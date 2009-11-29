@@ -85,10 +85,6 @@ namespace Apoc3D.Scene
         VertexBuffer smallQuad;
         ObjectFactory factory;
 
-
-        RenderOperation quadOp;
-        RenderOperation smQuadOp;
-
         //Sprite spr;
 
         //Effect LoadEffect(string fileName) 
@@ -114,15 +110,6 @@ namespace Apoc3D.Scene
             gaussXBlur = new GaussBlurX(rs);
             gaussYBlur = new GaussBlurY(rs);
 
-
-            //rtParam = new EffectHandle("rt");
-            //clrRtParam = new EffectHandle("clrRt");
-            //blmRtParam = new EffectHandle("blmRt");
-
-            //VertexElement[] elems = new VertexElement[3];
-            //elems[0] = new VertexElement(0, 0, DeclarationType.Float4, DeclarationMethod.Default, DeclarationUsage.PositionTransformed, 0);
-            //elems[1] = new VertexElement(0, (short)Vector4.SizeInBytes, DeclarationType.Float2, DeclarationMethod.Default, DeclarationUsage.TextureCoordinate, 0);
-            //elems[2] = VertexElement.VertexDeclarationEnd;
             vtxDecl = factory.CreateVertexDeclaration(RectVertex.Elements);
 
             LoadUnmanagedResources();
@@ -278,8 +265,6 @@ namespace Apoc3D.Scene
             idst[4] = 2;
             idst[5] = 3;
             indexBuffer.Unlock();
-
-            
         }
 
 

@@ -606,7 +606,6 @@ namespace Apoc3D.Graphics
         VertexDeclaration vtxDecl;
         int vertexSize;
 
-        //GeomentryData[] bufferedGm;
         RenderOperation[] bufferedOp;
 
         protected Material[][] materials;
