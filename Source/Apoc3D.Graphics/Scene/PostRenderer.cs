@@ -233,13 +233,11 @@ namespace Apoc3D.Scene
 
             Size blmSize = new Size(512, 512);
             Size scrnSize = new Size(s.Width, s.Height);
-            //s.Dispose();
 
-            //colorTarget = TextureLoader.LoadUITexture(device, new FileLocation(@"E:\Desktop\123.png"));
             clrRt = factory.CreateRenderTarget(scrnSize.Width, scrnSize.Height, ImagePixelFormat.X8R8G8B8);
             blmRt = factory.CreateRenderTarget(blmSize.Width, blmSize.Width, ImagePixelFormat.R32F);
 
-
+            #region 建立屏幕quad
             quad = factory.CreateVertexBuffer(4, vtxDecl, BufferUsage.Static);
 
             RectVertex* vdst = (RectVertex*)quad.Lock(0, 0, LockMode.None);
@@ -252,7 +250,9 @@ namespace Apoc3D.Scene
             vdst[3].Position = new Vector4(scrnSize.Width, scrnSize.Height, 0, 1);
             vdst[3].TexCoord = new Vector2(1, 1);
             quad.Unlock();
+            #endregion
 
+            #region 建立小quad
 
             smallQuad = factory.CreateVertexBuffer(4, vtxDecl, BufferUsage.Static);
             vdst = (RectVertex*)smallQuad.Lock(0, 0, LockMode.None);
@@ -266,6 +266,7 @@ namespace Apoc3D.Scene
             vdst[3].TexCoord = new Vector2(1, 1);
             smallQuad.Unlock();
 
+            #endregion
 
             indexBuffer = factory.CreateIndexBuffer(IndexBufferType.Bit32, 6, BufferUsage.Static);
             int* idst = (int*)indexBuffer.Lock(0, 0, LockMode.None);
@@ -278,6 +279,7 @@ namespace Apoc3D.Scene
             idst[5] = 3;
             indexBuffer.Unlock();
 
+            
         }
 
 

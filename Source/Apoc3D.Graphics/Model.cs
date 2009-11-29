@@ -293,32 +293,6 @@ namespace Apoc3D.Graphics
             }
         }
 
-        ///// <summary>
-        /////  引用mdl的数据，但重新创建动画实例
-        ///// </summary>
-        ///// <param name="rs"></param>
-        ///// <param name="mdl"></param>
-        //public Model(RenderSystem dev, Model mdl)
-        //    : base(dev, mdl)
-        //{
-        //    if (mdl.entities != null)
-        //    {
-        //        this.entities = new GameMesh[mdl.entities.Length];
-        //        for (int i = 0; i < entities.Length; i++)
-        //        {
-        //            this.entities[i] = new GameMesh(dev, mdl.entities[i]);
-        //        }
-        //    }
-
-        //    base.TransformAnim = new TransformAnimationInstance(mdl.TransformAnim.Data);
-
-        //    if (mdl.SkinAnim != null)
-        //    {
-        //        base.SkinAnim = new SkinAnimationInstance(mdl.SkinAnim.Data);
-        //    }
-        //    //isResourceEntity = false;
-        //}
-
         private Model(RenderSystem dev)
             : base(dev)
         {

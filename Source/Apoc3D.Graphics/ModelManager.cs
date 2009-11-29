@@ -32,12 +32,12 @@ namespace Apoc3D.Graphics
             : base(cacheSize)
         {
         }
-        public ResourceHandle<Model> CreateInstance(RenderSystem device, ResourceLocation rl)
+        public ResourceHandle<Model> CreateInstance(RenderSystem rs, ResourceLocation rl)
         {
             Resource retrived = base.Exists(rl.Name);
             if (retrived == null)
             {
-                Model mdl = new Model(device, rl);
+                Model mdl = new Model(rs, rl);
                 retrived = mdl;
                 base.NotifyResourceNew(mdl);
             }

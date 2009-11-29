@@ -17,6 +17,10 @@ namespace Apoc3D.Scene
 
         #endregion
 
+        public ObjectTypeManager()
+        {
+            factories = new Dictionary<string, SceneObjectFactory>();
+        }
 
         public void RegisterObjectType(SceneObjectFactory fac)
         {

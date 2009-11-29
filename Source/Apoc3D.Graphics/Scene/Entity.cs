@@ -73,7 +73,6 @@ namespace Apoc3D.Scene
         /// </summary>
         protected bool isTransformDirty;
 
-        bool useLodModel;
         bool dontDraw;
 
         Vector3 boundingSphereOffset;

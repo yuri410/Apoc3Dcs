@@ -994,37 +994,6 @@ namespace Apoc3D.Graphics
         #region 构造函数
 
         /// <summary>
-        /// 引用mesh的数据，但重新创建动画实例
-        /// </summary>
-        /// <param name="rs"></param>
-        /// <param name="mesh"></param>
-        [Obsolete()]
-        public GameMesh(RenderSystem rs, GameMesh mesh)
-        {
-            this.renderSystem = rs;
-            this.disposed = mesh.disposed;
-            this.indexBuffers = mesh.indexBuffers;
-            this.materials = mesh.materials;
-            this.name = mesh.name;
-            this.partPrimCount = mesh.partPrimCount;
-            this.partVtxCount = mesh.partVtxCount;
-            this.bufferedOp = mesh.bufferedOp;
-
-            this.vertexBuffer = mesh.vertexBuffer;
-            this.vertexSize = mesh.vertexSize;
-            this.vtxDecl = mesh.vtxDecl;
-
-            this.primCount = mesh.primCount;
-            this.vertexCount = mesh.vertexCount;
-            this.matAnims = new MaterialAnimationInstance[mesh.matAnims.Length];
-
-            for (int i = 0; i < matAnims.Length; i++)
-            {
-                matAnims[i] = new MaterialAnimationInstance(mesh.matAnims[i].Data);
-            }
-        }
-
-        /// <summary>
         ///  从网格数据创建网格
         /// </summary>
         /// <param name="dev"></param>
