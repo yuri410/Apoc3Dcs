@@ -415,13 +415,14 @@ namespace Apoc3D.Scene
             //states.Lighting = false;
 
             #region 处理一般的Op
-            foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in batchTable)
+            foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in batchData.batchTable)
             {
                 FastList<RenderOperation> opList = e1.Value;
 
                 if (opList.Count > 0)
                 {
-                    RenderList(e1.Key, opList);
+                    renderSystem.Render(opList.Elements, opList.Count);
+                    //RenderList(e1.Key, opList);
                 } // if (opList.Count > 0)
             }
             #endregion
@@ -517,133 +518,128 @@ namespace Apoc3D.Scene
             {
                 opList.FastClear();
             }
-            Dictionary<string, Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>>.ValueCollection instTableVals = batchData.instanceTable.Values;
-            foreach (Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> matTbl in instTableVals)
+
+            Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = batchData.instanceTable.Values;
+            foreach (Dictionary<GeomentryData, FastList<RenderOperation>> geoTable in matTableVals)
             {
-                Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = matTbl.Values;
-                foreach (Dictionary<GeomentryData, FastList<RenderOperation>> geoTable in matTableVals)
+                Dictionary<GeomentryData, FastList<RenderOperation>>.ValueCollection geoTableVals = geoTable.Values;
+                foreach (FastList<RenderOperation> opList in geoTableVals)
                 {
-                    Dictionary<GeomentryData, FastList<RenderOperation>>.ValueCollection geoTableVals = geoTable.Values;
-                    foreach (FastList<RenderOperation> opList in geoTableVals)
-                    {
-                        opList.FastClear();
-                    }
+                    opList.FastClear();
                 }
+
             }
         }
 
-        void RenderList(Material material, FastList<RenderOperation> opList)
-        {
-            RenderStateManager states = renderSystem.RenderStates;
-            renderSystem.BindShader((PixelShader)null);
-            renderSystem.BindShader((VertexShader)null);
+        //void RenderList(Material material, FastList<RenderOperation> opList)
+        //{
+        //    RenderStateManager states = renderSystem.RenderStates;
+        //    renderSystem.BindShader((PixelShader)null);
+        //    renderSystem.BindShader((VertexShader)null);
 
-            //Effect effect = effects[name];
+        //    Effect effect = material.Effect;
 
-            //if (effect == null)
-            //{
-            //    effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
-            //}
+        //    if (effect == null)
+        //    {
+        //        effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
+        //    }
 
-            int passCount = effect.Begin();
-            for (int p = 0; p < passCount; p++)
-            {
-                effect.BeginPass(p);
+        //    states.AlphaBlendEnable = !material.IsTransparent;
+        //    states.CullMode = material.CullMode;
 
-                for (int j = 0; j < opList.Count; j++)
-                {
-                    RenderOperation op = opList[j];
-                    GeomentryData gm = op.Geomentry;
+        //    int passCount = effect.Begin();
+        //    for (int p = 0; p < passCount; p++)
+        //    {
+        //        effect.BeginPass(p);
 
-                    if (gm.VertexCount == 0)
-                        continue;
+        //        for (int j = 0; j < opList.Count; j++)
+        //        {
+        //            RenderOperation op = opList[j];
+        //            GeomentryData gm = op.Geomentry;
 
-                    BatchCount++;
-                    PrimitiveCount += gm.PrimCount;
-                    VertexCount += gm.VertexCount;
+        //            if (gm.VertexCount == 0)
+        //                continue;
 
-                    Material mate = op.Material;
-                    if (mate == null)
-                        mate = Material.DefaultMaterial;
+        //            BatchCount++;
+        //            PrimitiveCount += gm.PrimCount;
+        //            VertexCount += gm.VertexCount;
 
-                    //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
-                    states.AlphaBlendEnable = !mate.IsTransparent;
-                    states.CullMode = mate.CullMode;
+        //            //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
 
-                    effect.Setup(mate, ref op);
+        //            effect.Setup(material, ref op);
 
 
-                    renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
-                    renderSystem.VertexFormat = gm.Format;
-                    renderSystem.VertexDeclaration = gm.VertexDeclaration;
+        //            renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
+        //            renderSystem.VertexFormat = gm.Format;
+        //            renderSystem.VertexDeclaration = gm.VertexDeclaration;
 
-                    if (gm.UseIndices)
-                    {
-                        renderSystem.Indices = gm.IndexBuffer;
-                        renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
-                            gm.BaseVertex, 0,
-                            gm.VertexCount, gm.BaseIndexStart,
-                            gm.PrimCount);
-                    }
-                    else
-                    {
-                        renderSystem.DrawPrimitives(gm.PrimitiveType, 0, gm.PrimCount);
-                    }
-                } // for (int j = 0; j < opList.Count; j++)
-                effect.EndPass();
-            }
-            effect.End();
-        }
+        //            if (gm.UseIndices)
+        //            {
+        //                renderSystem.Indices = gm.IndexBuffer;
+        //                renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
+        //                    gm.BaseVertex, 0,
+        //                    gm.VertexCount, gm.BaseIndexStart,
+        //                    gm.PrimCount);
+        //            }
+        //            else
+        //            {
+        //                renderSystem.DrawPrimitives(gm.PrimitiveType, 0, gm.PrimCount);
+        //            }
+        //        } // for (int j = 0; j < opList.Count; j++)
+        //        effect.EndPass();
+        //    }
+        //    effect.End();
+        //}
 
-        void RenderSMList(string name, FastList<RenderOperation> opList)
-        {
-            Effect effect = effects[name];
-            if (effect == null)
-                effect = shadowMap.DefaultSMGen;
+        //void RenderSMList(string name, FastList<RenderOperation> opList)
+        //{
+        //    Effect effect = effects[name];
+        //    if (effect == null)
+        //        effect = shadowMap.DefaultSMGen;
 
-            effect.BeginShadowPass();
+        //    effect.BeginShadowPass();
 
-            for (int j = 0; j < opList.Count; j++)
-            {
-                RenderOperation op = opList[j];
-                GeomentryData gm = op.Geomentry;
+        //    for (int j = 0; j < opList.Count; j++)
+        //    {
+        //        RenderOperation op = opList[j];
+        //        GeomentryData gm = op.Geomentry;
 
-                if (gm.VertexCount == 0)
-                    continue;
+        //        if (gm.VertexCount == 0)
+        //            continue;
 
-                BatchCount++;
-                PrimitiveCount += gm.PrimCount;
-                VertexCount += gm.VertexCount;
+        //        BatchCount++;
+        //        PrimitiveCount += gm.PrimCount;
+        //        VertexCount += gm.VertexCount;
 
-                Material mate = op.Material;
-                if (mate == null)
-                    mate = Material.DefaultMaterial;
+        //        Material mate = op.Material;
+        //        if (mate == null)
+        //            mate = Material.DefaultMaterial;
 
-                //device.SetRenderState(RenderState.AlphaTestEnable, mate.IsTransparent);
-                renderSystem.SetRenderState<Cull>(RenderState.CullMode, mate.CullMode);
+        //        //device.SetRenderState(RenderState.AlphaTestEnable, mate.IsTransparent);
+        //        renderSystem.SetRenderState<Cull>(RenderState.CullMode, mate.CullMode);
 
-                effect.SetupShadowPass(mate, ref op);
+        //        effect.SetupShadowPass(mate, ref op);
 
-                renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
-                renderSystem.VertexFormat = gm.Format;
-                renderSystem.VertexDeclaration = gm.VertexDeclaration;
+        //        renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
+        //        renderSystem.VertexFormat = gm.Format;
+        //        renderSystem.VertexDeclaration = gm.VertexDeclaration;
 
-                if (gm.UseIndices)
-                {
-                    renderSystem.Indices = gm.IndexBuffer;
-                    renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
-                        gm.BaseVertex, 0,
-                        gm.VertexCount, gm.BaseIndexStart,
-                        gm.PrimCount);
-                }
-                else
-                {
-                    renderSystem.DrawPrimitives(gm.PrimitiveType, 0, gm.PrimCount);
-                }
-            }
+        //        if (gm.UseIndices)
+        //        {
+        //            renderSystem.Indices = gm.IndexBuffer;
+        //            renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
+        //                gm.BaseVertex, 0,
+        //                gm.VertexCount, gm.BaseIndexStart,
+        //                gm.PrimCount);
+        //        }
+        //        else
+        //        {
+        //            renderSystem.DrawPrimitives(gm.PrimitiveType, 0, gm.PrimCount);
+        //        }
+        //    }
 
-            effect.EndShadowPass();
-        }
+        //    effect.EndShadowPass();
+        //}
 
         /// <summary>
         ///  渲染整个场景
@@ -688,97 +684,98 @@ namespace Apoc3D.Scene
                 AddAxisOperation();
                 PreRender();
 
+                renderSystem.BindShader((PixelShader)null);
+                renderSystem.BindShader((VertexShader)null);
 
-                renderSystem.PixelShader = null;
-                renderSystem.VertexShader = null;
-
-                renderSystem.SetRenderState(RenderState.ZEnable, true);
+                renderSystem.RenderStates.DepthBufferEnable = true;
 
                 #region Shadow Map Gen
                 shadowMap.Begin(Atmosphere.LightDirection, EffectParams.CurrentCamera);
 
-                foreach (KeyValuePair<string, FastList<RenderOperation>> e1 in batchTable)
+                foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in batchData.batchTable)
                 {
                     FastList<RenderOperation> opList = e1.Value;
 
                     if (opList.Count > 0)
                     {
-                        RenderSMList(e1.Key, opList);
+                        //RenderSMList(e1.Key, opList);
                     }
                 }
-                foreach (KeyValuePair<string, Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>> e2 in instanceTable)
-                {
-                    Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> matTable = e2.Value;
-                    foreach (KeyValuePair<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> e3 in matTable)
-                    {
-                        Dictionary<GeomentryData, FastList<RenderOperation>> geoTable = e3.Value;
-                        foreach (KeyValuePair<GeomentryData, FastList<RenderOperation>> e4 in geoTable)
-                        {
-                            GeomentryData gm = e4.Key;
+                #region Instancing
+                //foreach (KeyValuePair<string, Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>> e2 in instanceTable)
+                //{
+                //    Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> matTable = e2.Value;
+                //    foreach (KeyValuePair<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> e3 in matTable)
+                //    {
+                //        Dictionary<GeomentryData, FastList<RenderOperation>> geoTable = e3.Value;
+                //        foreach (KeyValuePair<GeomentryData, FastList<RenderOperation>> e4 in geoTable)
+                //        {
+                //            GeomentryData gm = e4.Key;
 
-                            FastList<RenderOperation> opList = e4.Value;
+                //            FastList<RenderOperation> opList = e4.Value;
 
-                            if (gm != null)
-                            {
-                                if (opList.Count < 50 || gm.VertexCount > 20)
-                                {
-                                    RenderSMList(e2.Key, opList);
-                                }
-                                else
-                                {
-                                    Effect effect = effects[e2.Key];
+                //            if (gm != null)
+                //            {
+                //                if (opList.Count < 50 || gm.VertexCount > 20)
+                //                {
+                //                    RenderSMList(e2.Key, opList);
+                //                }
+                //                else
+                //                {
+                //                    Effect effect = effects[e2.Key];
 
-                                    if (effect == null)
-                                        effect = shadowMap.DefaultSMGen;
+                //                    if (effect == null)
+                //                        effect = shadowMap.DefaultSMGen;
 
-                                    Material mate = e3.Key;
-                                    if (mate == null)
-                                        mate = Material.DefaultMaterial;
+                //                    Material mate = e3.Key;
+                //                    if (mate == null)
+                //                        mate = Material.DefaultMaterial;
 
 
-                                    if (gm.VertexCount == 0)
-                                        continue;
+                //                    if (gm.VertexCount == 0)
+                //                        continue;
 
-                                    renderSystem.SetRenderState<Cull>(RenderState.CullMode, mate.CullMode);
+                //                    renderSystem.SetRenderState<Cull>(RenderState.CullMode, mate.CullMode);
 
-                                    effect.BeginShadowPass();
+                //                    effect.BeginShadowPass();
 
-                                    int remainingInst = opList.Count;
-                                    int index = 0;
-                                    while (remainingInst > 0)
-                                    {
-                                        BatchCount++;
-                                        PrimitiveCount += gm.PrimCount;
-                                        VertexCount += gm.VertexCount;
+                //                    int remainingInst = opList.Count;
+                //                    int index = 0;
+                //                    while (remainingInst > 0)
+                //                    {
+                //                        BatchCount++;
+                //                        PrimitiveCount += gm.PrimCount;
+                //                        VertexCount += gm.VertexCount;
 
-                                        //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
-                                        RenderOperation op = new RenderOperation();
-                                        effect.Setup(mate, ref op);
+                //                        //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
+                //                        RenderOperation op = new RenderOperation();
+                //                        effect.Setup(mate, ref op);
 
-                                        renderSystem.VertexFormat = gm.Format;
-                                        renderSystem.VertexDeclaration = instancing.GetInstancingDecl(gm.VertexDeclaration);
+                //                        renderSystem.VertexFormat = gm.Format;
+                //                        renderSystem.VertexDeclaration = instancing.GetInstancingDecl(gm.VertexDeclaration);
 
-                                        int rendered = instancing.Setup(opList, index);
+                //                        int rendered = instancing.Setup(opList, index);
 
-                                        renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
-                                        renderSystem.SetStreamSourceFrequency(0, rendered, StreamSource.IndexedData);
+                //                        renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
+                //                        renderSystem.SetStreamSourceFrequency(0, rendered, StreamSource.IndexedData);
 
-                                        remainingInst -= rendered;
-                                        index += rendered;
+                //                        remainingInst -= rendered;
+                //                        index += rendered;
 
-                                        renderSystem.Indices = gm.IndexBuffer;
-                                        renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
-                                            gm.BaseVertex, 0,
-                                            gm.VertexCount, gm.BaseIndexStart,
-                                            gm.PrimCount);
+                //                        renderSystem.Indices = gm.IndexBuffer;
+                //                        renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
+                //                            gm.BaseVertex, 0,
+                //                            gm.VertexCount, gm.BaseIndexStart,
+                //                            gm.PrimCount);
 
-                                    }
-                                    effect.EndShadowPass();
-                                } // if (opList.Count > 0)
-                            }
-                        }
-                    }
-                }
+                //                    }
+                //                    effect.EndShadowPass();
+                //                } // if (opList.Count > 0)
+                //            }
+                //        }
+                //    }
+                //}
+                #endregion
                 shadowMap.End();
 
                 #endregion
@@ -813,44 +810,21 @@ namespace Apoc3D.Scene
             if (disposing)
             {
                 shadowMap.Dispose();
-                instancing.Dispose();
+                //instancing.Dispose();
                 postRenderer.Dispose();
 
                 axis.Dispose();
-                visibleObjects.Clear();
+                batchData.Dispose();
+                //visibleObjects.Clear();
 
-                Dictionary<string, FastList<RenderOperation>>.ValueCollection vals = batchTable.Values;
-                foreach (FastList<RenderOperation> opList in vals)
-                {
-                    opList.Clear();
-                }
-                batchTable.Clear();
-
-                Dictionary<string, Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>>.ValueCollection instTableVals = instanceTable.Values;
-                foreach (Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> matTbl in instTableVals)
-                {
-                    Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = matTbl.Values;
-                    foreach (Dictionary<GeomentryData, FastList<RenderOperation>> geoTable in matTableVals)
-                    {
-                        Dictionary<GeomentryData, FastList<RenderOperation>>.ValueCollection geoTableVals = geoTable.Values;
-                        foreach (FastList<RenderOperation> opList in geoTableVals)
-                        {
-                            opList.Clear();
-                        }
-                        geoTable.Clear();
-                    }
-                    matTbl.Clear();
-                }
-                effects.Clear();
+               
+                //effects.Clear();
 
             }
             shadowMap = null;
-            instancing = null;
+            //instancing = null;
             postRenderer = null;
-            batchTable = null;
-            instanceTable = null;
-            effects = null;
-            visibleObjects = null;
+            batchData = null;
             axis = null;
             cameraList = null;
         }

@@ -403,7 +403,7 @@ namespace Apoc3D.Graphics
                         renderOpEntId[dstIdx + j] = i;
                         //opBuffer[dstIdx + j].Geomentry = entOps[i][j];
                         //animation.GetTransform(i, out  opBuffer[dstIdx + j].Transformation);
-                        opBuffer[i].Transformation =  TransformAnim.GetTransform(renderOpEntId[i]);
+                        opBuffer[i].Transformation = animInstance.GetTransform(renderOpEntId[i]);
                     }
 
                     dstIdx += entOps[i].Length;
@@ -413,7 +413,7 @@ namespace Apoc3D.Graphics
             {
                 for (int i = 0; i < opBuffer.Length; i++)
                 {
-                    opBuffer[i].Transformation = TransformAnim.GetTransform(renderOpEntId[i]);
+                    opBuffer[i].Transformation = animInstance.GetTransform(renderOpEntId[i]);
                     //animation.GetTransform(renderOpEntId[i], out opBuffer[i].Transformation);
                 }
                 //animation.Animate();

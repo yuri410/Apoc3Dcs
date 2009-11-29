@@ -5,6 +5,7 @@ using System.Text;
 using Apoc3D.Graphics.Effects;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
+using Apoc3D.Core;
 
 namespace Apoc3D.Graphics
 {
@@ -71,7 +72,7 @@ namespace Apoc3D.Graphics
         #region Constants
         static readonly string MaterialColorTag = "MaterialColor";
 
-        static readonly string IsTexEmbededTag = "IsEmbeded";
+        //static readonly string IsTexEmbededTag = "IsEmbeded";
         static readonly string MaterialFlagTag = "Flags";
         static readonly string HasTextureTag = "HasTexture";
         static readonly string TextureTag = "Texture";
@@ -86,8 +87,6 @@ namespace Apoc3D.Graphics
         protected float power;
 
         protected string[] textureFiles = new string[MaxTexLayers];
-
-        protected bool[] texEmbeded = new bool[MaxTexLayers];
 
         protected TexType[] textures = new TexType[MaxTexLayers];
 
@@ -179,10 +178,10 @@ namespace Apoc3D.Graphics
         #endregion
 
         #region Abstract Methods
-        protected abstract TexType LoadTexture(ContentBinaryReader br, bool isEmbeded, int index);
+        protected abstract TexType LoadTexture(ContentBinaryReader br, int index);
         protected abstract void DestroyTexture(TexType tex);
 
-        protected abstract void SaveTexture(ContentBinaryWriter bw, TexType tex, bool isEmbeded, int index);
+        protected abstract void SaveTexture(ContentBinaryWriter bw, TexType tex, int index);
         protected abstract Effect LoadEffect(string name);
         #endregion
 
@@ -230,12 +229,12 @@ namespace Apoc3D.Graphics
 
             br.Close();
 
-            br = data.GetData(IsTexEmbededTag);
-            for (int i = 0; i < MaxTexLayers; i++)
-            {
-                texEmbeded[i] = br.ReadBoolean();
-            }
-            br.Close();
+            //br = data.GetData(IsTexEmbededTag);
+            //for (int i = 0; i < MaxTexLayers; i++)
+            //{
+            //    texEmbeded[i] = br.ReadBoolean();
+            //}
+            //br.Close();
 
             bool[] hasTexture = new bool[MaxTexLayers];
             br = data.GetData(HasTextureTag);
@@ -251,7 +250,7 @@ namespace Apoc3D.Graphics
                 if (hasTexture[i])
                 {
                     br = data.GetData(TextureTag + i.ToString());
-                    textures[i] = LoadTexture(br, texEmbeded[i], i);
+                    textures[i] = LoadTexture(br, i);
                     br.Close();
                 }
             }
@@ -303,12 +302,6 @@ namespace Apoc3D.Graphics
             bw.Close();
 
 
-            bw = data.AddEntry(IsTexEmbededTag);
-            for (int i = 0; i < MaxTexLayers; i++)
-            {
-                bw.Write(texEmbeded[i]);
-            }
-            bw.Close();
 
             bw = data.AddEntry(HasTextureTag);
             for (int i = 0; i < MaxTexLayers; i++)
@@ -322,7 +315,7 @@ namespace Apoc3D.Graphics
                 if (textures[i] != null || !string.IsNullOrEmpty(textureFiles[i]))
                 {
                     bw = data.AddEntry(TextureTag + i.ToString());
-                    SaveTexture(bw, textures[i], texEmbeded[i], i);
+                    SaveTexture(bw, textures[i], i);
                     bw.Close();
                 }
             }
@@ -374,7 +367,7 @@ namespace Apoc3D.Graphics
     /// <summary>
     ///  材质
     /// </summary>
-    public class Material : MeshMaterialBase<Texture>, IComparable<Material>
+    public class Material : MeshMaterialBase<ResourceHandle<Texture>>, IComparable<Material>
     {
         #region Constants
 
@@ -435,7 +428,7 @@ namespace Apoc3D.Graphics
         /// <summary>
         ///  重写以适应不同环境下的使用
         /// </summary>
-        Texture LoadTexture(string fileName)
+        ResourceHandle<Texture> LoadTexture(string fileName)
         {
             fileName = fileName.Trim();
             if (!string.IsNullOrEmpty(fileName))
@@ -443,7 +436,7 @@ namespace Apoc3D.Graphics
                 FileLocation fl = FileSystem.Instance.TryLocate(fileName, FileLocateRules.Model);
                 if (fl != null)
                 {
-                    return TextureManager.Instance.CreateInstance(device, fl);
+                    return TextureManager.Instance.CreateInstance(fl);
                 }
                 else
                 {
@@ -453,27 +446,16 @@ namespace Apoc3D.Graphics
             }
             return null;
         }
-        protected override Texture LoadTexture(ContentBinaryReader br, bool isEmbeded, int index)
+        protected override ResourceHandle<Texture> LoadTexture(ContentBinaryReader br, int index)
         {
-            if (isEmbeded)
-            {
-                return new GameTexture(Texture.FromStream(device, br.BaseStream, Usage.None, Pool.Managed));
-            }
-            else
-            {
-                string fn = br.ReadStringUnicode();
-                textureFiles[index] = fn;
+            string fn = br.ReadStringUnicode();
+            textureFiles[index] = fn;
 
-                return LoadTexture(fn);
-            }
+            return LoadTexture(fn);
         }
 
-        protected override void SaveTexture(ContentBinaryWriter bw, Texture tex, bool isEmbeded, int index)
+        protected override void SaveTexture(ContentBinaryWriter bw, ResourceHandle<Texture> tex, int index)
         {
-            if (isEmbeded)
-            {
-                throw new NotSupportedException();
-            }
             bw.WriteStringUnicode(textureFiles[index]);
         }
 
@@ -497,9 +479,9 @@ namespace Apoc3D.Graphics
             return data;
         }
 
-        protected override void DestroyTexture(Texture tex)
+        protected override void DestroyTexture(ResourceHandle<Texture> tex)
         {
-            TextureManager.Instance.DestroyInstance(tex);
+            tex.Dispose();
         }
 
         #endregion

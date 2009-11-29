@@ -115,7 +115,7 @@ namespace Apoc3D.Graphics.Animation
             }
         }
 
-        public Matrix GetTransform(int entity)
+        public override Matrix GetTransform(int entity)
         {
             return currentTransform[entity];
         }

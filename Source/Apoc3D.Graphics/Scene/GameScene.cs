@@ -101,7 +101,7 @@ namespace Apoc3D.Scene
             int esy = (int)(z * invCellUnit);
 
             // 截断到Cluster的第一顶点处
-            if (esx < Terrain.TerrainSize)
+            if (esx < Cluster.ClusterLength + 1)
             {
                 esx = 0;
             }
@@ -110,7 +110,7 @@ namespace Apoc3D.Scene
                 esx = Cluster.ClusterLength * ((esx - 1) / Cluster.ClusterLength) + 1;
             }
 
-            if (esy < Terrain.TerrainSize)
+            if (esy < Cluster.ClusterLength + 1)
             {
                 esy = 0;
             }
@@ -139,7 +139,7 @@ namespace Apoc3D.Scene
             int esy = (int)((camPos.Z - cam.FarPlane) * invCellUnit);
 
             // 截断到Cluster的第一顶点处
-            if (esx < Terrain.TerrainSize)
+            if (esx < Cluster.ClusterLength + 1)
             {
                 esx = 0;
             }
@@ -148,7 +148,7 @@ namespace Apoc3D.Scene
                 esx = Cluster.ClusterLength * ((esx - 1) / Cluster.ClusterLength) + 1;
             }
 
-            if (esy < Terrain.TerrainSize)
+            if (esy < Cluster.ClusterLength + 1)
             {
                 esy = 0;
             }
@@ -168,9 +168,9 @@ namespace Apoc3D.Scene
             //    enumLength++;
             //}
 
-            for (int x = esx; x < esx + enumLength; x += Terrain.TerrainSize)
+            for (int x = esx; x < esx + enumLength; x += (Cluster.ClusterLength + 1))
             {
-                for (int y = esy; y < esy + enumLength; y += Terrain.TerrainSize)
+                for (int y = esy; y < esy + enumLength; y += (Cluster.ClusterLength + 1))
                 {
                     ClusterDescription desc = new ClusterDescription(x, y);
 
@@ -209,7 +209,7 @@ namespace Apoc3D.Scene
 
 
             // 截断到Cluster的第一顶点处
-            if (esx < Terrain.TerrainSize)
+            if (esx < Cluster.ClusterLength + 1)
             {
                 esx = 0;
             }
@@ -218,7 +218,7 @@ namespace Apoc3D.Scene
                 esx = Cluster.ClusterLength * ((esx - 1) / Cluster.ClusterLength) + 1;
             }
 
-            if (esy < Terrain.TerrainSize)
+            if (esy < Cluster.ClusterLength + 1)
             {
                 esy = 0;
             }
@@ -233,9 +233,9 @@ namespace Apoc3D.Scene
 
             Ray ra = new Ray(ray.Start, direction);
 
-            for (int x = esx; x < esx + enumLength; x += Terrain.TerrainSize)
+            for (int x = esx; x < esx + enumLength; x += (Cluster.ClusterLength + 1))
             {
-                for (int y = esy; y < esy + enumLength; y += Terrain.TerrainSize)
+                for (int y = esy; y < esy + enumLength; y += (Cluster.ClusterLength + 1))
                 {
                     ClusterDescription desc = new ClusterDescription(x, y);
 

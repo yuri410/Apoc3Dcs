@@ -10,7 +10,7 @@ namespace Apoc3D.Scene
     /// <summary>
     ///  渲染场景时，PassInfo对象用来从Cluster的场景管理器收集信息，并存储
     /// </summary>
-    public class PassData
+    public class PassData : IDisposable
     {
         ///// <summary>
         /////  按效果批次分组，一个效果批次有一个RenderOperation列表
@@ -40,6 +40,46 @@ namespace Apoc3D.Scene
 
             visibleObjects = new FastList<SceneObject>();
         }
-    }
 
+        #region IDisposable 成员
+
+        public bool Disposed
+        {
+            get;
+            private set;
+        }
+
+        public void Dispose()
+        {
+            if (!Disposed)
+            {
+                Dictionary<Material, FastList<RenderOperation>>.ValueCollection vals = batchTable.Values;
+                foreach (FastList<RenderOperation> opList in vals)
+                {
+                    opList.Clear();
+                }
+                batchTable.Clear();
+
+                Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = instanceTable.Values;
+                foreach (Dictionary<GeomentryData, FastList<RenderOperation>> geoTable in matTableVals)
+                {
+                    Dictionary<GeomentryData, FastList<RenderOperation>>.ValueCollection geoTableVals = geoTable.Values;
+                    foreach (FastList<RenderOperation> opList in geoTableVals)
+                    {
+                        opList.Clear();
+                    }
+                    geoTable.Clear();
+                }
+                instanceTable.Clear();
+
+                Disposed = true;
+            }
+            else
+            {
+                throw new ObjectDisposedException(ToString());
+            }
+        }
+
+        #endregion
+    }
 }

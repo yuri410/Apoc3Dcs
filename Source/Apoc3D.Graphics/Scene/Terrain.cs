@@ -1193,7 +1193,7 @@ namespace Apoc3D.Scene
 
             if (disposing)
             {
-                TerrainTextureManager.Instance.DestroyInstance(DisplacementMap);
+                TextureManager.Instance.DestroyInstance(DisplacementMap);
                 DisplacementMap = null;
 
                 TerrainTextureManager.Instance.DestroyInstance(ColorMap);

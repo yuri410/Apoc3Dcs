@@ -19,7 +19,7 @@ namespace Apoc3D.Scene
         /// <summary>
         ///  表示Cluster的长度（512）
         /// </summary>
-        public const int ClusterLength = Terrain.TerrainSize - 1;
+        public const int ClusterLength = 512;
 
         #endregion
 

@@ -448,27 +448,27 @@ namespace Apoc3D.Graphics
         /// </summary>
         public void Render()
         {
-            if (skyBox != null)
-            {
-                skyBox.Render();
-            }
-            if (FogEnabled)
-            {
-                RenderStateManager states = renderSystem.RenderStates;
+            //if (skyBox != null)
+            //{
+            //    skyBox.Render();
+            //}
+            //if (FogEnabled)
+            //{
+                //RenderStateManager states = renderSystem.RenderStates;
 
-                states.FogEnable = true;
-                states.FogTableMode = fogMode;
-                states.FogVertexMode = fogMode;
+                //states.FogEnable = true;
+                //states.FogTableMode = fogMode;
+                //states.FogVertexMode = fogMode;
 
-                states.FogStart = fogStart;
-                states.FogEnd = fogEnd;
-                states.FogColor = new ColorValue(currentFogColor);
-                states.FogDensity = fogDensity;
-            }
-            else
-            {
-                renderSystem.RenderStates.FogEnable = false;
-            }
+                //states.FogStart = fogStart;
+                //states.FogEnd = fogEnd;
+                //states.FogColor = new ColorValue(currentFogColor);
+                //states.FogDensity = fogDensity;
+            //}
+            //else
+            //{
+            //    renderSystem.RenderStates.FogEnable = false;
+            //}
         }
 
         uint MultiplyColor(ref ColorValue clr, float bgn)
@@ -517,55 +517,56 @@ namespace Apoc3D.Graphics
                 sunAngle = 90;
             }
 
+            #region 日出日落切换
+            //if (skyBox != null)
+            //{
+            //    if (angle >= 360 - fadeRange2 || angle <= fadeRange)
+            //    {
+            //        if (angle > 90)
+            //        {
+            //            skyBox.DayNightLerpParam = (360 + fadeRange - angle) / totalRange;
 
-            if (skyBox != null)
-            {
-                if (angle >= 360 - fadeRange2 || angle <= fadeRange)
-                {
-                    if (angle > 90)
-                    {
-                        skyBox.DayNightLerpParam = (360 + fadeRange - angle) / totalRange;
+            //            float brightness = invLowestBrightness * (1f - (360 + fadeRange - angle) / totalRange) + lowestBrightness;
+            //            currentLight.Diffuse = light.Diffuse * brightness;
+            //            currentFogColor = MultiplyColor(ref fogColor, brightness);
+            //        }
+            //        else
+            //        {
+            //            skyBox.DayNightLerpParam = (fadeRange - angle) / totalRange;
 
-                        float brightness = invLowestBrightness * (1f - (360 + fadeRange - angle) / totalRange) + lowestBrightness;
-                        currentLight.Diffuse = light.Diffuse * brightness;
-                        currentFogColor = MultiplyColor(ref fogColor, brightness);
-                    }
-                    else
-                    {
-                        skyBox.DayNightLerpParam = (fadeRange - angle) / totalRange;
+            //            float brightness = invLowestBrightness * (1f - (fadeRange - angle) / totalRange) + lowestBrightness;
+            //            currentLight.Diffuse = light.Diffuse * brightness;
+            //            currentFogColor = MultiplyColor(ref fogColor, brightness);
+            //        }
+            //    }
+            //    else if (angle >= 180 - fadeRange && angle <= fadeRange2 + 180)
+            //    {
+            //        skyBox.DayNightLerpParam = 1f - ((180f + fadeRange2 - angle) / totalRange);
 
-                        float brightness = invLowestBrightness * (1f - (fadeRange - angle) / totalRange) + lowestBrightness;
-                        currentLight.Diffuse = light.Diffuse * brightness;
-                        currentFogColor = MultiplyColor(ref fogColor, brightness);
-                    }
-                }
-                else if (angle >= 180 - fadeRange && angle <= fadeRange2 + 180)
-                {
-                    skyBox.DayNightLerpParam = 1f - ((180f + fadeRange2 - angle) / totalRange);
+            //        float brightness = invLowestBrightness * ((180f + fadeRange2 - angle) / totalRange) + lowestBrightness;
+            //        currentLight.Diffuse = light.Diffuse * brightness;
+            //        currentFogColor = MultiplyColor(ref fogColor, brightness);
+            //    }
+            //    else if (angle > fadeRange && angle < 180 - fadeRange)
+            //    {
+            //        currentLight.Diffuse = light.Diffuse;
+            //        currentFogColor = fogColor.PackedValue;
 
-                    float brightness = invLowestBrightness * ((180f + fadeRange2 - angle) / totalRange) + lowestBrightness;
-                    currentLight.Diffuse = light.Diffuse * brightness;
-                    currentFogColor = MultiplyColor(ref fogColor, brightness);
-                }
-                else if (angle > fadeRange && angle < 180 - fadeRange)
-                {
-                    currentLight.Diffuse = light.Diffuse;
-                    currentFogColor = fogColor.PackedValue;
+            //        skyBox.DayNightLerpParam = 0;
+            //    }
+            //    else if (angle > 180 + fadeRange2 && angle < 360 - fadeRange2)
+            //    {
+            //        float extraDiffuse = (2 * lowestBrightness2) * Math.Abs(Math.Max(0f, ((angle - (180 + fadeRange2)) / (180 - fadeRange2 * 2) * 0.5f - 1f)));
+            //        float brightness = lowestBrightness + extraDiffuse;
 
-                    skyBox.DayNightLerpParam = 0;
-                }
-                else if (angle > 180 + fadeRange2 && angle < 360 - fadeRange2)
-                {
-                    float extraDiffuse = (2 * lowestBrightness2) * Math.Abs(Math.Max(0f, ((angle - (180 + fadeRange2)) / (180 - fadeRange2 * 2) * 0.5f - 1f)));
-                    float brightness = lowestBrightness + extraDiffuse;
-
-                    currentLight.Diffuse = light.Diffuse * brightness;
-                    currentFogColor = MultiplyColor(ref fogColor, brightness);
-                    skyBox.DayNightLerpParam = 1;
-                }
+            //        currentLight.Diffuse = light.Diffuse * brightness;
+            //        currentFogColor = MultiplyColor(ref fogColor, brightness);
+            //        skyBox.DayNightLerpParam = 1;
+            //    }
 
 
-            }
+            //}
+            #endregion
 
             //currentFogColor = currFogClr.ToArgb();
         }

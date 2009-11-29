@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics.Animation
 {
@@ -26,6 +27,11 @@ namespace Apoc3D.Graphics.Animation
         public MaterialAnimation Data 
         {
             get { return data; }
+        }
+
+        public override Matrix GetTransform(int index)
+        {
+            throw new NotSupportedException();
         }
     }
 }

@@ -84,7 +84,8 @@ namespace Apoc3D.Graphics
         protected static readonly string MaterialAnimationTag = "MaterialAnimation";
         protected static readonly string FaceCountTag = "FaceCount";
         protected static readonly string FacesTag = "Faces";
-        protected static readonly string VertexFormatTag = "VertexFormat";
+        //protected static readonly string VertexFormatTag = "VertexFormat";
+        protected static readonly string VertexDeclTag = "VertexDeclaration";
         protected static readonly string VertexCountTag = "VertexCount";
         protected static readonly string VertexSizeTag = "VertexSize";
 
@@ -95,11 +96,18 @@ namespace Apoc3D.Graphics
         #endregion
 
         byte[] buffer;
-        RenderSystem device;
 
-        protected MeshData(RenderSystem dev)
+
+        bool[] hasTexCoord = new bool[Material.MaxTexLayers];
+
+        VertexElement[] vtxElements;
+
+        RenderSystem renderSystem;
+
+
+        protected MeshData(RenderSystem rs)
         {
-            device = dev;
+            renderSystem = rs;
         }
 
         #region 属性
@@ -107,8 +115,8 @@ namespace Apoc3D.Graphics
         [Browsable(false)]
         public RenderSystem Device
         {
-            get { return device; }
-            protected set { device = value; }
+            get { return renderSystem; }
+            protected set { renderSystem = value; }
         }
 
         public MType[][] Materials
@@ -132,7 +140,9 @@ namespace Apoc3D.Graphics
             set;
         }
 
-
+        /// <summary>
+        ///  表示顶点数据
+        /// </summary>
         [Browsable(false)]
         public IntPtr Data
         {
@@ -167,76 +177,36 @@ namespace Apoc3D.Graphics
         [Browsable(false)]
         public int TextureCoordCount
         {
-            get
-            {
-                int result = 0;
-
-                if (HasTexCoord1)
-                    result++;
-                if (HasTexCoord2)
-                    result++;
-                if (HasTexCoord3)
-                    result++;
-                if (HasTexCoord4)
-                    result++;
-                if (HasTexCoord5)
-                    result++;
-                if (HasTexCoord6)
-                    result++;
-                if (HasTexCoord7)
-                    result++;
-                if (HasTexCoord8)
-                    result++;
-                return result;
-            }
+            get;
+            private set;
         }
 
         [Browsable(false)]
         public VertexElement[] VertexElements
         {
-            get;
-            set;
+            get { return vtxElements; }
+            set
+            {
+                vtxElements = value;
+
+                for (int i = 0; i < hasTexCoord.Length; i++)
+                    hasTexCoord[i] = false;
+                TextureCoordCount = 0;
+
+                for (int i = 0; i < value.Length; i++)
+                {
+                    if (value[i].Semantic == VertexElementUsage.TextureCoordinate)
+                    {
+                        hasTexCoord[value[i].Index] = true;
+                        TextureCoordCount++;
+                    }
+                }
+            }
         }
 
-        [Browsable(false)]
-        public bool HasTexCoord1
+        public bool HasTexCoord(int index)
         {
-            get { return (VertexFormat.Texture1) == VertexFormat.Texture1; }
-        }
-        [Browsable(false)]
-        public bool HasTexCoord2
-        {
-            get { return (Format & VertexFormat.Texture2) == VertexFormat.Texture2; }
-        }
-        [Browsable(false)]
-        public bool HasTexCoord3
-        {
-            get { return (Format & VertexFormat.Texture3) == VertexFormat.Texture3; }
-        }
-        [Browsable(false)]
-        public bool HasTexCoord4
-        {
-            get { return (Format & VertexFormat.Texture4) == VertexFormat.Texture4; }
-        }
-        [Browsable(false)]
-        public bool HasTexCoord5
-        {
-            get { return (Format & VertexFormat.Texture5) == VertexFormat.Texture5; }
-        }
-        [Browsable(false)]
-        public bool HasTexCoord6
-        {
-            get { return (Format & VertexFormat.Texture6) == VertexFormat.Texture6; }
-        }
-        [Browsable(false)]
-        public bool HasTexCoord7
-        {
-            get { return (Format & VertexFormat.Texture7) == VertexFormat.Texture7; }
-        }
-        [Browsable(false)]
-        public bool HasTexCoord8
-        {
-            get { return (Format & VertexFormat.Texture8) == VertexFormat.Texture8; }
+            return hasTexCoord[index];
         }
 
         #endregion
@@ -338,7 +308,7 @@ namespace Apoc3D.Graphics
                 for (int j = 0; j < frameCount; j++)
                 {
                     BinaryDataReader matData = br.ReadBinaryData();
-                    Materials[i][j] = LoadMaterial(device, matData);
+                    Materials[i][j] = LoadMaterial(renderSystem, matData);
                     matData.Close();
                 }
             }
@@ -360,6 +330,7 @@ namespace Apoc3D.Graphics
             Name = br.ReadStringUnicode();
             br.Close();
 
+            #region 读取面
             int faceCount = data.GetDataInt32(FaceCountTag);
             Faces = new MeshFace[faceCount];
 
@@ -373,9 +344,26 @@ namespace Apoc3D.Graphics
                 Faces[i].MaterialIndex = br.ReadInt32();
             }
             br.Close();
+            #endregion
 
-            Format = (VertexFormat)data.GetDataInt32(VertexFormatTag);
-            VertexElements = D3DX.DeclaratorFromFVF(Format);
+            #region 读取顶点声明元素
+            br = data.GetData(VertexDeclTag);
+
+            int elemCount = br.ReadInt32();
+            VertexElement[] elements = new VertexElement[elemCount];
+
+            for (int i = 0; i < elemCount; i++)
+            {
+                int emOfs = br.ReadInt32();
+                VertexElementFormat emFormat = (VertexElementFormat)br.ReadInt32();
+                VertexElementUsage emUsage = (VertexElementUsage)br.ReadInt32();
+                int emIndex = br.ReadInt32();
+                elements[i] = new VertexElement(emOfs, emFormat, emUsage, emIndex);
+            }
+            VertexElements = elements;
+
+            br.Close();
+            #endregion
 
             if (data.Contains(VertexSizeTag))
             {
@@ -427,6 +415,10 @@ namespace Apoc3D.Graphics
             }
             bw.Close();
 
+            bw = data.AddEntry(VertexDeclTag);
+
+            bw.Close();
+
 
             bw = data.AddEntry(NameTag);
             bw.WriteStringUnicode(Name);
@@ -434,6 +426,7 @@ namespace Apoc3D.Graphics
 
             data.AddEntry(FaceCountTag, Faces.Length);
 
+            #region 保存表面
             bw = data.AddEntry(FacesTag);
             for (int i = 0; i < Faces.Length; i++)
             {
@@ -443,8 +436,22 @@ namespace Apoc3D.Graphics
                 bw.Write(Faces[i].MaterialIndex);
             }
             bw.Close();
+            #endregion
 
-            data.AddEntry(VertexFormatTag, (int)Format);
+            #region 保存顶点声明元素
+            bw = data.AddEntry(VertexDeclTag);
+
+            bw.Write(VertexElements.Length);
+            for (int i = 0; i < VertexElements.Length; i++)
+            {
+                bw.Write(VertexElements[i].Offset);
+                bw.Write((int)VertexElements[i].Type);
+                bw.Write((int)VertexElements[i].Semantic);
+                bw.Write(VertexElements[i].Index);
+            }
+
+            bw.Close();
+            #endregion
 
             data.AddEntry(VertexSizeTag, VertexSize);
             data.AddEntry(VertexCountTag, VertexCount);
@@ -536,29 +543,9 @@ namespace Apoc3D.Graphics
             int vertexSize = 0;
             for (int i = 0; i < elements.Length; i++)
             {
-                vertexSize += GetVertexElementSize(elements[i]);
+                vertexSize += elements[i].Size;
             }
             return vertexSize;
-        }
-
-        static int[] elementSizeTable = new int[]
-        {
-            sizeof(float), 
-            sizeof(float) * 2, 
-            sizeof(float) * 3, 
-            sizeof(float) * 4, 
-            sizeof(int), 
-            sizeof(byte) * 4, 
-            sizeof(short) * 2,
-            sizeof(short) * 4, 
-            0, 0, 0, 0, 0, 0, 0, 
-            sizeof(float), 
-            sizeof(float) * 2, 
-            0 };
-
-        public static int GetVertexElementSize(VertexElement elem)
-        {
-            return elementSizeTable[(int)elem.Type];
         }
 
         void GetFaces(GameMesh mesh)
@@ -573,7 +560,7 @@ namespace Apoc3D.Graphics
 
             for (int i = 0; i < ibs.Length; i++)
             {
-                if (ibs[i].IndexSize == sizeof(ushort))
+                if (ibs[i].BufferType == IndexBufferType.Bit16)
                 {
                     ushort* isrc = (ushort*)ibs[i].Lock(0, 0, LockMode.ReadOnly);
 
@@ -619,8 +606,6 @@ namespace Apoc3D.Graphics
         VertexDeclaration vtxDecl;
         int vertexSize;
 
-        //protected VertexFormat vtxFormat;
-
         //GeomentryData[] bufferedGm;
         RenderOperation[] bufferedOp;
 
@@ -633,6 +618,7 @@ namespace Apoc3D.Graphics
         protected int[] partVtxCount;
 
         RenderSystem renderSystem;
+        ObjectFactory factory;
         string name;
 
         bool disposed;
@@ -690,7 +676,7 @@ namespace Apoc3D.Graphics
 
         //    mesh.UnlockVertexBuffer();
 
-            
+
 
         //    List<int>[] indices = new List<int>[matCount];
         //    for (int i = 0; i < matCount; i++)
@@ -764,7 +750,7 @@ namespace Apoc3D.Graphics
         //}
         //#endregion
 
-        #region 获取数据
+        #region 获取网格数据
 
         public VertexBuffer VertexBuffer
         {
@@ -784,7 +770,7 @@ namespace Apoc3D.Graphics
 
             for (int i = 0; i < indexBuffers.Length; i++)
             {
-                if (indexBuffers[i].IndexSize == sizeof(short))
+                if (indexBuffers[i].BufferType == IndexBufferType.Bit16)
                 {
                     ushort* isrc = (ushort*)indexBuffers[i].Lock(0, 0, LockMode.ReadOnly);
 
@@ -861,7 +847,7 @@ namespace Apoc3D.Graphics
         /// </summary>
         /// <param name="dev"></param>
         /// <param name="data">网格数据</param>
-        public unsafe void BuildFromData(RenderSystem dev, MeshData data)
+        public unsafe void BuildFromData(RenderSystem rs, MeshData data)
         {
             this.name = data.Name;
 
@@ -877,16 +863,19 @@ namespace Apoc3D.Graphics
 
             this.vertexSize = data.VertexSize;
 
-            this.vtxDecl = new VertexDeclaration(dev, data.VertexElements);
+            this.vtxDecl = factory.CreateVertexDeclaration(data.VertexElements);
 
-            this.vertexBuffer = new VertexBuffer(dev, vertexSize * vertexCount, BufferUsage.None, data.Format);
+            #region 复制顶点数据
+            this.vertexBuffer = factory.CreateVertexBuffer(vertexCount, vtxDecl, BufferUsage.Static);
 
             void* vdst = vertexBuffer.Lock(0, 0, LockMode.None).ToPointer();
 
             Memory.Copy(data.Data.ToPointer(), vdst, vertexSize * vertexCount);
 
             vertexBuffer.Unlock();
+            #endregion
 
+            #region 建立索引数据
             bool useIndex16 = vertexCount <= ushort.MaxValue;
 
             List<int>[] indices = new List<int>[matCount];
@@ -897,6 +886,7 @@ namespace Apoc3D.Graphics
 
             partPrimCount = new int[matCount];
             partVtxCount = new int[matCount];
+
 
             MeshFace[] faces = data.Faces;
             for (int i = 0; i < faces.Length; i++)
@@ -923,7 +913,7 @@ namespace Apoc3D.Graphics
                     }
 
                     List<int> idx = indices[i];
-                    indexBuffers[i] = new IndexBuffer(dev, idx.Count * sizeof(ushort), BufferUsage.None, true);
+                    indexBuffers[i] = factory.CreateIndexBuffer(IndexBufferType.Bit16, idx.Count, BufferUsage.Static);
 
                     ushort* ib = (ushort*)indexBuffers[i].Lock(0, 0, LockMode.None);
                     for (int j = 0; j < idx.Count; j++)
@@ -952,7 +942,7 @@ namespace Apoc3D.Graphics
                         Memory.Zero(dst, vertexCount);
                     }
                     List<int> idx = indices[i];
-                    indexBuffers[i] = new IndexBuffer(dev, idx.Count * sizeof(uint), BufferUsage.Static, false);
+                    indexBuffers[i] = factory.CreateIndexBuffer(IndexBufferType.Bit32, idx.Count, BufferUsage.Static);
 
                     uint* ib = (uint*)indexBuffers[i].Lock(0, 0, LockMode.None);
                     for (int j = 0; j < idx.Count; j++)
@@ -968,7 +958,7 @@ namespace Apoc3D.Graphics
                     partVtxCount[i] = vtxCount;
                 }
             }
-
+            #endregion
         }
 
         #endregion
@@ -1008,9 +998,10 @@ namespace Apoc3D.Graphics
         /// </summary>
         /// <param name="rs"></param>
         /// <param name="mesh"></param>
-        public GameMesh(RenderSystem dev, GameMesh mesh)
+        [Obsolete()]
+        public GameMesh(RenderSystem rs, GameMesh mesh)
         {
-            this.renderSystem = dev;
+            this.renderSystem = rs;
             this.disposed = mesh.disposed;
             this.indexBuffers = mesh.indexBuffers;
             this.materials = mesh.materials;
@@ -1018,7 +1009,6 @@ namespace Apoc3D.Graphics
             this.partPrimCount = mesh.partPrimCount;
             this.partVtxCount = mesh.partVtxCount;
             this.bufferedOp = mesh.bufferedOp;
-            this.vtxFormat = mesh.Format;
 
             this.vertexBuffer = mesh.vertexBuffer;
             this.vertexSize = mesh.vertexSize;
@@ -1033,30 +1023,34 @@ namespace Apoc3D.Graphics
                 matAnims[i] = new MaterialAnimationInstance(mesh.matAnims[i].Data);
             }
         }
+
         /// <summary>
         ///  从网格数据创建网格
         /// </summary>
         /// <param name="dev"></param>
         /// <param name="data"></param>
-        public GameMesh(RenderSystem dev, MeshData data)
+        public GameMesh(RenderSystem rs, MeshData data)
         {
-            this.renderSystem = dev;
+            this.renderSystem = rs;
+            this.factory = rs.ObjectFactory;
 
-            BuildFromData(dev, data);
+            BuildFromData(rs, data);
         }
 
-        public GameMesh(RenderSystem dev, VertexPNT1[] vertices, int[] indices, Material[][] materials)
+        public GameMesh(RenderSystem rs, VertexPNT1[] vertices, int[] indices, Material[][] materials)
         {
-            this.renderSystem = dev;
-            this.vtxDecl = new VertexDeclaration(dev, VertexPNT1.Elements);
+            this.factory = rs.ObjectFactory;
+
+            this.renderSystem = rs;
+            this.vtxDecl = factory.CreateVertexDeclaration(VertexPNT1.Elements);
             this.materials = materials;
 
             this.matAnims = new MaterialAnimationInstance[materials.Length];
 
-            vertexSize = sizeof(VertexPNT1);
+            this.vertexSize = sizeof(VertexPNT1);
             int vbSize = vertexSize * vertices.Length;
 
-            vertexBuffer = new VertexBuffer(dev, vbSize, BufferUsage.None, VertexPNT1.Format);
+            this.vertexBuffer = factory.CreateVertexBuffer(vertices.Length, vtxDecl, BufferUsage.Static);
 
             void* vdst = vertexBuffer.Lock(0, 0, LockMode.None).ToPointer();
 
@@ -1065,24 +1059,24 @@ namespace Apoc3D.Graphics
                 Memory.Copy(src, vdst, vbSize);
             }
 
-            vertexBuffer.Unlock();
+            this.vertexBuffer.Unlock();
 
 
             int ibSize = sizeof(uint) * indices.Length;
 
-            indexBuffers = new IndexBuffer[1];
-            indexBuffers[0] = new IndexBuffer(dev, ibSize, BufferUsage.None,  false);
+            this.indexBuffers = new IndexBuffer[1];
+            this.indexBuffers[0] = factory.CreateIndexBuffer(IndexBufferType.Bit32, indices.Length, BufferUsage.Static);
 
             void* idst = indexBuffers[0].Lock(0, 0, LockMode.None).ToPointer();
 
-            indexBuffers[0].Lock(0, 0, LockMode.None);
+            this.indexBuffers[0].Lock(0, 0, LockMode.None);
 
             fixed (int* src = &indices[0])
             {
                 Memory.Copy(src, idst, ibSize);
             }
 
-            indexBuffers[0].Unlock();
+            this.indexBuffers[0].Unlock();
 
             partPrimCount = new int[materials.Length];
             partVtxCount = new int[materials.Length];
@@ -1102,13 +1096,6 @@ namespace Apoc3D.Graphics
         #endregion
 
         #region 属性
-        ///// <summary>
-        /////  获得网格顶点的格式的VertexFormat表达形式
-        ///// </summary>
-        //public VertexFormat Format
-        //{
-        //    get { return vtxFormat; }
-        //}
 
         public int[] PartPrimitiveCount
         {
@@ -1166,7 +1153,7 @@ namespace Apoc3D.Graphics
                 for (int i = 0; i < bufferedOp.Length; i++)
                 {
                     GeomentryData gd = new GeomentryData(this);
-                    gd.Format = vtxFormat;
+
                     //bufferedGm[i].Material = materials[i];
                     gd.IndexBuffer = indexBuffers[i];
                     gd.PrimCount = partPrimCount[i];

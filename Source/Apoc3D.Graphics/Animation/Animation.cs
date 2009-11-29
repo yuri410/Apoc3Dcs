@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics.Animation
 {
@@ -63,6 +64,8 @@ namespace Apoc3D.Graphics.Animation
             protected set { currentFrame = value; }
         }
 
+        public abstract Matrix GetTransform(int index);               
+        
         #region IUpdatable 成员
 
         public virtual void Update(float dt)

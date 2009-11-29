@@ -127,9 +127,6 @@
     <Compile Include="Scene\SceneNode.cs" />
     <Compile Include="Scene\SceneObject.cs" />
     <Compile Include="Scene\StaticModelObject.cs" />
-    <Compile Include="Scene\Terrain.cs" />
-    <Compile Include="Scene\TerrainFactory.cs" />
-    <Compile Include="Scene\TerrainTreeNode.cs" />
     <Compile Include="ShadowMap.cs" />
     <Compile Include="RenderSystem\VertexFormats.cs" />
     <Compile Include="WaterSurface.cs" />

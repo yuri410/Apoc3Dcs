@@ -5,6 +5,7 @@ using System.Text;
 using Apoc3D.Collections;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
+using Apoc3D.Core;
 
 namespace Apoc3D.Graphics
 {
@@ -188,7 +189,7 @@ namespace Apoc3D.Graphics
                 new Vector3(x + texture.Width, y, 0),
                 new Vector3(x, y + texture.Height, 0),
                 new Vector3(x + texture.Width, y + texture.Height, 0));
-            buf.Material.SetTexture(0, texture);
+            buf.Material.SetTexture(0, new ResourceHandle<Texture>(texture));
 
             curIndex++;
 
@@ -216,7 +217,7 @@ namespace Apoc3D.Graphics
                new Vector3(rect.X + rect.Width, rect.Y, 0),
                new Vector3(rect.X, rect.Y + rect.Height, 0),
                new Vector3(rect.X + rect.Width, rect.Y + texture.Height, 0));
-            buf.Material.SetTexture(0, texture);
+            buf.Material.SetTexture(0, new ResourceHandle<Texture>(texture));
 
             curIndex++;
 
