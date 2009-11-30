@@ -4,8 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Xml;
-using SlimDX;
-using SlimDX.Direct3D9;
 using Apoc3D.Ide.Designers;
 using Apoc3D.Graphics;
 

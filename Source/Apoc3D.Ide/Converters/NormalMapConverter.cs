@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Apoc3D.IO;
+using Apoc3D.Vfs;
 
 namespace Apoc3D.Ide.Converters
 {

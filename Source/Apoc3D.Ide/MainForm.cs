@@ -15,9 +15,9 @@ using Apoc3D.Ide.Designers;
 using Apoc3D.Ide.Projects;
 using Apoc3D.Ide.Templates;
 using Apoc3D.Ide.Tools;
-using Apoc3D.IO;
+using Apoc3D.MathLib;
 using Apoc3D.Media;
-using Apoc3D.UI;
+using Apoc3D.Vfs;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Apoc3D.Ide
@@ -320,7 +320,7 @@ namespace Apoc3D.Ide
             {
                 e.Cancel = true;
             }
-            Engine.Release();
+            //Engine.Release();
         }
 
         public CloseDocumentResult CloseDocuments(IDockContent[] docFrms)

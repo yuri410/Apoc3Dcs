@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 using Apoc3D.Vfs;
 
 namespace Apoc3D.Ide
@@ -31,66 +30,63 @@ namespace Apoc3D.Ide
         {
             singleton = new PluginManager();
 
-            string pluginPath = Path.Combine(Application.StartupPath, Paths.Plugin);
-            if (Directory.Exists(pluginPath))
+            string[] files = FileSystem.Instance.SearchFile("*.dll");
+
+            Type iplugin = typeof(IPlugin);
+
+            for (int i = 0; i < files.Length; i++)
             {
-                string[] files = Directory.GetFiles(pluginPath, "*.dll", SearchOption.TopDirectoryOnly);
+                IPlugin obj = null;
 
-                Type iplugin = typeof(IPlugin);
-
-                for (int i = 0; i < files.Length; i++)
+                try
                 {
-                    IPlugin obj = null;
+                    Assembly assembly = Assembly.LoadFrom(files[i]);
 
-                    try
+                    Type[] types = assembly.GetTypes();
+
+                    bool found = false;
+                    for (int j = 0; j < types.Length && !found; j++)
                     {
-                        Assembly assembly = Assembly.LoadFile(files[i]);
-                        
-                        Type[] types = assembly.GetTypes();
+                        Type[] interfaces = types[j].GetInterfaces();
 
-                        bool found = false;
-                        for (int j = 0; j < types.Length && !found; j++)
+                        for (int k = 0; k < interfaces.Length && !found; k++)
                         {
-                            Type[] interfaces = types[j].GetInterfaces();
-
-                            for (int k = 0; k < interfaces.Length && !found; k++)
+                            if (interfaces[k] == iplugin)
                             {
-                                if (interfaces[k] == iplugin)
+                                obj = (IPlugin)Activator.CreateInstance(types[j]);
+
+                                try
                                 {
-                                    obj = (IPlugin)Activator.CreateInstance(types[j]);
-
-                                    try
-                                    {
-                                        obj.Load();
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        if (errcbk != null)
-                                        {
-                                            errcbk(obj, e);
-                                        }
-                                    }
-
-                                    singleton.plugins.Add(obj.Name, obj);
-
-                                    found = true;
+                                    obj.Load();
                                 }
+                                catch (Exception e)
+                                {
+                                    if (errcbk != null)
+                                    {
+                                        errcbk(obj, e);
+                                    }
+                                }
+
+                                singleton.plugins.Add(obj.Name, obj);
+
+                                found = true;
                             }
                         }
                     }
-                    catch (BadImageFormatException)
-                    {
-
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write(e.Message);
-                    }
-                    if (prgcbk != null)
-                    {
-                        prgcbk(obj, i, files.Length);
-                    }
                 }
+                catch (BadImageFormatException)
+                {
+
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.Message);
+                }
+                if (prgcbk != null)
+                {
+                    prgcbk(obj, i, files.Length);
+                }
+
             }
         }
 

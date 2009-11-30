@@ -5,8 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Apoc3D.UI;
-
 
 namespace Apoc3D.Ide.Editors
 {

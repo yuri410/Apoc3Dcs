@@ -44,12 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffer\D3D9BackBuffer.cs" />
+    <Compile Include="Buffer\D3D9DepthBuffer.cs" />
     <Compile Include="Buffer\D3D9IndexBuffer.cs" />
-    <Compile Include="Buffer\D3D9Surface.cs" />
     <Compile Include="Buffer\D3D9VertexBuffer.cs" />
-    <Compile Include="D3D9ConstantTable.cs" />
     <Compile Include="D3D9DeviceContent.cs" />
-    <Compile Include="D3D9Font.cs" />
     <Compile Include="D3D9GraphicsAPI.cs" />
     <Compile Include="D3D9Line.cs" />
     <Compile Include="D3D9ObjectFactory.cs" />
@@ -78,9 +77,6 @@
       <Project>{726180A4-EE3E-478D-A5F9-985F56393AA7}</Project>
       <Name>Apoc3D.Graphics</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

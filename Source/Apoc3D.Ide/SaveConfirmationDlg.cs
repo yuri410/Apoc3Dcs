@@ -5,9 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Apoc3D.Ide.Designers;
 using Apoc3D;
-using Apoc3D.UI;
+using Apoc3D.Ide.Designers;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Ide
 {

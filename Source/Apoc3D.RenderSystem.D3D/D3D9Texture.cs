@@ -30,7 +30,7 @@ namespace Apoc3D.Graphics.D3D9
         static D3D.Pool GetPool(TextureUsage usage)
         {
             if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
-                                   (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
+               (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
             {
                 return D3D.Pool.Default;
             }
@@ -88,129 +88,129 @@ namespace Apoc3D.Graphics.D3D9
             }
         }
 
-        public unsafe D3D9Texture(D3D9RenderSystem rs, D3D9Surface[] surface, TextureUsage usage)
-            : base(rs, surface, usage)
-        {
-            this.device = rs.D3DDevice;
+        //public unsafe D3D9Texture(D3D9RenderSystem rs, D3D9Surface[] surface, TextureUsage usage)
+        //    : base(rs, surface, usage)
+        //{
+        //    this.device = rs.D3DDevice;
 
-            if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
-                (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
-            {
-                pool = D3D.Pool.Default;
-            }
-            else
-            {
-                pool = D3D.Pool.Managed;
-            }
+        //    if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
+        //        (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
+        //    {
+        //        pool = D3D.Pool.Default;
+        //    }
+        //    else
+        //    {
+        //        pool = D3D.Pool.Managed;
+        //    }
 
-            Texture = new D3D.Texture(device, Width, Height, SurfaceCount, D3D.Usage.None, D3D9Utils.ConvertEnum(Format), pool);
+        //    Texture = new D3D.Texture(device, Width, Height, SurfaceCount, D3D.Usage.None, D3D9Utils.ConvertEnum(Format), pool);
 
 
-            //D3D.Surface[] dsurface = new D3D.Surface[surface.Length];
-            for (int i = 0; i < surface.Length; i++)
-            {
-                D3D.Surface dsurface = surface[i].D3DSurface;
+        //    //D3D.Surface[] dsurface = new D3D.Surface[surface.Length];
+        //    for (int i = 0; i < surface.Length; i++)
+        //    {
+        //        D3D.Surface dsurface = surface[i].D3DSurface;
 
-                SlimDX.DataRectangle rect = texture.LockRectangle(0, D3D.LockFlags.None);
+        //        SlimDX.DataRectangle rect = texture.LockRectangle(0, D3D.LockFlags.None);
 
-                SlimDX.DataRectangle rect2 = dsurface.LockRectangle(D3D.LockFlags.None);
+        //        SlimDX.DataRectangle rect2 = dsurface.LockRectangle(D3D.LockFlags.None);
                                 
-                Memory.Copy(rect2.Data.DataPointer, rect.Data.DataPointer,  surface[i].Size);
+        //        Memory.Copy(rect2.Data.DataPointer, rect.Data.DataPointer,  surface[i].Size);
 
-                texture.UnlockRectangle(0);
+        //        texture.UnlockRectangle(0);
 
-                dsurface.UnlockRectangle();
-            }
+        //        dsurface.UnlockRectangle();
+        //    }
 
 
 
-        }
+        //}
 
-        public unsafe D3D9Texture(D3D9RenderSystem rs, D3D9Texture texture)
-            : base(rs, texture)
-        {
-            this.device = rs.D3DDevice;            
+        //public unsafe D3D9Texture(D3D9RenderSystem rs, D3D9Texture texture)
+        //    : base(rs, texture)
+        //{
+        //    this.device = rs.D3DDevice;            
 
-            this.pool = texture.pool;
-            this.baseTexture = texture.baseTexture;
-            this.texture = texture.texture;
-            this.volTexture = texture.volTexture;
-            this.cubeTexture = texture.cubeTexture;
-        }
+        //    this.pool = texture.pool;
+        //    this.baseTexture = texture.baseTexture;
+        //    this.texture = texture.texture;
+        //    this.volTexture = texture.volTexture;
+        //    this.cubeTexture = texture.cubeTexture;
+        //}
 
-        public unsafe D3D9Texture(D3D9RenderSystem rs, System.Drawing.Bitmap bmp, TextureUsage usage)
-            : base(rs, bmp, usage)
-        {
-            if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
-               (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
-            {
-                pool = D3D.Pool.Default;
-            }
-            else
-            {
-                pool = D3D.Pool.Managed;
-            }
-            device = rs.D3DDevice;
+        //public unsafe D3D9Texture(D3D9RenderSystem rs, System.Drawing.Bitmap bmp, TextureUsage usage)
+        //    : base(rs, bmp, usage)
+        //{
+        //    if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
+        //       (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
+        //    {
+        //        pool = D3D.Pool.Default;
+        //    }
+        //    else
+        //    {
+        //        pool = D3D.Pool.Managed;
+        //    }
+        //    device = rs.D3DDevice;
 
-            Texture = new D3D.Texture(device, Width, Height, SurfaceCount, D3D.Usage.None, D3D.Format.A8R8G8B8, pool);
+        //    Texture = new D3D.Texture(device, Width, Height, SurfaceCount, D3D.Usage.None, D3D.Format.A8R8G8B8, pool);
 
-            SlimDX.DataRectangle rect = texture.LockRectangle(0, D3D.LockFlags.None);
+        //    SlimDX.DataRectangle rect = texture.LockRectangle(0, D3D.LockFlags.None);
 
-            SDI.BitmapData bmpData = bmp.LockBits(new SD.Rectangle(0, 0, Width, Height), SDI.ImageLockMode.ReadOnly, SDI.PixelFormat.Format32bppArgb);
+        //    SDI.BitmapData bmpData = bmp.LockBits(new SD.Rectangle(0, 0, Width, Height), SDI.ImageLockMode.ReadOnly, SDI.PixelFormat.Format32bppArgb);
 
-            if (rect.Pitch == Width * 4)
-            {
-                Memory.Copy(bmpData.Scan0, rect.Data.DataPointer, ContentSize);
-            }
-            else
-            {
-                int rowSize = Width * 4;
-                byte* src = (byte*)bmpData.Scan0.ToPointer();
-                byte* dst = (byte*)rect.Data.DataPointer.ToPointer();
-                for (int i = 0; i < Height; i++)
-                {
-                    Memory.Copy(src, dst, rowSize);
-                    src += rowSize;
-                    dst += rowSize;
-                }
-            } 
+        //    if (rect.Pitch == Width * 4)
+        //    {
+        //        Memory.Copy(bmpData.Scan0, rect.Data.DataPointer, ContentSize);
+        //    }
+        //    else
+        //    {
+        //        int rowSize = Width * 4;
+        //        byte* src = (byte*)bmpData.Scan0.ToPointer();
+        //        byte* dst = (byte*)rect.Data.DataPointer.ToPointer();
+        //        for (int i = 0; i < Height; i++)
+        //        {
+        //            Memory.Copy(src, dst, rowSize);
+        //            src += rowSize;
+        //            dst += rowSize;
+        //        }
+        //    } 
             
-            bmp.UnlockBits(bmpData);
+        //    bmp.UnlockBits(bmpData);
 
-            texture.UnlockRectangle(0);
-        }
+        //    texture.UnlockRectangle(0);
+        //}
 
-        public D3D9Texture(D3D9RenderSystem rs, ImageLoader image, TextureUsage usage)
-            : base(rs, image, usage)
-        {
-            if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
-                (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
-            {
-                pool = D3D.Pool.Default;
-            }
-            else
-            {
-                pool = D3D.Pool.Managed;
-            } 
-            device = rs.D3DDevice;
-        }
+        //public D3D9Texture(D3D9RenderSystem rs, ImageLoader image, TextureUsage usage)
+        //    : base(rs, image, usage)
+        //{
+        //    if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
+        //        (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
+        //    {
+        //        pool = D3D.Pool.Default;
+        //    }
+        //    else
+        //    {
+        //        pool = D3D.Pool.Managed;
+        //    } 
+        //    device = rs.D3DDevice;
+        //}
 
-        public D3D9Texture(D3D9RenderSystem rs, Image image, TextureUsage usage)
-            : base(rs, image, usage)
-        {
-            if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
-                (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
-            {
-                pool = D3D.Pool.Default;
-            }
-            else
-            {
-                pool = D3D.Pool.Managed;
-            }
-            device = rs.D3DDevice;
-        }
+        //public D3D9Texture(D3D9RenderSystem rs, Image image, TextureUsage usage)
+        //    : base(rs, image, usage)
+        //{
+        //    if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget ||
+        //        (usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
+        //    {
+        //        pool = D3D.Pool.Default;
+        //    }
+        //    else
+        //    {
+        //        pool = D3D.Pool.Managed;
+        //    }
+        //    device = rs.D3DDevice;
+        //}
         
-        public D3D9Texture(D3D9RenderSystem rs, int length, int levelCount, TextureUsage usage, PixelFormat format)
+        public D3D9Texture(D3D9RenderSystem rs, int length, int levelCount, TextureUsage usage, ImagePixelFormat format)
             : base(rs, length, levelCount, usage, format)
         {
             pool = GetPool(usage);
@@ -218,7 +218,7 @@ namespace Apoc3D.Graphics.D3D9
             CubeTexture = new D3D.CubeTexture(rs.D3DDevice, length, levelCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
 
         }
-        public D3D9Texture(D3D9RenderSystem rs, int width, int height, int levelCount, TextureUsage usage, PixelFormat format)
+        public D3D9Texture(D3D9RenderSystem rs, int width, int height, int levelCount, TextureUsage usage, ImagePixelFormat format)
             : base(rs, width, height, 1, levelCount, format, usage)
         {
             pool = GetPool(usage);
@@ -226,7 +226,7 @@ namespace Apoc3D.Graphics.D3D9
 
             Texture = new D3D.Texture(rs.D3DDevice, width, height, levelCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
         }
-        public D3D9Texture(D3D9RenderSystem rs, int width, int height, int depth, int levelCount, TextureUsage usage, PixelFormat format)
+        public D3D9Texture(D3D9RenderSystem rs, int width, int height, int depth, int levelCount, TextureUsage usage, ImagePixelFormat format)
             : base(rs, width, height, depth, levelCount, format, usage)
         {
             pool = GetPool(usage);
@@ -241,29 +241,29 @@ namespace Apoc3D.Graphics.D3D9
                 Texture = new D3D.Texture(rs.D3DDevice, width, height, levelCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
             }
         }
-        protected override void LoadImage(Image image)
-        {
-            switch (Type)
-            {
-                case TextureType.CubeTexture:
-                    CubeTexture = new D3D.CubeTexture(device, Width, SurfaceCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
+        //protected override void LoadImage(Image image)
+        //{
+        //    switch (Type)
+        //    {
+        //        case TextureType.CubeTexture:
+        //            CubeTexture = new D3D.CubeTexture(device, Width, SurfaceCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
 
-                    break;
+        //            break;
 
-                case TextureType.Texture1D:
-                case TextureType.Texture2D:
-                    Texture = new D3D.Texture(device, Width, Height, SurfaceCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
+        //        case TextureType.Texture1D:
+        //        case TextureType.Texture2D:
+        //            Texture = new D3D.Texture(device, Width, Height, SurfaceCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
                     
-                    break;
+        //            break;
 
-                case TextureType.Texture3D:
-                    VolumeTexture = new D3D.VolumeTexture(device, Width, Height, Depth, SurfaceCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
+        //        case TextureType.Texture3D:
+        //            VolumeTexture = new D3D.VolumeTexture(device, Width, Height, Depth, SurfaceCount, D3D9Utils.ConvertEnum(Usage), D3D9Utils.ConvertEnum(Format), pool);
                     
-                    break;
-            }
+        //            break;
+        //    }
 
-            throw new NotImplementedException();
-        }
+        //    throw new NotImplementedException();
+        //}
 
         protected override void unload()
         {

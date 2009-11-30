@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Apoc3D.IO;
+using Apoc3D.Vfs;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Apoc3D.Ide.Designers

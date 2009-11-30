@@ -20,22 +20,13 @@ namespace Apoc3D.Graphics.D3D9
         {
             return new D3D9Texture(d3dRenderSys, (D3D9Texture)texture);
         }
-        public override Texture CreateTexture(System.Drawing.Bitmap bmp, TextureUsage usage)
-        {
-            return new D3D9Texture(d3dRenderSys, bmp, usage);
-        }
+
         public override Texture CreateTexture(int width, int height, int levelCount, TextureUsage usage, PixelFormat format)
         {
             return new D3D9Texture(d3dRenderSys, width, height, levelCount, usage, format);
         }
-        public override Texture CreateTexture(ImageLoader image, TextureUsage usage)
-        {
-            return new D3D9Texture(d3dRenderSys, image, usage);
-        }
-        public override Texture CreateTexture(Image image, TextureUsage usage)
-        {
-            return new D3D9Texture(d3dRenderSys, image, usage);
-        }
+
+
         public override Texture CreateTexture(int width, int height, int depth, int levelCount, TextureUsage usage, PixelFormat format)
         {
             return new D3D9Texture(d3dRenderSys, width, height, depth, levelCount, usage, format);

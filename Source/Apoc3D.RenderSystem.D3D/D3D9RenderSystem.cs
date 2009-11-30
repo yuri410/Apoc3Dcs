@@ -11,8 +11,8 @@ namespace Apoc3D.Graphics.D3D9
     {
         const int MaxLights = 8;
 
-        Direct3D d3d;
-        Device device;
+        D3D.Direct3D d3d;
+        D3D.Device device;
 
         D3D9RenderStateManager renderStates;
 
@@ -23,7 +23,7 @@ namespace Apoc3D.Graphics.D3D9
 
         SamplerState[] bufferedStates;
 
-        public D3D9RenderSystem(Direct3D d3d, Device device)
+        public D3D9RenderSystem(D3D.Direct3D d3d, D3D.Device device)
             : base(D3D9GraphicsAPIFactory.APIName)
         {
             this.d3d = d3d;
@@ -338,11 +338,11 @@ namespace Apoc3D.Graphics.D3D9
 
             RenderSystemCaps = caps;
 
-            device.SetRenderState(RenderState.LocalViewer, true);
+            device.SetRenderState(D3D.RenderState.LocalViewer, true);
             //device = new Device(d3d, adapter, DeviceType.Hardware, IntPtr.Zero, CreateFlags.HardwareVertexProcessing);
         }
 
-        internal Device D3DDevice
+        internal D3D.Device D3DDevice
         {
             get { return device; }
         }
@@ -364,54 +364,54 @@ namespace Apoc3D.Graphics.D3D9
             device.Clear(D3D9Utils.ConvertEnum(flags), color, depth, stencil);
         }
 
-        public unsafe override Matrix GetTransform(TransformState state)
-        {
-            matBuffer = device.GetTransform((int)state);
+        //public unsafe override Matrix GetTransform(TransformState state)
+        //{
+        //    matBuffer = device.GetTransform((int)state);
 
-            fixed (SlimDX.Matrix* ptr = &matBuffer)
-            {
-                return *(Matrix*)ptr;
-            }
-        }
+        //    fixed (SlimDX.Matrix* ptr = &matBuffer)
+        //    {
+        //        return *(Matrix*)ptr;
+        //    }
+        //}
 
-        public override void SetFog(FogMode mode, ColorValue color, float start, float end, float density)
-        {
-            if (mode == FogMode.None)
-            {
-                renderStates.FogEnable = false;
-            }
-            else
-            {
-                renderStates.FogEnable = true;
+        //public override void SetFog(FogMode mode, ColorValue color, float start, float end, float density)
+        //{
+        //    if (mode == FogMode.None)
+        //    {
+        //        renderStates.FogEnable = false;
+        //    }
+        //    else
+        //    {
+        //        renderStates.FogEnable = true;
 
-                renderStates.FogVertexMode = mode;
-                renderStates.FogTableMode = mode;
-                renderStates.FogStart = start;
-                renderStates.FogEnd = end;
-                renderStates.FogDensity = density;
-                renderStates.FogColor = color;
-            }
-        }
-        public unsafe override void SetTransform(TransformState state, Matrix matrix)
-        {
-            device.SetTransform((int)state, *(SlimDX.Matrix*)&matrix);
-        }
+        //        renderStates.FogVertexMode = mode;
+        //        renderStates.FogTableMode = mode;
+        //        renderStates.FogStart = start;
+        //        renderStates.FogEnd = end;
+        //        renderStates.FogDensity = density;
+        //        renderStates.FogColor = color;
+        //    }
+        //}
+        //public unsafe override void SetTransform(TransformState state, Matrix matrix)
+        //{
+        //    device.SetTransform((int)state, *(SlimDX.Matrix*)&matrix);
+        //}
 
         public override void SetPointParameters(float size, bool attenuationEnabled, float constant, float linear, float quadratic, float minSize, float maxSize)
         {
             if (attenuationEnabled)
             {
-                device.SetRenderState(RenderState.PointScaleEnable, true);
-                device.SetRenderState(RenderState.PointScaleA, constant);
-                device.SetRenderState(RenderState.PointScaleB, linear);
-                device.SetRenderState(RenderState.PointScaleC, quadratic);
+                device.SetRenderState(D3D.RenderState.PointScaleEnable, true);
+                device.SetRenderState(D3D.RenderState.PointScaleA, constant);
+                device.SetRenderState(D3D.RenderState.PointScaleB, linear);
+                device.SetRenderState(D3D.RenderState.PointScaleC, quadratic);
             }
             else
             {
-                device.SetRenderState(RenderState.PointScaleEnable, false);
+                device.SetRenderState(D3D.RenderState.PointScaleEnable, false);
             }
-            device.SetRenderState(RenderState.PointSize, size);
-            device.SetRenderState(RenderState.PointSizeMin, minSize);
+            device.SetRenderState(D3D.RenderState.PointSize, size);
+            device.SetRenderState(D3D.RenderState.PointSizeMin, minSize);
             //RenderStates.PointSize = size;
             //RenderStates.PointSizeMin = minSize;
 
@@ -419,7 +419,7 @@ namespace Apoc3D.Graphics.D3D9
             {
                 maxSize = RenderSystemCaps.MaxPointSize;
             }
-            device.SetRenderState(RenderState.PointSizeMax, minSize);
+            device.SetRenderState(D3D.RenderState.PointSizeMax, minSize);
 
         }
         public override void Render(RenderOperation[] op)
@@ -429,47 +429,47 @@ namespace Apoc3D.Graphics.D3D9
             
         }
 
-        public override Light GetLight(int index)
-        {
-            return lightBuffer[index];
-        }
-        public unsafe override void SetLight(int index, Light light)
-        {
-            if (light == null && lightBuffer[index] != null)
-            {
-                device.EnableLight(index, false);
-            }
-            else if (light != null && lightBuffer[index] == null)
-            {
-                device.EnableLight(index, true);
-            }
+        //public override Light GetLight(int index)
+        //{
+        //    return lightBuffer[index];
+        //}
+        //public unsafe override void SetLight(int index, Light light)
+        //{
+        //    if (light == null && lightBuffer[index] != null)
+        //    {
+        //        device.EnableLight(index, false);
+        //    }
+        //    else if (light != null && lightBuffer[index] == null)
+        //    {
+        //        device.EnableLight(index, true);
+        //    }
 
-            Color4F clr = light.Ambient;
+        //    Color4F clr = light.Ambient;
 
-            SlimDX.Color4 d3dClr = *(SlimDX.Color4*)&clr;
+        //    SlimDX.Color4 d3dClr = *(SlimDX.Color4*)&clr;
 
-            d3dLgtBuffer[index].Ambient = d3dClr;
-            d3dLgtBuffer[index].Diffuse = d3dClr;
-            d3dLgtBuffer[index].Specular = d3dClr;
-            d3dLgtBuffer[index].Attenuation0 = light.AttenuationConst;
-            d3dLgtBuffer[index].Attenuation1 = light.AttenuationLinear;
-            d3dLgtBuffer[index].Attenuation2 = light.AttenuationQuad;
+        //    d3dLgtBuffer[index].Ambient = d3dClr;
+        //    d3dLgtBuffer[index].Diffuse = d3dClr;
+        //    d3dLgtBuffer[index].Specular = d3dClr;
+        //    d3dLgtBuffer[index].Attenuation0 = light.AttenuationConst;
+        //    d3dLgtBuffer[index].Attenuation1 = light.AttenuationLinear;
+        //    d3dLgtBuffer[index].Attenuation2 = light.AttenuationQuad;
 
-            Vector3 tmpVec = light.Direction;
+        //    Vector3 tmpVec = light.Direction;
 
-            d3dLgtBuffer[index].Direction = *(SlimDX.Vector3*)&tmpVec;
+        //    d3dLgtBuffer[index].Direction = *(SlimDX.Vector3*)&tmpVec;
 
-            d3dLgtBuffer[index].Falloff = light.SpotFalloff;
-            d3dLgtBuffer[index].Phi = light.SpotOuter;
-            d3dLgtBuffer[index].Theta = light.SpotInner;
-            d3dLgtBuffer[index].Type = D3D9Utils.ConvertEnum(light.Type);
+        //    d3dLgtBuffer[index].Falloff = light.SpotFalloff;
+        //    d3dLgtBuffer[index].Phi = light.SpotOuter;
+        //    d3dLgtBuffer[index].Theta = light.SpotInner;
+        //    d3dLgtBuffer[index].Type = D3D9Utils.ConvertEnum(light.Type);
 
-        }
+        //}
         public override void SetRenderTarget(int index, RenderTarget rt)
         {
             D3D9RenderTarget drt = (D3D9RenderTarget)rt;
 
-            device.SetRenderTarget(index, drt.d3dClrBuffer);
+            device.SetRenderTarget(index, drt.clrBuffer);
             device.DepthStencilSurface = drt.d3dDepBuffer;
         }
         public override RenderTarget GetRenderTarget(int index)
@@ -495,41 +495,41 @@ namespace Apoc3D.Graphics.D3D9
             {
                 if ((RenderSystemCaps.StencilCaps & StencilCaps.TwoSided) != StencilCaps.TwoSided)
                     throw new NotSupportedException("2-sided stencils are not supported");
-                device.SetRenderState(RenderState.TwoSidedStencilMode, true);
+                device.SetRenderState(D3D.RenderState.TwoSidedStencilMode, true);
 
                 // Set alternative versions of ops
                 // fail op
                 so = D3D9Utils.ConvertEnum(stencilFailOp);
-                device.SetRenderState<D3D.StencilOperation>(RenderState.CcwStencilFail, so);
+                device.SetRenderState<D3D.StencilOperation>(D3D.RenderState.CcwStencilFail, so);
                 // depth fail op
-                device.SetRenderState<D3D.StencilOperation>(RenderState.CcwStencilZFail, so);
+                device.SetRenderState<D3D.StencilOperation>(D3D.RenderState.CcwStencilZFail, so);
 
                 // pass op
-                device.SetRenderState<D3D.StencilOperation>(RenderState.CcwStencilPass, so);
+                device.SetRenderState<D3D.StencilOperation>(D3D.RenderState.CcwStencilPass, so);
             }
             else
             {
-                device.SetRenderState(RenderState.TwoSidedStencilMode, false);
+                device.SetRenderState(D3D.RenderState.TwoSidedStencilMode, false);
             }
 
             // func
-            device.SetRenderState<CompareFunction>(RenderState.StencilFunc, func);
+            device.SetRenderState<CompareFunction>(D3D.RenderState.StencilFunc, func);
 
             // reference value
-            device.SetRenderState(RenderState.StencilRef, refValue);
+            device.SetRenderState(D3D.RenderState.StencilRef, refValue);
 
             // mask 
-            device.SetRenderState(RenderState.StencilMask, mask);
+            device.SetRenderState(D3D.RenderState.StencilMask, mask);
 
             // fail op
             so = D3D9Utils.ConvertEnum(stencilFailOp);
-            device.SetRenderState<D3D.StencilOperation>(RenderState.CcwStencilFail, so);
+            device.SetRenderState<D3D.StencilOperation>(D3D.RenderState.CcwStencilFail, so);
 
             // depth fail op
-            device.SetRenderState<D3D.StencilOperation>(RenderState.CcwStencilZFail, so);
+            device.SetRenderState<D3D.StencilOperation>(D3D.RenderState.CcwStencilZFail, so);
 
             // pass op
-            device.SetRenderState<D3D.StencilOperation>(RenderState.CcwStencilPass, so);
+            device.SetRenderState<D3D.StencilOperation>(D3D.RenderState.CcwStencilPass, so);
         }
         public override void SetTexture(int index, Texture texture)
         {
@@ -543,53 +543,6 @@ namespace Apoc3D.Graphics.D3D9
         {
             return new SamplerStateCollection(bufferedStates);
         }
-
-        //public override void SetSamplerState(int sampler, SamplerState type, float value)
-        //{
-        //    device.SetSamplerState(sampler, D3D9Utils.ConvertEnum(type), value);
-        //}
-        //public override void SetSamplerState(int sampler, SamplerState type, int value)
-        //{
-        //    device.SetSamplerState(sampler, D3D9Utils.ConvertEnum(type), value);
-        //}
-        //public override void SetSamplerState(int sampler, SamplerState type, TextureAddressMode textureAddress)
-        //{
-        //    device.SetSamplerState(sampler, D3D9Utils.ConvertEnum(type), D3D9Utils.ConvertEnum(textureAddress));
-        //}
-        //public override void SetSamplerState(int sampler, SamplerState type, TextureFilter textureFilter)
-        //{
-        //    device.SetSamplerState(sampler, D3D9Utils.ConvertEnum(type), D3D9Utils.ConvertEnum(textureFilter));
-        //}
-
-
-        //public override void SetTextureStageState(int sampler, TextureStage type, float value)
-        //{
-        //    device.SetTextureStageState(sampler, D3D9Utils.ConvertEnum(type), value);
-        //}
-
-        //public override void SetTextureStageState(int sampler, TextureStage type, int value)
-        //{
-        //    device.SetTextureStageState(sampler, D3D9Utils.ConvertEnum(type), value);
-          
-        //}
-        //public override void SetTextureStageState(int sampler, TextureStage type, TextureArgument arg)
-        //{
-        //    device.SetTextureStageState(sampler, D3D9Utils.ConvertEnum(type), (int)value);
-        //}
-        //public override void SetTextureStageState(int sampler, TextureStage type, TextureOperation arg)
-        //{
-        //    device.SetTextureStageState(sampler, D3D9Utils.ConvertEnum(type), D3D9Utils.ConvertEnum(value));
-        //}
-        //public override void SetTextureStageState(int sampler, TextureStage type, TextureTransform arg)
-        //{
-        //    device.SetTextureStageState(sampler, D3D9Utils.ConvertEnum(type), D3D9Utils.ConvertEnum(value));
-        //}
-
-
-        //public override void SetEffect(R3D.GraphicsEngine.EffectSystem.Effect eff)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public override void BindShader(VertexShader shader)
         {
@@ -640,7 +593,7 @@ namespace Apoc3D.Graphics.D3D9
 
         public override string ToString()
         {
-            return RenderSystemName;
+            return "渲染子系统：" + RenderSystemName;
         }
     }
 }

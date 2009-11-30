@@ -4,6 +4,7 @@ using System.Text;
 using Apoc3D.Graphics;
 using Apoc3D.Media;
 using D3D = SlimDX.Direct3D9;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics.D3D9
 {

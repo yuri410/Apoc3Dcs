@@ -140,20 +140,28 @@ namespace Apoc3D.Graphics
         public DeviceContent CreateDeviceContent()
         {
             string osName = string.Empty;
+
             OperatingSystem osInfo = Environment.OSVersion;
-            if (osInfo.Platform == PlatformID.Win32NT ||
-                osInfo.Platform == PlatformID.Win32Windows ||
-                osInfo.Platform == PlatformID.WinCE)
+
+            switch (osInfo.Platform) 
             {
-                osName = "Windows";
-            }
-            else if (osInfo.Platform == PlatformID.MacOSX)
-            {
-                osName = "Mac OS X";
-            }
-            else
-            {
-                osName = "Linux";
+                case  PlatformID.Win32NT:
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32S:
+                    osName = "Windows";
+                    break;
+                case PlatformID.WinCE:
+                    osName = "WinCE";
+                    break;
+                case PlatformID.Unix:
+                    osName = "Linux";
+                    break;
+                case PlatformID.Xbox :
+                    osName = "XBox";
+                    break;
+                default:
+                    osName = "Mac OS X";
+                    break;
             }
 
             FastList<Entry> facList;

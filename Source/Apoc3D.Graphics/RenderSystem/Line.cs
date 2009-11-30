@@ -11,7 +11,7 @@ namespace Apoc3D.Graphics
 {
     public class Line : IRenderable
     {
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential)]
         struct LineVertex
         {
             internal static VertexDeclaration vtxDecl;

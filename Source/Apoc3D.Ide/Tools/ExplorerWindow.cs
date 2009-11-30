@@ -7,7 +7,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Apoc3D.Ide.Projects;
-using Apoc3D.UI;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Apoc3D.Ide.Tools

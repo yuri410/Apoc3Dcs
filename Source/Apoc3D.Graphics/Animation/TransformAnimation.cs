@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Apoc3D.Collections;
+using Apoc3D.Design;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
 

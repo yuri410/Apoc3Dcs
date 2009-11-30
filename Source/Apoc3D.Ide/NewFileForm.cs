@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows.Forms;
 using Apoc3D.Ide.Designers;
 using Apoc3D.Ide.Templates;
-using Apoc3D.UI;
 
 namespace Apoc3D.Ide
 {

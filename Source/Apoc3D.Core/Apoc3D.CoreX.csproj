@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AsyncProcessor.cs" />
     <Compile Include="Design\Dummy.cs" />
+    <Compile Include="Design\MatrixEditor.cs" />
     <Compile Include="DummyAttributes.cs" />
     <Compile Include="CaseInsensitiveStringComparer.cs" />
     <Compile Include="Collections\CollectionBase.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="GameClock.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="GenerationTable.cs" />
+    <Compile Include="IPlugin.cs" />
     <Compile Include="IUpdatable.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogManager.cs" />
@@ -140,11 +142,14 @@
     <Compile Include="MathLib\Vector3.cs" />
     <Compile Include="MathLib\Vector4.cs" />
     <Compile Include="MathLib\Viewport.cs" />
+    <Compile Include="Media\Data.cs" />
+    <Compile Include="Media\PixelFormat.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Network\IClient.cs" />
     <Compile Include="Network\INetworkObject.cs" />
     <Compile Include="Network\IServer.cs" />
     <Compile Include="PlatformAPISupport.cs" />
+    <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Randomizer.cs" />
     <Compile Include="Resource.cs" />
@@ -173,7 +178,6 @@
   <ItemGroup>
     <Folder Include="Graphic\" />
     <Folder Include="Input\" />
-    <Folder Include="Media\" />
     <Folder Include="Physics\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

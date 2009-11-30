@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Apoc3D.Design;
 using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics.Animation
@@ -79,7 +80,9 @@ namespace Apoc3D.Graphics.Animation
                     currentTime = 0;
                 }
 
-                currentFrame = (int)Math.Truncate(currentTime / data.FrameLength);
+                float v = (currentTime / data.FrameLength);
+                currentFrame = (int)v;
+                if (currentFrame > v) currentFrame--;
             }
         }
 

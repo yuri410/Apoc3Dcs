@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms.Design;
 using Apoc3D.MathLib;
 
 namespace Apoc3D.Design
 {
+#if !XBOX
+    using System.Drawing.Design;
+    using System.Windows.Forms.Design;
+
+#endif
     public class MatrixEditor : UITypeEditor
     {
 #if !XBOX

@@ -5,6 +5,7 @@ using Apoc3D;
 
 namespace Apoc3D
 {
+#if !XBOX
     using System.Windows.Forms;
 
     public static class LanguageParser
@@ -66,4 +67,5 @@ namespace Apoc3D
             }
         }
     }
+#endif
 }

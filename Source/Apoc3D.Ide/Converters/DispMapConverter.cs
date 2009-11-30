@@ -6,12 +6,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Windows.Forms;
-using SlimDX;
-using SlimDX.Direct3D9;
 using Apoc3D;
 using Apoc3D.Graphics;
 using Apoc3D.Ide.Designers;
-using Apoc3D.IO;
+using Apoc3D.Vfs;
 using Apoc3D.Scene;
 
 namespace Apoc3D.Ide.Converters

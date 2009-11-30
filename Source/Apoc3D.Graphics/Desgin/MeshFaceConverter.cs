@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.Collections;
 using System.Globalization;
 using System.Reflection;
@@ -10,6 +9,10 @@ using Apoc3D.Graphics;
 
 namespace Apoc3D.Design
 {
+#if !XBOX
+    using System.ComponentModel.Design.Serialization;
+#endif
+
     public class MeshFaceConverter : ExpandableObjectConverter
     {
 #if !XBOX

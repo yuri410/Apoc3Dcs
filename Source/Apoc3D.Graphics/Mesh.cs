@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using Apoc3D.Design;
 using Apoc3D.Graphics;
 using Apoc3D.Graphics.Animation;
 using Apoc3D.MathLib;

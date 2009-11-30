@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using Apoc3D.MathLib;
-    using System.Data;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Design;
 
 namespace Apoc3D.Design
 {

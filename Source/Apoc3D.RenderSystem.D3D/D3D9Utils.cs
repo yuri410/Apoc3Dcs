@@ -11,55 +11,55 @@ namespace Apoc3D.Graphics.D3D9
     {
         static D3D9Utils()
         {
-            fmtConv = new Format[(int)PixelFormat.Count];
+            fmtConv = new Format[(int)ImagePixelFormat.Count];
 
             for (int i = 0; i < fmtConv.Length; i++)
             {
                 fmtConv[i] = Format.Unknown;
             }
 
-            fmtConv[(int)PixelFormat.A16B16G16R16] = Format.A16B16G16R16;
-            fmtConv[(int)PixelFormat.A16B16G16R16F] = Format.A16B16G16R16F;
-            fmtConv[(int)PixelFormat.A1R5G5B5] = Format.A1R5G5B5;
-            fmtConv[(int)PixelFormat.A2B10G10R10] = Format.A2B10G10R10;
-            fmtConv[(int)PixelFormat.A2R10G10B10] = Format.A2R10G10B10;
-            fmtConv[(int)PixelFormat.A32B32G32R32F] = Format.A32B32G32R32F;
-            fmtConv[(int)PixelFormat.A4L4] = Format.A4L4;
-            fmtConv[(int)PixelFormat.A4R4G4B4] = Format.A4R4G4B4;
-            fmtConv[(int)PixelFormat.A8] = Format.A8;
-            fmtConv[(int)PixelFormat.A8B8G8R8] = Format.A8B8G8R8;
-            fmtConv[(int)PixelFormat.A8L8] = Format.A8L8;
-            fmtConv[(int)PixelFormat.A8R8G8B8] = Format.A8R8G8B8;
-            fmtConv[(int)PixelFormat.DXT1] = Format.Dxt1;
-            fmtConv[(int)PixelFormat.DXT2] = Format.Dxt2;
-            fmtConv[(int)PixelFormat.DXT3] = Format.Dxt3;
-            fmtConv[(int)PixelFormat.DXT4] = Format.Dxt4;
-            fmtConv[(int)PixelFormat.DXT5] = Format.Dxt5;
-            fmtConv[(int)PixelFormat.G16R16] = Format.G16R16;
-            fmtConv[(int)PixelFormat.G16R16F] = Format.G16R16F;
-            fmtConv[(int)PixelFormat.G32R32F] = Format.G32R32F;
-            fmtConv[(int)PixelFormat.L16] = Format.L16;
+            fmtConv[(int)ImagePixelFormat.A16B16G16R16] = Format.A16B16G16R16;
+            fmtConv[(int)ImagePixelFormat.A16B16G16R16F] = Format.A16B16G16R16F;
+            fmtConv[(int)ImagePixelFormat.A1R5G5B5] = Format.A1R5G5B5;
+            fmtConv[(int)ImagePixelFormat.A2B10G10R10] = Format.A2B10G10R10;
+            fmtConv[(int)ImagePixelFormat.A2R10G10B10] = Format.A2R10G10B10;
+            fmtConv[(int)ImagePixelFormat.A32B32G32R32F] = Format.A32B32G32R32F;
+            fmtConv[(int)ImagePixelFormat.A4L4] = Format.A4L4;
+            fmtConv[(int)ImagePixelFormat.A4R4G4B4] = Format.A4R4G4B4;
+            fmtConv[(int)ImagePixelFormat.A8] = Format.A8;
+            fmtConv[(int)ImagePixelFormat.A8B8G8R8] = Format.A8B8G8R8;
+            fmtConv[(int)ImagePixelFormat.A8L8] = Format.A8L8;
+            fmtConv[(int)ImagePixelFormat.A8R8G8B8] = Format.A8R8G8B8;
+            fmtConv[(int)ImagePixelFormat.DXT1] = Format.Dxt1;
+            fmtConv[(int)ImagePixelFormat.DXT2] = Format.Dxt2;
+            fmtConv[(int)ImagePixelFormat.DXT3] = Format.Dxt3;
+            fmtConv[(int)ImagePixelFormat.DXT4] = Format.Dxt4;
+            fmtConv[(int)ImagePixelFormat.DXT5] = Format.Dxt5;
+            fmtConv[(int)ImagePixelFormat.G16R16] = Format.G16R16;
+            fmtConv[(int)ImagePixelFormat.G16R16F] = Format.G16R16F;
+            fmtConv[(int)ImagePixelFormat.G32R32F] = Format.G32R32F;
+            fmtConv[(int)ImagePixelFormat.Luminance16] = Format.L16;
 
-            fmtConv[(int)PixelFormat.L8] = Format.L8;
-            fmtConv[(int)PixelFormat.R16F] = Format.R16F;
-            fmtConv[(int)PixelFormat.R32F] = Format.R32F;
-            fmtConv[(int)PixelFormat.R3G3B2] = Format.R3G3B2;
-            fmtConv[(int)PixelFormat.R5G6B5] = Format.R5G6B5;
-            fmtConv[(int)PixelFormat.R8G8B8] = Format.R8G8B8;
-            fmtConv[(int)PixelFormat.X8B8G8R8] = Format.X8B8G8R8;
-            fmtConv[(int)PixelFormat.X8R8G8B8] = Format.X8R8G8B8;
+            fmtConv[(int)ImagePixelFormat.Luminance8] = Format.L8;
+            fmtConv[(int)ImagePixelFormat.R16F] = Format.R16F;
+            fmtConv[(int)ImagePixelFormat.R32F] = Format.R32F;
+            fmtConv[(int)ImagePixelFormat.R3G3B2] = Format.R3G3B2;
+            fmtConv[(int)ImagePixelFormat.R5G6B5] = Format.R5G6B5;
+            fmtConv[(int)ImagePixelFormat.R8G8B8] = Format.R8G8B8;
+            fmtConv[(int)ImagePixelFormat.X8B8G8R8] = Format.X8B8G8R8;
+            fmtConv[(int)ImagePixelFormat.X8R8G8B8] = Format.X8R8G8B8;
 
 
-            fmtConv[(int)PixelFormat.Depth15Stencil1] = Format.D15S1;
-            fmtConv[(int)PixelFormat.Depth16] = Format.D16;
-            fmtConv[(int)PixelFormat.Depth16Lockable] = Format.D16Lockable;
-            fmtConv[(int)PixelFormat.Depth24] = Format.D24X8;
-            fmtConv[(int)PixelFormat.Depth24Stencil4] = Format.D24X4S4;
-            fmtConv[(int)PixelFormat.Depth24Stencil8] = Format.D24S8;
-            fmtConv[(int)PixelFormat.Depth24Stencil8Single] = Format.D24SingleS8;
-            fmtConv[(int)PixelFormat.Depth32] = Format.D32;
-            fmtConv[(int)PixelFormat.Depth32Lockable] = Format.D32Lockable;
-            fmtConv[(int)PixelFormat.Depth32Single] = Format.D32SingleLockable;
+            fmtConv[(int)DepthFormat.Depth15Stencil1] = Format.D15S1;
+            fmtConv[(int)DepthFormat.Depth16] = Format.D16;
+            fmtConv[(int)DepthFormat.Depth16Lockable] = Format.D16Lockable;
+            fmtConv[(int)DepthFormat.Depth24X8] = Format.D24X8;
+            fmtConv[(int)DepthFormat.Depth24Stencil4] = Format.D24X4S4;
+            fmtConv[(int)DepthFormat.Depth24Stencil8] = Format.D24S8;
+            fmtConv[(int)DepthFormat.Depth24Stencil8Single] = Format.D24SingleS8;
+            fmtConv[(int)DepthFormat.Depth32] = Format.D32;
+            fmtConv[(int)DepthFormat.Depth32Lockable] = Format.D32Lockable;
+            fmtConv[(int)DepthFormat.Depth32Single] = Format.D32SingleLockable;
 
 
             tsConv = new D3D.TextureStage[33];
@@ -762,7 +762,7 @@ namespace Apoc3D.Graphics.D3D9
 
 
 
-        public static D3D.Format ConvertEnum(PixelFormat format)
+        public static D3D.Format ConvertEnum(ImagePixelFormat format)
         {
             return fmtConv[(int)format];
             //switch (format)

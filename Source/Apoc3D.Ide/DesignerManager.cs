@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Apoc3D.Ide.Designers;
 using Apoc3D;
-using Apoc3D.IO;
+using Apoc3D.Ide.Designers;
+using Apoc3D.Vfs;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Ide
 {

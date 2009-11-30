@@ -11,7 +11,7 @@ namespace Apoc3D.Graphics
 {
     public class Sprite : IDisposable, IRenderable
     {
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential)]
         struct SpriteVertex
         {
             internal static VertexDeclaration vtxDecl;
