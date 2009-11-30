@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Apoc3D.Graphics;
-using Apoc3D.Graphics.Effects;
 using Apoc3D.Vfs;
 using Apoc3D.MathLib;
+using Apoc3D.Graphics;
 
 namespace Apoc3D.Scene
 {
@@ -31,10 +30,6 @@ namespace Apoc3D.Scene
         protected ClusterDescription description;
 
         /// <summary>
-        /// </summary>
-        protected RenderSystem renderSystem;
-
-        /// <summary>
         ///  Cluster的包围球
         /// </summary>
         protected BoundingSphere boudingSphere;
@@ -52,12 +47,11 @@ namespace Apoc3D.Scene
         /// </summary>
         /// <param name="x">以地形单位为单位</param>
         /// <param name="y">以地形单位为单位</param>
-        public Cluster(GameScene scene, RenderSystem device, int x, int y, float cellUnit)
+        public Cluster(GameScene scene, int x, int y, float cellUnit)
         {
             this.description.X = x;
             this.description.Y = y;
 
-            this.renderSystem = device;
             this.CellUnit = cellUnit;
 
             this.boudingSphere.Center = new Vector3(
@@ -69,7 +63,7 @@ namespace Apoc3D.Scene
             this.WorldX = x == 0 ? 0 : (x - 1) * cellUnit;
             this.WorldZ = y == 0 ? 0 : (y - 1) * cellUnit;
 
-            this.sceneMgr = new OctreeSceneManager(this, device, new OctreeBox(ClusterLength, 0), 10f);
+            this.sceneMgr = new OctreeSceneManager(this, new OctreeBox(ClusterLength, 0), 10f);
             this.GameScene = scene;
         }
 

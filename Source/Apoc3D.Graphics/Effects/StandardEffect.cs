@@ -176,8 +176,8 @@ namespace Apoc3D.Graphics.Effects
 
         public override void Setup(Material mat, ref RenderOperation op)
         {
-            //if (!stateSetted)
-            //{
+            if (!stateSetted)
+            {
             //    Light light = EffectParams.Atmosphere.Light;
             //    Vector3 lightDir = light.Direction;
             //    effect.SetValue(tlParamLa, light.Ambient);
@@ -190,8 +190,8 @@ namespace Apoc3D.Graphics.Effects
 
             //    effect.SetTexture(shadowMapParam, EffectParams.ShadowMap.ShadowColorMap);
 
-            //    stateSetted = true;
-            //}
+                stateSetted = true;
+            }
             //effect.SetValue(tlParamKa, mat.mat.Ambient);
             //effect.SetValue(tlParamKd, mat.mat.Diffuse);
             //effect.SetValue(tlParamKs, mat.mat.Specular);

@@ -57,131 +57,6 @@ namespace Apoc3D.Graphics
         Bit32
     }
 
-    //public enum VertexFormat
-    //{
-    //    // 摘要:
-    //    //     Vertex format contains no texture coordinate sets.
-    //    Texture0 = 0,
-    //    //
-    //    // 摘要:
-    //    //     No vertex format defined.
-    //    None = 0,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format includes the position of an untransformed vertex.
-    //    Position = 2,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format includes the position of a transformed vertex.
-    //    PositionRhw = 4,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains position and weighting values for multimatrix blending
-    //    //     operations.
-    //    PositionBlend1 = 6,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains position and weighting values for multimatrix blending
-    //    //     operations.
-    //    PositionBlend2 = 8,
-    //    //
-    //    // 摘要:
-    //    //     The number of bits by which to shift an integer value that identifies the
-    //    //     number of texture coordinates for a vertex.
-    //    TextureCountShift = 8,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains position and weighting values for multimatrix blending
-    //    //     operations.
-    //    PositionBlend3 = 10,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains position and weighting values for multimatrix blending
-    //    //     operations.
-    //    PositionBlend4 = 12,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains position and weighting values for multimatrix blending
-    //    //     operations.
-    //    PositionBlend5 = 14,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format includes a vertex normal vector.
-    //    Normal = 16,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains a position and a normal.
-    //    PositionNormal = 18,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains a point size.
-    //    PointSize = 32,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format includes a diffuse color component.
-    //    Diffuse = 64,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format includes a specular color component.
-    //    Specular = 128,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 1 texture coordinate set.
-    //    Texture1 = 256,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 2 texture coordinate sets.
-    //    Texture2 = 512,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 3 texture coordinate sets.
-    //    Texture3 = 768,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 4 texture coordinate sets.
-    //    Texture4 = 1024,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 5 texture coordinate sets.
-    //    Texture5 = 1280,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 6 texture coordinate sets.
-    //    Texture6 = 1536,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 7 texture coordinate sets.
-    //    Texture7 = 1792,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains 8 texture coordinate sets.
-    //    Texture8 = 2048,
-    //    //
-    //    // 摘要:
-    //    //     Mask for texture flag bits.
-    //    TextureCountMask = 3840,
-    //    //
-    //    // 摘要:
-    //    //     The last beta field in the vertex position data will be of type UByte4. The
-    //    //     data in the beta fields are used with matrix palette skinning to specify
-    //    //     matrix indices.
-    //    LastBetaUByte4 = 4096,
-    //    //
-    //    // 摘要:
-    //    //     Vertex format contains transformed and clipped data.
-    //    PositionW = 16386,
-    //    //
-    //    // 摘要:
-    //    //     Mask for position bits.
-    //    PositionMask = 16398,
-    //    //
-    //    // 摘要:
-    //    //     The last beta field in the vertex position data will be of type Color. The
-    //    //     data in the beta fields are used with matrix palette skinning to specify
-    //    //     matrix indices.
-    //    LastBetaColor = 32768,
-    //}
-
     public enum CullMode
     {
         Clockwise = 2,
@@ -199,54 +74,12 @@ namespace Apoc3D.Graphics
         NegativeZ
     }
 
-    //public enum DepthFormat
-    //{
-    //    Unknown = 0,
-    //    Depth15Stencil1 = 1,
-    //    Depth16 = 2,
-    //    Depth16Lockable = 3,
-    //    Depth24 = 4,
-    //    Depth24Stencil4 = 5,
-    //    Depth24Stencil8 = 6,
-    //    Depth24Stencil8Single = 7,
-    //    Depth32 = 8,
-    //    Depth32Lockable = 9,
-    //    Depth32Single = 10,
-    //}
-
 
     public enum FillMode
     {
         Point = 1,
         Solid = 3,
         WireFrame = 2
-    }
-
-    public enum FogMode
-    {
-        None = 0,
-        Exponent = 1,
-        ExponentSquared = 2,
-        Linear = 3
-    }
-
-    [Flags]
-    public enum FilterOptions
-    {
-        Box = 5,
-        Dither = 524288,
-        DitherDiffusion = 1048576,
-        Linear = 3,
-        Mirror = 458752,
-        MirrorU = 65536,
-        MirrorV = 131072,
-        MirrorW = 262144,
-        None = 1,
-        Point = 2,
-        Srgb = 6291456,
-        SrgbIn = 2097152,
-        SrgbOut = 4194304,
-        Triangle = 4
     }
 
     public enum MultiSampleType
@@ -336,65 +169,6 @@ namespace Apoc3D.Graphics
         Keep = 1,
         Replace = 3,
         Zero = 2
-    }
-
-    public enum SurfaceFormat
-    {
-        Alpha8 = 15,
-        Bgr233 = 16,
-        Bgr24 = 17,
-        Bgr32 = 2,
-        Bgr444 = 13,
-        Bgr555 = 11,
-        Bgr565 = 9,
-        Bgra1010102 = 3,
-        Bgra2338 = 14,
-        Bgra4444 = 12,
-        Bgra5551 = 10,
-        Color = 1,
-        Depth15Stencil1 = 56,
-        Depth16 = 54,
-        Depth24 = 51,
-        Depth24Stencil4 = 50,
-        Depth24Stencil8 = 48,
-        Depth24Stencil8Single = 49,
-        Depth32 = 52,
-        Dxt1 = 28,
-        Dxt2 = 29,
-        Dxt3 = 30,
-        Dxt4 = 31,
-        Dxt5 = 32,
-        HalfSingle = 25,
-        HalfVector2 = 26,
-        HalfVector4 = 27,
-        Luminance16 = 34,
-        Luminance8 = 33,
-        LuminanceAlpha16 = 36,
-        LuminanceAlpha8 = 35,
-        Multi2Bgra32 = 47,
-        NormalizedAlpha1010102 = 41,
-        NormalizedByte2 = 18,
-        NormalizedByte2Computed = 42,
-        NormalizedByte4 = 19,
-        NormalizedLuminance16 = 39,
-        NormalizedLuminance32 = 40,
-        NormalizedShort2 = 20,
-        NormalizedShort4 = 21,
-        Palette8 = 37,
-        PaletteAlpha16 = 38,
-        Rg32 = 7,
-        Rgb32 = 5,
-        Rgba1010102 = 6,
-        Rgba32 = 4,
-        Rgba64 = 8,
-        Single = 22,
-        Unknown = -1,
-        Vector2 = 23,
-        Vector4 = 24,
-        VideoGrGb = 45,
-        VideoRgBg = 46,
-        VideoUyVy = 44,
-        VideoYuYv = 43
     }
 
     public enum SwapEffect
@@ -518,24 +292,7 @@ namespace Apoc3D.Graphics
         Texture3D,
         CubeTexture
     }
-    //public enum SamplerState
-    //{
-    //    AddressU = 1,
-    //    AddressV = 2,
-    //    AddressW = 3,
-    //    BorderColor = 4,
-    //    MagFilter = 5,
-    //    MinFilter = 6,
-    //    MipFilter = 7,
-    //    MipMapLodBias = 8,
-    //    MaxMipLevel = 9,        
-    //    MaxAnisotropy = 10,        
-    //    SrgbTexture = 11 ,
-    //    ElementIndex = 12,
-    //    DisplacementMapOffset = 13
-    //}
-
-
+    
     /// <summary>
     /// Defines the possible shading modes.
     /// </summary>
@@ -551,67 +308,60 @@ namespace Apoc3D.Graphics
         Gouraud = 2,
     }
 
+    #region
     //[Flags]
-    //public enum TextureUsage
+    //public enum TextureArgument
     //{
-    //    AutoGenerateMipMap = 1024,
-    //    Linear = 1073741824,
-    //    None = 0,
-    //    Tiled = -2147483648
+    //    AlphaReplicate = 32,
+    //    Complement = 16,
+    //    Constant = 6,
+    //    Current = 1,
+    //    Diffuse = 0,
+    //    SelectMask = 15,
+    //    Specular = 4,
+    //    Temp = 5,
+    //    Texture = 2,
+    //    TFactor = 3
     //}
-    [Flags]
-    public enum TextureArgument
-    {
-        AlphaReplicate = 32,
-        Complement = 16,
-        Constant = 6,
-        Current = 1,
-        Diffuse = 0,
-        SelectMask = 15,
-        Specular = 4,
-        Temp = 5,
-        Texture = 2,
-        TFactor = 3
-    }
-    public enum TextureOperation
-    {
-        Add = 7,
-        AddSigned = 8,
-        AddSigned2X = 9,
-        AddSmooth = 11,
-        BlendCurrentAlpha = 16,
-        BlendDiffuseAlpha = 12,
-        BlendFactorAlpha = 14,
-        BlendTextureAlpha = 13,
-        BlendTextureAlphaPM = 15,
-        BumpEnvironmentMap = 22,
-        BumpEnvironmentMapLuminance = 23,
-        Disable = 1,
-        DotProduct3 = 24,
-        Lerp = 26,
-        Modulate = 4,
-        Modulate2X = 5,
-        Modulate4X = 6,
-        ModulateAlphaAddColor = 18,
-        ModulateColorAddAlpha = 19,
-        ModulateInvAlphaAddColor = 20,
-        ModulateInvColorAddAlpha = 21,
-        MultiplyAdd = 25,
-        Premodulate = 17,
-        SelectArg1 = 2,
-        SelectArg2 = 3,
-        Subtract = 10
-    }
-    public enum TextureTransform
-    {
-        Count1 = 1,
-        Count2 = 2,
-        Count3 = 3,
-        Count4 = 4,
-        Disable = 0,
-        Projected = 256
-    }
-
+    //public enum TextureOperation
+    //{
+    //    Add = 7,
+    //    AddSigned = 8,
+    //    AddSigned2X = 9,
+    //    AddSmooth = 11,
+    //    BlendCurrentAlpha = 16,
+    //    BlendDiffuseAlpha = 12,
+    //    BlendFactorAlpha = 14,
+    //    BlendTextureAlpha = 13,
+    //    BlendTextureAlphaPM = 15,
+    //    BumpEnvironmentMap = 22,
+    //    BumpEnvironmentMapLuminance = 23,
+    //    Disable = 1,
+    //    DotProduct3 = 24,
+    //    Lerp = 26,
+    //    Modulate = 4,
+    //    Modulate2X = 5,
+    //    Modulate4X = 6,
+    //    ModulateAlphaAddColor = 18,
+    //    ModulateColorAddAlpha = 19,
+    //    ModulateInvAlphaAddColor = 20,
+    //    ModulateInvColorAddAlpha = 21,
+    //    MultiplyAdd = 25,
+    //    Premodulate = 17,
+    //    SelectArg1 = 2,
+    //    SelectArg2 = 3,
+    //    Subtract = 10
+    //}
+    //public enum TextureTransform
+    //{
+    //    Count1 = 1,
+    //    Count2 = 2,
+    //    Count3 = 3,
+    //    Count4 = 4,
+    //    Disable = 0,
+    //    Projected = 256
+    //}
+    #endregion
 
     [Flags]
     public enum TextureWrapCoordinates
@@ -673,14 +423,6 @@ namespace Apoc3D.Graphics
         Vector4 = 3
     }
 
-    //public enum VertexElementMethod : byte
-    //{
-    //    Default = 0,
-    //    LookUp = 5,
-    //    LookUpPresampled = 6,
-    //    UV = 4
-    //}
- 
     public enum VertexElementUsage : byte
     {
         Binormal = 7,
@@ -746,71 +488,6 @@ namespace Apoc3D.Graphics
         World3 = 259
     }
 
-
-    ///// <summary>
-    /////     Vertex element semantics, used to identify the meaning of vertex buffer contents.
-    ///// </summary>
-    //public enum VertexElementSemantic
-    //{
-    //    /// <summary>
-    //    ///     Position, 3 reals per vertex.
-    //    /// </summary>
-    //    Position = 1,
-    //    /// <summary>
-    //    ///     Blending weights.
-    //    /// </summary>
-    //    BlendWeights = 2,
-    //    /// <summary>
-    //    ///     Blending indices.
-    //    /// </summary>
-    //    BlendIndices = 3,
-    //    /// <summary>
-    //    ///     Normal, 3 reals per vertex.
-    //    /// </summary>
-    //    Normal = 4,
-    //    /// <summary>
-    //    ///     Diffuse colors.
-    //    /// </summary>
-    //    Diffuse = 5,
-    //    /// <summary>
-    //    ///     Specular colors.
-    //    /// </summary>
-    //    Specular = 6,
-    //    /// <summary>
-    //    ///     Texture coordinates.
-    //    /// </summary>
-    //    TexCoords = 7,
-    //    /// <summary>
-    //    ///     Binormal (Y axis if normal is Z).
-    //    /// </summary>
-    //    Binormal = 8,
-    //    /// <summary>
-    //    ///     Tangent (X axis if normal is Z).
-    //    /// </summary>
-    //    Tangent = 9
-    //}
-
-    ///// <summary>
-    /////     Vertex element type, used to identify the base types of the vertex contents.
-    ///// </summary>
-    //public enum VertexElementType
-    //{
-    //    Float1,
-    //    Float2,
-    //    Float3,
-    //    Float4,
-    //    Color,
-    //    Short1,
-    //    Short2,
-    //    Short3,
-    //    Short4,
-    //    UByte4,
-    //    /// D3D style compact colour
-    //    Color_ARGB = 10,
-    //    /// GL style compact colour
-    //    Color_ABGR = 11
-
-    //}
 
     public enum PresentInterval
     {

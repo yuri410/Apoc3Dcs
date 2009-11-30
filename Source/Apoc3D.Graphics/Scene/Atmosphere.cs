@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Apoc3D.Config;
+using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
 
-namespace Apoc3D.Graphics
+namespace Apoc3D.Scene
 {
+    public enum FogMode : int
+    {
+        None = 0,
+        Simple
+    }
+
     /// <summary>
     ///  提供大气效果的信息
     /// </summary>
@@ -290,8 +297,8 @@ namespace Apoc3D.Graphics
         AtmosphereInfo info;
         RenderSystem renderSystem;
 
-        Light light;
-        Light currentLight;
+        Light light = new Light();
+        Light currentLight = new Light();
 
         FogMode fogMode;
         ColorValue fogColor;
@@ -393,7 +400,6 @@ namespace Apoc3D.Graphics
             this.renderSystem = rs;
             this.info = info;
 
-            light = new Light();
             light.Ambient = info.AmbientColor;
             light.Diffuse = info.DiffuseColor;
             light.Specular = info.SpecularColor;

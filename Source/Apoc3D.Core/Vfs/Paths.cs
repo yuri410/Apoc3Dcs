@@ -8,6 +8,7 @@ namespace Apoc3D.Vfs
     public static class Paths
     {
         //static readonly string 
+        static readonly string plugin = "plugin";
         static readonly string maps = "maps";
         static readonly string models = "models";
         static readonly string effects = "effects";
@@ -30,7 +31,10 @@ namespace Apoc3D.Vfs
             get { return mapFilter; }
         }
 
-
+        public static string Plugin 
+        {
+            get { return plugin; }
+        }
 
         public static string Models
         {

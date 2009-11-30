@@ -6,10 +6,11 @@ using Apoc3D.Collections;
 using Apoc3D.Config;
 using Apoc3D.Graphics;
 using Apoc3D.Graphics.Effects;
-using Apoc3D.Vfs;
 using Apoc3D.MathLib;
+using Apoc3D.Vfs;
+using Apoc3D.Scene;
 
-namespace Apoc3D.Scene
+namespace Apoc3D.Graphics
 {
     public unsafe abstract class GameSceneBase<CType, SDType> : IDisposable, ISceneRenderer
         where CType : Cluster

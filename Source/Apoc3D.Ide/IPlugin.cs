@@ -5,15 +5,9 @@ using System.Drawing;
 
 namespace Apoc3D.Ide
 {
-    public interface IPlugin
+    public interface IPlugin : Apoc3D.IPlugin
     {
-        void Load();
-        void Unload();
 
-        string Name
-        {
-            get;
-        }
 
         Icon PluginIcon
         {

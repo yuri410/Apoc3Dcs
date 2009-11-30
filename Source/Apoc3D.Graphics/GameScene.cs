@@ -6,10 +6,11 @@ using Apoc3D.Collections;
 using Apoc3D.Config;
 using Apoc3D.Graphics;
 using Apoc3D.Graphics.Effects;
-using Apoc3D.Vfs;
 using Apoc3D.MathLib;
+using Apoc3D.Vfs;
+using Apoc3D.Scene;
 
-namespace Apoc3D.Scene
+namespace Apoc3D.Graphics
 {
     /// <summary>
     ///  游戏中的场景
@@ -48,7 +49,7 @@ namespace Apoc3D.Scene
             {
                 for (int y = 0; y < size; y++)
                 {
-                    clusters[x * size + y] = new Cluster(this, device, x, y, data.CellUnit);
+                    clusters[x * size + y] = new Cluster(this, x, y, data.CellUnit);
 
                     if (cbk != null)
                     {                        

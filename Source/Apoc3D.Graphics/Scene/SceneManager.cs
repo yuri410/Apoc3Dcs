@@ -15,8 +15,6 @@ namespace Apoc3D.Scene
     {
         #region Fields
 
-        RenderSystem device;
-
         Cluster parentCluster;
 
         List<SceneObject> objects = new List<SceneObject>();
@@ -64,10 +62,8 @@ namespace Apoc3D.Scene
         #endregion
 
         #region Constructor
-        protected SceneManagerBase(RenderSystem dev, Cluster cluster)
+        protected SceneManagerBase(Cluster cluster)
         {
-            this.device = dev;
-
             this.OffsetX = cluster.WorldX;
             this.OffsetY = cluster.WorldY;
             this.OffsetZ = cluster.WorldZ;
@@ -348,8 +344,8 @@ namespace Apoc3D.Scene
 
         #region 构造函数
 
-        public SceneManager(RenderSystem device, Cluster cluster, Atmosphere atmos)
-            : base(device, cluster)
+        public SceneManager(Cluster cluster, Atmosphere atmos)
+            : base(cluster)
         {
         }
 

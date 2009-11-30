@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SlimDX.Direct3D9;
 using D3D = SlimDX.Direct3D9;
+using Apoc3D.Media;
 
 namespace Apoc3D.Graphics.D3D9
 {
@@ -10,7 +11,7 @@ namespace Apoc3D.Graphics.D3D9
     {
         D3D.Surface surface;
 
-        internal D3D9Surface(D3D9RenderSystem rs, D3D.Surface suf, int width, int height, BufferUsage usage, PixelFormat format)
+        internal D3D9Surface(D3D9RenderSystem rs, D3D.Surface suf, int width, int height, BufferUsage usage, ImagePixelFormat format)
             : base(width, height, usage, format)
         {
             this.surface = suf;
@@ -21,7 +22,7 @@ namespace Apoc3D.Graphics.D3D9
         //    this.surface = suf;
         //}
 
-        public D3D9Surface(D3D9RenderSystem rs, int width, int height, BufferUsage usage, PixelFormat format)
+        public D3D9Surface(D3D9RenderSystem rs, int width, int height, BufferUsage usage, ImagePixelFormat format)
             : base(width, height, usage, format)
         {
             surface = D3D.Surface.CreateRenderTarget(
