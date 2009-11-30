@@ -18,6 +18,6 @@ namespace Apoc3D
             EmptyStringArray = new string[0];
         }
 
-        public static string GetTempFileName() { throw new NotImplementedException(); }
+        //public static string GetTempFileName() { throw new NotImplementedException(); }
     }
 }

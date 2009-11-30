@@ -4,10 +4,10 @@ using System.Text;
 using Apoc3D.Graphics;
 using Apoc3D.Graphics.Effects;
 using Apoc3D.MathLib;
-using Apoc3D.Vfs;
 using Apoc3D.Media;
+using Apoc3D.Vfs;
 
-namespace Apoc3D.Scene
+namespace Apoc3D.Graphics
 {
     /// <summary>
     ///  定义可以渲染场景的接口，供后期效果渲染器使用。

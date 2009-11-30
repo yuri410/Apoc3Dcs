@@ -25,8 +25,8 @@ namespace Apoc3D.Scene
         Vector3 min;
         Vector3 max;
 
-        public OctreeSceneManager(Cluster cluster, RenderSystem dev, OctreeBox range, float minBVSize)
-            : base(dev, cluster)
+        public OctreeSceneManager(Cluster cluster, OctreeBox range, float minBVSize)
+            : base(cluster)
         {
             this.range = range;
             MinimumBVSize = minBVSize;

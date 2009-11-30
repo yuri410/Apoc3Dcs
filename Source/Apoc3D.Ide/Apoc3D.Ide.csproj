@@ -287,6 +287,24 @@
     <Content Include="WeifenLuo.WinFormsUI.Docking.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Apoc3D.Collision\Apoc3D.Collision.csproj">
+      <Project>{ED6CFF26-7985-4156-8E04-30D01BA33655}</Project>
+      <Name>Apoc3D.Collision</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apoc3D.Core\Apoc3D.Core.csproj">
+      <Project>{767AFD72-02F7-4543-B193-A2E19645A4B9}</Project>
+      <Name>Apoc3D.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apoc3D.Graphics\Apoc3D.Graphics.csproj">
+      <Project>{726180A4-EE3E-478D-A5F9-985F56393AA7}</Project>
+      <Name>Apoc3D.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JigLibX\JigLibX.csproj">
+      <Project>{7C3F7EE7-7E67-462B-80C8-588331703AE9}</Project>
+      <Name>JigLibX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Build\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

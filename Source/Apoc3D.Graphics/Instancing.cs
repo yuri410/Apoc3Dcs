@@ -5,13 +5,13 @@ using Apoc3D.Collections;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 
-namespace Apoc3D.Scene
-{ 
+namespace Apoc3D.Graphics
+{
     /// <summary>
     ///  表示几何体实例化渲染所用的顶点缓冲中的顶点格式
     ///  这个格式包含网格的世界变换矩阵
     /// </summary>
-    public struct InstanceData 
+    public struct InstanceData
     {
         /// <summary>
         ///  矩阵的第一行
@@ -36,7 +36,7 @@ namespace Apoc3D.Scene
         /// <summary>
         ///  获取这个结构体的大小
         /// </summary>
-        public static int Size 
+        public static int Size
         {
             get { return Vector3.SizeInBytes * 4; }
         }
@@ -46,7 +46,7 @@ namespace Apoc3D.Scene
     /// <summary>
     ///  几何体实例化渲染器
     /// </summary>
-    public  class Instancing : UnmanagedResource
+    public class Instancing : UnmanagedResource
     {
         public const int MaxInstances = 25;
 
@@ -70,10 +70,10 @@ namespace Apoc3D.Scene
             LoadUnmanagedResources();
 
             this.idElements = new VertexElement[4];
-            this.idElements[0] = new VertexElement(1, 0, DeclarationType.Float3,  DeclarationUsage.TextureCoordinate, 8);
-            this.idElements[1] = new VertexElement(1, (short)Vector3.SizeInBytes, DeclarationType.Float3,  DeclarationUsage.TextureCoordinate, 9);
+            this.idElements[0] = new VertexElement(1, 0, DeclarationType.Float3, DeclarationUsage.TextureCoordinate, 8);
+            this.idElements[1] = new VertexElement(1, (short)Vector3.SizeInBytes, DeclarationType.Float3, DeclarationUsage.TextureCoordinate, 9);
             this.idElements[2] = new VertexElement(1, (short)(Vector3.SizeInBytes * 2), DeclarationType.Float3, DeclarationUsage.TextureCoordinate, 10);
-            this.idElements[3] = new VertexElement(1, (short)(Vector3.SizeInBytes * 3), DeclarationType.Float3,  DeclarationUsage.TextureCoordinate, 11);
+            this.idElements[3] = new VertexElement(1, (short)(Vector3.SizeInBytes * 3), DeclarationType.Float3, DeclarationUsage.TextureCoordinate, 11);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Apoc3D.Scene
         public VertexDeclaration GetInstancingDecl(VertexDeclaration decl)
         {
             VertexDeclaration idecl;
-            if (!declBuffer.TryGetValue(decl, out idecl)) 
+            if (!declBuffer.TryGetValue(decl, out idecl))
             {
                 VertexElement[] elems1 = decl.Elements;
                 VertexElement[] elems2 = new VertexElement[elems1.Length + idElements.Length];
@@ -127,7 +127,7 @@ namespace Apoc3D.Scene
                 Array.Copy(elems1, elems2, elems1.Length - 1);
                 Array.Copy(idElements, 0, elems2, elems1.Length - 1, idElements.Length);
                 elems2[elems2.Length - 1] = VertexElement.VertexDeclarationEnd;
-                
+
                 idecl = new VertexDeclaration(device, elems2);
 
                 declBuffer.Add(decl, idecl);
