@@ -84,7 +84,6 @@
     <Compile Include="FpsCounter.cs" />
     <Compile Include="GameScene.cs" />
     <Compile Include="GameSceneBase.cs" />
-    <Compile Include="GameTime.cs" />
     <Compile Include="IRenderable.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MeshSimplifier.cs" />

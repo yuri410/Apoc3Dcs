@@ -17,21 +17,23 @@ namespace Apoc3D.RenderSystem.Xna
         // xna的实现只可以由渲染子系统建立RenderWindow，并且只可以建立一个
         protected override RenderControl create(PresentParameters pm)
         {
-            RenderWindow renWnd;
+            XnaRenderWindow renWnd;
 
             if (renderSystem == null)
-            {
-                game = new X.Game();
+            {                
+                renWnd = new XnaRenderWindow(null, pm);
+
+                game = renWnd.Game;
 
                 device = game.GraphicsDevice;
 
                 renderSystem = new XnaRenderSystem(device);
 
-                XnaRenderTarget xnaRt = new XnaRenderTarget(renderSystem, pm.BackBufferWidth, pm.BackBufferHeight);
+                XnaRenderTarget xnaRt = new XnaRenderTarget(renderSystem, pm.BackBufferWidth, pm.BackBufferHeight, pm.BackBufferFormat);
 
-                renWnd = new XnaRenderWindow(game, renderSystem, pm);
+                renderSystem.SetRenderTarget(0, xnaRt);
             }
-            else 
+            else
             {
                 throw new NotSupportedException("XNA图形渲染子系统不能建立额外的RenderControl");
             }

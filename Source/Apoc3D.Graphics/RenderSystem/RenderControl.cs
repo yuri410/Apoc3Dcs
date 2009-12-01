@@ -43,7 +43,11 @@ namespace Apoc3D.Graphics
             this.fpsCounter = new FpsCounter();
         }
 
-
+        protected RenderSystem RenderSystem
+        {
+            get { return renderSystem; }
+            set { renderSystem = value; }
+        }
         public RenderTarget RenderTarget
         {
             get { return renderTarget; }
@@ -143,21 +147,27 @@ namespace Apoc3D.Graphics
         /// </summary>
         public abstract void Run();
 
-        public event EventHandler Begin;
+        public event EventHandler Initialize;
+        public event EventHandler Load;
         public event UpdateEventHandler Update;
         public event DrawEventHandler Draw;
-        public event EventHandler End;
+        public event EventHandler Unload;
 
-        protected void OnBegin() 
+        protected void OnInitialize()
         {
-            if (Begin != null)
-                Begin(this, EventArgs.Empty);
+            if (Initialize != null)
+                Initialize(this, EventArgs.Empty);
+        }
+        protected void OnLoad() 
+        {
+            if (Load != null)
+                Load(this, EventArgs.Empty);
         }
 
-        protected void OnEnd() 
+        protected void OnUnload() 
         {
-            if (End != null)
-                End(this, EventArgs.Empty);
+            if (Unload != null)
+                Unload(this, EventArgs.Empty);
         }
 
         protected void OnUpdate(GameTime time) 

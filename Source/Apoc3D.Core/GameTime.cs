@@ -13,7 +13,7 @@
         public float FramesPerSecond
         {
 			get { return m_FramesPerSecond; }
-			internal set { m_FramesPerSecond = value; }
+            protected set { m_FramesPerSecond = value; }
         }
 
 		private float m_ElapsedGameTime;
@@ -24,7 +24,7 @@
         public float ElapsedGameTime
         {
 			get { return m_ElapsedGameTime; }
-			internal set { m_ElapsedGameTime = value; }
+			protected set { m_ElapsedGameTime = value; }
         }
 
 		private float m_ElapsedRealTime;
@@ -35,7 +35,7 @@
         public float ElapsedRealTime
         {
 			get { return m_ElapsedRealTime; }
-			internal set { m_ElapsedRealTime = value; }
+            protected set { m_ElapsedRealTime = value; }
         }
 
 		private float m_TotalGameTime;
@@ -46,7 +46,7 @@
         public float TotalGameTime
         {
             get { return m_TotalGameTime; }
-            internal set { m_TotalGameTime = value; }
+            protected set { m_TotalGameTime = value; }
         }
 
         private float m_TotalRealTime;
@@ -57,7 +57,7 @@
         public float TotalRealTime
         {
             get { return m_TotalRealTime; }
-            internal set { m_TotalRealTime = value; }
+            protected set { m_TotalRealTime = value; }
         }
 
         private bool m_IsRunningSlowly;
@@ -70,7 +70,7 @@
         public bool IsRunningSlowly
         {
             get { return m_IsRunningSlowly; }
-            internal set { m_IsRunningSlowly = value; }
+            protected set { m_IsRunningSlowly = value; }
         }
 
         /// <summary>
