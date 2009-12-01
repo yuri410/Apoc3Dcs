@@ -22,7 +22,7 @@ namespace Apoc3D.RenderSystem.Xna
 
         public string Name
         {
-            get { return "XNA Render Subsystem" }
+            get { return "XNA Render Subsystem"; }
         }
 
         #endregion

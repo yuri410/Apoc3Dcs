@@ -103,9 +103,8 @@
     <Compile Include="EngineConsole.cs" />
     <Compile Include="EngineTimer.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="GameClock.cs" />
-    <Compile Include="GameTime.cs" />
     <Compile Include="GenerationTable.cs" />
+    <Compile Include="Handlers.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IUpdatable.cs" />
     <Compile Include="Log.cs" />

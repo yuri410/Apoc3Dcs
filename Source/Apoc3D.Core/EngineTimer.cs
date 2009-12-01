@@ -3,43 +3,171 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Apoc3D
 {
     public static class EngineTimer
     {
-        class TimeAdjuster
+        class Clock
         {
-            public TimeAdjuster()
+            long baseRealTime;
+            long lastRealTime;
+            bool lastRealTimeValid;
+            int suspendCount;
+            long suspendStartTime;
+            long timeLostToSuspension;
+            TimeSpan currentTimeBase;
+            TimeSpan currentTimeOffset;
+
+            public TimeSpan CurrentTime
             {
-                timeBeginPeriod(tCaps.min);
+                get { return currentTimeBase + currentTimeOffset; }
             }
-            ~TimeAdjuster()
+
+            public TimeSpan ElapsedTime
             {
-                timeEndPeriod(tCaps.min);
+                get;
+                private set;
+            }
+
+            public TimeSpan ElapsedAdjustedTime
+            {
+                get;
+                private set;
+            }
+
+            public static long Frequency
+            {
+                get { return Stopwatch.Frequency; }
+            }
+
+            public Clock()
+            {
+                Reset();
+            }
+
+            public void Reset()
+            {
+                currentTimeBase = TimeSpan.Zero;
+                currentTimeOffset = TimeSpan.Zero;
+                baseRealTime = Stopwatch.GetTimestamp();
+                lastRealTimeValid = false;
+            }
+
+            public void Suspend()
+            {
+                suspendCount++;
+                if (suspendCount == 1)
+                    suspendStartTime = Stopwatch.GetTimestamp();
+            }
+
+            /// <summary>
+            /// Resumes a previously suspended clock.
+            /// </summary>
+            public void Resume()
+            {
+                suspendCount--;
+                if (suspendCount <= 0)
+                {
+                    timeLostToSuspension += Stopwatch.GetTimestamp() - suspendStartTime;
+                    suspendStartTime = 0;
+                }
+            }
+
+            public void Step()
+            {
+                long counter = Stopwatch.GetTimestamp();
+
+                if (!lastRealTimeValid)
+                {
+                    lastRealTime = counter;
+                    lastRealTimeValid = true;
+                }
+
+                try
+                {
+                    currentTimeOffset = CounterToTimeSpan(counter - baseRealTime);
+                }
+                catch (OverflowException)
+                {
+                    // update the base value and try again to adjust for overflow
+                    currentTimeBase += currentTimeOffset;
+                    baseRealTime = lastRealTime;
+
+                    try
+                    {
+                        // get the current offset
+                        currentTimeOffset = CounterToTimeSpan(counter - baseRealTime);
+                    }
+                    catch (OverflowException)
+                    {
+                        // account for overflow
+                        baseRealTime = counter;
+                        currentTimeOffset = TimeSpan.Zero;
+                    }
+                }
+
+                try
+                {
+                    ElapsedTime = CounterToTimeSpan(counter - lastRealTime);
+                }
+                catch (OverflowException)
+                {
+                    ElapsedTime = TimeSpan.Zero;
+                }
+
+                try
+                {
+                    ElapsedAdjustedTime = CounterToTimeSpan(counter - (lastRealTime + timeLostToSuspension));
+                    timeLostToSuspension = 0;
+                }
+                catch (OverflowException)
+                {
+                    ElapsedAdjustedTime = TimeSpan.Zero;
+                }
+
+                lastRealTime = counter;
+            }
+
+            static TimeSpan CounterToTimeSpan(long delta)
+            {
+                return TimeSpan.FromTicks((delta * 10000000) / Frequency);
             }
         }
+        //class TimeAdjuster
+        //{
+        //    public TimeAdjuster()
+        //    {
+        //        timeBeginPeriod(tCaps.min);
+        //    }
+        //    ~TimeAdjuster()
+        //    {
+        //        timeEndPeriod(tCaps.min);
+        //    }
+        //}
 
-        struct TimeCaps
-        {
-            public int min, max;
-        }
+        //struct TimeCaps
+        //{
+        //    public int min, max;
+        //}
 
-        static TimeAdjuster tAdj;
-        static TimeCaps tCaps;
+        //static TimeAdjuster tAdj;
+        static Clock clock;
 
-        static uint startTime;
-        static long curTime;
+        static TimeSpan startTime;
+        static TimeSpan curTime;
 
         static object syncHelper = new object();
         static Thread thread;
 
         static EngineTimer()
         {
-            timeGetDevCaps(out tCaps, 8);
-            tAdj = new TimeAdjuster();
+            //timeGetDevCaps(out tCaps, 8);
+            //tAdj = new TimeAdjuster();
+            clock = new Clock();
+            startTime = clock.ElapsedAdjustedTime;
 
-            startTime = GetTime();
             //Update(null);
 
             thread = new Thread(Update);
@@ -54,92 +182,43 @@ namespace Apoc3D
 
         #region 属性
 
-        public static int MinDelay
-        {
-            get { return tCaps.min; }
-        }
-        public static int MaxDelay
-        {
-            get { return tCaps.max; }
-        }
 
-        public static double TimeSecond
-        {
-            get { return Time / 1000.0; }
-        }
-
-        public static long Time
+        public static TimeSpan Time
         {
             get
             {
-                long result;
                 lock (syncHelper)
-                {                 
-                    result = curTime - startTime;
+                {
+                    return curTime;
                 }
-
-                if (result < 0)
-                    result = 0;
-                return result;
             }
         }
 
-        public static TimeSpan TimeSpan
-        {
-            get { return TimeSpan.FromMilliseconds(Time); }
-        }
-
         #endregion
 
-        #region PInvoke
+        //#region PInvoke
 
-        [DllImport("winmm.dll")]
-        static extern int timeGetDevCaps(out TimeCaps cap, int cbdc);
-        [DllImport("winmm.dll")]
-        static extern int timeBeginPeriod(int per);
-        [DllImport("winmm.dll")]
-        static extern int timeEndPeriod(int per);
+        //[DllImport("winmm.dll")]
+        //static extern int timeGetDevCaps(out TimeCaps cap, int cbdc);
+        //[DllImport("winmm.dll")]
+        //static extern int timeBeginPeriod(int per);
+        //[DllImport("winmm.dll")]
+        //static extern int timeEndPeriod(int per);
 
-        [DllImport("winmm.dll", EntryPoint = "timeGetTime")]
-        public static extern uint GetTime();
+        //[DllImport("winmm.dll", EntryPoint = "timeGetTime")]
+        //public static extern uint GetTime();
 
-        #endregion
+        //#endregion
 
         #region 方法
-
-        ///// <summary>
-        ///// 得到两次更新的时间差
-        ///// </summary>
-        ///// <returns>返回时间的单位为ms</returns>
-        //public static long GetInterval()
-        //{
-        //    long old = curTime;
-        //    Update(null);
-        //    return curTime - old;
-        //}
-
         private static void Update()
         {
-            int loopPassed = 0;
             while (true)
             {
                 lock (syncHelper)
                 {
-                    long t = GetTime() + uint.MaxValue * loopPassed;
-                    if (t < curTime)
-                    {
-                        loopPassed++;
-
-                        curTime = t + uint.MaxValue;
-
-                    }
-                    else
-                    {
-
-                        curTime = t;
-                    }
+                    curTime = clock.ElapsedAdjustedTime;
                 }
-
                 Thread.Sleep(15);
             }
         }

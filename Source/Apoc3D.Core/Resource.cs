@@ -223,21 +223,12 @@ namespace Apoc3D.Core
             /// </summary>
             public void Use(Resource resource)
             {
-                TimeSpan time = EngineTimer.TimeSpan;
+                TimeSpan time = EngineTimer.Time;
 
                 lock (syncHelper)
                 {
-                    timeQueue.Enqueue((float)EngineTimer.TimeSpan.TotalSeconds);
+                    timeQueue.Enqueue((float)EngineTimer.Time.TotalSeconds);
                 }
-
-                //int og = generation;
-                //UpdateGeneration();
-                //int ng = generation;
-
-                //if (og > ng)
-                //{
-                //    table.UpdateGeneration(og, ng, resource);
-                //}
             }
 
             internal void UpdateGeneration()
@@ -259,7 +250,7 @@ namespace Apoc3D.Core
                         result /= timeQueue.Count;
                     }
                 }
-                result = (float)EngineTimer.TimeSpan.TotalSeconds - result;
+                result = (float)EngineTimer.Time.TotalSeconds - result;
 
                 if (result > GenerationTable.GenerationLifeTime[0])
                 {

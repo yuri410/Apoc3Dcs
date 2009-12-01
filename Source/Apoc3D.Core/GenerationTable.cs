@@ -66,7 +66,7 @@ namespace Apoc3D.Core
         {
             const int passTimeLimit = 4000;
 
-            TimeSpan timeStart = EngineTimer.TimeSpan;
+            TimeSpan timeStart = EngineTimer.Time;
 
             while (!Disposed)
             {
@@ -78,7 +78,7 @@ namespace Apoc3D.Core
                 }
 
 
-                TimeSpan time = EngineTimer.TimeSpan;
+                TimeSpan time = EngineTimer.Time;
 
                 int count;
                 lock (syncHelper2)
@@ -120,7 +120,7 @@ namespace Apoc3D.Core
 
                         if (loopCount++ % 10 == 0)
                         {
-                            timeStart = EngineTimer.TimeSpan;
+                            timeStart = EngineTimer.Time;
                             remainingTime -= (int)(timeStart - time).TotalMilliseconds;
 
                             loopCount = 0;

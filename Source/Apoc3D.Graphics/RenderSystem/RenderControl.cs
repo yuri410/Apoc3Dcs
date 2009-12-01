@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Apoc3D.Core;
 using Apoc3D.Graphics;
 
 namespace Apoc3D.Graphics
@@ -120,13 +121,14 @@ namespace Apoc3D.Graphics
         #endregion
     }
 
+    public delegate void UpdateEventHandler(object sender, GameTime time);
+
     /// <summary>
     ///  表示渲染窗口
     /// </summary>
     /// <remarks>在游戏机上即屏幕</remarks>
     public abstract class RenderWindow : RenderControl
     {
-
         protected RenderWindow(RenderSystem rs, PresentParameters pm, RenderTarget rt)
             : base(rs, pm, rt)
         {
@@ -140,6 +142,38 @@ namespace Apoc3D.Graphics
         ///  以这个渲染窗口开始主循环
         /// </summary>
         public abstract void Run();
-      
+
+        public event EventHandler Begin;
+        public event UpdateEventHandler Update;
+        public event DrawEventHandler Draw;
+        public event EventHandler End;
+
+        protected void OnBegin() 
+        {
+            if (Begin != null)
+                Begin(this, EventArgs.Empty);
+        }
+
+        protected void OnEnd() 
+        {
+            if (End != null)
+                End(this, EventArgs.Empty);
+        }
+
+        protected void OnUpdate(GameTime time) 
+        {
+            if (Update != null) 
+            {
+                Update(this, time);
+            }
+        }
+
+        protected void OnDraw() 
+        {
+            if (Draw != null)
+            {
+                Draw();
+            }
+        }
     }
 }
