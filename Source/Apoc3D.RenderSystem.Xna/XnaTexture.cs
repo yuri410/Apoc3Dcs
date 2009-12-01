@@ -6,12 +6,20 @@ using System.Text;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 using Apoc3D.Media;
-using XG = Microsoft.Xna.Framework;
+using Apoc3D.Vfs;
+using XG = Microsoft.Xna.Framework.Graphics;
 
 namespace Apoc3D.RenderSystem.Xna
 {
     class XnaTexture : Texture
     {
+        XG.Texture texture;
+
+        public XnaTexture(XnaRenderSystem rs, ResourceLocation rl)
+            : base(rs, rl)
+        {
+            
+        }
 
         public override void Save(Stream stm)
         {

@@ -8,27 +8,12 @@ using Apoc3D.Vfs;
 namespace Apoc3D.Graphics
 {
     /// <summary>
-    /// Describes the location for the include file.
-    /// </summary>
-    public enum IncludeType
-    {
-        /// <summary>
-        /// Look in the local project for the include file.
-        /// </summary>
-        Local = 0,
-        /// <summary>
-        /// Look in the system path for the include file.
-        /// </summary>
-        System = 1
-    }
-
-    /// <summary>
     ///  表示Shader 代码中 Include 文件的文件操作处理器
     /// </summary>
     public interface Include
     {
         void Close(Stream stream);
-        void Open(IncludeType includeType, string fileName, out Stream stream);
+        void Open(string fileName, out Stream stream);
     }
 
     /// <summary>

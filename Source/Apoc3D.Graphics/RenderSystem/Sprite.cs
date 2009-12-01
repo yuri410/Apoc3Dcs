@@ -137,7 +137,7 @@ namespace Apoc3D.Graphics
                 SpriteVertex.vtxDecl = fac.CreateVertexDeclaration(elements);
             }
 
-            block = fac.CreateStateBlock(StateBlockType.All);
+            block = fac.CreateStateBlock();
 
             RenderSystem = rs;
             bufferedOp = new FastList<RenderOperation>();

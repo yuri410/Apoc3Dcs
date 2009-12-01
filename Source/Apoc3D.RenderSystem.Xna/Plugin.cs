@@ -20,6 +20,11 @@ namespace Apoc3D.RenderSystem.Xna
             GraphicsAPIManager.Instance.UnregisterGraphicsAPI(XnaGraphicsAPIFactory.APIName);
         }
 
+        public string Name
+        {
+            get { return "XNA Render Subsystem" }
+        }
+
         #endregion
     }
 }

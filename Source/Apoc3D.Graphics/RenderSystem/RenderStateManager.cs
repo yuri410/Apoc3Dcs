@@ -247,11 +247,6 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract ShadeMode ShadingMode
-        {
-            get;
-            set;
-        }
         public abstract float SlopeScaleDepthBias
         {
             get;

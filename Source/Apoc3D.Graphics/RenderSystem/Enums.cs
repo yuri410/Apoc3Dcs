@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Apoc3D.Graphics
 {
-    public enum StateBlockType
-    {
-        All = 0,
-        VertexState = 1,
-        PixelState = 2
-    }
+    //public enum StateBlockType
+    //{
+    //    All = 0,
+    //    VertexState = 1,
+    //    PixelState = 2
+    //}
     public enum LockMode
     {
         None,
@@ -18,27 +18,85 @@ namespace Apoc3D.Graphics
         NoOverwrite
     }
 
+    /// <summary>
+    ///  定义用于alpha，蒙板，以及深度测试所用到的比较方式。
+    /// </summary>
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum CompareFunction
     {
-        Always = 8,
-        Equal = 3,
-        Greater = 5,
-        GreaterEqual = 7,
-        Less = 2,
-        LessEqual = 4,
+        /// <summary>
+        ///  总是无法通过测试
+        /// </summary>
         Never = 1,
-        NotEqual = 6
+
+        /// <summary>
+        ///  如果预定值比当前像素的值小，则通过
+        /// </summary>
+        Less = 2,
+
+        /// <summary>
+        ///  如果预定值与当前像素的值相同，则通过
+        /// </summary>
+        Equal = 3,
+
+        /// <summary>
+        ///  如果预定值小于等于当前像素的值，则通过
+        /// </summary>
+        LessEqual = 4,
+        
+        /// <summary>
+        ///  如果预定值当前像素的值大，则通过
+        /// </summary>
+        Greater = 5,
+
+        /// <summary>
+        ///  如果预定值与当前像素的值不相同，则通过
+        /// </summary>
+        NotEqual = 6,
+
+        /// <summary>
+        ///  如果预定值大于等于当前像素的值，则通过
+        /// </summary>
+        GreaterEqual = 7,
+
+        /// <summary>
+        ///  总是通过测试
+        /// </summary>
+        Always = 8,
     }
 
+    /// <summary>
+    ///  Defines the color channels that can be chosen for a per-channel write to
+    ///  a render target color buffer.
+    /// </summary>
+    /// <remarks>可以直接转换的API：XNA</remarks>
     [Flags()]
     public enum ColorWriteChannels
     {
-        All = 15,
-        Alpha = 8,
-        Blue = 4,
-        Green = 2,
+        /// <summary>
+        ///  No channel selected.
+        /// </summary>
         None = 0,
-        Red = 1
+        /// <summary>
+        ///  Red channel of a buffer.
+        /// </summary>
+        Red = 1,
+        /// <summary>
+        ///  Green channel of a buffer.
+        /// </summary>
+        Green = 2,
+        /// <summary>
+        ///  Blue channel of a buffer.
+        /// </summary>
+        Blue = 4,
+        /// <summary>
+        ///  Alpha channel of a buffer.
+        /// </summary>
+        Alpha = 8,        
+        /// <summary>
+        ///  All buffer channels.
+        /// </summary>
+        All = 15,
     }
 
     [Flags()]
@@ -112,39 +170,164 @@ namespace Apoc3D.Graphics
         Video = 16
     }
 
+    /// <summary>
+    ///  
+    /// </summary>
+    /// <remarks>对xna可以直接转换</remarks>
     [Flags]
     public enum ClearFlags
     {
+        Target = 1,
         DepthBuffer = 2,
-        Stencil = 4,
-        Target = 1
-    }
-    public enum BlendFunction
-    {
-        Add = 1,
-        Max = 5,
-        Min = 4,
-        ReverseSubtract = 3,
-        Subtract = 2
+        Stencil = 4
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>可以直接转换的API：XNA</remarks>
+    public enum BlendFunction
+    {
+        /// <summary>
+        ///  The result is the destination added to the source.Result = (Source Color
+        ///  * Source Blend) + (Destination Color * Destination Blend)
+        /// </summary>
+        Add = 1,
+
+        /// <summary>
+        ///  The result is the destination subtracted from the source.Result = (Source
+        ///  Color * Source Blend) − (Destination Color * Destination Blend)
+        /// </summary>
+        Subtract = 2,
+   
+        /// <summary>
+        ///  The result is the source subtracted from the destination.Result = (Destination
+        ///  Color * Destination Blend) −(Source Color * Source Blend)
+        /// </summary>
+        ReverseSubtract = 3,
+
+        /// <summary>
+        ///  The result is the minimum of the source and destination.Result = min( (Source
+        ///     Color * Source Blend), (Destination Color * Destination Blend) )
+        /// </summary>
+        Min = 4,
+
+        /// <summary>
+        ///  The result is the maximum of the source and destination.Result = max( (Source
+        ///     Color * Source Blend), (Destination Color * Destination Blend) )
+        /// </summary>
+        Max = 5,
+    }
+
+    /// <summary>
+    ///  定义颜色混合因子
+    /// </summary>
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum Blend
     {
-        BlendFactor = 14,
-        BothInverseSourceAlpha = 13,
-        BothSourceAlpha = 12,
-        DestinationAlpha = 7,
-        DestinationColor = 9,
-        InverseBlendFactor = 15,
-        InverseDestinationAlpha = 8,
-        InverseDestinationColor = 10,
-        InverseSourceAlpha = 6,
-        InverseSourceColor = 4,
+        /// <summary>
+        ///  每个颜色通道都会乘以0
+        /// </summary>
+        Zero = 1,
+
+        /// <summary>
+        ///  每个颜色通道都会乘以1
+        /// </summary>
         One = 2,
-        SourceAlpha = 5,
-        SourceAlphaSaturation = 11,
+        
+        /// <summary>
+        ///  每个颜色通道都会和混合源的颜色中的相应通道相乘
+        /// </summary>
         SourceColor = 3,
-        Zero = 1
+
+        /// <summary>
+        ///  Each component of the color is multiplied by the inverse of the source color.
+        ///  This can be represented as (1 − Rs, 1 − Gs, 1 − Bs, 1 − As) where R, G, B,
+        ///  and A respectively stand for the red, green, blue, and alpha destination
+        ///  values.
+        /// </summary>
+        InverseSourceColor = 4,
+
+        /// <summary>
+        ///  Each component of the color is multiplied by the alpha value of the source.
+        ///  This can be represented as (As, As, As, As), where As is the alpha source
+        ///  value.
+        /// </summary>
+        SourceAlpha = 5,
+  
+        /// <summary>
+        ///  Each component of the color is multiplied by the inverse of the alpha value
+        ///  of the source. This can be represented as (1 − As, 1 − As, 1 − As, 1 − As),
+        ///  where As is the alpha destination value.
+        /// </summary>
+        InverseSourceAlpha = 6,
+  
+        /// <summary>
+        ///  Each component of the color is multiplied by the alpha value of the destination.
+        ///  This can be represented as (Ad, Ad, Ad, Ad), where Ad is the destination
+        ///  alpha value.
+        /// </summary>
+        DestinationAlpha = 7,
+        
+        /// <summary>
+        ///  Each component of the color is multiplied by the inverse of the alpha value
+        ///  of the destination. This can be represented as (1 − Ad, 1 − Ad, 1 − Ad, 1
+        ///  − Ad), where Ad is the alpha destination value.
+        /// </summary>
+        InverseDestinationAlpha = 8,
+        
+        /// <summary>
+        ///  Each component color is multiplied by the destination color. This can be
+        ///  represented as (Rd, Gd, Bd, Ad), where R, G, B, and A respectively stand
+        ///  for red, green, blue, and alpha destination values.
+        /// </summary>
+        DestinationColor = 9,
+          
+        /// <summary>
+        ///  Each component of the color is multiplied by the inverse of the destination
+        ///  color. This can be represented as (1 − Rd, 1 − Gd, 1 − Bd, 1 − Ad), where
+        ///  Rd, Gd, Bd, and Ad respectively stand for the red, green, blue, and alpha
+        ///  destination values.
+        /// </summary>
+        InverseDestinationColor = 10,
+           
+        /// <summary>
+        ///  Each component of the color is multiplied by either the alpha of the source
+        ///  color, or the inverse of the alpha of the source color, whichever is greater.
+        ///  This can be represented as (f, f, f, 1), where f = min(A, 1 − Ad).
+        /// </summary>
+        SourceAlphaSaturation = 11,
+            
+        /// <summary>
+        ///  This mode is obsolete. The same effect can be achieved by setting the source
+        ///  and destination blend factors to SourceAlpha and InverseSourceAlpha in separate
+        ///  calls.
+        /// </summary>
+        BothSourceAlpha = 12,
+        
+        /// <summary>
+        ///  Each component of the source color is multiplied by the inverse
+        ///  of the alpha of the source color, and each component of the destination color
+        ///  is multiplied by the alpha of the source color. This can be represented as
+        ///  (1 − As, 1 − As, 1 − As, 1 − As), with a destination blend factor of (As,
+        ///  As, As, As); the destination blend selection is overridden. This blend mode
+        ///  is supported only for the RenderState.SourceBlend render state.
+        /// </summary>
+        [Obsolete("Win32 only")]
+        BothInverseSourceAlpha = 13,
+        
+        /// <summary>
+        ///  Each component of the color is multiplied by a constant set in RenderStateManager.BlendFactor.
+        /// </summary>
+        BlendFactor = 14,
+
+        /// <summary>
+        ///  Each component of the color is multiplied by the inverse of a constant set
+        ///  in RenderState.BlendFactor. This blend mode is supported only if GraphicsDeviceCapabilities.BlendCaps.SupportsBlendFactor
+        ///  is true in the GraphicsDeviceCapabilities.SourceBlendCapabilities or GraphicsDeviceCapabilities.DestinationBlendCapabilities
+        ///  properties.
+        /// </summary>
+        InverseBlendFactor = 15,
     }
 
     [Flags]
@@ -159,16 +342,46 @@ namespace Apoc3D.Graphics
         WrapAndMip = 2097152
     }
 
+    /// <summary>
+    ///  Defines stencil buffer operations.
+    /// </summary>
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum StencilOperation
     {
-        Decrement = 8,
-        DecrementSaturation = 5,
-        Increment = 7,
-        IncrementSaturation = 4,
-        Invert = 6,
+        /// <summary>
+        ///  Does not update the stencil-buffer entry. This is the default value.
+        /// </summary>
         Keep = 1,
+        /// <summary>
+        ///  Sets the stencil-buffer entry to 0.
+        /// </summary>
+        Zero = 2,
+        /// <summary>
+        ///  Replaces the stencil-buffer entry with a reference value.
+        /// </summary>
         Replace = 3,
-        Zero = 2
+        /// <summary>
+        ///  Increments the stencil-buffer entry, clamping to the maximum value.
+        /// </summary>
+        IncrementSaturation = 4,
+        /// <summary>
+        ///  Decrements the stencil-buffer entry, clamping to 0.
+        /// </summary>
+        DecrementSaturation = 5,
+        /// <summary>
+        ///  Inverts the bits in the stencil-buffer entry.
+        /// </summary>
+        Invert = 6,
+        /// <summary>
+        ///  Increments the stencil-buffer entry, wrapping to 0 if the new value exceeds
+        ///     the maximum value.
+        /// </summary>
+        Increment = 7,
+        /// <summary>
+        ///  Decrements the stencil-buffer entry, wrapping to the maximum value if the
+        ///     new value is less than 0.
+        /// </summary>
+        Decrement = 8,
     }
 
     public enum SwapEffect
@@ -179,111 +392,84 @@ namespace Apoc3D.Graphics
         Copy
     }
 
-
-
     /// <summary>
-    /// Texture stage states define multi-blender texture operations. 
-    /// Some sampler states set up vertex processing, and some set up pixel processing. 
-    /// Texture stage states can be saved and restored using stateblocks. 
+    ///  Defines constants that describe supported texture-addressing modes. Reference
+    ///  page contains links to related conceptual articles.
     /// </summary>
-    public enum TextureStage
-    {
-        /// <summary>
-        /// Settings for the third alpha operand for triadic operations. 
-        /// Use values from TextureArgument to set this state. 
-        /// The default value is TextureArgument.Current. 
-        /// </summary>
-        AlphaArg0 = 27,
-        /// <summary>
-        /// Texture-stage state is the first alpha argument for the stage. 
-        /// Use values from TextureArgument to set this state. 
-        /// The default value is TextureArgument.Texture. 
-        /// </summary>
-        AlphaArg1 = 5,
-        /// <summary>
-        /// Texture-stage state is the second alpha argument for the stage. Use values from TextureArgument to set this state. The default value is TextureArgument.Current.
-        /// </summary>
-        AlphaArg2 = 6,
-        /// <summary>
-        /// 
-        /// </summary>
-        AlphaOperation = 4,
-        /// <summary>
-        /// 
-        /// </summary>
-        BumpEnvironmentLOffset = 23,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        BumpEnvironmentLScale = 22,
-        /// <summary>
-        /// 
-        /// </summary>
-        BumpEnvironmentMat00 = 7,
-        /// <summary>
-        /// 
-        /// </summary>
-        BumpEnvironmentMat01 = 8,
-        /// <summary>
-        /// 
-        /// </summary>
-        BumpEnvironmentMat10 = 9,
-        /// <summary>
-        /// 
-        /// </summary>
-        BumpEnvironmentMat11 = 10,
-        /// <summary>
-        /// 
-        /// </summary>
-        ColorArg0 = 26,
-        /// <summary>
-        /// 
-        /// </summary>
-        ColorArg1 = 2,
-        /// <summary>
-        /// 
-        /// </summary>
-        ColorArg2 = 3,
-        /// <summary>
-        /// 
-        /// </summary>
-        ColorOperation = 1,
-        /// <summary>
-        /// 
-        /// </summary>
-        Constant = 32,
-        /// <summary>
-        /// 
-        /// </summary>
-        ResultArg = 28,
-        /// <summary>
-        /// 
-        /// </summary>
-        TexCoordIndex = 11,
-        /// <summary>
-        /// 
-        /// </summary>
-        TextureTransformFlags = 24
-    }
-
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum TextureAddressMode
     {
+        /// <summary>
+        ///  Tile the texture at every integer junction. For example, for u values between
+        ///  0 and 3, the texture is repeated three times; no mirroring is performed.
+        /// </summary>
+        Wrap = 1,
+        /// <summary>
+        ///   Similar to Wrap, except that the texture is flipped at every integer junction.
+        ///   For u values between 0 and 1, for example, the texture is addressed normally;
+        ///   between 1 and 2, the texture is flipped (mirrored); between 2 and 3, the
+        ///   texture is normal again, and so on.
+        /// </summary>
+        Mirror = 2,        
+        /// <summary>
+        ///   Texture coordinates outside the range [0.0, 1.0] are set to the texture color
+        ///   at 0.0 or 1.0, respectively.
+        /// </summary>
+        Clamp = 3,        
+        /// <summary>
+        ///  Texture coordinates outside the range [0.0, 1.0] are set to the border color.
+        /// </summary>
         Border = 4,
-        Clamp = 3,
-        Mirror = 2,
+        /// <summary>
+        ///  Similar to Mirror and Clamp. Takes the absolute value of the texture coordinate
+        ///  (thus, mirroring around 0), and then clamps to the maximum value. The most
+        ///  common usage is for volume textures, where support for the full MirrorOnce
+        ///  texture-addressing mode is not necessary, but the data is symmetrical around
+        ///  the one axis.
+        /// </summary>
         MirrorOnce = 5,
-        Wrap = 1
     }
 
+    /// <summary>
+    ///  Defines how a texture will be filtered as it is minified for each mipmap
+    ///   level.
+    /// </summary>
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum TextureFilter
     {
-        Anisotropic = 3,
-        GaussianQuad = 7,
-        Linear = 2,
+        /// <summary>
+        ///  Mipmapping disabled. The rasterizer uses the magnification filter instead.
+        /// </summary>
         None = 0,
+        /// <summary>
+        ///   Point filtering used as a texture magnification or minification filter. The
+        ///   texel with coordinates nearest to the desired pixel value is used. The texture
+        ///   filter used between mipmap levels is based on the nearest point; that is,
+        ///   the rasterizer uses the color from the texel of the nearest mipmap texture.
+        /// </summary>
         Point = 1,
-        PyramidalQuad = 6
+        /// <summary>
+        ///  Bilinear interpolation filtering used as a texture magnification or minification
+        ///  filter. A weighted average of a 2×2 area of texels surrounding the desired
+        ///  pixel is used. The texture filter used between mipmap levels is trilinear
+        ///  mipmap interpolation, in which the rasterizer performs linear interpolation
+        ///  on pixel color, using the texels of the two nearest mipmap textures.
+        /// </summary>
+        Linear = 2,
+        /// <summary>
+        ///  Anisotropic texture filtering used as a texture magnification or minification
+        ///  filter. This type of filtering compensates for distortion caused by the difference
+        ///  in angle between the texture polygon and the plane of the screen.
+        /// </summary>
+        Anisotropic = 3,
+        /// <summary>
+        ///  A 4-sample tent filter used as a texture magnification or minification filter.
+        /// </summary>
+        PyramidalQuad = 6,
+        /// <summary>
+        ///  A 4-sample Gaussian filter used as a texture magnification or minification filter.
+        /// </summary>
+        GaussianQuad = 7,
     }
     public enum TextureType
     {
@@ -294,83 +480,33 @@ namespace Apoc3D.Graphics
     }
     
     /// <summary>
-    /// Defines the possible shading modes.
+    ///  Defines supported wrap coordinates. Reference page contains links to related
+    ///  conceptual articles.
     /// </summary>
-    public enum ShadeMode
-    {
-        /// <summary>
-        /// Flat shading.
-        /// </summary>
-        Flat = 1,
-        /// <summary>
-        ///   Gouraud shading.
-        /// </summary>
-        Gouraud = 2,
-    }
-
-    #region
-    //[Flags]
-    //public enum TextureArgument
-    //{
-    //    AlphaReplicate = 32,
-    //    Complement = 16,
-    //    Constant = 6,
-    //    Current = 1,
-    //    Diffuse = 0,
-    //    SelectMask = 15,
-    //    Specular = 4,
-    //    Temp = 5,
-    //    Texture = 2,
-    //    TFactor = 3
-    //}
-    //public enum TextureOperation
-    //{
-    //    Add = 7,
-    //    AddSigned = 8,
-    //    AddSigned2X = 9,
-    //    AddSmooth = 11,
-    //    BlendCurrentAlpha = 16,
-    //    BlendDiffuseAlpha = 12,
-    //    BlendFactorAlpha = 14,
-    //    BlendTextureAlpha = 13,
-    //    BlendTextureAlphaPM = 15,
-    //    BumpEnvironmentMap = 22,
-    //    BumpEnvironmentMapLuminance = 23,
-    //    Disable = 1,
-    //    DotProduct3 = 24,
-    //    Lerp = 26,
-    //    Modulate = 4,
-    //    Modulate2X = 5,
-    //    Modulate4X = 6,
-    //    ModulateAlphaAddColor = 18,
-    //    ModulateColorAddAlpha = 19,
-    //    ModulateInvAlphaAddColor = 20,
-    //    ModulateInvColorAddAlpha = 21,
-    //    MultiplyAdd = 25,
-    //    Premodulate = 17,
-    //    SelectArg1 = 2,
-    //    SelectArg2 = 3,
-    //    Subtract = 10
-    //}
-    //public enum TextureTransform
-    //{
-    //    Count1 = 1,
-    //    Count2 = 2,
-    //    Count3 = 3,
-    //    Count4 = 4,
-    //    Disable = 0,
-    //    Projected = 256
-    //}
-    #endregion
-
+    /// <remarks>可以直接转换的API：XNA</remarks>
     [Flags]
     public enum TextureWrapCoordinates
     {
+        /// <summary>
+        ///  No texture wrap coordinates specified.
+        /// </summary>
         None = 0,
+        /// <summary>
+        ///  U texture wrapping (wrapping in the direction of the first dimension).
+        /// </summary>
+        Zero = 1,
+        /// <summary>
+        ///  V texture wrapping (wrapping in the direction of the second dimension).
+        /// </summary>
         One = 2,
-        Three = 8,
+        /// <summary>
+        ///  W texture wrapping (wrapping in the direction of the third dimension).
+        /// </summary>
         Two = 4,
-        Zero = 1
+        /// <summary>
+        ///  Texture wrapping in the direction of the fourth dimension.
+        /// </summary>
+        Three = 8,
     }
 
     public enum RenderPrimitiveType
@@ -401,6 +537,10 @@ namespace Apoc3D.Graphics
         TriangleFan
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>可以和xna的直接转换，源自xnafx</remarks>
     public enum VertexElementFormat : byte
     {
         Byte4 = 5,
@@ -423,6 +563,10 @@ namespace Apoc3D.Graphics
         Vector4 = 3
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>可以和xna的直接转换，源自xnafx</remarks>
     public enum VertexElementUsage : byte
     {
         Binormal = 7,

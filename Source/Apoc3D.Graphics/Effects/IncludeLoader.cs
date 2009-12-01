@@ -41,7 +41,7 @@ namespace Apoc3D.Graphics.Effects
             stream.Close();
         }
 
-        public void Open(IncludeType includeType, string fileName, out Stream stream)
+        public void Open(string fileName, out Stream stream)
         {
             FileLocation fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, fileName), FileLocateRules.Default);
             stream = fl.GetStream;

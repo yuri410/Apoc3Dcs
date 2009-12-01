@@ -17,24 +17,43 @@ namespace Apoc3D.Graphics
 
         FpsCounter fpsCounter;
 
+        /// <summary>
+        ///  创建第一个渲染目标/渲染控件时使用这个构造函数
+        /// </summary>
+        /// <param name="rs"></param>
+        /// <param name="pm"></param>
+        /// <param name="rt">现有的RenderTarget</param>
         protected RenderControl(RenderSystem rs, PresentParameters pm, RenderTarget rt)
             : this(rs, pm)
         {
             this.renderTarget = rt;
         }
+
+        /// <summary>
+        ///  在以多渲染目标，多渲染控件情况下建立RenderControl。
+        ///  会根据PresentParameters中的设定建立新的RenderTarget。
+        /// </summary>
+        /// <param name="rs"></param>
+        /// <param name="pm"></param>
         protected RenderControl(RenderSystem rs, PresentParameters pm)
         {
             this.presentParams = pm;
             this.renderSystem = rs;
             this.fpsCounter = new FpsCounter();
-
         }
+
 
         public RenderTarget RenderTarget
         {
             get { return renderTarget; }
         }
 
+        /// <summary>
+        ///  为这个RenderControl建立API所对应的RenderTarget
+        /// </summary>
+        /// <param name="rs"></param>
+        /// <param name="pm"></param>
+        /// <returns></returns>
         protected abstract RenderTarget CreateRenderTarget(RenderSystem rs, PresentParameters pm);
 
         public virtual void Present()
@@ -47,6 +66,10 @@ namespace Apoc3D.Graphics
             get { return fpsCounter.FPS; }
         }
 
+        /// <summary>
+        ///  ？？？
+        /// </summary>
+        [Obsolete()]
         public void NotifyBind()
         {
             if (renderTarget == null)
@@ -100,6 +123,7 @@ namespace Apoc3D.Graphics
     /// <summary>
     ///  表示渲染窗口
     /// </summary>
+    /// <remarks>在游戏机上即屏幕</remarks>
     public abstract class RenderWindow : RenderControl
     {
 
@@ -112,5 +136,10 @@ namespace Apoc3D.Graphics
         {
         }
 
+        /// <summary>
+        ///  以这个渲染窗口开始主循环
+        /// </summary>
+        public abstract void Run();
+      
     }
 }

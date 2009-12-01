@@ -2,24 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Apoc3D.Graphics;
 using Apoc3D.Collections;
+using Apoc3D.Graphics;
 using Apoc3D.MathLib;
+using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
 
 namespace Apoc3D.RenderSystem.Xna
 {
     class XnaRenderSystem : Apoc3D.Graphics.RenderSystem
     {
-        XG.GraphicsDevice device;
+        internal XG.GraphicsDevice device;
+
+        public XnaRenderSystem(XG.GraphicsDevice device)
+            : base(XnaGraphicsAPIFactory.APIName + "RenderSystem")
+        {
+            this.device = device;
+        }
 
         public override void Init()
         {
-            throw new NotImplementedException();
         }
 
         public override void Clear(ClearFlags flags, int color, float depth, int stencil)
         {
+
             throw new NotImplementedException();
         }
 

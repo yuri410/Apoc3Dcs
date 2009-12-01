@@ -15,16 +15,9 @@ namespace Apoc3D.Graphics
             private set;
         }
 
-        protected StateBlock(RenderSystem rs, StateBlockType type)
+        protected StateBlock(RenderSystem rs)
         {
             this.RenderSystem = rs;
-            this.Type = type;
-        }
-
-        public StateBlockType Type
-        {
-            get;
-            private set;
         }
 
         public abstract void Capture();

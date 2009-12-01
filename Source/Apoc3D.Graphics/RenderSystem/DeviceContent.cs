@@ -96,7 +96,8 @@ namespace Apoc3D.Graphics
         protected abstract RenderControl create(PresentParameters pm);
      
         /// <summary>
-        ///  创建一个渲染控件，渲染到一个控件中
+        ///  创建一个渲染控件，渲染到一个控件中。
+        ///  根据参数的不同，可以使用现有的控件或者由渲染子系统建立一个新的。
         /// </summary>
         /// <param name="pm"></param>
         /// <returns></returns>
