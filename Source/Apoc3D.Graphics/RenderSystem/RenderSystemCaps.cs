@@ -480,7 +480,7 @@ namespace Apoc3D.Graphics
         }
 
         //public int AdapterOrdinal { get; set; }
-        //public int AdapterOrdinalInGroup { get; set; }
+        public int AdapterOrdinalInGroup { get; set; }
         public CompareCaps AlphaCompareCaps { get; set; }
 
 
@@ -491,7 +491,7 @@ namespace Apoc3D.Graphics
         public BlendCaps DestinationBlendCaps { get; set; }
         public DeviceCaps DeviceCaps { get; set; }
         public DeviceCaps2 DeviceCaps2 { get; set; }
-        //public DeviceType DeviceType { get; set; }
+
         public float ExtentsAdjust { get; set; }
         public VertexFormatCaps FVFCaps { get; set; }
         public float GuardBandBottom { get; set; }
@@ -500,9 +500,9 @@ namespace Apoc3D.Graphics
         public float GuardBandTop { get; set; }
         public LineCaps LineCaps { get; set; }
         public int MasterAdapterOrdinal { get; set; }
-        //public int MaxActiveLights { get; set; }
+
         public int MaxAnisotropy { get; set; }
-        //public float MaxNPatchTessellationLevel { get; set; }
+
         public int MaxPixelShader30InstructionSlots { get; set; }
         public float MaxPointSize { get; set; }
         public int MaxPrimitiveCount { get; set; }

@@ -930,6 +930,7 @@ namespace Apoc3D.RenderSystem.Xna
             caps.GuardBandRight = device.GraphicsDeviceCapabilities.GuardBandRight;
             caps.GuardBandTop = device.GraphicsDeviceCapabilities.GuardBandTop;
 
+            caps.AdapterOrdinalInGroup = device.GraphicsDeviceCapabilities.AdapterOrdinalInGroup;
             caps.MasterAdapterOrdinal = device.GraphicsDeviceCapabilities.MasterAdapterOrdinal;
             caps.MaxAnisotropy = device.GraphicsDeviceCapabilities.MaxAnisotropy;
             caps.MaxPixelShader30InstructionSlots = device.GraphicsDeviceCapabilities.MaxPixelShader30InstructionSlots;
