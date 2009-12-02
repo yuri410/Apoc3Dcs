@@ -122,7 +122,7 @@ namespace Apoc3D.Graphics
 
             renderSys.SetRenderTarget(0, shadowRt);
 
-            renderSys.Clear(ClearFlags.Target | ClearFlags.DepthBuffer, -1, 1, 0);
+            renderSys.Clear(ClearFlags.Target | ClearFlags.DepthBuffer, ColorValue.White, 1, 0);
 
 
             //effect.Begin(FX.DoNotSaveSamplerState | FX.DoNotSaveShaderState | FX.DoNotSaveState);

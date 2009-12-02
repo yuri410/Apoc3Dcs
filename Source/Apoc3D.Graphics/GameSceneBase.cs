@@ -400,7 +400,7 @@ namespace Apoc3D.Graphics
 
             renderSystem.SetRenderTarget(0, target);
 
-            renderSystem.Clear(ClearFlags.DepthBuffer | ClearFlags.Target, 0, 1, 0);
+            renderSystem.Clear(ClearFlags.DepthBuffer | ClearFlags.Target, ColorValue.Black, 1, 0);
 
 
             //renderSystem.SetTransform(TransformState.Projection, EffectParams.CurrentCamera.ProjectionMatrix);

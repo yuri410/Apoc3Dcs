@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Apoc3D.Core;
-using Apoc3D.Media;
 using Apoc3D.MathLib;
+using Apoc3D.Media;
 using Apoc3D.Vfs;
-using System.IO;
 
 namespace Apoc3D.Graphics
 {
@@ -108,24 +108,14 @@ namespace Apoc3D.Graphics
         {
             this.RenderSystem = rs;
             this.ResourceLocation = rl;
+            this.Usage = TextureUsage.Static;
         }
-
-        protected Texture(RenderSystem rs, BackBuffer[] surface, TextureUsage usage)
+        protected Texture(RenderSystem rs, ResourceLocation rl, TextureUsage usage)
+            : base(TextureManager.Instance, rl.Name)
         {
             this.RenderSystem = rs;
-            this.SurfaceCount = surface.Length;
-            this.Width = surface[0].Width;
-            this.Height = surface[0].Height;
-            this.Depth = 1;
-
-            this.Type = TextureType.Texture2D;
-            this.Format = surface[0].ColorFormat;
-            //this.BytesPerPixel = Image.GetBytesPerPixel(Format);
-            this.ContentSize = PixelFormat.GetMemorySize(Width, Height, 1, Format);
-
+            this.ResourceLocation = rl;
             this.Usage = usage;
-
-
         }
 
         protected Texture(RenderSystem rs, int width, int height, int depth, int surfaceCount, ImagePixelFormat format, TextureUsage usage)
@@ -263,134 +253,7 @@ namespace Apoc3D.Graphics
         }
         #endregion
 
-        //public unsafe DataStream LockStream(int surface, LockMode mode, CubeMapFace cubemapFace, Rectangle rect)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, cubemapFace, mode, rect);
-        //        IsLocked = true;
-        //        return new DataStream(res.ToPointer(), Width * Width * BytesPerPixel, mode == LockMode.ReadOnly);
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-        //public IntPtr Lock(int surface, CubeMapFace cubemapFace, LockMode mode, Rectangle rect)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, cubemapFace, mode, rect);
-        //        IsLocked = true;
-        //        return res;
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-
-        //public unsafe DataStream LockStream(int surface, LockMode mode, CubeMapFace cubemapFace)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, cubemapFace, mode, new Rectangle(0, 0, Width, Width));
-        //        IsLocked = true;
-        //        return new DataStream(res.ToPointer(), Width * Width * BytesPerPixel, mode == LockMode.ReadOnly);
-        //    }
-        //    throw new InvalidOperationException();
-
-        //}
-        //public IntPtr Lock(int surface, CubeMapFace cubemapFace, LockMode mode)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, cubemapFace, mode, new Rectangle(0, 0, Width, Width));
-        //        IsLocked = true;
-        //        return res;
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-
-
-
-        //public unsafe DataStream LockStream(int surface, LockMode mode)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        switch (Type)
-        //        {
-        //            case TextureType.Texture1D:
-        //            case TextureType.Texture2D:
-        //                IntPtr res = @lock(surface, mode, new Rectangle(0, 0, Width, Height));
-        //                IsLocked = true;
-        //                return new DataStream(res.ToPointer(), Width * Height * BytesPerPixel, mode == LockMode.ReadOnly);
-        //            case TextureType.Texture3D:
-        //                res = @lock(surface, mode, new Box(0, 0, 0, Width, Height, Depth));
-        //                IsLocked = true;
-        //                return new DataStream(res.ToPointer(), Width * Height * Depth * BytesPerPixel, mode == LockMode.ReadOnly);
-        //        }
-        //        throw new InvalidOperationException();
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-        //public IntPtr Lock(int surface, LockMode mode)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res;
-        //        switch (Type)
-        //        {
-        //            case TextureType.Texture1D:
-        //            case TextureType.Texture2D:
-        //                res = @lock(surface, mode, new Rectangle(0, 0, Width, Height));
-        //                IsLocked = true;
-        //                return res;
-        //            case TextureType.Texture3D:
-        //                res = @lock(surface, mode, new Box(0, 0, 0, Width, Height, Depth));
-        //                IsLocked = true;
-        //                return res;
-        //        }
-        //        throw new InvalidOperationException();
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-
-        //public unsafe DataStream LockStream(int surface, LockMode mode, Rectangle rect)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, mode, rect);
-        //        IsLocked = true;
-        //        return new DataStream(res.ToPointer(), rect.Width * rect.Height * BytesPerPixel, mode == LockMode.ReadOnly);
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-        //public IntPtr Lock(int surface, LockMode mode, Rectangle rect)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, mode, rect);
-        //        IsLocked = true;
-        //        return res;
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-
-        //public unsafe DataStream LockStream(int surface, LockMode mode, Box box)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, mode, box);
-        //        IsLocked = true;
-        //        return new DataStream(res.ToPointer(), box.Width * box.Height * box.Depth * BytesPerPixel, mode == LockMode.ReadOnly);
-        //    }
-        //    throw new InvalidOperationException();
-        //}
-        //public IntPtr Lock(int surface, LockMode mode, Box box)
-        //{
-        //    if (!IsLocked)
-        //    {
-        //        IntPtr res = @lock(surface, mode, box);
-        //        IsLocked = true;
-        //        return res;
-        //    }
-        //    throw new InvalidOperationException();
-        //}
+        
 
        
         

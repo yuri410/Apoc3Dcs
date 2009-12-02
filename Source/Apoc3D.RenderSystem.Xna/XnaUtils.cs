@@ -4,10 +4,11 @@ using System.Text;
 using Apoc3D.Media;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
+using Apoc3D.Graphics;
 
-namespace Apoc3D.Graphics.D3D9
+namespace Apoc3D.RenderSystem.Xna
 {
-    internal struct D3D9Utils
+    internal struct XnaUtils
     {
         const int MaxFmtCount = 100;
 
@@ -153,35 +154,54 @@ namespace Apoc3D.Graphics.D3D9
             dfmtConv2[(int)XG.DepthFormat.Depth32 + 1] = DepthFormat.Depth32;
         }
 
-        static D3D9Utils()
+        static XnaUtils()
         {
             BuildColorFormatConv();
             BuildDepthFormatConv();
         }
 
 
+        #region ClearFlags
         public static XG.ClearOptions ConvertEnum(ClearFlags flags)
-        {           
+        {
             return (XG.ClearOptions)flags;
         }
+        public static ClearFlags ConvertEnum(XG.ClearOptions flags)
+        {
+            return (ClearFlags)flags;
+        }
+        #endregion
 
+        #region BufferUsage
         public static XG.BufferUsage ConvertEnum(BufferUsage usage)
         {
             XG.BufferUsage ret = 0;
 
-            if ((usage & BufferUsage.Dynamic) == BufferUsage.Dynamic)
-            {
-                // Only add the dynamic flag for the default pool, and
-                // we use default pool when buffer is discardable
-                if ((usage & BufferUsage.Discardable) != BufferUsage.Discardable)
-                    ret |= XG.BufferUsage.None;
-            }
             if ((usage & BufferUsage.WriteOnly) == BufferUsage.WriteOnly)
             {
                 ret |= XG.BufferUsage.WriteOnly;
             }
             return ret;
         }
+        public static BufferUsage ConvertEnum(XG.BufferUsage usage, bool isDyn)
+        {
+            BufferUsage ret = 0;
+            if ((usage & XG.BufferUsage.WriteOnly) == XG.BufferUsage.WriteOnly)
+            {             
+                ret |= BufferUsage.WriteOnly;
+            }
+
+            if (isDyn)
+            {
+                ret |= BufferUsage.Dynamic;
+            }
+            else
+            {
+                ret |= BufferUsage.Static;
+            }
+            return ret;
+        }
+        #endregion
 
         #region VertexElementUsage
         public static XG.VertexElementUsage ConvertEnum(VertexElementUsage semantic)
@@ -191,6 +211,17 @@ namespace Apoc3D.Graphics.D3D9
         public static XG.VertexElementFormat ConvertEnum(VertexElementFormat type)
         {
             return (XG.VertexElementFormat)type;
+        }
+        #endregion
+
+        #region IndexBufferType
+        public static IndexBufferType ConvertEnum(XG.IndexElementSize v)
+        {
+            return v == XG.IndexElementSize.SixteenBits ? IndexBufferType.Bit16 : IndexBufferType.Bit32;
+        }
+        public static XG.IndexElementSize ConvertEnum(IndexBufferType v)
+        {
+            return v == IndexBufferType.Bit16 ? XG.IndexElementSize.SixteenBits : XG.IndexElementSize.ThirtyTwoBits;
         }
         #endregion
 
@@ -282,6 +313,7 @@ namespace Apoc3D.Graphics.D3D9
         }
         #endregion
 
+        #region TextureUsage
         public static XG.TextureUsage ConvertEnum(TextureUsage usage)
         {
             XG.TextureUsage result = XG.TextureUsage.None;
@@ -289,21 +321,18 @@ namespace Apoc3D.Graphics.D3D9
             {
                 result |= XG.TextureUsage.AutoGenerateMipMap;
             }
-            //if ((usage & TextureUsage.Dynamic) == TextureUsage.Dynamic)
-            //{
-            //    result |= XG.TextureUsage.None;
-            //}
-            //if ((usage & TextureUsage.WriteOnly) == TextureUsage.WriteOnly)
-            //{
-            //    result |= XG.TextureUsage.WriteOnly;
-            //}
-            //if ((usage & TextureUsage.RenderTarget) == TextureUsage.RenderTarget)
-            //{
-            //    result |= XG.TextureUsage.RenderTarget;
-            //}
 
             return result;
         }
+        public static TextureUsage ConvertEnum(XG.TextureUsage usage)
+        {
+            if ((usage & XG.TextureUsage.AutoGenerateMipMap) == XG.TextureUsage.AutoGenerateMipMap)
+            {
+                return TextureUsage.AutoMipMap;
+            }
+            return TextureUsage.Static;
+        }
+        #endregion
 
         #region DepthFormat
         public static XG.DepthFormat ConvertEnum(DepthFormat format) 

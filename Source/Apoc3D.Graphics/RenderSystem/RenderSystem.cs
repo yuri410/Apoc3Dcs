@@ -109,32 +109,7 @@ namespace Apoc3D.Graphics
         /// <param name="color">清除颜色缓冲后的颜色</param>
         /// <param name="depth">清除深度缓冲后的深度</param>
         /// <param name="stencil">清除蒙板缓冲后的蒙板值</param>
-        public abstract void Clear(ClearFlags flags, int color, float depth, int stencil);
-
-        ///// <summary>
-        /////  设置雾效参数
-        ///// </summary>
-        ///// <param name="mode"></param>
-        ///// <param name="color"></param>
-        ///// <param name="start"></param>
-        ///// <param name="end"></param>
-        ///// <param name="density"></param>
-        //[Obsolete()]
-        //public abstract void SetFog(FogMode mode, ColorValue color, float start, float end, float density);
-
-        ///// <summary>
-        /////  设置光源信息
-        ///// </summary>
-        ///// <param name="index"></param>
-        ///// <param name="light"></param>
-        //public abstract void SetLight(int index, Light light);
-
-        ///// <summary>
-        /////  获取光源信息
-        ///// </summary>
-        ///// <param name="index"></param>
-        ///// <returns></returns>
-        //public abstract Light GetLight(int index);
+        public abstract void Clear(ClearFlags flags, ColorValue color, float depth, int stencil);
 
         /// <summary>
         ///  设置RenderTarget
@@ -150,13 +125,7 @@ namespace Apoc3D.Graphics
         /// <returns></returns>
         public abstract RenderTarget GetRenderTarget(int index);
 
-        ///// <summary>
-        /////  设定当前纹理
-        ///// </summary>
-        ///// <param name="index"></param>
-        ///// <param name="texture"></param>
-        //public abstract void SetTexture(int index, Texture texture);
-
+        
         /// <summary>
         ///  设置蒙版测试的相关参数
         /// </summary>
@@ -222,30 +191,11 @@ namespace Apoc3D.Graphics
             //dDevice.SetRenderState(RenderState.PointSizeMax, maxSize);
         }
 
-        //public abstract void SetTextureStageState(int sampler, TextureStage type, TextureArgument arg);
-        //public abstract void SetTextureStageState(int sampler, TextureStage type, TextureOperation arg);
-        //public abstract void SetTextureStageState(int sampler, TextureStage type, TextureTransform arg);
-
-        //public abstract void SetTextureStageState(int sampler, TextureStage type, int value);
-        //public abstract void SetTextureStageState(int sampler, TextureStage type, float value);
-
         /// <summary>
         ///  获取所有纹理层的Sampler状态
         /// </summary>
         /// <returns></returns>
         public abstract SamplerStateCollection GetSamplerStates();
-        //public abstract void SetSamplerState(int sampler, SamplerState type, TextureAddressMode textureAddress);
-        //public abstract void SetSamplerState(int sampler, SamplerState type, TextureFilter textureFilter);
-        //public abstract void SetSamplerState(int sampler, SamplerState type, int value);
-        //public abstract void SetSamplerState(int sampler, SamplerState type, float value);
-
-        ///// <summary>
-        /////  设置当前的材质
-        ///// </summary>
-        ///// <param name="mat"></param>
-        //public abstract void SetMaterialColor(Material mat);
-
-        //public abstract void SetEffect(Effect eff);
 
         /// <summary>
         ///  设置顶点Shader
@@ -299,54 +249,5 @@ namespace Apoc3D.Graphics
         }
 
         public abstract Viewport Viewport { get; set; }
-
-        ///// <summary>
-        /////  获取变换矩阵
-        ///// </summary>
-        ///// <param name="state"></param>
-        ///// <returns></returns>
-        //public abstract Matrix GetTransform(TransformState state);
-
-        ///// <summary>
-        /////  设置变换矩阵
-        ///// </summary>
-        ///// <param name="state"></param>
-        ///// <param name="matrix"></param>
-        //public abstract void SetTransform(TransformState state, Matrix matrix);
-
-
-
-        //public unsafe void SetTransform(TransformState state, Matrix matrix)
-        //{
-        //    if (state >= TransformState.World)
-        //    {
-        //        int idx = (int)(state - TransformState.World);
-        //        transformInfo.world[idx] = matrix;
-        //        transformInfo.isWorldDirty[idx] = true;
-        //        return;
-        //    }
-        //    if (state >= TransformState.Texture0)
-        //    {
-        //        int idx = (int)(state - TransformState.Texture0);
-
-        //        transformInfo.texture[idx] = matrix;
-        //        transformInfo.isTexDirty[idx] = true;
-        //        return;
-        //    }
-        //    if (state == TransformState.View)
-        //    {
-        //        transformInfo.view = matrix;
-        //        transformInfo.isViewDirty = true;
-        //        return;
-        //    }
-        //    if (state == TransformState.Projection)
-        //    {
-        //        transformInfo.projection = matrix;
-        //        transformInfo.isProjDirty = true;
-        //        return;
-        //    }
-        //}
-
-
     }
 }

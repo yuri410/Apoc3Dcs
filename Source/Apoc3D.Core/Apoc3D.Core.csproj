@@ -93,6 +93,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="GenerationTable.cs" />
+    <Compile Include="Handlers.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IUpdatable.cs" />
     <Compile Include="LanguageParser.cs" />

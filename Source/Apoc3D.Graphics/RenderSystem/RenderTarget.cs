@@ -10,9 +10,6 @@ namespace Apoc3D.Graphics
     /// </summary>
     public abstract class RenderTarget : IDisposable
     {
-        protected BackBuffer colorBuffer;
-        protected DepthBuffer depthStencilBuffer;
-
         protected RenderTarget(RenderSystem renderSystem, int width, int height,
             ImagePixelFormat clrBufFormat, DepthFormat depBufFmt)
         {
@@ -31,7 +28,7 @@ namespace Apoc3D.Graphics
         }
 
         public abstract Texture GetColorBufferTexture();
-        public abstract Texture GetDepthBufferTexture();       
+        public abstract DepthBuffer GetDepthBufferTexture();       
 
         public int Width
         {

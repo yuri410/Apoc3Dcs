@@ -14,6 +14,13 @@ namespace Apoc3D.RenderSystem.Xna
     {
         internal XG.GraphicsDevice device;
 
+        internal XG.RenderTarget2D defaultRtXna;
+        XnaRenderTarget defaultRt;
+
+        XnaRenderTarget[] cachedRenderTargets;
+
+        Capabilities devCaps;
+
         public XnaRenderSystem(XG.GraphicsDevice device)
             : base(XnaGraphicsAPIFactory.APIName + "RenderSystem")
         {
@@ -22,12 +29,22 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override void Init()
         {
+
+            defaultRtXna = (XG.RenderTarget2D)device.GetRenderTarget(0);
+
+
+
+            devCaps = new Capabilities();
+            
+
+            cachedRenderTargets = new XnaRenderTarget[device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets];
+            cachedRenderTargets[0] = defaultRt;
         }
 
-        public override void Clear(ClearFlags flags, int color, float depth, int stencil)
+        public override void Clear(ClearFlags flags, ColorValue color, float depth, int stencil)
         {
-
-            throw new NotImplementedException();
+            XG.Color clr = new XG.Color(color.R, color.G, color.B, color.A);
+            device.Clear(XnaUtils.ConvertEnum(flags), clr, depth, stencil);
         }
 
         public override void SetRenderTarget(int index, RenderTarget rt)

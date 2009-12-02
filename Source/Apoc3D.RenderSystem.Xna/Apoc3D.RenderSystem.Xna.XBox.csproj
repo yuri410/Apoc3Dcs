@@ -64,6 +64,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffer\XnaDepthBuffer.cs" />
+    <Compile Include="Buffer\XnaIndexBuffer.cs" />
+    <Compile Include="XnaObjectFactory.cs" />
     <Compile Include="XnaUtils.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="XnaRenderTarget.cs" />
     <Compile Include="XnaRenderWindow.cs" />
     <Compile Include="XnaTexture.cs" />
+    <Compile Include="Buffer\XnaVertexBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Apoc3D.Core\Apoc3D.CoreX.csproj">
