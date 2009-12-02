@@ -543,24 +543,92 @@ namespace Apoc3D.Graphics
     /// <remarks>可以和xna的直接转换，源自xnafx</remarks>
     public enum VertexElementFormat : byte
     {
-        Byte4 = 5,
-        Color = 4,
-        HalfVector2 = 15,
-        HalfVector4 = 16,
-        Normalized101010 = 14,
-        NormalizedShort2 = 9,
-        NormalizedShort4 = 10,
-        Rg32 = 11,
-        Rgba32 = 8,
-        Rgba64 = 12,
-        Short2 = 6,
-        Short4 = 7,
+        /// <summary>
+        ///  Single-component, 32-bit floating-point, expanded to (float, 0, 0, 1).
+        /// </summary>
         Single = 0,
-        UInt101010 = 13,
-        Unused = 17,
+        /// <summary>
+        ///  Two-component, 32-bit floating-point, expanded to (float, float, 0, 1).
+        /// </summary>
         Vector2 = 1,
+        /// <summary>
+        ///  Three-component, 32-bit floating point, expanded to (float, float, float, 1).
+        /// </summary>
         Vector3 = 2,
-        Vector4 = 3
+        /// <summary>
+        ///  Four-component, 32-bit floating point, expanded to (float, float, float, float).
+        /// </summary>
+        Vector4 = 3,
+        /// <summary>
+        ///  Four-component, packed, unsigned byte, mapped to 0 to 1 range. Input is in
+        ///     Int32 format (ARGB) expanded to (R, G, B, A).
+        /// </summary>
+        Color = 4,
+        /// <summary>
+        ///  Four-component, unsigned byte.
+        /// </summary>
+        Byte4 = 5,
+        /// <summary>
+        ///  Two-component, signed short expanded to (value, value, 0, 1).
+        /// </summary>
+        Short2 = 6,
+        /// <summary>
+        ///  Four-component, signed short expanded to (value, value, value, value).
+        /// </summary>
+        Short4 = 7,
+        /// <summary>
+        ///  Four-component byte with each byte normalized by dividing the component with
+        ///     255.0f. This type is valid for vertex shader version 2.0 or higher.
+        /// </summary>
+        Rgba32 = 8,
+        /// <summary>
+        ///  Normalized, two-component, signed short, expanded to (first short/32767.0,
+        ///     second short/32767.0, 0, 1). This type is valid for vertex shader version
+        ///     2.0 or higher.
+        /// </summary>
+        NormalizedShort2 = 9,
+        /// <summary>
+        ///  Normalized, four-component, signed short, expanded to (first short/32767.0,
+        ///     second short/32767.0, third short/32767.0, fourth short/32767.0). This type
+        ///     is valid for vertex shader version 2.0 or higher.
+        /// </summary>
+        NormalizedShort4 = 10,
+        /// <summary>
+        ///  Normalized, two-component, unsigned short, expanded to (first byte/65535.0,
+        ///     second byte/65535.0, 0, 1). This type is valid for vertex shader version
+        ///     2.0 or higher.
+        /// </summary>
+        Rg32 = 11,
+        /// <summary>
+        ///  Normalized, four-component, unsigned short, expanded to (first byte/65535.0,
+        ///     second byte/65535.0, third byte/65535.0, fourth byte/65535.0). This type
+        ///     is valid for vertex shader version 2.0 or higher.
+        /// </summary>
+        Rgba64 = 12,
+        /// <summary>
+        ///  Three-component, unsigned, 10 10 10 format expanded to (value, value, value, 1).
+        /// </summary>
+        UInt101010 = 13,
+        /// <summary>
+        ///  Three-component, signed, 10 10 10 format normalized and expanded to (v[0]/511.0,
+        ///     v[1]/511.0, v[2]/511.0, 1).
+        /// </summary>
+        Normalized101010 = 14,
+        /// <summary>
+        ///  Two-component, 16-bit floating point expanded to (value, value, value, value).
+        ///     This type is valid for vertex shader version 2.0 or higher.
+        /// </summary>
+        HalfVector2 = 15,
+        /// <summary>
+        ///  Four-component, 16-bit floating-point expanded to (value, value, value, value).
+        ///     This type is valid for vertex shader version 2.0 or higher.
+        /// </summary>
+        HalfVector4 = 16,
+        /// <summary>
+        ///  Type field in the declaration is unused. This is designed for use with VertexElementMethod.UV
+        ///     and VertexElementMethod.LookUpPresampled.
+        /// </summary>
+        Unused = 17,
     }
 
     /// <summary>

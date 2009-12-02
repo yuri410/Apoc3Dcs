@@ -208,10 +208,23 @@ namespace Apoc3D.RenderSystem.Xna
         {
             return (XG.VertexElementUsage)semantic;
         }
+        public static VertexElementUsage ConvertEnum(XG.VertexElementUsage semantic)
+        {
+            return (VertexElementUsage)semantic;
+        }
+
+        #endregion
+
+        #region VertexElementFormat
         public static XG.VertexElementFormat ConvertEnum(VertexElementFormat type)
         {
             return (XG.VertexElementFormat)type;
         }
+        public static VertexElementFormat ConvertEnum(XG.VertexElementFormat type)
+        {
+            return (VertexElementFormat)type;
+        }
+
         #endregion
 
         #region IndexBufferType

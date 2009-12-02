@@ -119,14 +119,14 @@ namespace Apoc3D.Graphics
     [Flags]
     public enum DeclarationTypeCaps
     {
-        Dec3N = 128,
-        HalfFour = 512,
-        HalfTwo = 256,
+        UInt101010N = 128,
+        HalfVector4 = 512,
+        HalfVector2 = 256,
         Short2N = 4,
         Short4N = 8,
         UByte4 = 1,
         UByte4N = 2,
-        UDec3 = 64,
+        UInt101010 = 64,
         UShort2N = 16,
         UShort4N = 32
     }
@@ -151,7 +151,7 @@ namespace Apoc3D.Graphics
     [Flags]
     public enum DeviceCaps
     {
-        CanBlitSysToNonLocal = 131072,
+        CanRenderSysToNonLocal = 131072,
         CanRenderAfterFlip = 2048,
         DrawPrimitives2 = 8192,
         DrawPrimitives2Extended = 32768,
@@ -160,11 +160,11 @@ namespace Apoc3D.Graphics
         ExecuteVideoMemory = 32,
         HWRasterization = 524288,
         HWTransformAndLight = 65536,
-        NPatches = 16777216,
+        //NPatches = 16777216,
         PureDevice = 1048576,
-        QuinticRTPatches = 2097152,
-        RTPatches = 4194304,
-        RTPatchHandleZero = 8388608,
+        //QuinticRTPatches = 2097152,
+        //RTPatches = 4194304,
+        //RTPatchHandleZero = 8388608,
         SeparateTextureMemory = 16384,
         TextureNonLocalVideoMemory = 4096,
         TextureSystemMemory = 256,
@@ -173,13 +173,13 @@ namespace Apoc3D.Graphics
         TLVertexVideoMemory = 128
     }
     [Flags]
-    public enum DevCaps2
+    public enum DeviceCaps2
     {
-        AdaptiveTessNPatch = 8,
-        AdaptiveTessRTPatch = 4,
+        //AdaptiveTessNPatch = 8,
+        //AdaptiveTessRTPatch = 4,
         CanStretchRectFromTextures = 16,
-        DMapNPatch = 2,
-        PresampledMapNPatch = 32,
+        //DMapNPatch = 2,
+        //PresampledMapNPatch = 32,
         StreamOffset = 1,
         VertexElementsCanShareStreamOffset = 64
     }
@@ -490,7 +490,7 @@ namespace Apoc3D.Graphics
         public CompareCaps DepthCompareCaps { get; set; }
         public BlendCaps DestinationBlendCaps { get; set; }
         public DeviceCaps DeviceCaps { get; set; }
-        public DevCaps2 DeviceCaps2 { get; set; }
+        public DeviceCaps2 DeviceCaps2 { get; set; }
         //public DeviceType DeviceType { get; set; }
         public float ExtentsAdjust { get; set; }
         public VertexFormatCaps FVFCaps { get; set; }

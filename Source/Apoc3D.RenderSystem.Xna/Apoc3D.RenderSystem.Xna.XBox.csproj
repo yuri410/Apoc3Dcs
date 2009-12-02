@@ -77,6 +77,7 @@
     <Compile Include="XnaRenderWindow.cs" />
     <Compile Include="XnaTexture.cs" />
     <Compile Include="Buffer\XnaVertexBuffer.cs" />
+    <Compile Include="XnaVertexDeclaration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Apoc3D.Core\Apoc3D.CoreX.csproj">

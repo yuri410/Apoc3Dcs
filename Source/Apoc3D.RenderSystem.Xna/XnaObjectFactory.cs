@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Apoc3D.Graphics;
-using Apoc3D.Vfs;
 using Apoc3D.Media;
-
-using XG = Microsoft.Xna.Framework.Graphics;
+using Apoc3D.Vfs;
 using X = Microsoft.Xna.Framework;
+using XG = Microsoft.Xna.Framework.Graphics;
 
 namespace Apoc3D.RenderSystem.Xna
 {
@@ -68,7 +67,7 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override VertexDeclaration CreateVertexDeclaration(VertexElement[] elements)
         {
-            throw new NotImplementedException();
+            return new XnaVertexDeclaration(renderSys, elements);
         }
 
         public override StateBlock CreateStateBlock()
