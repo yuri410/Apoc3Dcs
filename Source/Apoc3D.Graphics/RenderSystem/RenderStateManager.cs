@@ -25,7 +25,7 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract BlendFunction AlphaBlendOperation
+        public abstract BlendFunction BlendOperationAlpha
         {
             get;
             set;
@@ -55,7 +55,7 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract BlendFunction BlendFunction
+        public abstract BlendFunction BlendOperation
         {
             get;
             set;
@@ -135,47 +135,7 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        //public abstract ColorValue FogColor
-        //{
-        //    get;
-        //    set;
-        //}
-        //public abstract float FogDensity
-        //{
-        //    get;
-        //    set;
-        //}
-        //public abstract bool FogEnable
-        //{
-        //    get;
-        //    set;
-        //}
-        //public abstract float FogEnd
-        //{
-        //    get;
-        //    set;
-        //}
-        //public abstract float FogStart
-        //{
-        //    get;
-        //    set;
-        //}
-        //public abstract FogMode FogTableMode
-        //{
-        //    get;
-        //    set;
-        //}
-        //public abstract FogMode FogVertexMode
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //public abstract bool Lighting
-        //{
-        //    get;
-        //    set;
-        //}
+        
         public abstract bool MultiSampleAntiAlias
         {
             get;
@@ -187,21 +147,6 @@ namespace Apoc3D.Graphics
             set;
         }
         public abstract float PointSize
-        {
-            get;
-            set;
-        }
-        public abstract float PointScaleA
-        {
-            get;
-            set;
-        }
-        public abstract float PointScaleB
-        {
-            get;
-            set;
-        }
-        public abstract float PointScaleC
         {
             get;
             set;
@@ -222,11 +167,7 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract bool RangeFogEnable
-        {
-            get;
-            set;
-        }
+
         public abstract int ReferenceAlpha
         {
             get;
@@ -242,7 +183,7 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract bool SeparateAlphaBlendEnabled
+        public abstract bool AlphaBlendSeparateEnabled
         {
             get;
             set;

@@ -117,9 +117,19 @@ namespace Apoc3D.Graphics
 
     public enum CullMode
     {
+        /// <summary>
+        ///  Do not cull back faces.
+        /// </summary>
+        None = 1,
+        /// <summary>
+        ///  Cull back faces with clockwise vertices.
+        /// </summary>
         Clockwise = 2,
+        /// <summary>
+        ///  Cull back faces with counterclockwise vertices.
+        /// </summary>
         CounterClockwise = 3,
-        None = 1
+        
     }
 
     public enum CubeMapFace
@@ -132,12 +142,23 @@ namespace Apoc3D.Graphics
         NegativeZ
     }
 
-
+    /// <summary>
+    ///  Draw solid faces for each primitive.
+    /// </summary>
     public enum FillMode
     {
+        /// <summary>
+        ///  Draw a point at each vertex.
+        /// </summary>
         Point = 1,
+        /// <summary>
+        ///  Draw lines connecting the vertices that define a primitive face.
+        /// </summary>
+        WireFrame = 2,
+        /// <summary>
+        ///  Draw solid faces for each primitive.
+        /// </summary>
         Solid = 3,
-        WireFrame = 2
     }
 
     public enum MultiSampleType

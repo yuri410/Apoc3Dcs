@@ -227,6 +227,28 @@ namespace Apoc3D.RenderSystem.Xna
 
         #endregion
 
+        #region FillMode
+        public static XG.FillMode ConvertEnum(FillMode mode) 
+        {
+            return (XG.FillMode)mode;
+        }
+        public static FillMode ConvertEnum(XG.FillMode mode) 
+        {
+            return (FillMode)mode;
+        }
+        #endregion
+
+        #region CullMode
+        public static XG.CullMode ConvertEnum(CullMode mode)
+        {
+            return (XG.CullMode)mode;
+        }
+        public static CullMode ConvertEnum(XG.CullMode mode)
+        {
+            return (CullMode)mode;
+        }
+        #endregion
+
         #region IndexBufferType
         public static IndexBufferType ConvertEnum(XG.IndexElementSize v)
         {

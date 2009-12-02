@@ -20,12 +20,20 @@ namespace Apoc3D.RenderSystem.Xna
 
         XnaRenderTarget[] cachedRenderTargets;
 
+        XnaRenderStateManager renderStates;
+        XnaObjectFactory objectFactory;
 
+        //SamplerStateCollection samplerStates = new SamplerStateCollection();
 
         public XnaRenderSystem(XG.GraphicsDevice device)
             : base(XnaGraphicsAPIFactory.APIName + "RenderSystem")
         {
             this.device = device;
+            this.renderStates = new XnaRenderStateManager(this);
+            base.RenderStates = renderStates;
+
+            this.objectFactory = new XnaObjectFactory(this);
+            base.ObjectFactory = objectFactory;
         }
 
         public override void Init()
@@ -937,6 +945,7 @@ namespace Apoc3D.RenderSystem.Xna
             caps.MaxPointSize = device.GraphicsDeviceCapabilities.MaxPointSize;
             caps.MaxPrimitiveCount = device.GraphicsDeviceCapabilities.MaxPrimitiveCount;
             caps.MaxSimultaneousTextures = device.GraphicsDeviceCapabilities.MaxSimultaneousTextures;
+            caps.MaxSimultaneousRT = device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets;
             caps.MaxStreams = device.GraphicsDeviceCapabilities.MaxStreams;
             caps.MaxStreamStride = device.GraphicsDeviceCapabilities.MaxStreamStride;
             caps.MaxTextureAspectRatio = device.GraphicsDeviceCapabilities.MaxTextureAspectRatio;
@@ -952,7 +961,7 @@ namespace Apoc3D.RenderSystem.Xna
             caps.NumberOfAdaptersInGroup = device.GraphicsDeviceCapabilities.NumberOfAdaptersInGroup;
             caps.PixelShader1xMaxValue = device.GraphicsDeviceCapabilities.PixelShader1xMaxValue;
             caps.PixelShaderVersion = device.GraphicsDeviceCapabilities.PixelShaderVersion;
-
+            
             #region PresentInterval
             XG.PresentInterval caps16 = device.GraphicsDeviceCapabilities.PresentInterval;
 
@@ -982,7 +991,6 @@ namespace Apoc3D.RenderSystem.Xna
             }
             #endregion
 
-            caps.SimultaneousRTCount = device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets;
             caps.VertexShaderVersion = device.GraphicsDeviceCapabilities.VertexShaderVersion;
 
 

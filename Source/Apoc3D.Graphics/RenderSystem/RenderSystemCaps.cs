@@ -57,36 +57,7 @@ namespace Apoc3D.Graphics
         VolumeMap = 8192,
         VolumeMapPow2 = 262144
     }
-    [Flags]
-    public enum TextureOperationCaps
-    {
-        Add = 64,
-        AddSigned = 128,
-        AddSigned2X = 256,
-        AddSmooth = 1024,
-        BlendCurrentAlpha = 32768,
-        BlendDiffuseAlpha = 2048,
-        BlendFactorAlpha = 8192,
-        BlendTextureAlpha = 4096,
-        BlendTextureAlphaPM = 16384,
-        BumpEnvironmentMap = 2097152,
-        BumpEnvironmentMapLuminance = 4194304,
-        Disable = 1,
-        DotProduct3 = 8388608,
-        Lerp = 33554432,
-        Modulate = 8,
-        Modulate2X = 16,
-        Modulate4X = 32,
-        ModulateAlphaAddColor = 131072,
-        ModulateColorAddAlpha = 262144,
-        ModulateInvAlphaAddColor = 524288,
-        ModulateInvColorAddAlpha = 1048576,
-        MultiplyAdd = 16777216,
-        Premodulate = 65536,
-        SelectArg1 = 2,
-        SelectArg2 = 4,
-        Subtract = 512
-    }
+
     [Flags]
     public enum TextureAddressCaps
     {
@@ -290,6 +261,7 @@ namespace Apoc3D.Graphics
         public int StaticFlowControlDepth { get; set; }
 
     }
+
     /// <summary>
     /// Represents the capabilities of the hardware exposed through the Direct3D object.
     /// </summary>
@@ -508,6 +480,7 @@ namespace Apoc3D.Graphics
         public int MaxPrimitiveCount { get; set; }
         public int MaxPShaderInstructionsExecuted { get; set; }
         public int MaxSimultaneousTextures { get; set; }
+        public int MaxSimultaneousRT { get; set; }
         public int MaxStreams { get; set; }
         public int MaxStreamStride { get; set; }
         public int MaxTextureAspectRatio { get; set; }
@@ -532,14 +505,13 @@ namespace Apoc3D.Graphics
         public PixelShader20Caps PS20Caps { get; set; }
         public RasterCaps RasterCaps { get; set; }
         public ShadeCaps ShadeCaps { get; set; }
-        public int SimultaneousRTCount { get; set; }
         public BlendCaps SourceBlendCaps { get; set; }
         public StencilCaps StencilCaps { get; set; }
         public FilterCaps StretchRectFilterCaps { get; set; }
         public TextureAddressCaps TextureAddressCaps { get; set; }
         public TextureCaps TextureCaps { get; set; }
         public FilterCaps TextureFilterCaps { get; set; }
-        public TextureOperationCaps TextureOperationCaps { get; set; }
+        //public TextureOperationCaps TextureOperationCaps { get; set; }
         public VertexProcessingCaps VertexProcessingCaps { get; set; }
         public Version VertexShaderVersion { get; set; }
         public FilterCaps VertexTextureFilterCaps { get; set; }

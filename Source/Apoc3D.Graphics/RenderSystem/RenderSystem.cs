@@ -136,6 +136,7 @@ namespace Apoc3D.Graphics
         /// <param name="depthFailOp"></param>
         /// <param name="passOp"></param>
         /// <param name="twoSidedOperation"></param>
+        [Obsolete()]
         public virtual void SetStencilFunction(CompareFunction func,
             int refValue, int mask,
             StencilOperation stencilFailOp,
@@ -144,51 +145,6 @@ namespace Apoc3D.Graphics
             bool twoSidedOperation)
         {
 
-        }
-
-        /// <summary>
-        ///  设置绘制点的相关参数
-        /// </summary>
-        /// <param name="size">点的大小</param>
-        /// <param name="attenuationEnabled">是否开启点精灵</param>
-        /// <param name="constant"></param>
-        /// <param name="linear"></param>
-        /// <param name="quadratic"></param>
-        /// <param name="minSize"></param>
-        /// <param name="maxSize"></param>
-        public virtual void SetPointParameters(float size, bool attenuationEnabled,
-            float constant, float linear, float quadratic,
-            float minSize, float maxSize)
-        {
-            if (attenuationEnabled)
-            {
-                RenderStates.PointSpriteEnable = true;
-                RenderStates.PointScaleA = constant;
-                RenderStates.PointScaleB = linear;
-                RenderStates.PointScaleC = quadratic;
-                //RenderStates.
-                //dDevice.SetRenderState(RenderState.PointScaleEnable, true);
-                //dDevice.SetRenderState(RenderState.PointScaleA, constant);
-                //dDevice.SetRenderState(RenderState.PointScaleB, linear);
-                //dDevice.SetRenderState(RenderState.PointScaleC, quadratic);
-            }
-            else
-            {
-                RenderStates.PointSpriteEnable = false;
-                //dDevice.SetRenderState(RenderState.PointScaleEnable, false);
-            }
-            //dDevice.SetRenderState(RenderState.PointSize, size);
-            //dDevice.SetRenderState(RenderState.PointSizeMin, minSize);
-            RenderStates.PointSize = size;
-            RenderStates.PointSizeMin = minSize;
-
-            if (maxSize == 0f)
-            {
-                maxSize = caps.MaxPointSize;
-            }
-            RenderStates.PointSizeMax = maxSize;
-            //if (maxSize == 0.0f) maxSize = (float)rCapabilities.MaxPointSize;
-            //dDevice.SetRenderState(RenderState.PointSizeMax, maxSize);
         }
 
         /// <summary>
