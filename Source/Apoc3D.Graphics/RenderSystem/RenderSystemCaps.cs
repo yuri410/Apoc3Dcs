@@ -500,9 +500,9 @@ namespace Apoc3D.Graphics
         public float GuardBandTop { get; set; }
         public LineCaps LineCaps { get; set; }
         public int MasterAdapterOrdinal { get; set; }
-        public int MaxActiveLights { get; set; }
+        //public int MaxActiveLights { get; set; }
         public int MaxAnisotropy { get; set; }
-        public float MaxNPatchTessellationLevel { get; set; }
+        //public float MaxNPatchTessellationLevel { get; set; }
         public int MaxPixelShader30InstructionSlots { get; set; }
         public float MaxPointSize { get; set; }
         public int MaxPrimitiveCount { get; set; }

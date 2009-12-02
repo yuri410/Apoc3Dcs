@@ -33,7 +33,7 @@ namespace Apoc3D.RenderSystem.Xna
             defaultRtXna = (XG.RenderTarget2D)device.GetRenderTarget(0);
             defaultRt = new XnaRenderTarget(this, defaultRtXna);
 
-
+            #region ªÒ»°Capabilities
             Capabilities caps = new Capabilities();
 
             #region AlphaCompareCapabilities
@@ -75,7 +75,7 @@ namespace Apoc3D.RenderSystem.Xna
 
             #region CubeTextureFilterCapabilities
             XGC.FilterCaps caps2 = device.GraphicsDeviceCapabilities.CubeTextureFilterCapabilities;
-
+            
             if (caps2.SupportsMagnifyAnisotropic)
             {
                 caps.CubeTextureFilterCaps |= FilterCaps.MagAnisotropic;
@@ -336,34 +336,6 @@ namespace Apoc3D.RenderSystem.Xna
             
             #endregion
 
-            #region LineCapabilities
-            XG.GraphicsDeviceCapabilities.LineCaps lineCaps = device.GraphicsDeviceCapabilities.LineCapabilities;
-            if (lineCaps.SupportsAlphaCompare )
-            {
-                caps.LineCaps |= LineCaps.AlphaCompare;
-            }
-            if (lineCaps.SupportsAntiAlias)
-            {
-                caps.LineCaps |= LineCaps.Antialias;
-            }
-            if (lineCaps.SupportsBlend)
-            {
-                caps.LineCaps |= LineCaps.Blend;
-            }
-            if (lineCaps.SupportsDepthBufferTest)
-            {
-                caps.LineCaps |= LineCaps.DepthTest;
-            }
-            if (lineCaps.SupportsFog)
-            {
-                caps.LineCaps |= LineCaps.Fog;
-            }
-            if (lineCaps.SupportsTextureMapping)
-            {
-                caps.LineCaps |= LineCaps.Texture;
-            }
-            #endregion
-
             #region DriverCapabilities
             XG.GraphicsDeviceCapabilities.PixelShaderCaps caps6 = device.GraphicsDeviceCapabilities.PixelShaderCapabilities;
 
@@ -395,6 +367,94 @@ namespace Apoc3D.RenderSystem.Xna
             
             caps.PS20Caps = pscaps;
 
+            #endregion
+
+            #region LineCapabilities
+            XG.GraphicsDeviceCapabilities.LineCaps lineCaps = device.GraphicsDeviceCapabilities.LineCapabilities;
+            if (lineCaps.SupportsAlphaCompare )
+            {
+                caps.LineCaps |= LineCaps.AlphaCompare;
+            }
+            if (lineCaps.SupportsAntiAlias)
+            {
+                caps.LineCaps |= LineCaps.Antialias;
+            }
+            if (lineCaps.SupportsBlend)
+            {
+                caps.LineCaps |= LineCaps.Blend;
+            }
+            if (lineCaps.SupportsDepthBufferTest)
+            {
+                caps.LineCaps |= LineCaps.DepthTest;
+            }
+            if (lineCaps.SupportsFog)
+            {
+                caps.LineCaps |= LineCaps.Fog;
+            }
+            if (lineCaps.SupportsTextureMapping)
+            {
+                caps.LineCaps |= LineCaps.Texture;
+            }
+            #endregion
+
+            #region PrimitiveCapabilities
+            XG.GraphicsDeviceCapabilities.PrimitiveCaps caps10 = device.GraphicsDeviceCapabilities.PrimitiveCapabilities;
+            if (caps10.SupportsBlendOperation)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.BlendOperation;
+            }
+            if (caps10.SupportsClipTransformedVertices)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.ClipTLVertices;
+            }
+            if (caps10.SupportsColorWrite)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.ColorWriteEnable;
+            }
+            if (caps10.SupportsCullClockwiseFace)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.CullCW;
+            }
+            if (caps10.SupportsCullCounterClockwiseFace)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.CullCCW;
+            }
+            if (caps10.SupportsCullNone)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.CullNone;
+            }
+            if (caps10.SupportsFogAndSpecularAlpha)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.FogAndSpecularAlpha;
+            }
+            if (caps10.SupportsIndependentWriteMasks)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.IndependentWriteMasks;
+            }
+            if (caps10.SupportsMaskZ)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.MaskZ;
+            }
+            if (caps10.SupportsMultipleRenderTargetsIndependentBitDepths)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.MrtIndependentBitDepths;
+            }
+            if (caps10.SupportsMultipleRenderTargetsPostPixelShaderBlending)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.MrtPostPixelShaderBlending;
+            }
+            if (caps10.SupportsSeparateAlphaBlend)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.SeparateAlphaBlend;
+            }
+            if (caps10.HasFogVertexClamped)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.FogVertexClamped;
+            }
+            if (caps10.IsNullReference)
+            {
+                caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.NullReference;
+            }
             #endregion
 
             #region RasterCapabilities
@@ -478,10 +538,454 @@ namespace Apoc3D.RenderSystem.Xna
             }
             #endregion
 
+            #region SourceBlendCapabilities
+            caps4 = device.GraphicsDeviceCapabilities.SourceBlendCapabilities;
+            if (caps4.SupportsBlendFactor)
+            {
+                caps.SourceBlendCaps |= BlendCaps.BlendFactor;
+            }
+            if (caps4.SupportsBothInverseSourceAlpha)
+            {
+                caps.SourceBlendCaps |= BlendCaps.BothInverseSourceAlpha;
+            }
+            if (caps4.SupportsDestinationAlpha)
+            {
+                caps.SourceBlendCaps |= BlendCaps.DestinationAlpha;
+            }
+            if (caps4.SupportsDestinationColor)
+            {
+                caps.SourceBlendCaps |= BlendCaps.DestinationColor;
+            }
+            if (caps4.SupportsInverseDestinationAlpha)
+            {
+                caps.SourceBlendCaps |= BlendCaps.InverseDestinationAlpha;
+            }
+            if (caps4.SupportsInverseDestinationColor)
+            {
+                caps.SourceBlendCaps |= BlendCaps.InverseDestinationColor;
+            }
+            if (caps4.SupportsInverseSourceAlpha)
+            {
+                caps.SourceBlendCaps |= BlendCaps.InverseSourceAlpha;
+            }
+            if (caps4.SupportsInverseSourceColor)
+            {
+                caps.SourceBlendCaps |= BlendCaps.InverseSourceColor;
+            }
+            if (caps4.SupportsOne)
+            {
+                caps.SourceBlendCaps |= BlendCaps.One;
+            }
+            if (caps4.SupportsSourceAlpha)
+            {
+                caps.SourceBlendCaps |= BlendCaps.SourceAlpha;
+            }
+            if (caps4.SupportsSourceAlphaSat)
+            {
+                caps.SourceBlendCaps |= BlendCaps.SourceAlphaSaturated;
+            }
+            if (caps4.SupportsSourceColor)
+            {
+                caps.SourceBlendCaps |= BlendCaps.SourceColor;
+            }
+            if (caps4.SupportsZero)
+            {
+                caps.SourceBlendCaps |= BlendCaps.Zero;
+            }
+            #endregion
 
+            #region StencilCapabilities
+            XG.GraphicsDeviceCapabilities.StencilCaps caps9 = device.GraphicsDeviceCapabilities.StencilCapabilities;
+            if (caps9.SupportsDecrement)
+            {
+                caps.StencilCaps |= StencilCaps.Decrement;
+            }
+            if (caps9.SupportsDecrementSaturation)
+            {
+                caps.StencilCaps |= StencilCaps.DecrementClamp;
+            }
+            if (caps9.SupportsIncrement)
+            {
+                caps.StencilCaps |= StencilCaps.Increment;
+            }
+            if (caps9.SupportsIncrementSaturation)
+            {
+                caps.StencilCaps |= StencilCaps.IncrementClamp;
+            }
+            if (caps9.SupportsInvert)
+            {
+                caps.StencilCaps |= StencilCaps.Invert;
+            }
+            if (caps9.SupportsKeep)
+            {
+                caps.StencilCaps |= StencilCaps.Keep;
+            }
+            if (caps9.SupportsReplace)
+            {
+                caps.StencilCaps |= StencilCaps.Replace;
+            }
+            if (caps9.SupportsTwoSided)
+            {
+                caps.StencilCaps |= StencilCaps.TwoSided;
+            }
+            if (caps9.SupportsZero)
+            {
+                caps.StencilCaps |= StencilCaps.Zero;
+            }
+            
             RenderSystemCaps = caps;
+            #endregion
+
+            #region TextureAddressCapabilities
+            XG.GraphicsDeviceCapabilities.AddressCaps caps11 = device.GraphicsDeviceCapabilities.TextureAddressCapabilities;
+
+            if (caps11.SupportsBorder)
+            {
+                caps.TextureAddressCaps |= TextureAddressCaps.Border;
+            }
+            if (caps11.SupportsClamp)
+            {
+                caps.TextureAddressCaps |= TextureAddressCaps.Clamp;
+            }
+            if (caps11.SupportsIndependentUV)
+            {
+                caps.TextureAddressCaps |= TextureAddressCaps.IndependentUV;
+            }
+            if (caps11.SupportsMirror)
+            {
+                caps.TextureAddressCaps |= TextureAddressCaps.Mirror;
+            }
+            if (caps11.SupportsMirrorOnce)
+            {
+                caps.TextureAddressCaps |= TextureAddressCaps.MirrorOnce;
+            }
+            if (caps11.SupportsWrap)
+            {
+                caps.TextureAddressCaps |= TextureAddressCaps.Wrap;
+            }
+            #endregion
+
+            #region TextureCapabilities
+            XG.GraphicsDeviceCapabilities.TextureCaps caps12 = device.GraphicsDeviceCapabilities.TextureCapabilities;
+            if (caps12.SupportsAlpha)
+            {
+                caps.TextureCaps |= TextureCaps.Alpha;
+            }
+            if (caps12.SupportsCubeMap)
+            {
+                caps.TextureCaps |= TextureCaps.CubeMap;
+            }
+            if (caps12.SupportsMipCubeMap)
+            {
+                caps.TextureCaps |= TextureCaps.MipCubeMap;
+            }
+            if (caps12.SupportsMipMap)
+            {
+                caps.TextureCaps |= TextureCaps.MipMap;
+            }
+            if (caps12.SupportsMipVolumeMap)
+            {
+                caps.TextureCaps |= TextureCaps.MipVolumeMap;
+            }
+            if (caps12.SupportsNonPower2Conditional)
+            {
+                caps.TextureCaps |= TextureCaps.NonPow2Conditional;
+            }
+            if (caps12.SupportsNoProjectedBumpEnvironment)
+            {
+                caps.TextureCaps |= TextureCaps.NoProjectedBumpEnvironment;
+            } 
+            if (caps12.SupportsPerspective)
+            {
+                caps.TextureCaps |= TextureCaps.Perspective;
+            }
+            if (caps12.SupportsProjected)
+            {
+                caps.TextureCaps |= TextureCaps.Projected;
+            }
+            if (caps12.SupportsTextureRepeatNotScaledBySize)
+            {
+                caps.TextureCaps |= TextureCaps.TextureRepeatNotScaledBySize;
+            }
+            if (caps12.SupportsVolumeMap)
+            {
+                caps.TextureCaps |= TextureCaps.VolumeMap;
+            }
+            if (caps12.RequiresCubeMapPower2)
+            {
+                caps.TextureCaps |= TextureCaps.CubeMapPow2;
+            }
+            if (caps12.RequiresPower2)
+            {
+                caps.TextureCaps |= TextureCaps.Pow2;
+            }
+            if (caps12.RequiresSquareOnly)
+            {
+                caps.TextureCaps |= TextureCaps.SquareOnly;
+            }
+            if (caps12.RequiresVolumeMapPower2)
+            {
+                caps.TextureCaps |= TextureCaps.VolumeMapPow2;
+            }
+            #endregion
+
+            #region TextureFilterCapabilities
+            caps2 = device.GraphicsDeviceCapabilities.TextureFilterCapabilities;
+            if (caps2.SupportsMagnifyAnisotropic)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MagAnisotropic;
+            }
+            if (caps2.SupportsMagnifyGaussianQuad)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MagGaussianQuad;
+            }
+            if (caps2.SupportsMagnifyLinear)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MagLinear;
+            }
+            if (caps2.SupportsMagnifyPoint)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MagPoint;
+            }
+            if (caps2.SupportsMagnifyPyramidalQuad)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MagPyramidalQuad;
+            }
+            if (caps2.SupportsMinifyAnisotropic)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MinAnisotropic;
+            }
+            if (caps2.SupportsMinifyGaussianQuad)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MinGaussianQuad;
+            }
+            if (caps2.SupportsMinifyLinear)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MinLinear;
+            }
+            if (caps2.SupportsMinifyPoint)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MinPoint;
+            }
+            if (caps2.SupportsMinifyPyramidalQuad)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MinPyramidalQuad;
+            }
+            if (caps2.SupportsMipMapLinear)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MipLinear;
+            }
+            if (caps2.SupportsMipMapPoint)
+            {
+                caps.TextureFilterCaps |= FilterCaps.MipPoint;
+            }
+            #endregion
+
+            #region VertexProcessingCapabilities
+            XG.GraphicsDeviceCapabilities.VertexProcessingCaps caps13 = device.GraphicsDeviceCapabilities.VertexProcessingCapabilities;
+
+            if (caps13.SupportsLocalViewer) 
+            {
+                caps.VertexProcessingCaps |= VertexProcessingCaps.LocalViewer;
+            }
+            if (caps13.SupportsNoTextureGenerationNonLocalViewer) 
+            {
+                caps.VertexProcessingCaps |= VertexProcessingCaps.NoTexGenNonLocalViewer;
+            }
+            if (caps13.SupportsTextureGeneration) 
+            {
+                caps.VertexProcessingCaps |= VertexProcessingCaps.TextureGen;
+            }
+            if (caps13.SupportsTextureGenerationSphereMap) 
+            {
+                caps.VertexProcessingCaps |= VertexProcessingCaps.TexGenSphereMap;
+            }
+            #endregion
+
+            #region VertexShaderCapabilities
+            XG.GraphicsDeviceCapabilities.VertexShaderCaps caps14 = device.GraphicsDeviceCapabilities.VertexShaderCapabilities;
+
+            VertexShader20Caps vscaps = new VertexShader20Caps();
+
+            if (caps14.SupportsPredication) 
+            {
+                vscaps.Caps |= VertexShaderCaps.Predication;
+            }
+            vscaps.DynamicFlowControlDepth = caps14.DynamicFlowControlDepth;
+            vscaps.StaticFlowControlDepth = caps14.StaticFlowControlDepth;
+            vscaps.TempCount = caps14.NumberTemps;
+
+            caps.VS20Caps = vscaps;
+            #endregion
+
+            #region VolumeTextureAddressCapabilities
+            caps11 = device.GraphicsDeviceCapabilities.VolumeTextureAddressCapabilities;
+
+            if (caps11.SupportsBorder)
+            {
+                caps.VolumeTextureAddressCaps |= TextureAddressCaps.Border;
+            }
+            if (caps11.SupportsClamp)
+            {
+                caps.VolumeTextureAddressCaps |= TextureAddressCaps.Clamp;
+            }
+            if (caps11.SupportsIndependentUV)
+            {
+                caps.VolumeTextureAddressCaps |= TextureAddressCaps.IndependentUV;
+            }
+            if (caps11.SupportsMirror)
+            {
+                caps.VolumeTextureAddressCaps |= TextureAddressCaps.Mirror;
+            }
+            if (caps11.SupportsMirrorOnce)
+            {
+                caps.VolumeTextureAddressCaps |= TextureAddressCaps.MirrorOnce;
+            }
+            if (caps11.SupportsWrap)
+            {
+                caps.VolumeTextureAddressCaps |= TextureAddressCaps.Wrap;
+            }
+            #endregion
+
+            #region VolumeTextureFilterCapabilities
+            caps2 = device.GraphicsDeviceCapabilities.VolumeTextureFilterCapabilities;
+            if (caps2.SupportsMagnifyAnisotropic)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MagAnisotropic;
+            }
+            if (caps2.SupportsMagnifyGaussianQuad)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MagGaussianQuad;
+            }
+            if (caps2.SupportsMagnifyLinear)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MagLinear;
+            }
+            if (caps2.SupportsMagnifyPoint)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MagPoint;
+            }
+            if (caps2.SupportsMagnifyPyramidalQuad)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MagPyramidalQuad;
+            }
+            if (caps2.SupportsMinifyAnisotropic)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MinAnisotropic;
+            }
+            if (caps2.SupportsMinifyGaussianQuad)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MinGaussianQuad;
+            }
+            if (caps2.SupportsMinifyLinear)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MinLinear;
+            }
+            if (caps2.SupportsMinifyPoint)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MinPoint;
+            }
+            if (caps2.SupportsMinifyPyramidalQuad)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MinPyramidalQuad;
+            }
+            if (caps2.SupportsMipMapLinear)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MipLinear;
+            }
+            if (caps2.SupportsMipMapPoint)
+            {
+                caps.VolumeTextureFilterCaps |= FilterCaps.MipPoint;
+            }
+            #endregion
+
+            #region VertexFormatCapabilities
+            XG.GraphicsDeviceCapabilities.VertexFormatCaps caps15 = device.GraphicsDeviceCapabilities.VertexFormatCapabilities;
+            if (caps15.SupportsDoNotStripElements)
+            {
+                caps.FVFCaps |= VertexFormatCaps.DoNotStripElements;
+            }
+            if (caps15.SupportsPointSize) 
+            {
+                caps.FVFCaps |= VertexFormatCaps.PointSize;
+            }
+            caps.MaxSimultaneousTextures = caps15.NumberSimultaneousTextureCoordinates;
+
+            #endregion
+
+            caps.AlphaFullScreenFlipOrDiscard = device.GraphicsDeviceCapabilities.DriverCapabilities.SupportsAlphaFullScreenFlipOrDiscard;
+            caps.CanAutoGenerateMipmap = device.GraphicsDeviceCapabilities.DriverCapabilities.CanAutoGenerateMipMap;
+            caps.CanCalibrateGamma = device.GraphicsDeviceCapabilities.DriverCapabilities.CanCalibrateGamma;
+            caps.CanManageResource = device.GraphicsDeviceCapabilities.DriverCapabilities.CanManageResource;
+            caps.CopyToSystemMemory = device.GraphicsDeviceCapabilities.DriverCapabilities.SupportsCopyToSystemMemory;
+            caps.CopyToVideoMemory = device.GraphicsDeviceCapabilities.DriverCapabilities.SupportsCopyToVideoMemory;
+            caps.DynamicTextures = device.GraphicsDeviceCapabilities.DriverCapabilities.SupportsDynamicTextures;
+            caps.FullScreenGamma = device.GraphicsDeviceCapabilities.DriverCapabilities.SupportsFullScreenGamma;
+            caps.LinearToSrgbPresentation = device.GraphicsDeviceCapabilities.DriverCapabilities.SupportsLinearToSrgbPresentation;
 
 
+            caps.ExtentsAdjust = device.GraphicsDeviceCapabilities.ExtentsAdjust;
+            caps.GuardBandBottom = device.GraphicsDeviceCapabilities.GuardBandBottom;
+            caps.GuardBandLeft = device.GraphicsDeviceCapabilities.GuardBandLeft;
+            caps.GuardBandRight = device.GraphicsDeviceCapabilities.GuardBandRight;
+            caps.GuardBandTop = device.GraphicsDeviceCapabilities.GuardBandTop;
+
+            caps.MasterAdapterOrdinal = device.GraphicsDeviceCapabilities.MasterAdapterOrdinal;
+            caps.MaxAnisotropy = device.GraphicsDeviceCapabilities.MaxAnisotropy;
+            caps.MaxPixelShader30InstructionSlots = device.GraphicsDeviceCapabilities.MaxPixelShader30InstructionSlots;
+            caps.MaxPointSize = device.GraphicsDeviceCapabilities.MaxPointSize;
+            caps.MaxPrimitiveCount = device.GraphicsDeviceCapabilities.MaxPrimitiveCount;
+            caps.MaxSimultaneousTextures = device.GraphicsDeviceCapabilities.MaxSimultaneousTextures;
+            caps.MaxStreams = device.GraphicsDeviceCapabilities.MaxStreams;
+            caps.MaxStreamStride = device.GraphicsDeviceCapabilities.MaxStreamStride;
+            caps.MaxTextureAspectRatio = device.GraphicsDeviceCapabilities.MaxTextureAspectRatio;
+            caps.MaxTextureHeight = device.GraphicsDeviceCapabilities.MaxTextureHeight;
+            caps.MaxTextureRepeat = device.GraphicsDeviceCapabilities.MaxTextureRepeat;
+            caps.MaxTextureWidth = device.GraphicsDeviceCapabilities.MaxTextureWidth;
+            caps.MaxUserClipPlanes = device.GraphicsDeviceCapabilities.MaxUserClipPlanes;
+            caps.MaxVertexIndex = device.GraphicsDeviceCapabilities.MaxVertexIndex;
+            caps.MaxVertexShader30InstructionSlots = device.GraphicsDeviceCapabilities.MaxVertexShader30InstructionSlots;
+            caps.MaxVertexShaderConstants = device.GraphicsDeviceCapabilities.MaxVertexShaderConstants;
+            caps.MaxVertexW = device.GraphicsDeviceCapabilities.MaxVertexW;
+            caps.MaxVolumeExtent = device.GraphicsDeviceCapabilities.MaxVolumeExtent;
+            caps.NumberOfAdaptersInGroup = device.GraphicsDeviceCapabilities.NumberOfAdaptersInGroup;
+            caps.PixelShader1xMaxValue = device.GraphicsDeviceCapabilities.PixelShader1xMaxValue;
+            caps.PixelShaderVersion = device.GraphicsDeviceCapabilities.PixelShaderVersion;
+
+            #region PresentInterval
+            XG.PresentInterval caps16 = device.GraphicsDeviceCapabilities.PresentInterval;
+
+            if ((caps16 & XG.PresentInterval.Immediate) == XG.PresentInterval.Immediate)
+            {
+                caps.PresentationIntervals |= PresentInterval.Immediate;
+            }
+            if ((caps16 & XG.PresentInterval.One) == XG.PresentInterval.One)
+            {
+                caps.PresentationIntervals |= PresentInterval.One;
+            }
+            if ((caps16 & XG.PresentInterval.Two) == XG.PresentInterval.Two)
+            {
+                caps.PresentationIntervals |= PresentInterval.Two;
+            }
+            if ((caps16 & XG.PresentInterval.Three) == XG.PresentInterval.Three)
+            {
+                caps.PresentationIntervals |= PresentInterval.Three;
+            }
+            if ((caps16 & XG.PresentInterval.Four) == XG.PresentInterval.Four)
+            {
+                caps.PresentationIntervals |= PresentInterval.Immediate;
+            }
+            if ((caps16 & XG.PresentInterval.Default) == XG.PresentInterval.Default)
+            {
+                caps.PresentationIntervals |= PresentInterval.Default;
+            }
+            #endregion
+
+            caps.SimultaneousRTCount = device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets;
+            caps.VertexShaderVersion = device.GraphicsDeviceCapabilities.VertexShaderVersion;
+
+
+            #endregion
 
             cachedRenderTargets = new XnaRenderTarget[device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets];
             cachedRenderTargets[0] = defaultRt;
