@@ -66,9 +66,14 @@
   <ItemGroup>
     <Compile Include="Buffer\XnaDepthBuffer.cs" />
     <Compile Include="Buffer\XnaIndexBuffer.cs" />
+    <Compile Include="Hlsl\HlslCode.cs" />
+    <Compile Include="Hlsl\HlslDeclaration.cs" />
+    <Compile Include="Hlsl\HlslEnums.cs" />
     <Compile Include="XnaObjectFactory.cs" />
+    <Compile Include="XnaPixelShader.cs" />
     <Compile Include="XnaRenderStateManager.cs" />
     <Compile Include="XnaSamplerState.cs" />
+    <Compile Include="XnaStateBlock.cs" />
     <Compile Include="XnaUtils.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +85,7 @@
     <Compile Include="XnaTexture.cs" />
     <Compile Include="Buffer\XnaVertexBuffer.cs" />
     <Compile Include="XnaVertexDeclaration.cs" />
+    <Compile Include="XnaVertexShader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Apoc3D.Core\Apoc3D.CoreX.csproj">

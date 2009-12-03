@@ -18,8 +18,8 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaObjectFactory(XnaRenderSystem rs)
             : base(rs)
         {
-            device = rs.device;
-            renderSys = rs;
+            this.device = rs.device;
+            this.renderSys = rs;
         }
 
         #region ¥¥Ω®Œ∆¿Ì
@@ -73,7 +73,7 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override StateBlock CreateStateBlock()
         {
-            throw new NotImplementedException();
+            return new XnaStateBlock(renderSys);
         }
 
         public override VertexShader CreateVertexShader(string code, Macro[] defines, Include include, string profile, string functionName)

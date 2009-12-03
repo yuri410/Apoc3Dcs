@@ -7,24 +7,54 @@ using Apoc3D.Vfs;
 
 namespace Apoc3D.Graphics
 {
+    /// <summary>
+    ///  表示纹理的数据
+    /// </summary>
     public unsafe struct TextureData
     {
+        /// <summary>
+        ///  表示纹理的类型
+        /// </summary>
         public TextureType Type;
 
+        /// <summary>
+        ///  表示纹理的宽度
+        /// </summary>
         public int Width;
-
+        
+        /// <summary>
+        ///  纹理的高度
+        /// </summary>
         public int Height;
 
+        /// <summary>
+        ///  纹理的深度
+        /// </summary>
         public int Depth;
 
+        /// <summary>
+        ///  表示纹理的像素格式
+        /// </summary>
         public ImagePixelFormat Format;
 
+        /// <summary>
+        ///  表示纹理的大小，包括所有的层
+        /// </summary>
         public int ContentSize;
 
+        /// <summary>
+        ///  表示纹理的层数
+        /// </summary>
         public int LevelCount;
 
+        /// <summary>
+        ///  表示纹理每一层的大小
+        /// </summary>
         public fixed int LevelSize[Material.MaxTexLayers];
 
+        /// <summary>
+        ///  纹理的像素数据，从第一层开始一层一层排列
+        /// </summary>
         public byte[] Content;
 
         #region 常量
