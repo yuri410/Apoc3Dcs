@@ -11,6 +11,11 @@ namespace Apoc3D.RenderSystem.Xna
     class XnaVertexShader : VertexShader
     {
         XG.GraphicsDevice device;
+        public XnaVertexShader(XnaRenderSystem rs)
+            : base(rs)
+        {
+            device = rs.device;
+        }
 
         public override void SetValue<T>(string paramName, T value)
         {

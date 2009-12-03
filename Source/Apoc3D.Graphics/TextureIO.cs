@@ -95,9 +95,12 @@ namespace Apoc3D.Graphics
                 this.LevelCount = data.GetDataInt32(LevelCountTag);
 
                 ContentBinaryReader br1 = data.GetData(LevelSizeTag);
-                for (int i = 0; i < Material.MaxTexLayers; i++)
+                fixed (int* dst = LevelSize)
                 {
-                    this.LevelSize[i] = br.ReadInt32();
+                    for (int i = 0; i < Material.MaxTexLayers; i++)
+                    {
+                        dst[i] = br.ReadInt32();
+                    }
                 }
                 br1.Close();
 

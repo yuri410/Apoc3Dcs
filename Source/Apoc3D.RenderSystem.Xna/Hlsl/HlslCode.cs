@@ -3,23 +3,96 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Apoc3D.RenderSystem.Xna
 {
     class HlslCode
     {
         const char StrToken = '"';
-        
+        static readonly string CommentToken = "//";
+        static readonly string UsageStartToken = "[";
+        static readonly string UsageEndToken = "]";
+
         HlslDeclaration [] decls;
+
+
+        
 
         public HlslDeclaration[] Declarations 
         {
             get { return decls; }
-            set { decls = value; }
+            private set { decls = value; }
+        }
+
+        static HlslRegisterType ParseRegister(string reg, out int index) 
+        {
+            reg = reg.ToLower(CultureInfo.InvariantCulture);
+
+            int digitPos = -1;
+            for (int i = reg.Length - 1; i >= 0; i--) 
+            {
+                if (reg[i] >= '0' && reg[i] <= '9')
+                {
+                    digitPos = i;
+                }
+                else break;
+            }
+
+            if (digitPos != -1)
+            {
+                string ns = reg.Substring(digitPos);
+                index = int.Parse(ns);
+
+                reg = reg.Substring(0, digitPos);
+            }
+            else index = 0;
+
+            if (Enum.IsDefined(typeof(HlslRegisterType), reg))
+            {
+                return (HlslRegisterType)Enum.Parse(typeof(HlslRegisterType), reg, true);
+            }
+            return HlslRegisterType.Unknown;
+        }
+        static HlslType ParseType(string type) 
+        {
+            type = type.ToLower(CultureInfo.InvariantCulture);
+            return HlslType.Boolean;
+        }
+        static AutoParamType ParseAutoParam(string type, out int index) 
+        {
+            type = type.ToLower(CultureInfo.InvariantCulture);
+
+            int digitPos = -1;
+            for (int i = type.Length - 1; i >= 0; i--)
+            {
+                if (type[i] >= '0' && type[i] <= '9')
+                {
+                    digitPos = i;
+                }
+                else break;
+            }
+
+            if (digitPos != -1)
+            {
+                string ns = type.Substring(digitPos);
+                index = int.Parse(ns);
+
+                type = type.Substring(0, digitPos);
+            }
+            else index = 0;
+
+            if (Enum.IsDefined(typeof(AutoParamType), type))
+            {
+                return (AutoParamType)Enum.Parse(typeof(AutoParamType), type, true);
+            }
+            return AutoParamType.None;
         }
 
         public static HlslCode Parse(string code) 
         {
+            List<HlslDeclaration> declList = new List<HlslDeclaration>();
+
             string[] lines = code.Split('\n');
 
             for (int i = 0; i < lines.Length; i++)
@@ -42,7 +115,7 @@ namespace Apoc3D.RenderSystem.Xna
                             if (type == null)
                             {
                                 type = v1[k].Trim();
-                                if (type == "//")
+                                if (type == CommentToken)
                                 {
                                     isInvalid = true;
                                     break;
@@ -51,7 +124,7 @@ namespace Apoc3D.RenderSystem.Xna
                             else if (name == null)
                             {
                                 name = v1[k].Trim();
-                                if (name == "//")
+                                if (name == CommentToken)
                                 {
                                     isInvalid = true;
                                     break;
@@ -79,11 +152,34 @@ namespace Apoc3D.RenderSystem.Xna
                         {
                             string regName = lines[i].Substring(pos, pos2 - pos).Trim();
 
-                            pos = lines[i].IndexOf("//", pos2);
+                            pos = lines[i].IndexOf(CommentToken, pos2);
 
-                            string usage = lines[i].Substring(pos + 2);
+                            if (pos != -1)
+                            {
+                                string usage = lines[i].Substring(pos + 2).Trim();
+                                if (usage.StartsWith(UsageStartToken))
+                                {
+                                    pos = usage.IndexOf(UsageEndToken);
+                                    if (pos != -1)
+                                    {
+                                        usage = usage.Substring(1, pos);
 
+                                        HlslDeclaration decl = new HlslDeclaration();
 
+                                        int temp;
+                                        decl.Name = name;
+                                        
+                                        decl.Register = ParseRegister(regName, out temp);
+                                        decl.RegisterIndex = temp;
+
+                                        decl.Type = ParseType(type);
+                                        decl.Usage = ParseAutoParam(usage, out temp);
+                                        decl.Index = temp;
+
+                                        declList.Add(decl);
+                                    }
+                                }
+                            }
                         }
                     }
                 }

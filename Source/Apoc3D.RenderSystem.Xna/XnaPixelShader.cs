@@ -10,6 +10,12 @@ namespace Apoc3D.RenderSystem.Xna
 {
     class XnaPixelShader : PixelShader
     {
+        public XnaPixelShader(XnaRenderSystem rs)
+            : base(rs)
+        {
+
+        }
+
         public override void SetValue<T>(string paramName, T value)
         {
             throw new NotImplementedException();
