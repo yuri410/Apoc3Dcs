@@ -19,15 +19,15 @@ namespace Apoc3D.Test.ResourceManagerTest
 
         public void Visit() { }
 
-        protected override void ReadCacheData(Stream stream)
-        {
-            resource = new int[128];
-        }
+        //protected override void ReadCacheData(Stream stream)
+        //{
+        //    resource = new int[128];
+        //}
 
-        protected override void WriteCacheData(Stream stream)
-        {
+        //protected override void WriteCacheData(Stream stream)
+        //{
 
-        }
+        //}
 
         public override int GetSize()
         {
@@ -59,7 +59,7 @@ namespace Apoc3D.Test.ResourceManagerTest
             {
                 TestResource test = new TestResource(this, name);
                 retrived = test;
-                base.NotifyResourceNew(test, CacheType.None);
+                base.NotifyResourceNew(test);
             }
             return new ResourceHandle<TestResource>((TestResource)retrived);
         }

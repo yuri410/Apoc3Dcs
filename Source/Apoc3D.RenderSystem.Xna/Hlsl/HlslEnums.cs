@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Apoc3D.RenderSystem.Xna
@@ -46,9 +45,19 @@ namespace Apoc3D.RenderSystem.Xna
         MaterialDiffuse,
         MaterialSpecular,
         MaterialEmmisive,
-        
+        LightDiffuse,
+        LightAmbient,
+        LightSpecular,
         MaterialTexture,
         ShadowMap,
         SceneDepth,
+
+        WorldTransform,
+        WorldViewTransform,
+        WVPTransform,
+        ProjectionTransform,
+        ViewTransform,
+        CameraPosition,
+
     }
 }

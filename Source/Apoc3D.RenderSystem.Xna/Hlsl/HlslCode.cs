@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
@@ -16,7 +15,10 @@ namespace Apoc3D.RenderSystem.Xna
 
         HlslDeclaration [] decls;
 
-
+        private HlslCode(HlslDeclaration[] d)
+        {
+            decls = d;
+        }
         
 
         public HlslDeclaration[] Declarations 
@@ -48,9 +50,12 @@ namespace Apoc3D.RenderSystem.Xna
             }
             else index = 0;
 
-            if (Enum.IsDefined(typeof(HlslRegisterType), reg))
+            switch (reg) 
             {
-                return (HlslRegisterType)Enum.Parse(typeof(HlslRegisterType), reg, true);
+                case "c":
+                    return HlslRegisterType.Constant;
+                case "s":
+                    return HlslRegisterType.Sampler;
             }
             return HlslRegisterType.Unknown;
         }
@@ -82,9 +87,10 @@ namespace Apoc3D.RenderSystem.Xna
             }
             else index = 0;
 
-            if (Enum.IsDefined(typeof(AutoParamType), type))
+            AutoParamType result = (AutoParamType)Enum.Parse(typeof(AutoParamType), type, true);
+            if (Enum.IsDefined(typeof(AutoParamType), result))
             {
-                return (AutoParamType)Enum.Parse(typeof(AutoParamType), type, true);
+                return result;
             }
             return AutoParamType.None;
         }
@@ -102,7 +108,7 @@ namespace Apoc3D.RenderSystem.Xna
                 int pos = lines[i].IndexOf(':');
                 if (pos != -1)
                 {
-                    string v = lines[i].Substring(0, pos + 1);
+                    string v = lines[i].Substring(0, pos);
 
                     string type = null;
                     string name = null;
@@ -162,7 +168,7 @@ namespace Apoc3D.RenderSystem.Xna
                                     pos = usage.IndexOf(UsageEndToken);
                                     if (pos != -1)
                                     {
-                                        usage = usage.Substring(1, pos);
+                                        usage = usage.Substring(1, pos - 1);
 
                                         HlslDeclaration decl = new HlslDeclaration();
 
@@ -184,9 +190,8 @@ namespace Apoc3D.RenderSystem.Xna
                     }
                 }
             }
-            
 
-            throw new NotImplementedException();
+            return new HlslCode(declList.ToArray());
         }
     }
 }

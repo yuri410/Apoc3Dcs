@@ -42,6 +42,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>false</XnaCompressContent>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -54,6 +55,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>true</XnaCompressContent>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
@@ -76,7 +78,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffer\XnaDepthBuffer.cs" />
+    <Compile Include="Buffer\XnaIndexBuffer.cs" />
+    <Compile Include="Buffer\XnaVertexBuffer.cs" />
+    <Compile Include="Hlsl\HlslCode.cs" />
+    <Compile Include="Hlsl\HlslDeclaration.cs" />
+    <Compile Include="Hlsl\HlslEnums.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XnaDeviceContent.cs" />
+    <Compile Include="XnaGraphicsAPIFactory.cs" />
+    <Compile Include="XnaObjectFactory.cs" />
+    <Compile Include="XnaPixelShader.cs" />
+    <Compile Include="XnaRenderStateManager.cs" />
+    <Compile Include="XnaRenderSystem.cs" />
+    <Compile Include="XnaRenderTarget.cs" />
+    <Compile Include="XnaRenderWindow.cs" />
+    <Compile Include="XnaSamplerState.cs" />
+    <Compile Include="XnaStateBlock.cs" />
+    <Compile Include="XnaTexture.cs" />
+    <Compile Include="XnaUtils.cs" />
+    <Compile Include="XnaVertexDeclaration.cs" />
+    <Compile Include="XnaVertexShader.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
