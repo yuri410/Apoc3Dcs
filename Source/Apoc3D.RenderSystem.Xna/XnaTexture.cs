@@ -13,9 +13,6 @@ namespace Apoc3D.RenderSystem.Xna
 {
     class XnaTexture : Texture
     {
-        bool useLock;
-        object uselckHelper = new object();
-
         internal XG.Texture2D tex2D;
         internal XG.Texture3D tex3D;
         internal XG.TextureCube cube;

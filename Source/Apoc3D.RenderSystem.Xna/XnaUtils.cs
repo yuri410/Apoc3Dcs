@@ -160,6 +160,10 @@ namespace Apoc3D.RenderSystem.Xna
             BuildDepthFormatConv();
         }
 
+        public static XG.PrimitiveType ConvertEnum(RenderPrimitiveType type) 
+        {
+            return (XG.PrimitiveType)type;
+        }
 
         #region ClearFlags
         public static XG.ClearOptions ConvertEnum(ClearFlags flags)

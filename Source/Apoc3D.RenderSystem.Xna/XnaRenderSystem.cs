@@ -7,11 +7,14 @@ using Apoc3D.MathLib;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
 using XGC = Microsoft.Xna.Framework.Graphics.GraphicsDeviceCapabilities;
+using Apoc3D.Graphics.Effects;
 
 namespace Apoc3D.RenderSystem.Xna
 {
     class XnaRenderSystem : Apoc3D.Graphics.RenderSystem
     {
+        const int MaxVertexTex = 4;
+
         const int MaxTexLayers = Material.MaxTexLayers;
 
         internal XG.GraphicsDevice device;
@@ -1109,16 +1112,178 @@ namespace Apoc3D.RenderSystem.Xna
         {
             base.RenderSimple(op);
 
-            throw new NotImplementedException();
+            Material material = op.Material;
+
+            BindShader((PixelShader)null);
+            BindShader((VertexShader)null);
+
+            Effect effect = material.Effect;
+
+            if (effect == null)
+            {
+                effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
+            }
+
+            renderStates.AlphaBlendEnable = !material.IsTransparent;
+            renderStates.CullMode = material.CullMode;
+
+            int passCount = effect.Begin();
+            for (int p = 0; p < passCount; p++)
+            {
+                effect.BeginPass(p);
+
+                GeomentryData gm = op.Geomentry;
+
+                if (gm.VertexCount == 0)
+                    continue;
+
+                effect.Setup(material, ref op);
+
+                XnaVertexBuffer xnavb = (XnaVertexBuffer)gm.VertexBuffer;
+
+                if (xnavb.vertexBuffer != null)
+                {
+                    device.Vertices[0].SetSource(xnavb.vertexBuffer, 0, gm.VertexSize);
+                }
+                else
+                {
+                    device.Vertices[0].SetSource(xnavb.dynVb, 0, gm.VertexSize);
+                }
+
+                device.VertexDeclaration = ((XnaVertexDeclaration)gm.VertexDeclaration).vtxDecl;
+
+                if (gm.UseIndices)
+                {
+                    XnaIndexBuffer xnaib = (XnaIndexBuffer)gm.IndexBuffer;
+                    if (xnaib.indexBuffer != null)
+                    {
+                        device.Indices = xnaib.indexBuffer;
+                    }
+                    else
+                    {
+                        device.Indices = xnaib.dynIb;
+                    }
+
+                    device.DrawIndexedPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType),
+                        gm.BaseVertex, 0,
+                        gm.VertexCount, gm.BaseIndexStart,
+                        gm.PrimCount);
+                }
+                else
+                {
+                    device.DrawPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType), 0, gm.PrimCount);
+                }
+                effect.EndPass();
+            }
+            effect.End();
         }
-        public override void Render(RenderOperation[] op)
+        public override void Render(Material material, RenderOperation[] op)
         {
-            Render(op, op.Length);
+            Render(material, op, op.Length);
         }
-        public override void Render(RenderOperation[] op, int count)
+        public override void Render(Material material, RenderOperation[] opList, int count)
         {
-            base.Render(op, count);
-            throw new NotImplementedException();
+            if (opList == null)
+                return;
+            
+            BindShader((PixelShader)null);
+            BindShader((VertexShader)null);
+
+            Effect effect = material.Effect;
+
+            if (effect == null)
+            {
+                effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
+            }
+
+            renderStates.AlphaBlendEnable = !material.IsTransparent;
+            renderStates.CullMode = material.CullMode;
+
+            int passCount = effect.Begin();
+            for (int p = 0; p < passCount; p++)
+            {
+                effect.BeginPass(p);
+
+                for (int j = 0; j < count; j++)
+                {
+                    RenderOperation op = opList[j];
+                    GeomentryData gm = op.Geomentry;
+
+                    if (gm.VertexCount == 0)
+                        continue;
+
+                    BatchCount++;
+                    PrimitiveCount += gm.PrimCount;
+                    VertexCount += gm.VertexCount;
+
+                    //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
+
+                    effect.Setup(material, ref op);
+
+
+                    XnaVertexBuffer xnavb = (XnaVertexBuffer)gm.VertexBuffer;
+
+                    if (xnavb.vertexBuffer != null)
+                    {
+                        device.Vertices[0].SetSource(xnavb.vertexBuffer, 0, gm.VertexSize);
+                    }
+                    else
+                    {
+                        device.Vertices[0].SetSource(xnavb.dynVb, 0, gm.VertexSize);
+                    }
+
+                    device.VertexDeclaration = ((XnaVertexDeclaration)gm.VertexDeclaration).vtxDecl;
+
+                    if (gm.UseIndices)
+                    {
+                        XnaIndexBuffer xnaib = (XnaIndexBuffer)gm.IndexBuffer;
+                        if (xnaib.indexBuffer != null)
+                        {
+                            device.Indices = xnaib.indexBuffer;
+                        }
+                        else
+                        {
+                            device.Indices = xnaib.dynIb;
+                        }
+
+                        device.DrawIndexedPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType),
+                            gm.BaseVertex, 0,
+                            gm.VertexCount, gm.BaseIndexStart,
+                            gm.PrimCount);
+                    }
+                    else
+                    {
+                        device.DrawPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType), 0, gm.PrimCount);
+                    }
+                } // for (int j = 0; j < opList.Count; j++)
+                effect.EndPass();
+            }
+            effect.End();
+        }
+
+        public override void EndFrame()
+        {
+            XG.TextureCollection coll = device.Textures;
+
+            for (int i = 0; i < MaxTexLayers; i++) 
+            {
+                coll[i] = null;
+            }
+
+            coll = device.VertexTextures;
+            for (int i = 0; i < MaxVertexTex; i++) 
+            {
+                coll[i] = null;
+            }
+
+            XG.VertexStreamCollection coll2 = device.Vertices;
+            for (int i = 0; i < RenderSystemCaps.MaxStreams; i++)
+            {
+                device.Vertices[0].SetSource(null, 0, 0);
+            }
+            
+
+            base.EndFrame();
         }
     }
 }

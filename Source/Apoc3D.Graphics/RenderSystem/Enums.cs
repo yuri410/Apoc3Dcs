@@ -530,6 +530,7 @@ namespace Apoc3D.Graphics
         Three = 8,
     }
 
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum RenderPrimitiveType
     {
         /// <summary>
@@ -539,29 +540,29 @@ namespace Apoc3D.Graphics
         /// <summary>
         ///		Render the vertices as a series of individual lines.
         /// </summary>
-        LineList,
+        LineList = 2,
         /// <summary>
         ///		Render the vertices as a continuous line.
         /// </summary>
-        LineStrip,
+        LineStrip = 3,
         /// <summary>
         ///		Render the vertices as a series of individual triangles.
         /// </summary>
-        TriangleList,
+        TriangleList = 4,
         /// <summary>
         ///		Render the vertices as a continous set of triangles in a zigzag type fashion.
         /// </summary>
-        TriangleStrip,
+        TriangleStrip = 5,
         /// <summary>
         ///		Render the vertices as a set of trinagles in a fan like formation.
         /// </summary>
-        TriangleFan
+        TriangleFan = 6
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <remarks>可以和xna的直接转换，源自xnafx</remarks>
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum VertexElementFormat : byte
     {
         /// <summary>
@@ -655,7 +656,7 @@ namespace Apoc3D.Graphics
     /// <summary>
     /// 
     /// </summary>
-    /// <remarks>可以和xna的直接转换，源自xnafx</remarks>
+    /// <remarks>可以直接转换的API：XNA</remarks>
     public enum VertexElementUsage : byte
     {
         Binormal = 7,
@@ -700,27 +701,6 @@ namespace Apoc3D.Graphics
         ///	</summary>
         Default = AutoMipMap | StaticWriteOnly
     }
-
-    public enum TransformState
-    {
-        View = 2,
-        Projection = 3,
-
-        Texture0 = 16,
-        Texture1 = 17,
-        Texture2 = 18,
-        Texture3 = 19,
-        Texture4 = 20,
-        Texture5 = 21,
-        Texture6 = 22,
-        Texture7 = 23,
-
-        World = 256,
-        World1 = 257,
-        World2 = 258,
-        World3 = 259
-    }
-
 
     public enum PresentInterval
     {

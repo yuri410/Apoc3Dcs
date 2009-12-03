@@ -422,7 +422,7 @@ namespace Apoc3D.Graphics
 
                 if (opList.Count > 0)
                 {
-                    renderSystem.Render(opList.Elements, opList.Count);
+                    renderSystem.Render(e1.Key, opList.Elements, opList.Count);
                     //RenderList(e1.Key, opList);
                 } // if (opList.Count > 0)
             }

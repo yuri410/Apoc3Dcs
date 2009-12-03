@@ -24,6 +24,7 @@ namespace Apoc3D.Graphics
         public int BatchCount
         {
             get { return batchCount; }
+            protected set { batchCount = value; }
         }
         /// <summary>
         ///  获取渲染的场景的图元数量
@@ -31,6 +32,7 @@ namespace Apoc3D.Graphics
         public int PrimitiveCount
         {
             get { return primitiveCount; }
+            protected set { primitiveCount = value; }
         }
         /// <summary>
         ///  获取渲染的场景的顶点数量
@@ -38,6 +40,7 @@ namespace Apoc3D.Graphics
         public int VertexCount
         {
             get { return vertexCount; }
+            protected set { vertexCount = value; }
         }
 
         protected RenderSystem(string renderSystemName)
@@ -183,7 +186,7 @@ namespace Apoc3D.Graphics
         ///  渲染的时候必须有Pixel Shader使用，否则会引发异常
         /// </summary>
         /// <param name="op"></param>
-        public virtual void Render(RenderOperation[] op)
+        public virtual void Render(Material material, RenderOperation[] op)
         {
             if (op == null)
             {
@@ -197,7 +200,7 @@ namespace Apoc3D.Graphics
             }
         }
 
-        public virtual void Render(RenderOperation[] op, int count)
+        public virtual void Render(Material material, RenderOperation[] op, int count)
         {
             if (op == null)
             {
