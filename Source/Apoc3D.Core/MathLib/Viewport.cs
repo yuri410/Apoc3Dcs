@@ -11,66 +11,31 @@ namespace Apoc3D.MathLib
     /// </summary>
     public struct Viewport
     {
-        int x;
-        int y;
-        int width;
-        int height;
-        float minZ;
-        float maxZ;
-
         /// <summary>
         /// Gets or sets the viewport's X position.
         /// </summary>
-        public int X
-        {
-            get { return x; }
-            set { x = value; }
-        }
-
+        public int X;
         /// <summary>
         /// Gets or sets the viewport's Y position.
         /// </summary>
-        public int Y
-        {
-            get { return y; }
-            set { y = value; }
-        }
-
+        public int Y;
         /// <summary>
         /// Gets or sets the viewport's width.
         /// </summary>
-        public int Width
-        {
-            get { return width; }
-            set { width = value; }
-        }
-
+        public int Width;
         /// <summary>
         /// Gets or sets the viewport's height.
         /// </summary>
-        public int Height
-        {
-            get { return height; }
-            set { height = value; }
-        }
-
+        public int Height;
         /// <summary>
         /// Gets or sets the viewport's minimum Z depth.
         /// </summary>
-        public float MinZ
-        {
-            get { return minZ; }
-            set { minZ = value; }
-        }
-
+        public float MinZ;
         /// <summary>
         /// Gets or sets the viewport's maximum Z depth.
         /// </summary>
-        public float MaxZ
-        {
-            get { return maxZ; }
-            set { maxZ = value; }
-        }
+        public float MaxZ;
+
 
         private static bool WithinEpsilon(float a, float b)
         {
@@ -84,7 +49,7 @@ namespace Apoc3D.MathLib
             Matrix matrix = Matrix.Invert(Matrix.Multiply(Matrix.Multiply(world, view), projection));
             source.X = (((source.X - this.X) / ((float)this.Width)) * 2f) - 1f;
             source.Y = -((((source.Y - this.Y) / ((float)this.Height)) * 2f) - 1f);
-            source.Z = (source.Z - this.minZ) / (this.maxZ - this.minZ);
+            source.Z = (source.Z - this.MinZ) / (this.MaxZ - this.MinZ);
             Vector3 vector = Vector3.TransformSimple(source, matrix);
             float a = (((source.X * matrix.M14) + (source.Y * matrix.M24)) + (source.Z * matrix.M34)) + matrix.M44;
 
@@ -106,7 +71,7 @@ namespace Apoc3D.MathLib
             }
             vector.X = (((vector.X + 1f) * 0.5f) * this.Width) + this.X;
             vector.Y = (((-vector.Y + 1f) * 0.5f) * this.Height) + this.Y;
-            vector.Z = (vector.Z * (this.maxZ - this.minZ)) + this.minZ;
+            vector.Z = (vector.Z * (this.MaxZ - this.MinZ)) + this.MinZ;
             return vector;
         }
 
@@ -120,13 +85,13 @@ namespace Apoc3D.MathLib
         /// <param name="height">The height of the viewport.</param>
         public Viewport(int x, int y, int width, int height)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
 
-            this.minZ = 0;
-            this.maxZ = 1;
+            this.MinZ = 0;
+            this.MaxZ = 1;
         }
 
         /// <summary>
@@ -140,13 +105,13 @@ namespace Apoc3D.MathLib
         /// <param name="maxZ">The maximum Z distance of the viewport.</param>
         public Viewport(int x, int y, int width, int height, float minZ, float maxZ)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
 
-            this.minZ = minZ;
-            this.maxZ = maxZ;
+            this.MinZ = minZ;
+            this.MaxZ = maxZ;
         }
 
         /// <summary>
@@ -155,7 +120,7 @@ namespace Apoc3D.MathLib
         /// <param name="left">The first value to compare.</param>
         /// <param name="right">The second value to compare.</param>
         /// <returns><c>true</c> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <c>false</c>.</returns>
-        public static bool operator ==(Viewport left, Viewport right) 
+        public static bool operator ==(Viewport left, Viewport right)
         {
             return Equals(ref left, ref right);
         }
@@ -187,8 +152,8 @@ namespace Apoc3D.MathLib
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            return x.GetHashCode() + y.GetHashCode() + width.GetHashCode()
-                 + height.GetHashCode() + minZ.GetHashCode() + maxZ.GetHashCode();
+            return X.GetHashCode() + Y.GetHashCode() + Width.GetHashCode()
+                 + Height.GetHashCode() + MinZ.GetHashCode() + MaxZ.GetHashCode();
         }
 
         /// <summary>
@@ -214,9 +179,9 @@ namespace Apoc3D.MathLib
         /// <returns><c>true</c> if <paramref name="other"/> has the same value as this instance; otherwise, <c>false</c>.</returns>
         public bool Equals(Viewport other)
         {
-            return (x == other.x && y == other.y && 
-                width == other.width && height == other.height &&
-                minZ == other.minZ && maxZ == other.maxZ);
+            return (X == other.X && Y == other.Y &&
+                Width == other.Width && Height == other.Height &&
+                MinZ == other.MinZ && MaxZ == other.MaxZ);
         }
 
         /// <summary>
@@ -227,8 +192,8 @@ namespace Apoc3D.MathLib
         /// <returns><c>true</c> if <paramref name="value1"/> has the same value as <paramref name="value2"/>; otherwise, <c>false</c>.</returns>
         public static bool Equals(ref Viewport value1, ref Viewport value2)
         {
-            return (value1.x == value2.x && value1.y == value2.y && value1.width == value2.width
-                 && value1.height == value2.height && value1.minZ == value2.minZ && value1.maxZ == value2.maxZ);
+            return (value1.X == value2.X && value1.Y == value2.Y && value1.Width == value2.Width
+                 && value1.Height == value2.Height && value1.MinZ == value2.MinZ && value1.MaxZ == value2.MaxZ);
         }
     }
 }

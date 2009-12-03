@@ -125,6 +125,19 @@ namespace Apoc3D.Graphics
         /// <returns></returns>
         public abstract RenderTarget GetRenderTarget(int index);
 
+        /// <summary>
+        ///  设置纹理
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="texture"></param>
+        public abstract void SetTexture(int index, Texture texture);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public abstract Texture GetTexture(int index);
         
         /// <summary>
         ///  设置蒙版测试的相关参数

@@ -10,7 +10,7 @@ namespace Apoc3D.RenderSystem.Xna
 {
     class XnaDepthBuffer : DepthBuffer
     {
-        XG.DepthStencilBuffer buffer;
+        internal XG.DepthStencilBuffer buffer;
 
         internal XnaDepthBuffer(XnaRenderSystem rs, XG.DepthStencilBuffer buffer)
             : base(buffer.Width, buffer.Height, BufferUsage.Static, XnaUtils.ConvertEnum(buffer.Format))

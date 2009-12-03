@@ -13,6 +13,8 @@ namespace Apoc3D.RenderSystem.Xna
 {
     class XnaRenderSystem : Apoc3D.Graphics.RenderSystem
     {
+        const int MaxTexLayers = Material.MaxTexLayers;
+
         internal XG.GraphicsDevice device;
 
         internal XG.RenderTarget2D defaultRtXna;
@@ -23,10 +25,13 @@ namespace Apoc3D.RenderSystem.Xna
         XnaRenderStateManager renderStates;
         XnaObjectFactory objectFactory;
 
-        //SamplerStateCollection samplerStates = new SamplerStateCollection();
+        SamplerStateCollection samplerStates;
+        XnaSamplerState[] samplerStateXna;
+
+        XnaTexture[] cachedTextures;
 
         public XnaRenderSystem(XG.GraphicsDevice device)
-            : base(XnaGraphicsAPIFactory.APIName + "RenderSystem")
+            : base(XnaGraphicsAPIFactory.APIName + " RenderSystem")
         {
             this.device = device;
             this.renderStates = new XnaRenderStateManager(this);
@@ -34,6 +39,7 @@ namespace Apoc3D.RenderSystem.Xna
 
             this.objectFactory = new XnaObjectFactory(this);
             base.ObjectFactory = objectFactory;
+
         }
 
         public override void Init()
@@ -345,7 +351,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region DriverCapabilities
-            XG.GraphicsDeviceCapabilities.PixelShaderCaps caps6 = device.GraphicsDeviceCapabilities.PixelShaderCapabilities;
+            XGC.PixelShaderCaps caps6 = device.GraphicsDeviceCapabilities.PixelShaderCapabilities;
 
             PixelShader20Caps pscaps = new PixelShader20Caps ();
             if (caps6.SupportsArbitrarySwizzle) 
@@ -378,7 +384,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region LineCapabilities
-            XG.GraphicsDeviceCapabilities.LineCaps lineCaps = device.GraphicsDeviceCapabilities.LineCapabilities;
+            XGC.LineCaps lineCaps = device.GraphicsDeviceCapabilities.LineCapabilities;
             if (lineCaps.SupportsAlphaCompare )
             {
                 caps.LineCaps |= LineCaps.AlphaCompare;
@@ -406,7 +412,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region PrimitiveCapabilities
-            XG.GraphicsDeviceCapabilities.PrimitiveCaps caps10 = device.GraphicsDeviceCapabilities.PrimitiveCapabilities;
+            XGC.PrimitiveCaps caps10 = device.GraphicsDeviceCapabilities.PrimitiveCapabilities;
             if (caps10.SupportsBlendOperation)
             {
                 caps.PrimitiveMiscCaps |= PrimitiveMiscCaps.BlendOperation;
@@ -466,7 +472,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region RasterCapabilities
-            XG.GraphicsDeviceCapabilities.RasterCaps caps7 = device.GraphicsDeviceCapabilities.RasterCapabilities;
+            XGC.RasterCaps caps7 = device.GraphicsDeviceCapabilities.RasterCapabilities;
 
             if (caps7.SupportsAnisotropy)
             {
@@ -527,7 +533,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region ShadingCapabilities
-            XG.GraphicsDeviceCapabilities.ShadingCaps caps8 = device.GraphicsDeviceCapabilities.ShadingCapabilities;
+            XGC.ShadingCaps caps8 = device.GraphicsDeviceCapabilities.ShadingCapabilities;
             if (caps8.SupportsAlphaGouraudBlend)
             {
                 caps.ShadeCaps |= ShadeCaps.AlphaGouraudBlend;
@@ -603,7 +609,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region StencilCapabilities
-            XG.GraphicsDeviceCapabilities.StencilCaps caps9 = device.GraphicsDeviceCapabilities.StencilCapabilities;
+            XGC.StencilCaps caps9 = device.GraphicsDeviceCapabilities.StencilCapabilities;
             if (caps9.SupportsDecrement)
             {
                 caps.StencilCaps |= StencilCaps.Decrement;
@@ -645,7 +651,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region TextureAddressCapabilities
-            XG.GraphicsDeviceCapabilities.AddressCaps caps11 = device.GraphicsDeviceCapabilities.TextureAddressCapabilities;
+            XGC.AddressCaps caps11 = device.GraphicsDeviceCapabilities.TextureAddressCapabilities;
 
             if (caps11.SupportsBorder)
             {
@@ -674,7 +680,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region TextureCapabilities
-            XG.GraphicsDeviceCapabilities.TextureCaps caps12 = device.GraphicsDeviceCapabilities.TextureCapabilities;
+            XGC.TextureCaps caps12 = device.GraphicsDeviceCapabilities.TextureCapabilities;
             if (caps12.SupportsAlpha)
             {
                 caps.TextureCaps |= TextureCaps.Alpha;
@@ -790,7 +796,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region VertexProcessingCapabilities
-            XG.GraphicsDeviceCapabilities.VertexProcessingCaps caps13 = device.GraphicsDeviceCapabilities.VertexProcessingCapabilities;
+            XGC.VertexProcessingCaps caps13 = device.GraphicsDeviceCapabilities.VertexProcessingCapabilities;
 
             if (caps13.SupportsLocalViewer) 
             {
@@ -811,7 +817,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region VertexShaderCapabilities
-            XG.GraphicsDeviceCapabilities.VertexShaderCaps caps14 = device.GraphicsDeviceCapabilities.VertexShaderCapabilities;
+            XGC.VertexShaderCaps caps14 = device.GraphicsDeviceCapabilities.VertexShaderCapabilities;
 
             VertexShader20Caps vscaps = new VertexShader20Caps();
 
@@ -908,7 +914,7 @@ namespace Apoc3D.RenderSystem.Xna
             #endregion
 
             #region VertexFormatCapabilities
-            XG.GraphicsDeviceCapabilities.VertexFormatCaps caps15 = device.GraphicsDeviceCapabilities.VertexFormatCapabilities;
+            XGC.VertexFormatCaps caps15 = device.GraphicsDeviceCapabilities.VertexFormatCapabilities;
             if (caps15.SupportsDoNotStripElements)
             {
                 caps.FVFCaps |= VertexFormatCaps.DoNotStripElements;
@@ -998,6 +1004,15 @@ namespace Apoc3D.RenderSystem.Xna
 
             cachedRenderTargets = new XnaRenderTarget[device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets];
             cachedRenderTargets[0] = defaultRt;
+
+            samplerStateXna = new XnaSamplerState[MaxTexLayers];
+            for (int i = 0; i < samplerStateXna.Length; i++)
+            {
+                samplerStateXna[i] = new XnaSamplerState(device.SamplerStates[i], i);
+            }
+            samplerStates = new SamplerStateCollection(samplerStateXna);
+
+            cachedTextures = new XnaTexture[MaxTexLayers];
         }
 
         public override void Clear(ClearFlags flags, ColorValue color, float depth, int stencil)
@@ -1006,19 +1021,52 @@ namespace Apoc3D.RenderSystem.Xna
             device.Clear(XnaUtils.ConvertEnum(flags), clr, depth, stencil);
         }
 
+        public override Texture GetTexture(int index)
+        {
+            return cachedTextures[index];
+        }
+        public override void SetTexture(int index, Texture texture)
+        {
+            XnaTexture xtex = (XnaTexture)texture;
+
+            switch (xtex.Type) 
+            {
+                case TextureType.Texture2D:
+                case TextureType.Texture1D:
+                    device.Textures[index] = xtex.tex2D;
+                    break;
+                case TextureType.CubeTexture:
+                    device.Textures[index] = xtex.cube;
+                    break;
+                case TextureType.Texture3D:
+                    device.Textures[index] = xtex.tex3D;
+                    break;
+            }
+            
+            cachedTextures[index] = xtex;
+        }
+
         public override void SetRenderTarget(int index, RenderTarget rt)
         {
-            throw new NotImplementedException();
+            XnaRenderTarget xrt = (XnaRenderTarget)rt;
+            device.SetRenderTarget(index,xrt.colorBufXna);
+
+            if (xrt.depthBufXna != null) 
+            {
+                device.DepthStencilBuffer = xrt.depthBufXna;
+            }
+
+            cachedRenderTargets[index] = xrt;
         }
 
         public override RenderTarget GetRenderTarget(int index)
         {
-            throw new NotImplementedException();
+            return cachedRenderTargets[index];
         }
 
         public override SamplerStateCollection GetSamplerStates()
         {
-            throw new NotImplementedException();
+            return samplerStates;
         }
 
         public override void BindShader(VertexShader shader)
@@ -1035,12 +1083,43 @@ namespace Apoc3D.RenderSystem.Xna
         {
             get
             {
-                throw new NotImplementedException();
+                Viewport result;
+                XG.Viewport xv = device.Viewport;
+                result.Height = xv.Height;
+                result.MaxZ = xv.MaxDepth;
+                result.MinZ = xv.MinDepth;
+                result.Width = xv.Width;
+                result.X = xv.X;
+                result.Y = xv.Y;
+                return result;
             }
             set
             {
-                throw new NotImplementedException();
+                XG.Viewport result = new XG.Viewport();
+                result.Height = value.Height;
+                result.MaxDepth = value.MaxZ;
+                result.MinDepth = value.MinZ;
+                result.Width = value.Width;
+                result.X = value.X;
+                result.Y = value.Y;
+                device.Viewport = result;
             }
+        }
+
+        public override void RenderSimple(RenderOperation op)
+        {
+            base.RenderSimple(op);
+
+            throw new NotImplementedException();
+        }
+        public override void Render(RenderOperation[] op)
+        {
+            Render(op, op.Length);
+        }
+        public override void Render(RenderOperation[] op, int count)
+        {
+            base.Render(op, count);
+            throw new NotImplementedException();
         }
     }
 }

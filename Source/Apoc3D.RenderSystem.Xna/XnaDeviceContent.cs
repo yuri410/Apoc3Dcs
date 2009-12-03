@@ -15,7 +15,7 @@ namespace Apoc3D.RenderSystem.Xna
         X.GraphicsDeviceManager manager;
         X.Game game;
 
-        public XnaDeviceContent() 
+        public XnaDeviceContent()
             : base(false)
         {
 

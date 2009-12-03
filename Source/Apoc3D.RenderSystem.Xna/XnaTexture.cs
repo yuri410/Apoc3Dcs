@@ -14,9 +14,12 @@ namespace Apoc3D.RenderSystem.Xna
 {
     class XnaTexture : Texture
     {
-        XG.Texture2D tex2D;
-        XG.Texture3D tex3D;
-        XG.TextureCube cube;
+        bool useLock;
+        object uselckHelper = new object();
+
+        internal XG.Texture2D tex2D;
+        internal XG.Texture3D tex3D;
+        internal XG.TextureCube cube;
 
         #region 内部构造函数
         internal XnaTexture(XnaRenderSystem rs, XG.Texture2D tex2d)
@@ -151,12 +154,12 @@ namespace Apoc3D.RenderSystem.Xna
 
         protected override void load()
         {
-            throw new NotImplementedException();
+            
         }
 
         protected override void unload()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

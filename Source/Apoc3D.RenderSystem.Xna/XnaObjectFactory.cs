@@ -30,7 +30,7 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override Texture CreateTexture(int width, int height, int levelCount, TextureUsage usage, ImagePixelFormat format)
         {
-            throw new NotImplementedException();
+            return new XnaTexture(renderSys, width, height, 1, levelCount, format, usage);
         }
 
         public override Texture CreateTexture(int width, int height, int depth, int levelCount, TextureUsage usage, ImagePixelFormat format)
@@ -40,7 +40,7 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override Texture CreateTexture(int length, int levelCount, TextureUsage usage, ImagePixelFormat format)
         {
-            throw new NotImplementedException();
+            return new XnaTexture(renderSys, length, levelCount, format, usage);
         }
         #endregion
 
@@ -55,6 +55,7 @@ namespace Apoc3D.RenderSystem.Xna
             return new XnaRenderTarget(renderSys, width, height, clrFmt);
         }
         #endregion
+
         public override IndexBuffer CreateIndexBuffer(IndexBufferType type, int count, BufferUsage usage, bool useSysMem)
         {
             return new XnaIndexBuffer(renderSys, type, count * (type == IndexBufferType.Bit16 ? sizeof(ushort) : sizeof(uint)), usage);

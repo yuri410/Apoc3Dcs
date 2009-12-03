@@ -11,8 +11,8 @@ namespace Apoc3D.RenderSystem.Xna
 {
     class XnaRenderTarget : RenderTarget
     {
-        XG.RenderTarget2D colorBufXna;
-        XG.DepthStencilBuffer depthBufXna;
+        internal XG.RenderTarget2D colorBufXna;
+        internal XG.DepthStencilBuffer depthBufXna;
 
         XnaTexture colorBuf;
         XnaDepthBuffer depthBuf;

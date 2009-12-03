@@ -68,6 +68,7 @@
     <Compile Include="Buffer\XnaIndexBuffer.cs" />
     <Compile Include="XnaObjectFactory.cs" />
     <Compile Include="XnaRenderStateManager.cs" />
+    <Compile Include="XnaSamplerState.cs" />
     <Compile Include="XnaUtils.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
