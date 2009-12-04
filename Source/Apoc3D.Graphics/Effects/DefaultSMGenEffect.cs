@@ -50,11 +50,11 @@ namespace Apoc3D.Graphics.Effects
 
             FileLocation fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, "HardwareShadowMap.vs"), FileLocateRules.Default);
 
-            LoadVertexShader(rs, fl, null, "main");
+            LoadVertexShader(rs, fl);
 
             fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, "HardwareShadowMap.ps"), FileLocateRules.Default);
 
-            LoadPixelShader(rs, fl, null, "main");
+            LoadPixelShader(rs, fl);
 
             renderSys = rs;
             //string err;

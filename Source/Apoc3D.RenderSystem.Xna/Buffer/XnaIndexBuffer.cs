@@ -58,23 +58,26 @@ namespace Apoc3D.RenderSystem.Xna
             lockSize = size;
             curLockMode = mode;
             lockOfs = offset;
-            switch (mode)
+            if (Usage != BufferUsage.WriteOnly)
             {
-                case LockMode.None:
-                case LockMode.ReadOnly:
-                case LockMode.NoOverwrite:
-                    if (indexBuffer != null)
-                    {
-                        indexBuffer.GetData<byte>(offset, buffer, 0, size);
-                    }
-                    else
-                    {
+                switch (mode)
+                {
+                    case LockMode.None:
+                    case LockMode.ReadOnly:
+                    case LockMode.NoOverwrite:
+                        if (indexBuffer != null)
+                        {
+                            indexBuffer.GetData<byte>(offset, buffer, 0, size);
+                        }
+                        else
+                        {
+                            dynIb.GetData<byte>(offset, buffer, 0, size);
+                        }
+                        break;
+                    case LockMode.Discard:
                         dynIb.GetData<byte>(offset, buffer, 0, size);
-                    }
-                    break;
-                case LockMode.Discard:
-                    dynIb.GetData<byte>(offset, buffer, 0, size);
-                    break;
+                        break;
+                }
             }
             void* result;
             fixed (byte* src = &buffer[0])

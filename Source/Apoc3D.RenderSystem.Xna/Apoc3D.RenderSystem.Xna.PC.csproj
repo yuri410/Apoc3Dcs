@@ -97,6 +97,7 @@
     <Compile Include="XnaSamplerState.cs" />
     <Compile Include="XnaStateBlock.cs" />
     <Compile Include="XnaTexture.cs" />
+    <Compile Include="XnaTextureWrapCollection.cs" />
     <Compile Include="XnaUtils.cs" />
     <Compile Include="XnaVertexDeclaration.cs" />
     <Compile Include="XnaVertexShader.cs" />

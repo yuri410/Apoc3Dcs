@@ -6,9 +6,25 @@ using Apoc3D.Media;
 
 namespace Apoc3D.Graphics
 {
+    public struct ShaderSamplerState 
+    {
+        public TextureAddressMode AddressU;
+        public TextureAddressMode AddressV;
+        public TextureAddressMode AddressW;
+
+        public ColorValue BorderColor;
+        public TextureFilter MagFilter;
+        public TextureFilter MinFilter;
+        public TextureFilter MipFilter;
+        public int MaxAnisotropy;
+        public int MaxMipLevel;
+        public float MipMapLODBias;
+
+    }
     /// <summary>
     ///  表示采样器的状态，可以获取或设置采样器的参数
     /// </summary>
+    [Obsolete()]
     public abstract class SamplerState
     {
         protected SamplerState(int index)
@@ -67,7 +83,7 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract float MipMapLevelOfDetailBias
+        public abstract float MipMapLODBias
         {
             get;
             set;

@@ -128,46 +128,31 @@ namespace Apoc3D.Graphics
         /// <returns></returns>
         public abstract RenderTarget GetRenderTarget(int index);
 
-        /// <summary>
-        ///  设置纹理
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="texture"></param>
-        public abstract void SetTexture(int index, Texture texture);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public abstract Texture GetTexture(int index);
-        
-        /// <summary>
-        ///  设置蒙版测试的相关参数
-        /// </summary>
-        /// <param name="func"></param>
-        /// <param name="refValue"></param>
-        /// <param name="mask"></param>
-        /// <param name="stencilFailOp"></param>
-        /// <param name="depthFailOp"></param>
-        /// <param name="passOp"></param>
-        /// <param name="twoSidedOperation"></param>
-        [Obsolete()]
-        public virtual void SetStencilFunction(CompareFunction func,
-            int refValue, int mask,
-            StencilOperation stencilFailOp,
-            StencilOperation depthFailOp,
-            StencilOperation passOp,
-            bool twoSidedOperation)
-        {
 
-        }
+        ///// <summary>
+        /////  设置纹理
+        ///// </summary>
+        ///// <param name="index"></param>
+        ///// <param name="texture"></param>
+        //public abstract void SetTexture(int index, Texture texture);
 
-        /// <summary>
-        ///  获取所有纹理层的Sampler状态
-        /// </summary>
-        /// <returns></returns>
-        public abstract SamplerStateCollection GetSamplerStates();
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="index"></param>
+        ///// <returns></returns>
+        //public abstract Texture GetTexture(int index);
+
+
+
+
+
+        ///// <summary>
+        /////  获取所有纹理层的Sampler状态
+        ///// </summary>
+        ///// <returns></returns>
+        //public abstract SamplerStateCollection GetSamplerStates();
 
         /// <summary>
         ///  设置顶点Shader

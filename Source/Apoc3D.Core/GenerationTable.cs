@@ -49,7 +49,7 @@ namespace Apoc3D.Core
         object syncHelper2 = new object();
 
         /// <summary>
-        ///  代数计算线程与管理线程同步
+        ///  代数计算线程与管理线程同步，锁定manageState用
         /// </summary>
         object syncHelper3 = new object();
 
@@ -59,8 +59,13 @@ namespace Apoc3D.Core
         Thread guThread;
         Thread mgrThread;
         ResourceManager manager;
+
         ManageState manageState;
 
+        /// <summary>
+        ///  更新代数
+        ///  会根据代的时间长度，对于不同代的资源，隔一段时间检查代数，更新
+        /// </summary>
         [MTAThread()]
         private void GenerationUpdate_Main()
         {
@@ -145,6 +150,9 @@ namespace Apoc3D.Core
             }
         }
 
+        /// <summary>
+        ///  负责释放资源
+        /// </summary>
         [MTAThread()]
         private void Manage_Main()
         {

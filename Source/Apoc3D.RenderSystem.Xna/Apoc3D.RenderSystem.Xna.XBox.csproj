@@ -72,8 +72,11 @@
     <Compile Include="XnaObjectFactory.cs" />
     <Compile Include="XnaPixelShader.cs" />
     <Compile Include="XnaRenderStateManager.cs" />
-    <Compile Include="XnaSamplerState.cs" />
+    <Compile Include="XnaSamplerState.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XnaStateBlock.cs" />
+    <Compile Include="XnaTextureWrapCollection.cs" />
     <Compile Include="XnaUtils.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

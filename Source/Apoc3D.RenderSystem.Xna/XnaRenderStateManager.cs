@@ -1,12 +1,41 @@
 using System;
 using System.Collections.Generic;
 using Apoc3D.Graphics;
+using Apoc3D.Graphics.Collections;
 using Apoc3D.MathLib;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
 
 namespace Apoc3D.RenderSystem.Xna
 {
+    class XnaClipPlane : ClipPlane
+    {
+        XG.ClipPlane xplane;
+        public XnaClipPlane(XG.ClipPlane xnaPlane)
+        {
+            this.xplane = xnaPlane;
+        }
+
+        public override bool Enabled
+        {
+            get { return xplane.IsEnabled; }
+            set { xplane.IsEnabled = value; }
+        }
+
+        public override Plane Plane
+        {
+            get
+            {
+                X.Plane plane = xplane.Plane;
+                return new Plane(plane.Normal.X, plane.Normal.Y, plane.Normal.Z, plane.D);
+            }
+            set
+            {
+                xplane.Plane = new X.Plane(value.Normal.X, value.Normal.Y, value.Normal.Z, value.D);
+            }
+        }
+    }
+
     class XnaRenderStateManager : RenderStateManager
     {
         XnaRenderSystem renderSys;
@@ -20,6 +49,15 @@ namespace Apoc3D.RenderSystem.Xna
             this.renderSys = rs;
             this.device = renderSys.device;
             this.xnaState = device.RenderState;
+
+            XnaClipPlane[] planes = new XnaClipPlane[32];
+            for (int i = 0; i < planes.Length; i++)
+            {
+                planes[i] = new XnaClipPlane(device.ClipPlanes[i]);
+            }
+
+            this.clipPlaneCollecion = new ClipPlaneCollection(planes);
+            this.texWrapCollection = new XnaTextureWrapCollection(xnaState);
         }
 
         #region Alpha»ìºÏ
@@ -155,7 +193,7 @@ namespace Apoc3D.RenderSystem.Xna
                 xnaState.AlphaFunction = XnaUtils.ConvertEnum(value);
             }
         }
-        public override int ReferenceAlpha
+        public override int AlphaReference
         {
             get
             {
@@ -289,6 +327,17 @@ namespace Apoc3D.RenderSystem.Xna
             }
         }
 
+        public override float SlopeScaleDepthBias
+        {
+            get
+            {
+                return xnaState.SlopeScaleDepthBias;
+            }
+            set
+            {
+                xnaState.SlopeScaleDepthBias = value;
+            }
+        }
         #endregion
 
 
@@ -378,6 +427,7 @@ namespace Apoc3D.RenderSystem.Xna
         }
         #endregion
 
+        #region ScissorTest
         public override bool ScissorTestEnable
         {
             get
@@ -389,18 +439,19 @@ namespace Apoc3D.RenderSystem.Xna
                 xnaState.ScissorTestEnable = value;
             }
         }
-
-        public override float SlopeScaleDepthBias
+        public override Rectangle ScissorTestRectangle
         {
             get
             {
-                return xnaState.SlopeScaleDepthBias;
+                X.Rectangle rect = device.ScissorRectangle;
+                return new Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
             }
             set
             {
-                xnaState.SlopeScaleDepthBias = value;
+                device.ScissorRectangle = new X.Rectangle(value.X, value.Y, value.Width, value.Height);
             }
         }
+        #endregion
 
         #region Stencil
         public override int ReferenceStencil
@@ -548,183 +599,183 @@ namespace Apoc3D.RenderSystem.Xna
         }
         #endregion
 
-        #region Wraps
-        public override TextureWrapCoordinates Wrap0
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap0);
-            }
-            set
-            {
-                xnaState.Wrap0 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap1
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap1);
-            }
-            set
-            {
-                xnaState.Wrap1 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap10
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap10);
-            }
-            set
-            {
-                xnaState.Wrap10 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap11
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap11);
-            }
-            set
-            {
-                xnaState.Wrap11 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap12
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap12);
-            }
-            set
-            {
-                xnaState.Wrap12 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap13
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap13);
-            }
-            set
-            {
-                xnaState.Wrap13 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap14
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap14);
-            }
-            set
-            {
-                xnaState.Wrap14 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap15
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap15);
-            }
-            set
-            {
-                xnaState.Wrap15 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap2
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap2);
-            }
-            set
-            {
-                xnaState.Wrap2 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap3
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap3);
-            }
-            set
-            {
-                xnaState.Wrap3 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap4
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap4);
-            }
-            set
-            {
-                xnaState.Wrap4 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap5
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap5);
-            }
-            set
-            {
-                xnaState.Wrap5 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap6
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap6);
-            }
-            set
-            {
-                xnaState.Wrap6 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap7
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap7);
-            }
-            set
-            {
-                xnaState.Wrap7 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap8
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap8);
-            }
-            set
-            {
-                xnaState.Wrap8 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        public override TextureWrapCoordinates Wrap9
-        {
-            get
-            {
-                return XnaUtils.ConvertEnum(xnaState.Wrap9);
-            }
-            set
-            {
-                xnaState.Wrap9 = XnaUtils.ConvertEnum(value);
-            }
-        }
-        #endregion
+        //#region Wraps
+        //public override TextureWrapCoordinates Wrap0
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap0);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap0 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap1
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap1);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap1 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap10
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap10);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap10 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap11
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap11);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap11 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap12
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap12);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap12 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap13
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap13);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap13 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap14
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap14);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap14 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap15
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap15);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap15 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap2
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap2);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap2 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap3
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap3);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap3 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap4
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap4);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap4 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap5
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap5);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap5 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap6
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap6);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap6 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap7
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap7);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap7 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap8
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap8);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap8 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //public override TextureWrapCoordinates Wrap9
+        //{
+        //    get
+        //    {
+        //        return XnaUtils.ConvertEnum(xnaState.Wrap9);
+        //    }
+        //    set
+        //    {
+        //        xnaState.Wrap9 = XnaUtils.ConvertEnum(value);
+        //    }
+        //}
+        //#endregion
     }
 }

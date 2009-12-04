@@ -13,7 +13,7 @@ namespace Apoc3D.Graphics.Effects
             string filePath = FileSystem.CombinePath(Paths.Effects, "gaussBlurY.ps");
             FileLocation fl = FileSystem.Instance.Locate(filePath, FileLocateRules.Default);
 
-            LoadPixelShader(rs, fl, null, "main");
+            LoadPixelShader(rs, fl);
         }
     }
 }

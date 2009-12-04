@@ -65,8 +65,8 @@ namespace Apoc3D.Graphics
 
         public abstract StateBlock CreateStateBlock();
 
-        public abstract VertexShader CreateVertexShader(string code, Macro[] defines, Include include, string profile, string functionName);
-        public abstract PixelShader CreatePixelShader(string code, Macro[] defines, Include include, string profile, string functionName);
+        public abstract VertexShader CreateVertexShader(ResourceLocation resLoc);
+        public abstract PixelShader CreatePixelShader(ResourceLocation resLoc);
 
     }
 }

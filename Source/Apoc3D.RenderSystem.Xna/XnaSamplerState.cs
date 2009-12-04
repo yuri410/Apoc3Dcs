@@ -8,6 +8,7 @@ using XG = Microsoft.Xna.Framework.Graphics;
 
 namespace Apoc3D.RenderSystem.Xna
 {
+    [Obsolete()]
     class XnaSamplerState : SamplerState
     {
         XG.SamplerState xnaSS;
@@ -114,7 +115,7 @@ namespace Apoc3D.RenderSystem.Xna
             }
         }
 
-        public override float MipMapLevelOfDetailBias
+        public override float MipMapLODBias
         {
             get { return xnaSS.MipMapLevelOfDetailBias; }
             set { xnaSS.MipMapLevelOfDetailBias = value; }

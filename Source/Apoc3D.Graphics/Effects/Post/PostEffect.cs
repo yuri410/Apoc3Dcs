@@ -35,28 +35,18 @@ namespace Apoc3D.Graphics.Effects
         }
 
         #region Loading Shaders
-        protected void LoadVertexShader(RenderSystem rs, ResourceLocation vs, Macro[] macros, string funcName)
+        protected void LoadVertexShader(RenderSystem rs, ResourceLocation vs)
         {
             ObjectFactory fac = rs.ObjectFactory;
 
-            ContentStreamReader sr = new ContentStreamReader(vs);
-
-            string code = sr.ReadToEnd();
-            sr.Close();
-
-            vtxShader = fac.CreateVertexShader(code, macros, IncludeHandler.Instance, "vs_2_0", funcName);
+            vtxShader = fac.CreateVertexShader(vs);
 
         }
-        protected void LoadPixelShader(RenderSystem rs, ResourceLocation vs, Macro[] macros, string funcName)
+        protected void LoadPixelShader(RenderSystem rs, ResourceLocation vs)
         {
             ObjectFactory fac = rs.ObjectFactory;
 
-            ContentStreamReader sr = new ContentStreamReader(vs);
-
-            string code = sr.ReadToEnd();
-            sr.Close();
-
-            pixShader = fac.CreatePixelShader(code, macros, IncludeHandler.Instance, "ps_2_0", funcName);
+            pixShader = fac.CreatePixelShader(vs);
         }
         #endregion
     }

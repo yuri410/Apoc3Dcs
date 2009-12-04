@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Apoc3D.Graphics.Effects;
 using Apoc3D.Vfs;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics
 {
@@ -55,8 +56,52 @@ namespace Apoc3D.Graphics
             private set;
         }
 
-        public abstract void SetValue<T>(string paramName, T value) where T : struct;
+        public abstract int GetConstantIndex(string name);
+
+        public abstract void SetValue(int index, ref Vector2 value);
+        public abstract void SetValue(int index, ref Vector3 value);
+        public abstract void SetValue(int index, ref Vector4 value);
+        public abstract void SetValue(int index, ref Quaternion value);
+        public abstract void SetValue(int index, ref Matrix value);
+
+        public abstract void SetValue(int index, Vector2[] value);
+        public abstract void SetValue(int index, Vector3[] value);
+        public abstract void SetValue(int index, Vector4[] value);
+        public abstract void SetValue(int index, Quaternion[] value);
+        public abstract void SetValue(int index, Matrix[] value);
+
+        public abstract void SetValue(int index, bool value);
+        public abstract void SetValue(int index, float value);
+        public abstract void SetValue(int index, int value);
+        public abstract void SetValue(int index, bool[] value);
+        public abstract void SetValue(int index, float[] value);
+        public abstract void SetValue(int index, int[] value);
+
+        public abstract void SetTexture(int index, Texture tex);
+        public abstract void SetSamplerState(int index, ref ShaderSamplerState state);
+
+
+        public abstract void SetValue(string paramName, ref Vector2 value);
+        public abstract void SetValue(string paramName, ref Vector3 value);
+        public abstract void SetValue(string paramName, ref Vector4 value);
+        public abstract void SetValue(string paramName, ref Quaternion value);
+        public abstract void SetValue(string paramName, ref Matrix value);
+
+        public abstract void SetValue(string paramName, Vector2[] value);
+        public abstract void SetValue(string paramName, Vector3[] value);
+        public abstract void SetValue(string paramName, Vector4[] value);
+        public abstract void SetValue(string paramName, Quaternion[] value);
+        public abstract void SetValue(string paramName, Matrix[] value);
+
+        public abstract void SetValue(string paramName, bool value);
+        public abstract void SetValue(string paramName, float value);
+        public abstract void SetValue(string paramName, int value);
+        public abstract void SetValue(string paramName, bool[] value);
+        public abstract void SetValue(string paramName, float[] value);
+        public abstract void SetValue(string paramName, int[] value);
+
         public abstract void SetTexture(string paramName, Texture tex);
+        public abstract void SetSamplerState(string paramName, ref  ShaderSamplerState state);
 
         public abstract void AutoSetParameters();
 
@@ -108,15 +153,15 @@ namespace Apoc3D.Graphics
             : base(rs)
         {
         }
-        public static VertexShader FromResource(ObjectFactory fac, ResourceLocation rl, Macro[] macros, string funcName)
-        {
-            ContentStreamReader sr = new ContentStreamReader(rl);
+        //public static VertexShader FromResource(ObjectFactory fac, ResourceLocation rl, Macro[] macros, string funcName)
+        //{
+        //    ContentStreamReader sr = new ContentStreamReader(rl);
 
-            string code = sr.ReadToEnd();
-            sr.Close();
+        //    string code = sr.ReadToEnd();
+        //    sr.Close();
 
-            return fac.CreateVertexShader(code, macros, IncludeHandler.Instance, "vs_2_0", funcName);
-        }
+        //    return fac.CreateVertexShader(code, macros, IncludeHandler.Instance, "vs_2_0", funcName);
+        //}
     }
 
     /// <summary>
@@ -128,14 +173,14 @@ namespace Apoc3D.Graphics
             : base(rs)
         {
         }
-        public static PixelShader FromResource(ObjectFactory fac, ResourceLocation rl, Macro[] macros, string funcName)
-        {
-            ContentStreamReader sr = new ContentStreamReader(rl);
+        //public static PixelShader FromResource(ObjectFactory fac, ResourceLocation rl, Macro[] macros, string funcName)
+        //{
+        //    ContentStreamReader sr = new ContentStreamReader(rl);
 
-            string code = sr.ReadToEnd();
-            sr.Close();
+        //    string code = sr.ReadToEnd();
+        //    sr.Close();
 
-            return fac.CreatePixelShader(code, macros, IncludeHandler.Instance, "ps_2_0", funcName);
-        }
+        //    return fac.CreatePixelShader(code, macros, IncludeHandler.Instance, "ps_2_0", funcName);
+        //}
     }
 }

@@ -67,8 +67,10 @@
     <Compile Include="Animation\TransformAnimation.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Collections\BoneCollection.cs" />
+    <Compile Include="Collections\ClipPlaneCollection.cs" />
     <Compile Include="Collections\EntityNodeCollection.cs" />
     <Compile Include="Collections\SamplerStateCollection.cs" />
+    <Compile Include="Collections\TextureWrapCollection.cs" />
     <Compile Include="Desgin\MeshFaceConverter.cs" />
     <Compile Include="Effects\DefaultSMGenEffect.cs" />
     <Compile Include="Effects\Effect.cs" />

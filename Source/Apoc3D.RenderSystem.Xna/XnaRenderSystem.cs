@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Apoc3D.Collections;
 using Apoc3D.Graphics;
+using Apoc3D.Graphics.Effects;
 using Apoc3D.MathLib;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
 using XGC = Microsoft.Xna.Framework.Graphics.GraphicsDeviceCapabilities;
-using Apoc3D.Graphics.Effects;
 
 namespace Apoc3D.RenderSystem.Xna
 {
@@ -27,10 +27,10 @@ namespace Apoc3D.RenderSystem.Xna
         XnaRenderStateManager renderStates;
         XnaObjectFactory objectFactory;
 
-        SamplerStateCollection samplerStates;
-        XnaSamplerState[] samplerStateXna;
+        //SamplerStateCollection samplerStates;
+        //XnaSamplerState[] samplerStateXna;
 
-        XnaTexture[] cachedTextures;
+        //XnaTexture[] cachedTextures;
 
         public XnaRenderSystem(XG.GraphicsDevice device)
             : base(XnaGraphicsAPIFactory.APIName + " RenderSystem")
@@ -1007,14 +1007,14 @@ namespace Apoc3D.RenderSystem.Xna
             cachedRenderTargets = new XnaRenderTarget[device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets];
             cachedRenderTargets[0] = defaultRt;
 
-            samplerStateXna = new XnaSamplerState[MaxTexLayers];
-            for (int i = 0; i < samplerStateXna.Length; i++)
-            {
-                samplerStateXna[i] = new XnaSamplerState(device.SamplerStates[i], i);
-            }
-            samplerStates = new SamplerStateCollection(samplerStateXna);
+            //samplerStateXna = new XnaSamplerState[MaxTexLayers];
+            //for (int i = 0; i < samplerStateXna.Length; i++)
+            //{
+            //    samplerStateXna[i] = new XnaSamplerState(device.SamplerStates[i], i);
+            //}
+            //samplerStates = new SamplerStateCollection(samplerStateXna);
 
-            cachedTextures = new XnaTexture[MaxTexLayers];
+            //cachedTextures = new XnaTexture[MaxTexLayers];
         }
 
         public override void Clear(ClearFlags flags, ColorValue color, float depth, int stencil)
@@ -1023,30 +1023,30 @@ namespace Apoc3D.RenderSystem.Xna
             device.Clear(XnaUtils.ConvertEnum(flags), clr, depth, stencil);
         }
 
-        public override Texture GetTexture(int index)
-        {
-            return cachedTextures[index];
-        }
-        public override void SetTexture(int index, Texture texture)
-        {
-            XnaTexture xtex = (XnaTexture)texture;
+        //public override Texture GetTexture(int index)
+        //{
+        //    return cachedTextures[index];
+        //}
+        //public override void SetTexture(int index, Texture texture)
+        //{
+        //    XnaTexture xtex = (XnaTexture)texture;
 
-            switch (xtex.Type) 
-            {
-                case TextureType.Texture2D:
-                case TextureType.Texture1D:
-                    device.Textures[index] = xtex.tex2D;
-                    break;
-                case TextureType.CubeTexture:
-                    device.Textures[index] = xtex.cube;
-                    break;
-                case TextureType.Texture3D:
-                    device.Textures[index] = xtex.tex3D;
-                    break;
-            }
+        //    switch (xtex.Type) 
+        //    {
+        //        case TextureType.Texture2D:
+        //        case TextureType.Texture1D:
+        //            device.Textures[index] = xtex.tex2D;
+        //            break;
+        //        case TextureType.CubeTexture:
+        //            device.Textures[index] = xtex.cube;
+        //            break;
+        //        case TextureType.Texture3D:
+        //            device.Textures[index] = xtex.tex3D;
+        //            break;
+        //    }
             
-            cachedTextures[index] = xtex;
-        }
+        //    cachedTextures[index] = xtex;
+        //}
 
         public override void SetRenderTarget(int index, RenderTarget rt)
         {
@@ -1066,19 +1066,21 @@ namespace Apoc3D.RenderSystem.Xna
             return cachedRenderTargets[index];
         }
 
-        public override SamplerStateCollection GetSamplerStates()
-        {
-            return samplerStates;
-        }
+        //public override SamplerStateCollection GetSamplerStates()
+        //{
+        //    return samplerStates;
+        //}
 
         public override void BindShader(VertexShader shader)
         {
-            throw new NotImplementedException();
+            XnaVertexShader vs = (XnaVertexShader)shader;
+            device.VertexShader = vs.vsXna;
         }
 
         public override void BindShader(PixelShader shader)
         {
-            throw new NotImplementedException();
+            XnaPixelShader ps = (XnaPixelShader)shader;
+            device.PixelShader = ps.psXna;
         }
 
         public override Viewport Viewport
@@ -1185,10 +1187,10 @@ namespace Apoc3D.RenderSystem.Xna
         {
             if (opList == null)
                 return;
-            
-            BindShader((PixelShader)null);
-            BindShader((VertexShader)null);
 
+            device.PixelShader = null;
+            device.VertexShader = null;
+            
             Effect effect = material.Effect;
 
             if (effect == null)
@@ -1261,6 +1263,12 @@ namespace Apoc3D.RenderSystem.Xna
             effect.End();
         }
 
+        public override void BeginFrame()
+        {
+            base.BeginFrame();
+
+           
+        }
         public override void EndFrame()
         {
             XG.TextureCollection coll = device.Textures;

@@ -3,12 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using Apoc3D.MathLib;
 using Apoc3D.Media;
+using Apoc3D.Graphics.Collections;
 
 namespace Apoc3D.Graphics
 {
+    public abstract class ClipPlane 
+    {
+        public abstract bool Enabled
+        {
+            get;
+            set;
+        }
+        public abstract Plane Plane
+        {
+            get;
+            set;
+        }
+    }
+
     public abstract class RenderStateManager
     {
-
         public RenderStateManager(RenderSystem rdrSys)
         {
             RenderSystem = rdrSys;
@@ -20,32 +34,53 @@ namespace Apoc3D.Graphics
             private set;
         }
 
-        public abstract bool AlphaBlendEnable
+        protected TextureWrapCollection texWrapCollection;
+        protected ClipPlaneCollection clipPlaneCollecion;
+
+        #region AlphaTest
+        public abstract bool AlphaTestEnable
         {
             get;
             set;
         }
-        public abstract BlendFunction BlendOperationAlpha
-        {
-            get;
-            set;
-        }
-        public abstract Blend DestinationBlendAlpha
-        {
-            get;
-            set;
-        }
+        /// <summary>
+        ///  获取或设置alpha测试的方式
+        /// </summary>
         public abstract CompareFunction AlphaFunction
         {
             get;
             set;
         }
-        public abstract Blend SourceBlendAlpha
+        public abstract int AlphaReference
         {
             get;
             set;
         }
-        public abstract bool AlphaTestEnable
+        #endregion
+
+        #region Alpha混合
+        /// <summary>
+        ///  获取或设置Alpha混合是否开启
+        /// </summary>
+        public abstract bool AlphaBlendEnable
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        ///  获取或设置Alpha混合的方式
+        /// </summary>
+        public abstract BlendFunction BlendOperation
+        {
+            get;
+            set;
+        }
+        public abstract Blend SourceBlend
+        {
+            get;
+            set;
+        }
+        public abstract Blend DestinationBlend
         {
             get;
             set;
@@ -55,56 +90,68 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract BlendFunction BlendOperation
+
+        /// <summary>
+        ///  获取或设置对于alpha通的混合是否开启
+        /// </summary>
+        public abstract bool AlphaBlendSeparateEnabled
         {
             get;
             set;
         }
+        public abstract BlendFunction BlendOperationAlpha
+        {
+            get;
+            set;
+        }
+        public abstract Blend SourceBlendAlpha
+        {
+            get;
+            set;
+        }
+        public abstract Blend DestinationBlendAlpha
+        {
+            get;
+            set;
+        }
+        #endregion
+
+        #region ColorWriteChannels
+        /// <summary>
+        ///  获取或设置可以写入到RT上的颜色通道
+        /// </summary>
         public abstract ColorWriteChannels ColorWriteChannels
         {
             get;
             set;
         }
+        /// <summary>
+        ///  获取或设置可以写入到RT上的颜色通道
+        /// </summary>
         public abstract ColorWriteChannels ColorWriteChannels1
         {
             get;
             set;
         }
+        /// <summary>
+        ///  获取或设置可以写入到RT上的颜色通道
+        /// </summary>
         public abstract ColorWriteChannels ColorWriteChannels2
         {
             get;
             set;
         }
+        /// <summary>
+        ///  获取或设置可以写入到RT上的颜色通道
+        /// </summary>
         public abstract ColorWriteChannels ColorWriteChannels3
         {
             get;
             set;
         }
-        public abstract StencilOperation CounterClockwiseStencilDepthBufferFail
-        {
-            get;
-            set;
-        }
-        public abstract StencilOperation CounterClockwiseStencilFail
-        {
-            get;
-            set;
-        }
-        public abstract CompareFunction CounterClockwiseStencilFunction
-        {
-            get;
-            set;
-        }
-        public abstract StencilOperation CounterClockwiseStencilPass
-        {
-            get;
-            set;
-        }
-        public abstract CullMode CullMode
-        {
-            get;
-            set;
-        }
+        #endregion
+
+        #region Depth
         public abstract float DepthBias
         {
             get;
@@ -125,11 +172,19 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract Blend DestinationBlend
+        public abstract float SlopeScaleDepthBias
         {
             get;
             set;
         }
+        #endregion
+
+        public abstract CullMode CullMode
+        {
+            get;
+            set;
+        }
+
         public abstract FillMode FillMode
         {
             get;
@@ -146,12 +201,14 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
+        
+
+        #region Point States
         public abstract float PointSize
         {
             get;
             set;
         }
-
         public abstract float PointSizeMax
         {
             get;
@@ -167,33 +224,11 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
+        #endregion
 
-        public abstract int ReferenceAlpha
-        {
-            get;
-            set;
-        }
+        #region Stencil
+
         public abstract int ReferenceStencil
-        {
-            get;
-            set;
-        }
-        public abstract bool ScissorTestEnable
-        {
-            get;
-            set;
-        }
-        public abstract bool AlphaBlendSeparateEnabled
-        {
-            get;
-            set;
-        }
-        public abstract float SlopeScaleDepthBias
-        {
-            get;
-            set;
-        }
-        public abstract Blend SourceBlend
         {
             get;
             set;
@@ -238,86 +273,49 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-        public abstract TextureWrapCoordinates Wrap0
+        public abstract StencilOperation CounterClockwiseStencilDepthBufferFail
         {
             get;
             set;
         }
-        public abstract TextureWrapCoordinates Wrap1
+        public abstract StencilOperation CounterClockwiseStencilFail
         {
             get;
             set;
         }
-        public abstract TextureWrapCoordinates Wrap10
+        public abstract CompareFunction CounterClockwiseStencilFunction
         {
             get;
             set;
         }
-        public abstract TextureWrapCoordinates Wrap11
+        public abstract StencilOperation CounterClockwiseStencilPass
         {
             get;
             set;
         }
-        public abstract TextureWrapCoordinates Wrap12
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap13
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap14
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap15
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap2
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap3
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap4
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap5
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap6
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap7
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap8
-        {
-            get;
-            set;
-        }
-        public abstract TextureWrapCoordinates Wrap9
+        #endregion
+
+        #region ScissorTest
+        public abstract bool ScissorTestEnable
         {
             get;
             set;
         }
 
+        public abstract Rectangle ScissorTestRectangle
+        {
+            get;
+            set;
+        }
+        #endregion
+
+        public ClipPlaneCollection ClipPlanes 
+        {
+            get { return clipPlaneCollecion; }
+        }
+        public TextureWrapCollection TextureWraps
+        {
+            get { return texWrapCollection; }
+        }
     }
 }

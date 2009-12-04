@@ -150,12 +150,16 @@ namespace Apoc3D.RenderSystem.Xna
 
         protected override void load()
         {
-            
+            TextureData data = new TextureData();
+            data.Load(ResourceLocation);
+
+
+            throw new NotImplementedException();
         }
 
         protected override void unload()
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

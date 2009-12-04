@@ -74,14 +74,14 @@ namespace Apoc3D.RenderSystem.Xna
             return new XnaStateBlock(renderSys);
         }
 
-        public override VertexShader CreateVertexShader(string code, Macro[] defines, Include include, string profile, string functionName)
+        public override VertexShader CreateVertexShader(ResourceLocation resLoc)
         {
-            throw new NotImplementedException();
+            return new XnaVertexShader(renderSys, resLoc);
         }
 
-        public override PixelShader CreatePixelShader(string code, Macro[] defines, Include include, string profile, string functionName)
+        public override PixelShader CreatePixelShader(ResourceLocation resLoc)
         {
-            throw new NotImplementedException();
+            return new XnaPixelShader(renderSys, resLoc);
         }
     }
 }

@@ -23,7 +23,6 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaGraphicsAPIFactory()
             : base(desc)
         {
-
         }
         public override DeviceContent CreateDeviceContent()
         {
