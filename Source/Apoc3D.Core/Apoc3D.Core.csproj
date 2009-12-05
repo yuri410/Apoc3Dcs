@@ -87,6 +87,7 @@
     <Compile Include="Design\TypeConverters\Vector2Converter.cs" />
     <Compile Include="Design\TypeConverters\Vector3Converter.cs" />
     <Compile Include="Design\TypeConverters\Vector4Converter.cs" />
+    <Compile Include="DummyAttributes.cs" />
     <Compile Include="EngineConsole.cs">
     </Compile>
     <Compile Include="EngineTimer.cs" />

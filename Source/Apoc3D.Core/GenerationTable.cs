@@ -28,18 +28,9 @@ namespace Apoc3D.Core
             #endregion
         }
 
-        enum ManageState
-        {
-            Off,
-            RequiresSynchronize,
-            Ready,
-        }
-
         public const int MaxGeneration = 4;
 
         internal static readonly float[] GenerationLifeTime = new float[MaxGeneration] { 3, 6, 10, 30 };
-
-
 
         class STMethod : IDisposable
         {
@@ -56,6 +47,7 @@ namespace Apoc3D.Core
 #if !XBOX
                 this.guThread.SetApartmentState(ApartmentState.MTA);
 #endif
+                this.guThread.IsBackground = true;
                 this.guThread.Start();
 
                 this.manager = manager;
@@ -181,8 +173,20 @@ namespace Apoc3D.Core
             {
                 if (!Disposed)
                 {
-                    //commander.Dispose();
                     Disposed = true;
+
+#if !XBOX
+                    const int MaxWait = 10;
+                    for (int i = 0; i < MaxWait; i++) 
+                    {
+                        if (guThread.IsAlive) 
+                        {
+                            Thread.Sleep(10);
+                        }
+                    }
+                    if (guThread.IsAlive)
+#endif
+                        guThread.Abort();
                 }
             }
 
@@ -191,6 +195,12 @@ namespace Apoc3D.Core
         }
         class MTMethod : IDisposable
         {
+            enum ManageState
+            {
+                Off,
+                RequiresSynchronize,
+                Ready,
+            }
             ManageState manageState;
             GenerationTable table;
             ResourceManager manager;
@@ -203,7 +213,7 @@ namespace Apoc3D.Core
             /// </summary>
             object syncHelper3 = new object();
 
-            public ManageState State
+            ManageState State
             {
                 get
                 {
@@ -226,11 +236,13 @@ namespace Apoc3D.Core
 #if !XBOX
                 guThread.SetApartmentState(ApartmentState.MTA);
 #endif
+                guThread.IsBackground = true;
                 guThread.Start();
 
                 this.mgrThread = new Thread(Manage_Main);
                 mgrThread.Name = "Resource Management Thread for" + manager.ToString();
 #if !XBOX
+                mgrThread.IsBackground = true;
                 mgrThread.SetApartmentState(ApartmentState.MTA);
 #endif
                 mgrThread.Start();
@@ -391,8 +403,31 @@ namespace Apoc3D.Core
             {
                 if (!Disposed)
                 {
-                    //commander.Dispose();
                     Disposed = true;
+#if !XBOX
+
+                    const int MaxWait = 10;
+                    for (int i = 0; i < MaxWait; i++)
+                    {
+                        if (guThread.IsAlive)
+                        {
+                            Thread.Sleep(10);
+                        }
+                    }
+                    if (guThread.IsAlive)
+#endif
+                        guThread.Abort();
+#if !XBOX
+                    for (int i = 0; i < MaxWait; i++)
+                    {
+                        if (mgrThread.IsAlive)
+                        {
+                            Thread.Sleep(10);
+                        }
+                    }
+                    if (mgrThread.IsAlive)
+#endif
+                        mgrThread.Abort();
                 }
             }
 
@@ -413,7 +448,7 @@ namespace Apoc3D.Core
         volatile ExistTable<Resource>[] gen;
         volatile List<Resource> genList;
 
-        STMethod manageThread;
+        IDisposable manageThread;
 
         public GenerationTable(ResourceManager mgr)
         {
@@ -424,7 +459,7 @@ namespace Apoc3D.Core
                 gen[i] = new ExistTable<Resource>();
             }
 
-            manageThread = new STMethod(this, mgr);
+            manageThread = new MTMethod(this, mgr);
         }
 
         public ExistTable<Resource> this[int index]
@@ -490,7 +525,7 @@ namespace Apoc3D.Core
         {
             if (!Disposed)
             {
-                //commander.Dispose();
+                manageThread.Dispose();
                 Disposed = true;
             }
         }
