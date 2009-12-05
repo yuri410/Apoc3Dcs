@@ -22,16 +22,12 @@ namespace Apoc3D.RenderSystem.Xna
             : base(vb.SizeInBytes, XnaUtils.ConvertEnum(vb.BufferUsage,false), false)
         {
             vertexBuffer = vb;
-
-            buffer = new byte[Size];
         }
 
         internal XnaVertexBuffer(XnaRenderSystem rs, XG.DynamicVertexBuffer vb)
             : base(vb.SizeInBytes, XnaUtils.ConvertEnum(vb.BufferUsage, true), false)
         {
             dynVb = vb;
-
-            buffer = new byte[Size];
         }
 
         public XnaVertexBuffer(XnaRenderSystem rs, int size, BufferUsage usage) 
@@ -51,6 +47,8 @@ namespace Apoc3D.RenderSystem.Xna
         {
             if (size == 0)             
                 size = Size;
+
+            buffer = new byte[size];
 
             lockSize = size;
             curLockMode = mode;
@@ -86,13 +84,12 @@ namespace Apoc3D.RenderSystem.Xna
 
         protected override void unlock()
         {
-
             switch (curLockMode) 
             {
-                case LockMode.NoOverwrite:
                 case LockMode.ReadOnly:
                     // ²»¹Ü
                     break;
+                case LockMode.NoOverwrite:
                 case LockMode.None:
                 case LockMode.Discard:
                     if (vertexBuffer != null)
@@ -105,6 +102,7 @@ namespace Apoc3D.RenderSystem.Xna
                     }
                     break;
             }
+            buffer = null;
         }
 
         public override void Dispose(bool disposing)

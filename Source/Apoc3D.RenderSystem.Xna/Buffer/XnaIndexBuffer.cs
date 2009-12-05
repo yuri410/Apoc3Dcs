@@ -24,8 +24,6 @@ namespace Apoc3D.RenderSystem.Xna
                    ib.SizeInBytes, XnaUtils.ConvertEnum(ib.BufferUsage, false), false)
         {
             indexBuffer = ib;
-
-            buffer = new byte[Size];
         }
 
         internal XnaIndexBuffer(XnaRenderSystem rs, XG.DynamicIndexBuffer ib)
@@ -33,8 +31,6 @@ namespace Apoc3D.RenderSystem.Xna
                    ib.SizeInBytes, XnaUtils.ConvertEnum(ib.BufferUsage, true), false)
         {
             dynIb = ib;
-
-            buffer = new byte[Size];
         }
 
         public XnaIndexBuffer(XnaRenderSystem rs, IndexBufferType type, int size, BufferUsage usage)
@@ -55,6 +51,7 @@ namespace Apoc3D.RenderSystem.Xna
             if (size == 0)
                 size = Size;
 
+            buffer = new byte[size];
             lockSize = size;
             curLockMode = mode;
             lockOfs = offset;
@@ -89,13 +86,12 @@ namespace Apoc3D.RenderSystem.Xna
 
         protected override void unlock()
         {
-
             switch (curLockMode)
-            {
-                case LockMode.NoOverwrite:
+            {                
                 case LockMode.ReadOnly:
                     // ²»¹Ü
                     break;
+                case LockMode.NoOverwrite:
                 case LockMode.None:
                 case LockMode.Discard:
                     if (indexBuffer != null)
@@ -108,6 +104,7 @@ namespace Apoc3D.RenderSystem.Xna
                     }
                     break;
             }
+            buffer = null;
         }
 
         public override void Dispose(bool disposing)

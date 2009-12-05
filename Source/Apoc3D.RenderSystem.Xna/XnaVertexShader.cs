@@ -260,13 +260,16 @@ namespace Apoc3D.RenderSystem.Xna
         {
             int si = constants[index].SamplerIndex;
 
-            XnaTexture xnatex = (XnaTexture)tex;
-            if (xnatex.tex2D != null)
-                device.VertexTextures[si] = xnatex.tex2D;
-            else if (xnatex.cube != null)
-                device.VertexTextures[si] = xnatex.cube;
-            else if (xnatex.tex3D != null)
-                device.VertexTextures[si] = xnatex.tex3D;
+            if (tex.IsLoaded)
+            {
+                XnaTexture xnatex = (XnaTexture)tex;
+                if (xnatex.tex2D != null)
+                    device.VertexTextures[si] = xnatex.tex2D;
+                else if (xnatex.cube != null)
+                    device.VertexTextures[si] = xnatex.cube;
+                else if (xnatex.tex3D != null)
+                    device.VertexTextures[si] = xnatex.tex3D;
+            }
         }
         public override void SetSamplerState(int index, ref ShaderSamplerState state)
         {

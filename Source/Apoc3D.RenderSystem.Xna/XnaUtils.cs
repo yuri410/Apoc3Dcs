@@ -405,5 +405,14 @@ namespace Apoc3D.RenderSystem.Xna
             return (TextureFilter)ft;
         }
         #endregion
+
+        public static XG.CubeMapFace ConvertEnum(CubeMapFace face) 
+        {
+            return (XG.CubeMapFace)face;
+        }
+        public static CubeMapFace ConvertEnum(XG.CubeMapFace face) 
+        {
+            return (CubeMapFace)face;
+        }
     }
 }

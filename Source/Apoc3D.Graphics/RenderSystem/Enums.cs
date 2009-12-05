@@ -134,12 +134,30 @@ namespace Apoc3D.Graphics
 
     public enum CubeMapFace
     {
-        PositiveX,
-        NegativeX,
-        PositiveY,
-        NegativeY,
-        PositiveZ,
-        NegativeZ
+        /// <summary>
+        ///  Positive x-face of the cube map.
+        /// </summary>
+        PositiveX = 0,
+        /// <summary>
+        ///  Negative x-face of the cube map.
+        /// </summary>
+        NegativeX = 1,
+        /// <summary>
+        ///  Positive y-face of the cube map.
+        /// </summary>
+        PositiveY = 2,
+        /// <summary>
+        ///  Negative y-face of the cube map.
+        /// </summary>
+        NegativeY = 3,
+        /// <summary>
+        ///  Positive z-face of the cube map.
+        /// </summary>
+        PositiveZ = 4,
+        /// <summary>
+        ///  Negative z-face of the cube map.
+        /// </summary>
+        NegativeZ = 5,
     }
 
     /// <summary>
