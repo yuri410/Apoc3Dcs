@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Diagnostics;
 
-namespace Apoc3D
+namespace Apoc3D.Core
 {
     public static class EngineTimer
     {

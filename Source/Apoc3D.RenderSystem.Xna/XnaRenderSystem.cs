@@ -8,6 +8,7 @@ using Apoc3D.MathLib;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
 using XGC = Microsoft.Xna.Framework.Graphics.GraphicsDeviceCapabilities;
+using Apoc3D.Core;
 
 namespace Apoc3D.RenderSystem.Xna
 {
@@ -1267,7 +1268,7 @@ namespace Apoc3D.RenderSystem.Xna
         {
             base.BeginFrame();
 
-           
+            ResourceInterlock.BlockAll();
         }
         public override void EndFrame()
         {
@@ -1292,6 +1293,8 @@ namespace Apoc3D.RenderSystem.Xna
             
 
             base.EndFrame();
+
+            ResourceInterlock.UnblockAll();
         }
     }
 }

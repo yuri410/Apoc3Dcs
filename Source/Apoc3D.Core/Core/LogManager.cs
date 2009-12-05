@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Apoc3D
+namespace Apoc3D.Core
 {
     public class LogManager
     {

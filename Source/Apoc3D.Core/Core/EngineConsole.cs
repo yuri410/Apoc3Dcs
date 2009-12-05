@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Apoc3D
+namespace Apoc3D.Core
 {
     public partial class EngineConsole
     {

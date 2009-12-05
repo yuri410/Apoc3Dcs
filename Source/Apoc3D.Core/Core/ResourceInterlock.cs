@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Apoc3D.Core
 {
-    public static class ResourceInterlcok
+    public static class ResourceInterlock
     {
         static Dictionary<Thread, object> syncHelperTable = new Dictionary<Thread, object>();
 

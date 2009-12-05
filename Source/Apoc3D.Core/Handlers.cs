@@ -1,5 +1,5 @@
 ﻿
-namespace Apoc3D.Core
+namespace Apoc3D
 {
     public delegate void DrawEventHandler();
 }

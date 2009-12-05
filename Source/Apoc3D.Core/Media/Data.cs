@@ -9,12 +9,17 @@ namespace Apoc3D.Media
         int pitch;
         IntPtr pointer;
 
-        //int left;
-        //int top;
         int width;
         int height;
 
         ImagePixelFormat format;
+
+        public static readonly DataRectangle Empty;
+
+        static DataRectangle() 
+        {
+            Empty = new DataRectangle();
+        }
 
         public DataRectangle(int pitch, IntPtr pointer, int width, int height, ImagePixelFormat fmt)
         {
@@ -89,6 +94,13 @@ namespace Apoc3D.Media
         int depth;
 
         ImagePixelFormat format;
+
+        public static readonly DataBox Empty;
+
+        static DataBox() 
+        {
+            Empty = new DataBox();
+        }
 
         public DataBox(int width, int height, int depth, IntPtr pointer, ImagePixelFormat fmt)
 		{

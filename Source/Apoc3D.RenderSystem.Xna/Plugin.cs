@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Apoc3D.Core;
 using Apoc3D.Graphics;
 
 namespace Apoc3D.RenderSystem.Xna

@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace Apoc3D.Ide
 {
-    public interface IPlugin : Apoc3D.IPlugin
+    public interface IPlugin : Apoc3D.Core.IPlugin
     {
 
 

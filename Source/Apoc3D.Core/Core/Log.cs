@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Apoc3D
+namespace Apoc3D.Core
 {
     public class Log : IDisposable
     {

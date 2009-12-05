@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Apoc3D.Config;
+using Apoc3D.Core;
 using Apoc3D.Vfs;
 
 namespace Apoc3D.Scene
