@@ -135,24 +135,7 @@ namespace Apoc3D
                 return TimeSpan.FromTicks((delta * 10000000) / Frequency);
             }
         }
-        //class TimeAdjuster
-        //{
-        //    public TimeAdjuster()
-        //    {
-        //        timeBeginPeriod(tCaps.min);
-        //    }
-        //    ~TimeAdjuster()
-        //    {
-        //        timeEndPeriod(tCaps.min);
-        //    }
-        //}
 
-        //struct TimeCaps
-        //{
-        //    public int min, max;
-        //}
-
-        //static TimeAdjuster tAdj;
         static Clock clock;
 
         static TimeSpan startTime;
@@ -163,12 +146,8 @@ namespace Apoc3D
 
         static EngineTimer()
         {
-            //timeGetDevCaps(out tCaps, 8);
-            //tAdj = new TimeAdjuster();
             clock = new Clock();
             startTime = clock.CurrentTime;
-
-            //Update(null);
 
             thread = new Thread(Update);
             thread.Name = "Timer Auto Update";

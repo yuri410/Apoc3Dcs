@@ -171,6 +171,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\" />
     <Folder Include="Graphic\" />
     <Folder Include="Input\" />
     <Folder Include="Physics\" />
