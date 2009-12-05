@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using Apoc3D.Vfs;
 
-namespace Apoc3D.Ide
+namespace Apoc3D.Core
 {
     public delegate void PluginErrorCallback(IPlugin plugin, Exception e);
 

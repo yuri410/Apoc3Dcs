@@ -166,7 +166,7 @@ namespace Apoc3D
             //timeGetDevCaps(out tCaps, 8);
             //tAdj = new TimeAdjuster();
             clock = new Clock();
-            startTime = clock.ElapsedAdjustedTime;
+            startTime = clock.CurrentTime;
 
             //Update(null);
 
@@ -196,28 +196,16 @@ namespace Apoc3D
 
         #endregion
 
-        //#region PInvoke
-
-        //[DllImport("winmm.dll")]
-        //static extern int timeGetDevCaps(out TimeCaps cap, int cbdc);
-        //[DllImport("winmm.dll")]
-        //static extern int timeBeginPeriod(int per);
-        //[DllImport("winmm.dll")]
-        //static extern int timeEndPeriod(int per);
-
-        //[DllImport("winmm.dll", EntryPoint = "timeGetTime")]
-        //public static extern uint GetTime();
-
-        //#endregion
-
         #region 方法
         private static void Update()
         {
             while (true)
             {
+                clock.Step();
+
                 lock (syncHelper)
                 {
-                    curTime = clock.ElapsedAdjustedTime;
+                    curTime = clock.CurrentTime;
                 }
                 Thread.Sleep(15);
             }

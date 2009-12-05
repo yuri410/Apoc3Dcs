@@ -37,7 +37,7 @@ namespace Apoc3D.Core
 
         public const int MaxGeneration = 4;
 
-        internal static readonly float[] GenerationLifeTime = new float[MaxGeneration] { 10, 60, 300, 800 };
+        internal static readonly float[] GenerationLifeTime = new float[MaxGeneration] { 3, 6, 10, 30 };
 
         /// <summary>
         ///  对gen的线程锁
@@ -71,8 +71,6 @@ namespace Apoc3D.Core
         {
             const int passTimeLimit = 4000;
 
-            TimeSpan timeStart = EngineTimer.Time;
-
             while (!Disposed)
             {
                 bool isSyncing;
@@ -82,7 +80,7 @@ namespace Apoc3D.Core
                     isSyncing = manageState == ManageState.RequiresSynchronize;
                 }
 
-
+                TimeSpan timeStart = EngineTimer.Time;
                 TimeSpan time = EngineTimer.Time;
 
                 int count;
@@ -125,8 +123,8 @@ namespace Apoc3D.Core
 
                         if (loopCount++ % 10 == 0)
                         {
-                            timeStart = EngineTimer.Time;
-                            remainingTime -= (int)(timeStart - time).TotalMilliseconds;
+                            time = EngineTimer.Time;
+                            remainingTime -= (int)(time - timeStart).TotalMilliseconds;
 
                             loopCount = 0;
                         }
@@ -174,7 +172,7 @@ namespace Apoc3D.Core
                 {
                     int predictCSize = manager.UsedCacheSize;
 
-                    while (predictCSize > manager.TotalCacheSize)
+                    if (predictCSize > manager.TotalCacheSize)
                     {
                         for (int i = 3; i >= 1 && predictCSize > manager.TotalCacheSize; i--)
                         {

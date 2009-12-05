@@ -19,16 +19,6 @@ namespace Apoc3D.Test.ResourceManagerTest
 
         public void Visit() { }
 
-        //protected override void ReadCacheData(Stream stream)
-        //{
-        //    resource = new int[128];
-        //}
-
-        //protected override void WriteCacheData(Stream stream)
-        //{
-
-        //}
-
         public override int GetSize()
         {
             return sizeof(int) * 128;
@@ -173,7 +163,7 @@ namespace Apoc3D.Test.ResourceManagerTest
                 ResourceHandle<TestResource> handle = mgr.CreateInstance(rnd.NextDouble().ToString());
                 list2.Add(handle);
                 list.Add(handle);
-                Thread.Sleep(100);
+                Thread.Sleep(10);
 
                 if (i % 10 == 0)
                 {

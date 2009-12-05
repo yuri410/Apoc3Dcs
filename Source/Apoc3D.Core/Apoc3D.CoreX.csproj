@@ -153,6 +153,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Randomizer.cs" />
     <Compile Include="Resource.cs" />
+    <Compile Include="ResourceInterlcok.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Sound\ISample.cs" />
