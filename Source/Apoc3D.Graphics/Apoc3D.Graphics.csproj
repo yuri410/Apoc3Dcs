@@ -50,6 +50,7 @@
     <Compile Include="Animation\TransformAnimation.cs" />
     <Compile Include="Collections\ClipPlaneCollection.cs" />
     <Compile Include="Collections\TextureWrapCollection.cs" />
+    <Compile Include="RenderSystem\IRenderWindowHandler.cs" />
     <Compile Include="Scene\Atmosphere.cs" />
     <Compile Include="Collections\SamplerStateCollection.cs" />
     <Compile Include="Desgin\MeshFaceConverter.cs" />

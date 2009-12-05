@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Apoc3D.Core;
 using Apoc3D.Graphics;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics
 {
@@ -142,48 +143,60 @@ namespace Apoc3D.Graphics
         {
         }
 
+        public abstract Size ClientSize
+        {
+            get;
+        }
+        public abstract string Title
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         ///  以这个渲染窗口开始主循环
         /// </summary>
         public abstract void Run();
 
-        public event EventHandler Initialize;
-        public event EventHandler Load;
-        public event UpdateEventHandler Update;
-        public event DrawEventHandler Draw;
-        public event EventHandler Unload;
-
+        public IRenderWindowHandler EventHandler
+        {
+            get;
+            set;
+        }
         protected void OnInitialize()
         {
-            if (Initialize != null)
-                Initialize(this, EventArgs.Empty);
+            if (EventHandler != null)
+                EventHandler.Initialize();
         }
         protected void OnLoad() 
         {
-            if (Load != null)
-                Load(this, EventArgs.Empty);
+            if (EventHandler != null)
+                EventHandler.Load();
         }
 
         protected void OnUnload() 
         {
-            if (Unload != null)
-                Unload(this, EventArgs.Empty);
+            if (EventHandler != null)
+                EventHandler.Unload();
         }
 
         protected void OnUpdate(GameTime time) 
         {
-            if (Update != null) 
-            {
-                Update(this, time);
-            }
+            if (EventHandler != null) 
+                EventHandler.Update(time);
         }
 
         protected void OnDraw() 
         {
-            if (Draw != null)
-            {
-                Draw();
-            }
+            if (EventHandler != null)
+                EventHandler.Draw();
+            base.Present();
+        }
+
+        public object Tag
+        {
+            get;
+            set;
         }
     }
 }

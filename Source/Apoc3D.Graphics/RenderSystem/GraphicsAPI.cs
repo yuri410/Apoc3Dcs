@@ -143,9 +143,9 @@ namespace Apoc3D.Graphics
 
             OperatingSystem osInfo = Environment.OSVersion;
 
-            switch (osInfo.Platform) 
+            switch (osInfo.Platform)
             {
-                case  PlatformID.Win32NT:
+                case PlatformID.Win32NT:
                 case PlatformID.Win32Windows:
                 case PlatformID.Win32S:
                     osName = "Windows";
@@ -156,7 +156,7 @@ namespace Apoc3D.Graphics
                 case PlatformID.Unix:
                     osName = "Linux";
                     break;
-                case PlatformID.Xbox :
+                case PlatformID.Xbox:
                     osName = "XBox";
                     break;
                 default:

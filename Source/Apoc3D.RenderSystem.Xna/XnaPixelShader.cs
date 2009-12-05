@@ -51,7 +51,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs)
         {
             psXna = ps;
-            device = rs.device;
+            device = rs.Device;
 
             Init(ps.GetShaderCode());
         }
@@ -63,7 +63,7 @@ namespace Apoc3D.RenderSystem.Xna
             byte[] byteCode = br.ReadBytes(resLoc.Size);
             br.Close();
 
-            device = rs.device;
+            device = rs.Device;
             psXna = new XG.PixelShader(device, byteCode);
 
             Init(byteCode);

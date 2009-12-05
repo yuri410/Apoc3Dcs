@@ -15,8 +15,9 @@ namespace Apoc3D.RenderSystem.Xna
 
         static XnaGraphicsAPIFactory()
         {
-            PlatformAPISupport[] platforms = new PlatformAPISupport[1];
+            PlatformAPISupport[] platforms = new PlatformAPISupport[2];
             platforms[0] = new PlatformAPISupport(100, "XBox");
+            platforms[1] = new PlatformAPISupport(50, "Windows");
             desc = new GraphicsAPIDescription(APIName, new PlatformCollection(platforms));
         }
 

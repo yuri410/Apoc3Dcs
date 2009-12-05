@@ -4,6 +4,7 @@ using System.Text;
 using Apoc3D.Graphics;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.RenderSystem.Xna
 {
@@ -70,9 +71,9 @@ namespace Apoc3D.RenderSystem.Xna
             }
             protected override void Initialize()
             {
-                base.Initialize();
-
                 parent.OnInitialize();
+
+                base.Initialize();
             }
             protected override void OnExiting(object sender, EventArgs args)
             {
@@ -95,9 +96,10 @@ namespace Apoc3D.RenderSystem.Xna
         XGame game;       
 
         public XnaRenderWindow(XnaRenderSystem rs, PresentParameters pm)
-            : base(null, pm)
+            : base(rs, pm)
         {
             this.game = new XGame(this);
+            this.Tag = game;
         }
 
         protected override RenderTarget CreateRenderTarget(Apoc3D.Graphics.RenderSystem rs, PresentParameters pm)
@@ -110,9 +112,34 @@ namespace Apoc3D.RenderSystem.Xna
             game.Run();
         }
 
-        public X.Game Game 
+        internal void SetRenderSystem(XnaRenderSystem rs)
+        {
+            base.RenderSystem = rs;
+        }
+        internal X.Game Game 
         {
             get { return game; }
+        }
+
+        public override string Title
+        {
+            get
+            {
+                return game.Window.Title;
+            }
+            set
+            {
+                game.Window.Title = value;
+            }
+        }
+
+        public override Size ClientSize
+        {
+            get
+            {
+                X.Rectangle rect = game.Window.ClientBounds;
+                return new Size(rect.Width, rect.Height);
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaObjectFactory(XnaRenderSystem rs)
             : base(rs)
         {
-            this.device = rs.device;
+            this.device = rs.Device;
             this.renderSys = rs;
         }
 

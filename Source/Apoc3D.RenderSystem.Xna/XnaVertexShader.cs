@@ -52,7 +52,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs)
         {
             vsXna = vs;
-            device = rs.device;
+            device = rs.Device;
 
             Init(vs.GetShaderCode());
         }
@@ -64,7 +64,7 @@ namespace Apoc3D.RenderSystem.Xna
             byte[] byteCode = br.ReadBytes(resLoc.Size);
             br.Close();
 
-            device = rs.device;
+            device = rs.Device;
             vsXna = new XG.VertexShader(device, byteCode);
 
             Init(byteCode);

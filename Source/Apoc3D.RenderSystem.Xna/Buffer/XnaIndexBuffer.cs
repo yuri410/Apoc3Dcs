@@ -38,11 +38,11 @@ namespace Apoc3D.RenderSystem.Xna
         {
             if ((usage & BufferUsage.Dynamic) == BufferUsage.Dynamic)
             {
-                dynIb = new XG.DynamicIndexBuffer(rs.device, size, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(type));
+                dynIb = new XG.DynamicIndexBuffer(rs.Device, size, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(type));
             }
             else
             {
-                indexBuffer = new XG.IndexBuffer(rs.device, size, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(type));
+                indexBuffer = new XG.IndexBuffer(rs.Device, size, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(type));
             }
         }
 

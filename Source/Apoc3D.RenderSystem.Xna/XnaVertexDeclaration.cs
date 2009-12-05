@@ -40,7 +40,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(elements)
         {
             this.renderSys = rs;
-            this.vtxDecl = new XG.VertexDeclaration(rs.device, ConvertElements(elements));
+            this.vtxDecl = new XG.VertexDeclaration(rs.Device, ConvertElements(elements));
         }
 
         internal XnaVertexDeclaration(XnaRenderSystem rs, XG.VertexDeclaration decl)

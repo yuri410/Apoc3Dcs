@@ -36,7 +36,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs, tex2d.Width, tex2d.Height, 1, tex2d.LevelCount,
                    XnaUtils.ConvertEnum(tex2d.Format), XnaUtils.ConvertEnum(tex2d.TextureUsage))
         {
-            this.device = rs.device;
+            this.device = rs.Device;
             this.tex2D = tex2d;
             this.lockInfo = new LockInfo[tex2d.LevelCount];
         }
@@ -44,7 +44,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs, tex3d.Width, tex3d.Height, tex3d.Depth, tex3d.LevelCount,
                    XnaUtils.ConvertEnum(tex3d.Format), XnaUtils.ConvertEnum(tex3d.TextureUsage))
         {
-            this.device = rs.device;
+            this.device = rs.Device;
             this.tex3D = tex3d;
             this.lockInfo = new LockInfo[tex3d.LevelCount];
         }
@@ -52,7 +52,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs, texCube.Size, texCube.LevelCount,
                    XnaUtils.ConvertEnum(texCube.TextureUsage), XnaUtils.ConvertEnum(texCube.Format))
         {
-            this.device = rs.device;
+            this.device = rs.Device;
             this.cube = texCube;
             this.lockInfo = new LockInfo[texCube.LevelCount];
         }
@@ -67,7 +67,7 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaTexture(XnaRenderSystem rs, ResourceLocation rl, TextureUsage usage)
             : base(rs, rl, usage)
         {
-            this.device = rs.device;
+            this.device = rs.Device;
         }
 
         /// <summary>
@@ -83,15 +83,15 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaTexture(XnaRenderSystem rs, int width, int height, int depth, int level, ImagePixelFormat format, TextureUsage usage)
             : base(rs, width, height, depth, level, format, usage)
         {
-            this.device = rs.device;
+            this.device = rs.Device;
 
             if (Type == TextureType.Texture2D || Type == TextureType.Texture1D)
             {
-                this.tex2D = new XG.Texture2D(rs.device, width, height, level, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(format));
+                this.tex2D = new XG.Texture2D(rs.Device, width, height, level, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(format));
             }
             else if (Type == TextureType.Texture3D)
             {
-                this.tex3D = new XG.Texture3D(rs.device, width, height, depth, level, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(format));
+                this.tex3D = new XG.Texture3D(rs.Device, width, height, depth, level, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(format));
             }
             else
             {
@@ -103,9 +103,9 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaTexture(XnaRenderSystem rs, int length, int level, ImagePixelFormat format, TextureUsage usage)
             : base(rs, length, level, usage, format)
         {
-            this.device = rs.device;
+            this.device = rs.Device;
 
-            this.cube = new XG.TextureCube(rs.device, length, level, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(format));
+            this.cube = new XG.TextureCube(rs.Device, length, level, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(format));
             this.lockInfo = new LockInfo[level];
         }
 

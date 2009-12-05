@@ -31,8 +31,7 @@ namespace Apoc3D.RenderSystem.Xna
 
                 game = renWnd.Game;
 
-                device = game.GraphicsDevice;
-
+                
                 manager = new X.GraphicsDeviceManager(game);
 
                 manager.MinimumPixelShaderProfile = XG.ShaderProfile.PS_2_0;
@@ -47,7 +46,10 @@ namespace Apoc3D.RenderSystem.Xna
 
                 manager.ApplyChanges();
 
-                renderSystem = new XnaRenderSystem(device);
+
+                renderSystem = new XnaRenderSystem(manager);
+                renderSystem.Init();
+                renWnd.SetRenderSystem(renderSystem);
             }
             else
             {

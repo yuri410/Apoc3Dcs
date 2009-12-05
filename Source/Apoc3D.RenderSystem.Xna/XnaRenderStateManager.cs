@@ -47,7 +47,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs)
         {
             this.renderSys = rs;
-            this.device = renderSys.device;
+            this.device = renderSys.Device;
             this.xnaState = device.RenderState;
 
             XnaClipPlane[] planes = new XnaClipPlane[32];

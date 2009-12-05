@@ -35,11 +35,11 @@ namespace Apoc3D.RenderSystem.Xna
         {
             if ((usage & BufferUsage.Dynamic) == BufferUsage.Dynamic)
             {
-                dynVb = new XG.DynamicVertexBuffer(rs.device, size, XnaUtils.ConvertEnum(usage));
+                dynVb = new XG.DynamicVertexBuffer(rs.Device, size, XnaUtils.ConvertEnum(usage));
             }
             else 
             {
-                vertexBuffer = new XG.VertexBuffer(rs.device, size, XnaUtils.ConvertEnum(usage));
+                vertexBuffer = new XG.VertexBuffer(rs.Device, size, XnaUtils.ConvertEnum(usage));
             }
         }
 

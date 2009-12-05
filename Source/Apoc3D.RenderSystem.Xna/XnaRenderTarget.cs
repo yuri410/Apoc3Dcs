@@ -37,14 +37,14 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaRenderTarget(XnaRenderSystem rs, int width, int height, ImagePixelFormat format)
             : base(rs, width, height, format)
         {
-            this.colorBufXna = new XG.RenderTarget2D(rs.device, width, height, 1, XnaUtils.ConvertEnum(format));
+            this.colorBufXna = new XG.RenderTarget2D(rs.Device, width, height, 1, XnaUtils.ConvertEnum(format));
             this.colorBuf = new XnaTexture(rs, colorBufXna.GetTexture());
         }
         public XnaRenderTarget(XnaRenderSystem rs, int width, int height, ImagePixelFormat format, DepthFormat depFmt)
             : base(rs, width, height, format)
         {
-            this.colorBufXna = new XG.RenderTarget2D(rs.device, width, height, 1, XnaUtils.ConvertEnum(format));
-            this.depthBufXna = new XG.DepthStencilBuffer(rs.device, width, height, XnaUtils.ConvertEnum(depFmt));
+            this.colorBufXna = new XG.RenderTarget2D(rs.Device, width, height, 1, XnaUtils.ConvertEnum(format));
+            this.depthBufXna = new XG.DepthStencilBuffer(rs.Device, width, height, XnaUtils.ConvertEnum(depFmt));
 
             this.colorBuf = new XnaTexture(rs, colorBufXna.GetTexture());
             this.depthBuf = new XnaDepthBuffer(rs, depthBufXna);

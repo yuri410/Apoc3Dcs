@@ -105,6 +105,7 @@
     <Compile Include="RenderSystem\Font.cs" />
     <Compile Include="RenderSystem\FontManager.cs" />
     <Compile Include="RenderSystem\GraphicsAPI.cs" />
+    <Compile Include="RenderSystem\IRenderWindowHandler.cs" />
     <Compile Include="RenderSystem\Light.cs" />
     <Compile Include="RenderSystem\Line.cs" />
     <Compile Include="RenderSystem\Material.cs" />

@@ -14,7 +14,7 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaStateBlock(XnaRenderSystem rs) 
             : base(rs)
         {
-            stateBlockXna = new XG.StateBlock(rs.device);
+            stateBlockXna = new XG.StateBlock(rs.Device);
         }
 
         internal XnaStateBlock(XnaRenderSystem rs, XG.StateBlock stateBlock)
