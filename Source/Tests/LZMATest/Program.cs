@@ -35,29 +35,29 @@ namespace LZMATest
             //System.IO.MemoryStream propStream = new System.IO.MemoryStream();
             //encoder.WriteCoderProperties(propStream);
 
-            FileStream compressedStream = new FileStream(@"E:\Desktop\sss\lzma.bin", FileMode.OpenOrCreate, FileAccess.Write);
+            //FileStream compressedStream = new FileStream(@"E:\Desktop\sss\lzma.bin", FileMode.OpenOrCreate, FileAccess.Write);
 
-            FileStream inStream = new FileStream(@"E:\Desktop\srtm513_16xx.rar", FileMode.Open, FileAccess.Read);
-            encoder.Code(inStream, compressedStream, -1, -1, null);
-            inStream.Close();
-            compressedStream.Close();
-            
-            //string[] dems = Directory.GetFiles(@"E:\Desktop\srtm513_16", "*.tdmp");
+            //FileStream inStream = new FileStream(@"E:\Desktop\srtm513_16xx.rar", FileMode.Open, FileAccess.Read);
+            //encoder.Code(inStream, compressedStream, -1, -1, null);
+            //inStream.Close();
+            //compressedStream.Close();
 
-            //for (int i = 0; i < dems.Length; i++)
-            //{
-            //    string fileName = Path.GetFileNameWithoutExtension(dems[i]);
-            //    FileStream compressedStream = new FileStream(@"E:\Desktop\sss\" + fileName + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
+            string[] dems = Directory.GetFiles(@"E:\Desktop\srtm513_16", "*.tdmp");
 
-            //    FileStream inStream = new FileStream(dems[i], FileMode.Open, FileAccess.Read);
-            //    encoder.Code(inStream, compressedStream, -1, -1, null);
-                
-            //    Console.Write(i.ToString());
-            //    Console.Write(" : "); 
-            //    Console.WriteLine(dems[i]);
-            //    inStream.Close();
-            //    compressedStream.Close();
-            //}
+            for (int i = 0; i < dems.Length; i++)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(dems[i]);
+                FileStream compressedStream = new FileStream(@"E:\Desktop\sss\" + fileName + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
+
+                FileStream inStream = new FileStream(dems[i], FileMode.Open, FileAccess.Read);
+                encoder.Code(inStream, compressedStream, -1, -1, null);
+
+                Console.Write(i.ToString());
+                Console.Write(" : ");
+                Console.WriteLine(dems[i]);
+                inStream.Close();
+                compressedStream.Close();
+            }
         }
     }
 }
