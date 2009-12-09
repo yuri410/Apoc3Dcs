@@ -101,7 +101,7 @@ namespace Apoc3D.Ide
 
 
 
-            EffectManager.Instance.LoadEffects();
+            //EffectManager.Instance.LoadEffects();
 
             ConverterBase[] converters = ConverterManager.Instance.GetAllConverters();
 

@@ -15,20 +15,13 @@ namespace Apoc3D.Vfs
             : base(file, size, isinArchive)
         { }
 
-        public abstract Dictionary<uint, ArchiveFileEntry> Files
-        {
-            get;
-        }
+
         public abstract int FileCount
         {
             get;
         }
-        public abstract bool Find(string file, out ArchiveFileEntry entry);
 
-        public abstract Stream ArchiveStream
-        {
-            get;
-        }
+        public abstract Stream GetEntryStream(string file);
 
         public abstract void Dispose(bool disposing);
 
@@ -54,25 +47,6 @@ namespace Apoc3D.Vfs
         
     }
 
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ArchiveFileEntry
-    {
-        public uint id;
-        public int offset;
-        public int size;
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder(8);
-            sb.Append("{ ID= ");
-            sb.Append(Convert.ToString(id, 16));
-            sb.Append(", Offset= ");
-            sb.Append(offset.ToString());
-            sb.Append('}');
-            return sb.ToString();
-        }
-    }
 
     /// <summary>
     ///  为文件包定义抽象工厂

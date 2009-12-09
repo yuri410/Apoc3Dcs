@@ -187,6 +187,7 @@
     <Compile Include="Vfs\FileSystem.cs" />
     <Compile Include="Vfs\IAbstractFactory.cs" />
     <Compile Include="Vfs\Location.cs" />
+    <Compile Include="Vfs\LpkArchive.cs" />
     <Compile Include="Vfs\Paths.cs" />
     <Compile Include="Vfs\Streams.cs" />
   </ItemGroup>

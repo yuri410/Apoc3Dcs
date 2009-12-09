@@ -136,6 +136,8 @@ namespace Apoc3D.Vfs
             stdPack = new Dictionary<string, Archive>(50, CaseInsensitiveStringComparer.Instance);
             CurrentArchiveSet = new List<Archive>();
             workingDirs = new List<string>();
+
+            RegisterArchiveType(new LpkArchiveFactory());
         }
 
         public void RegisterArchiveType(ArchiveFactory fac)
@@ -478,9 +480,10 @@ namespace Apoc3D.Vfs
                     {
                         for (int i = 0; i < CurrentArchiveSet.Count; i++)
                         {
-                            ArchiveFileEntry ent;
-                            if (CurrentArchiveSet[i].Find(filePath, out ent))
-                                return new FileLocation(CurrentArchiveSet[i], CurrentArchiveSet[i].FilePath + Path.DirectorySeparatorChar + filePath, ent);
+                            Stream entStm = CurrentArchiveSet[i].GetEntryStream(filePath);
+
+                            if (entStm != null)
+                                return new FileLocation(CurrentArchiveSet[i], CurrentArchiveSet[i].FilePath + Path.DirectorySeparatorChar + filePath, entStm);
                         }
                     }
 
@@ -537,10 +540,11 @@ namespace Apoc3D.Vfs
                                     // 如果在资源包中
                                     if (last != null)
                                     {
-                                        ArchiveFileEntry ent;
-                                        if (last.Find(locs[i], out ent))
+                                        Stream entStm = last.GetEntryStream(locs[i]);
+
+                                        if (entStm != null)
                                         {
-                                            entry = CreateArchive(new FileLocation(last, CombinePath(arcPath, sb.ToString()), ent));
+                                            entry = CreateArchive(new FileLocation(last, CombinePath(arcPath, sb.ToString()), entStm));
                                             stdPack.Add(entry.FilePath, entry);
                                         }
                                         else
@@ -568,9 +572,10 @@ namespace Apoc3D.Vfs
 
                             if (found && entry != null)
                             {
-                                ArchiveFileEntry res;
-                                if (entry.Find(locs[locs.Length - 1], out res))
-                                    return new FileLocation(entry, CombinePath(arcPath, filePath), res);
+                                Stream entStm = entry.GetEntryStream(locs[locs.Length - 1]);
+
+                                if (entStm != null)
+                                    return new FileLocation(entry, CombinePath(arcPath, filePath), entStm);
                             }
                         }
                         catch (InvalidFormatException)

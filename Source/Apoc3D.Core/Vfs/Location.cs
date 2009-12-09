@@ -52,16 +52,15 @@ namespace Apoc3D.Vfs
         Archive parent;
         string path;
 
-        uint id;
         int offset;
 
+        Stream stm;
 
         public FileLocation(FileLocation fl)
             : base(fl.Name, fl.size)
         {
             this.parent = fl.parent;
             this.path = fl.path;
-            this.id = fl.id;
             this.offset = fl.offset;
         }
 
@@ -78,17 +77,17 @@ namespace Apoc3D.Vfs
             if (!System.IO.Path.IsPathRooted(filePath))
                 throw new ArgumentException();
         }
-
-        public FileLocation(Archive pack, string filePath, ArchiveFileEntry fileInfo)
-            : base(filePath, fileInfo.size)
+        public FileLocation(Archive pack, string filePath, Stream stm)
+            : base(filePath, (int)stm.Length)
         {
             parent = pack;
             path = filePath;
-            id = fileInfo.id;
-            offset = fileInfo.offset;
-            size = fileInfo.size;
-        }
 
+            offset = 0;
+            size = (int)stm.Length;
+            this.stm = stm;
+
+        }
 
         /// <summary>
         /// 获得文件流。对于资源包中的文件，以VirtualStream提供
@@ -98,14 +97,12 @@ namespace Apoc3D.Vfs
         {
             get
             {
-                if (parent != null)
+                if (stm != null)
                 {
-                    Stream s = parent.ArchiveStream;
-                    s.Position += offset;
-                    //s.SetLength((long)size);
-                    return new VirtualStream(s, s.Position, size);
+                    return stm;
                 }
-                return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);//
+
+                return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             }
         }
 

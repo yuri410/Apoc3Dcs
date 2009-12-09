@@ -22,10 +22,12 @@ namespace LZMATest
             CoderPropID[] propIDs = 
 			{ 
 				CoderPropID.DictionarySize,
+                CoderPropID.NumThreads,
 			};
             object[] properties = 
 			{
-				(Int32)(dictionarySize),
+				1048576,
+                2,
 			};
 
             UInt32 kBufferSize = dictionarySize + kAdditionalSize;
