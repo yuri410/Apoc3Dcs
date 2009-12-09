@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Apoc3D.Vfs
 {
-    public struct LpkArchiveEntry 
+    public struct LpkArchiveEntry
     {
         public string Name;
         public int CompressedSize;
@@ -56,7 +56,7 @@ namespace Apoc3D.Vfs
                     }
 
                     int propLen = br.ReadInt32();
-                    byte[] props = br.ReadBytes(propLen);                    
+                    byte[] props = br.ReadBytes(propLen);
                     decoder.SetDecoderProperties(props);
                 }
                 else
