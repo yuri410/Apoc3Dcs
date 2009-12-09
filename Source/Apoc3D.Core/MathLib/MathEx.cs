@@ -22,7 +22,13 @@ namespace Apoc3D.MathLib
         public const float Root2 = 1.4142135623730950488016887242097f;
         public const float Root3 = 1.7320508075688772935274463415059f;
         public const float PiSquare = (float)(Math.PI * Math.PI);
+        /// <summary>
+        ///  2分之PI
+        /// </summary>
         public const float PiOver2 = 1.570796f;
+        /// <summary>
+        ///  4分之PI
+        /// </summary>
         public const float PiOver4 = 0.7853982f;
         public const float GravityAcceleration = 9.80665f;
 

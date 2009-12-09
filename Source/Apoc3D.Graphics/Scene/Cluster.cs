@@ -250,12 +250,12 @@ namespace Apoc3D.Scene
         #region 字段
 
         /// <summary>
-        /// Cluster的X坐标（地形坐标系）。以地形单位为单位
+        /// 左上角的经度。Cluster的X坐标（地形坐标系）。以地形单位为单位
         /// </summary>
         public int X;
 
         /// <summary>
-        /// 以地形单位为单位
+        /// 左上角的纬度。以地形单位为单位
         /// </summary>
         public int Y;
 
