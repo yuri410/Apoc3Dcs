@@ -34,6 +34,7 @@ namespace Apoc3D.Vfs
         {
             stream = fl.GetStream;
             stream.Position = 0;
+            
             ContentBinaryReader br = new ContentBinaryReader(stream);
 
             try

@@ -123,6 +123,7 @@
     <Compile Include="MathLib\Curve.cs" />
     <Compile Include="MathLib\DirectDetectData.cs" />
     <Compile Include="MathLib\Frustum.cs" />
+    <Compile Include="MathLib\Half.cs" />
     <Compile Include="MathLib\LineSegment.cs" />
     <Compile Include="MathLib\MathEx.cs" />
     <Compile Include="MathLib\Matrix.cs" />
