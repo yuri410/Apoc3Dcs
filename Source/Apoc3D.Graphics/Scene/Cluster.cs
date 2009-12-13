@@ -11,14 +11,14 @@ namespace Apoc3D.Scene
     /// <summary>
     ///  表示Cluster。场景分为若干Cluster
     /// </summary>
-    public class Cluster : IDisposable, IUpdatable
+    public class Block : IDisposable, IUpdatable
     {
         #region 常量
 
         /// <summary>
-        ///  表示Cluster的长度（512）
+        ///  表示Cluster的长度
         /// </summary>
-        public const int ClusterLength = 512;
+        public const int ClusterLength = 1024;
 
         #endregion
 
@@ -47,7 +47,7 @@ namespace Apoc3D.Scene
         /// </summary>
         /// <param name="x">以地形单位为单位</param>
         /// <param name="y">以地形单位为单位</param>
-        public Cluster(GameScene scene, int x, int y, float cellUnit)
+        public Block(GameScene scene, int x, int y, float cellUnit)
         {
             this.description.X = x;
             this.description.Y = y;
@@ -91,7 +91,7 @@ namespace Apoc3D.Scene
                 return false;
             }
 
-            Cluster neightbour = GameScene.ClusterTable[desc];
+            Block neightbour = GameScene.ClusterTable[desc];
 
             if (neightbour != null)             
             {
@@ -235,7 +235,7 @@ namespace Apoc3D.Scene
 
         #endregion
 
-        ~Cluster()
+        ~Block()
         {
             if (!Disposed)
                 Dispose(false);
@@ -268,7 +268,7 @@ namespace Apoc3D.Scene
         /// </summary>
         public int Width
         {
-            get { return Cluster.ClusterLength; }
+            get { return Block.ClusterLength; }
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace Apoc3D.Scene
         /// </summary>
         public int Height
         {
-            get { return Cluster.ClusterLength; }
+            get { return Block.ClusterLength; }
         }
 
         #endregion

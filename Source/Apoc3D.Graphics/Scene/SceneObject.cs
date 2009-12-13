@@ -71,11 +71,6 @@ namespace Apoc3D.Scene
         #region 字段
 
         /// <summary>
-        ///  【见属性】
-        /// </summary>
-        Cluster parentCluster;
-
-        /// <summary>
         ///  该物体的包围球
         /// </summary>
         public BoundingSphere BoundingSphere;
@@ -89,33 +84,6 @@ namespace Apoc3D.Scene
 
         #region 属性
 
-        /// <summary>
-        ///  由Cluster造成的X偏移，世界坐标单位
-        /// </summary>
-        [Browsable(false)]
-        public float OffsetX
-        {
-            get;
-            set;
-        }
-        /// <summary>
-        ///  由Cluster造成的Y偏移，世界坐标单位
-        /// </summary>
-        [Browsable(false)]
-        public float OffsetY
-        {
-            get;
-            set;
-        }
-        /// <summary>
-        ///  由Cluster造成的Z偏移，世界坐标单位
-        /// </summary>
-        [Browsable(false)]
-        public float OffsetZ
-        {
-            get;
-            set;
-        }
 
         /// <summary>
         ///  获取或设置一个布尔值，表示该物体是否需要更新
@@ -129,10 +97,10 @@ namespace Apoc3D.Scene
         }
 
         /// <summary>
-        ///  获取场景物体所在的GameScene对象
+        ///  获取场景物体所在的场景管理器
         /// </summary>
         [Browsable(false)]
-        public GameScene GameScene
+        public SceneManagerBase SceneManager
         {
             get;
             private set;
@@ -146,23 +114,6 @@ namespace Apoc3D.Scene
         {
             get;
             protected internal set;
-        }
-
-        /// <summary>
-        ///  获取场景物体所在的Cluster
-        /// </summary>
-        [Browsable(false)]
-        public Cluster ParentCluster
-        {
-            get { return parentCluster; }
-            set
-            {
-                parentCluster = value;
-                if (value != null)
-                {
-                    GameScene = value.GameScene;
-                }
-            }
         }
 
         /// <summary>
@@ -216,20 +167,6 @@ namespace Apoc3D.Scene
         /// <param name="sceneMgr">源场景管理器</param>
         public virtual void OnRemovedFromScene(object sender, OctreeSceneManager sceneMgr) { }
 
-        /// <summary>
-        ///  当物体换到一个新的Cluster时被引擎调用。重写的方法应调用基类中的方法。
-        /// </summary>
-        /// <param name="newCluster">新的Cluster</param>
-        public virtual void NotifyClusterChanged(Cluster newCluster)
-        {
-            float ofsX = newCluster.WorldX - OffsetX;
-            float ofsY = newCluster.WorldY - OffsetY;
-            float ofsZ = newCluster.WorldZ - OffsetZ;
-
-            BoundingSphere.Center.X -= ofsX;
-            BoundingSphere.Center.Y -= ofsY;
-            BoundingSphere.Center.Z -= ofsZ;
-        }
 
         /// <summary>
         ///  计算物体是否与拾取射线相交
@@ -250,7 +187,10 @@ namespace Apoc3D.Scene
         /// <returns></returns>
         public abstract RenderOperation[] GetRenderOperation();
 
-
+        public virtual RenderOperation[] GetRenderOperation(int level) 
+        {
+            return GetRenderOperation();
+        }
         #endregion
 
         #region IUpdatable 成员

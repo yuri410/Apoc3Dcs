@@ -50,7 +50,14 @@
     <Compile Include="Animation\TransformAnimation.cs" />
     <Compile Include="Collections\ClipPlaneCollection.cs" />
     <Compile Include="Collections\TextureWrapCollection.cs" />
+    <Compile Include="Geometry\Sphere.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RenderSystem\IRenderWindowHandler.cs" />
+    <Compile Include="RenderSystem\Line.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SceneRenderer.cs" />
     <Compile Include="Scene\Atmosphere.cs" />
     <Compile Include="Collections\SamplerStateCollection.cs" />
     <Compile Include="Desgin\MeshFaceConverter.cs" />
@@ -99,7 +106,6 @@
     <Compile Include="RenderSystem\FontManager.cs" />
     <Compile Include="RenderSystem\GraphicsAPI.cs" />
     <Compile Include="RenderSystem\Light.cs" />
-    <Compile Include="RenderSystem\Line.cs" />
     <Compile Include="RenderSystem\ObjectFactory.cs" />
     <Compile Include="RenderSystem\RenderControl.cs" />
     <Compile Include="RenderSystem\RenderStateManager.cs" />
@@ -113,13 +119,8 @@
     <Compile Include="RenderSystem\TextureManager.cs" />
     <Compile Include="RenderSystem\VertexDeclaration.cs" />
     <Compile Include="RenderSystem\VertexElement.cs" />
-    <Compile Include="Scene\Cluster.cs" />
-    <Compile Include="Scene\ClusterTable.cs" />
-    <Compile Include="Scene\ClusterTableBase.cs" />
     <Compile Include="Scene\DynamicObject.cs" />
     <Compile Include="Scene\Entity.cs" />
-    <Compile Include="GameScene.cs" />
-    <Compile Include="GameSceneBase.cs" />
     <Compile Include="Scene\IFindObjectCallBack.cs" />
     <Compile Include="Scene\OctreeSceneManager.cs" />
     <Compile Include="Scene\OctreeSceneNode.cs" />

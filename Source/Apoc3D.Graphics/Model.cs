@@ -218,17 +218,6 @@ namespace Apoc3D.Graphics
                 br.Close();
             }
         }
-
-        //public override void ReadCacheData(Stream stream)
-        //{
-        //    ReadData(new BinaryDataReader(new VirtualStream(stream)));
-        //}
-        //public override void WriteCacheData(Stream stream)
-        //{
-        //    BinaryDataWriter data = new BinaryDataWriter();
-        //    WriteData(data);
-        //    data.Save(new VirtualStream(stream));
-        //}
     }
 
     /// <summary>
@@ -395,7 +384,10 @@ namespace Apoc3D.Graphics
             }
             return opBuffer;
         }
-
+        public RenderOperation[] GetRenderOperation(int level) 
+        {
+            return GetRenderOperation();
+        }
 
         #endregion
 

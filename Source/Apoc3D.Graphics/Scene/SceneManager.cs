@@ -15,14 +15,12 @@ namespace Apoc3D.Scene
     {
         #region Fields
 
-        Cluster parentCluster;
-
         List<SceneObject> objects = new List<SceneObject>();
 
         #endregion
 
         #region Properties
-
+       
         /// <summary>
         ///  获取一个System.Boolean，表示该对象是否已经释放
         /// </summary>
@@ -32,44 +30,16 @@ namespace Apoc3D.Scene
             private set;
         }
 
-        public Cluster ParentCluster
-        {
-            get { return parentCluster; }
-        }
-
         public List<SceneObject> SceneObjects
         {
             get { return objects; }
         }
-
-        public float OffsetX
-        {
-            get;
-            private set;
-        }
-
-        public float OffsetY
-        {
-            get;
-            private set;
-        }
-
-        public float OffsetZ
-        {
-            get;
-            private set;
-        }
+       
         #endregion
 
         #region Constructor
-        protected SceneManagerBase(Cluster cluster)
+        protected SceneManagerBase()
         {
-            this.OffsetX = cluster.WorldX;
-            this.OffsetY = cluster.WorldY;
-            this.OffsetZ = cluster.WorldZ;
-
-            this.parentCluster = cluster;
-
             BuildSceneManager();
         }
         #endregion
@@ -87,12 +57,6 @@ namespace Apoc3D.Scene
         /// <param name="obj">加入的物体</param>
         public virtual void AddObjectToScene(SceneObject obj)
         {
-            obj.OffsetX = OffsetX;
-            obj.OffsetY = OffsetY;
-            obj.OffsetZ = OffsetZ;
-
-            obj.ParentCluster = parentCluster;
-
             objects.Add(obj);
         }
 
@@ -190,9 +154,6 @@ namespace Apoc3D.Scene
                 {
                     if (ops[k].Geomentry != null)
                     {
-                        Matrix ofsTrans = Matrix.Translation(obj.OffsetX, obj.OffsetY, obj.OffsetZ);
-
-                        Matrix.Multiply(ref ops[k].Transformation, ref ofsTrans, out ops[k].Transformation);
                         Matrix.Multiply(ref ops[k].Transformation, ref obj.Transformation, out ops[k].Transformation);
 
                         Material mate = ops[k].Material;
@@ -344,8 +305,7 @@ namespace Apoc3D.Scene
 
         #region 构造函数
 
-        public SceneManager(Cluster cluster, Atmosphere atmos)
-            : base(cluster)
+        public SceneManager(Atmosphere atmos)
         {
         }
 

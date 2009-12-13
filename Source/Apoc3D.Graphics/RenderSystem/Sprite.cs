@@ -153,6 +153,10 @@ namespace Apoc3D.Graphics
         {
             return bufferedOp.Elements;
         }
+        public RenderOperation[] GetRenderOperation(int level)
+        {
+            return bufferedOp.Elements;
+        }
 
         #endregion
 

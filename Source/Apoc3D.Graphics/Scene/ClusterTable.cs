@@ -7,9 +7,9 @@ namespace Apoc3D.Scene
     /// <summary>
     ///  可以快速查询Cluster的哈希表
     /// </summary>
-    public class ClusterTable : ClusterTableBase<Cluster>
+    public class ClusterTable : ClusterTableBase<Block>
     {
-        public ClusterTable(Cluster[] clusters)
+        public ClusterTable(Block[] clusters)
             : base(clusters)
         {
         }

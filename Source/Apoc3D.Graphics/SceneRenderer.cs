@@ -1,79 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using Apoc3D.Collections;
-using Apoc3D.Config;
-using Apoc3D.Graphics;
 using Apoc3D.Graphics.Effects;
-using Apoc3D.MathLib;
-using Apoc3D.Vfs;
 using Apoc3D.Scene;
+using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics
 {
-    public unsafe abstract class GameSceneBase<CType, SDType> : IDisposable, ISceneRenderer
-        where CType : Block
-        where SDType : SceneDataBase
+    public class SceneRendererParameter 
     {
-        const int MaxInstance = 25;
-        const float PlanetRadius = 6371f;
-
-        public static float GetTileLegth(float rad)
+        public bool UseShadow
         {
-            return (float)Math.Sin(rad) * PlanetRadius;
+            get;
+            private set;
         }
-        public static float GetTileArc(float len)
+        
+        public SceneManagerBase SceneManager
         {
-            return (float)Math.Asin(len / PlanetRadius);
+            get;
+            private set;
         }
-        public static Vector3 GetPosition(float x, float y)
+        public IPostSceneRenderer PostRenderer
         {
-            // 微积分 球面参数方程
-            Vector3 result;
-            float py = (float)Math.Cos(y);
-            float rr = PlanetRadius * py;
-
-            result.Y = (float)Math.Sqrt(PlanetRadius * PlanetRadius - py * PlanetRadius);
-            result.X = (float)Math.Cos(x) * rr;
-            result.Z = (float)Math.Sin(x) * rr;
-
-            return result;
-        }
-        public static Vector3 GetNormal(float x, float y) 
-        {
-            Vector3 result = GetPosition(x, y);
-            result.Normalize();
-            return result;
-        }
-        public static Vector3 GetTangentY(float x,float y)
-        {
-            Vector3 result = GetPosition(x, y + MathEx.PiOver2);
-            result.Normalize();
-
-            return result;
-        }
-        public static Vector3 GetTangentX(float x, float y) 
-        {
-            Vector3 result = GetPosition(x + MathEx.PiOver2, y);
-            result.Normalize();
-
-            return result;
+            get;
+            private set;
         }
 
-
+    }
+    public class SceneRenderer : ISceneRenderer
+    {
         RenderSystem renderSystem;
         ObjectFactory factory;
-
-        /// <summary>
-        ///  坐标系指示的VertexBuffer
-        /// </summary>
-        VertexBuffer axis;
-
-        /// <summary>
-        ///  坐标系指示的RenderOperation
-        /// </summary>
-        RenderOperation axisOp;
 
         /// <summary>
         /// 摄像机列表，不包含effect的
@@ -81,30 +39,10 @@ namespace Apoc3D.Graphics
         List<ICamera> cameraList;
 
         ShadowMap shadowMap;
-
         IPostSceneRenderer postRenderer;
-        //Instancing instancing;
-
-        protected FastList<CType> visibleClusters;
-
-        ///// <summary>
-        /////  按效果批次分组，一个效果批次有一个RenderOperation列表
-        ///// </summary>
-        //protected Dictionary<string, FastList<RenderOperation>> batchTable;
-
-        ///// <summary>
-        /////  按效果批次名称查询效果的哈希表
-        ///// </summary>
-        //protected Dictionary<string, Effect> effects;
-
-        //Dictionary<string, Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>> instanceTable;
+        SceneManagerBase sceneManager;
 
         PassData batchData = new PassData();
-
-        //public ClusterTable ClusterTable
-        //{
-        //    get { return clusterTable; }
-        //}
 
         /// <summary>
         ///  获取或设置后期效果渲染器
@@ -114,43 +52,14 @@ namespace Apoc3D.Graphics
             get { return postRenderer; }
             set { postRenderer = value; }
         }
-
-        public FastList<CType> VisisbleClusters
+        public ShadowMap ShadowMap
         {
-            get { return visibleClusters; }
+            get { return shadowMap; }
         }
-
-        public int ClusterCount
-        {
-            get { return visibleClusters.Count; }
-        }
-
-        /// <summary>
-        /// Gets the number of primitives being rendered.
-        /// 获取渲染的图元数量
-        /// </summary>
-        public int PrimitiveCount
+        public Atmosphere Atmosphere
         {
             get;
-            protected set;
-        }
-
-        /// <summary>
-        /// 获取渲染的顶点数量
-        /// </summary>
-        public int VertexCount
-        {
-            get;
-            protected set;
-        }
-
-        /// <summary>
-        /// 获取渲染批次数量
-        /// </summary>
-        public int BatchCount
-        {
-            get;
-            protected set;
+            private set;
         }
 
         /// <summary>
@@ -162,125 +71,19 @@ namespace Apoc3D.Graphics
             protected set { batchData.RenderedObjectCount = value; }
         }
 
-        ///// <summary>
-        /////  获取当前渲染状态的摄像机
-        ///// </summary>
-        //public Camera CurrentCamera
-        //{
-        //    get;
-        //    protected set;
-        //}
-
-        /// <summary>
-        ///  场景的大气效果渲染器
-        /// </summary>
-        public Atmosphere Atmosphere
+        public SceneRenderer(RenderSystem rs, SceneRendererParameter sm)
         {
-            get;
-            private set;
-        }
+            this.renderSystem = rs;
+            this.factory = rs.ObjectFactory;
 
-        /// <summary>
-        ///  用于Cluster查找的单位
-        /// </summary>
-        public float CellUnit
-        {
-            get;
-            private set;
-        }
-
-        public SDType Data
-        {
-            get;
-            private set;
-        }
-
-        public ShadowMap ShadowMap
-        {
-            get { return shadowMap; }
-        }
-
-        //SkyBox LoadSkybox(string configName)
-        //{
-        //    FileLocation fl = FileSystem.Instance.Locate(Path.Combine(Paths.Configs, "skyboxes.ini"), FileLocateRules.Default);
-        //    Apoc3D.Config.Configuration config = ConfigurationManager.Instance.CreateInstance(fl);
-
-        //    ConfigurationSection sect = config[configName];
-
-        //    SkyBox result = new SkyBox(renderSystem);
-
-        //    FileLocation day = FileSystem.Instance.Locate(Path.Combine(Paths.DataSkybox, sect["DayTexture"]), FileLocateRules.Default);
-        //    FileLocation night = FileSystem.Instance.Locate(Path.Combine(Paths.DataSkybox, sect["NightTexture"]), FileLocateRules.Default);
-        //    result.LoadTexture(day, night);
-
-        //    return result;
-        //}
-
-
-        /// <summary>
-        ///  建立坐标指示
-        /// </summary>
-        void BuildAxis()
-        {
-            VertexDeclaration axisDecl = factory.CreateVertexDeclaration(VertexPC.Elements);
-            axis = factory.CreateVertexBuffer(6, axisDecl, BufferUsage.Static);
-            VertexPC* dst = (VertexPC*)axis.Lock(0, 0, LockMode.None);
-
-            Vector3 centre = new Vector3();
-            //centre.Y += 15;
-
-            float ext = 100;
-
-            dst[0] = new VertexPC { pos = centre, diffuse = (int)ColorValue.Red.PackedValue };
-            dst[1] = new VertexPC { pos = new Vector3(ext + centre.X, centre.Y, centre.Z), diffuse = (int)ColorValue.Red.PackedValue };
-            dst[2] = new VertexPC { pos = centre, diffuse = (int)ColorValue.Green.PackedValue };
-            dst[3] = new VertexPC { pos = new Vector3(centre.X, centre.Y + ext, centre.Z), diffuse = (int)ColorValue.Green.PackedValue };
-            dst[4] = new VertexPC { pos = centre, diffuse = (int)ColorValue.Blue.PackedValue };
-            dst[5] = new VertexPC { pos = new Vector3(centre.X, centre.Y, centre.Z + ext), diffuse = (int)ColorValue.Blue.PackedValue };
-
-            axis.Unlock();
-
-
-            axisOp.Geomentry = new GeomentryData(null);
-
-            axisOp.Geomentry.IndexBuffer = null;
-            axisOp.Material = Material.DefaultMaterial;
-            axisOp.Geomentry.PrimCount = 3;
-            axisOp.Geomentry.PrimitiveType = RenderPrimitiveType.LineList;
-            axisOp.Transformation = Matrix.Identity;
-            axisOp.Geomentry.VertexBuffer = axis; ;
-            axisOp.Geomentry.VertexCount = 6;
-            axisOp.Geomentry.VertexDeclaration = axisDecl;
-            axisOp.Geomentry.VertexSize = sizeof(VertexPC);
-        }
-
-
-        public GameSceneBase(RenderSystem device, SDType data)
-        {
-            this.renderSystem = device;
-            this.factory = device.ObjectFactory;
-
-            //this.clusterTable = data.ClusterTable;
+            this.postRenderer = sm.PostRenderer;
+            this.sceneManager = sm.SceneManager;
+            if (sm.UseShadow)
+            {
+                shadowMap = new ShadowMap(rs);
+            }
             this.cameraList = new List<ICamera>();
-            this.Atmosphere = new Atmosphere(device, data.AtmosphereData);
-            this.Data = data;
-
-            visibleClusters = new FastList<CType>();
-
-            BuildAxis();
-
-            CellUnit = data.CellUnit;
-
-
-
-
-            //this.instancing = new Instancing(device);
-
-            this.shadowMap = new ShadowMap(device);
-            this.postRenderer = new PostRenderer(device);
-            EffectParams.ShadowMap = shadowMap;
         }
-
 
         /// <summary>
         ///  添加摄像机
@@ -395,34 +198,6 @@ namespace Apoc3D.Graphics
                     }
                 }
             }
-        }
-        void AddAxisOperation()
-        {
-            //Effect effect;
-            //if (!effects.TryGetValue(string.Empty, out effect))
-            //{
-            //    effects.Add(string.Empty, null);
-            //}
-            
-            FastList<RenderOperation> opList;
-            if (!batchData.batchTable.TryGetValue(axisOp.Material, out opList))
-            {
-                opList = new FastList<RenderOperation>();
-                batchData.batchTable.Add(axisOp.Material, opList);
-            }
-            opList.Add(axisOp);
-
-        }
-
-        public abstract SceneObject FindObject(LineSegment ray);
-        protected abstract void PrepareVisibleClusters(ICamera cam);
-
-        /// <summary>
-        ///  在渲染物体之前（包括阴影），进行渲染前操作。对于每个摄像机都会调用。
-        /// </summary>
-        protected virtual void PreRender()
-        {
-
         }
 
         /// <summary>
@@ -576,116 +351,6 @@ namespace Apoc3D.Graphics
             }
         }
 
-        //void RenderList(Material material, FastList<RenderOperation> opList)
-        //{
-        //    RenderStateManager states = renderSystem.RenderStates;
-        //    renderSystem.BindShader((PixelShader)null);
-        //    renderSystem.BindShader((VertexShader)null);
-
-        //    Effect effect = material.Effect;
-
-        //    if (effect == null)
-        //    {
-        //        effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
-        //    }
-
-        //    states.AlphaBlendEnable = !material.IsTransparent;
-        //    states.CullMode = material.CullMode;
-
-        //    int passCount = effect.Begin();
-        //    for (int p = 0; p < passCount; p++)
-        //    {
-        //        effect.BeginPass(p);
-
-        //        for (int j = 0; j < opList.Count; j++)
-        //        {
-        //            RenderOperation op = opList[j];
-        //            GeomentryData gm = op.Geomentry;
-
-        //            if (gm.VertexCount == 0)
-        //                continue;
-
-        //            BatchCount++;
-        //            PrimitiveCount += gm.PrimCount;
-        //            VertexCount += gm.VertexCount;
-
-        //            //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
-
-        //            effect.Setup(material, ref op);
-
-
-        //            renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
-        //            renderSystem.VertexFormat = gm.Format;
-        //            renderSystem.VertexDeclaration = gm.VertexDeclaration;
-
-        //            if (gm.UseIndices)
-        //            {
-        //                renderSystem.Indices = gm.IndexBuffer;
-        //                renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
-        //                    gm.BaseVertex, 0,
-        //                    gm.VertexCount, gm.BaseIndexStart,
-        //                    gm.PrimCount);
-        //            }
-        //            else
-        //            {
-        //                renderSystem.DrawPrimitives(gm.PrimitiveType, 0, gm.PrimCount);
-        //            }
-        //        } // for (int j = 0; j < opList.Count; j++)
-        //        effect.EndPass();
-        //    }
-        //    effect.End();
-        //}
-
-        //void RenderSMList(string name, FastList<RenderOperation> opList)
-        //{
-        //    Effect effect = effects[name];
-        //    if (effect == null)
-        //        effect = shadowMap.DefaultSMGen;
-
-        //    effect.BeginShadowPass();
-
-        //    for (int j = 0; j < opList.Count; j++)
-        //    {
-        //        RenderOperation op = opList[j];
-        //        GeomentryData gm = op.Geomentry;
-
-        //        if (gm.VertexCount == 0)
-        //            continue;
-
-        //        BatchCount++;
-        //        PrimitiveCount += gm.PrimCount;
-        //        VertexCount += gm.VertexCount;
-
-        //        Material mate = op.Material;
-        //        if (mate == null)
-        //            mate = Material.DefaultMaterial;
-
-        //        //device.SetRenderState(RenderState.AlphaTestEnable, mate.IsTransparent);
-        //        renderSystem.SetRenderState<Cull>(RenderState.CullMode, mate.CullMode);
-
-        //        effect.SetupShadowPass(mate, ref op);
-
-        //        renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
-        //        renderSystem.VertexFormat = gm.Format;
-        //        renderSystem.VertexDeclaration = gm.VertexDeclaration;
-
-        //        if (gm.UseIndices)
-        //        {
-        //            renderSystem.Indices = gm.IndexBuffer;
-        //            renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
-        //                gm.BaseVertex, 0,
-        //                gm.VertexCount, gm.BaseIndexStart,
-        //                gm.PrimCount);
-        //        }
-        //        else
-        //        {
-        //            renderSystem.DrawPrimitives(gm.PrimitiveType, 0, gm.PrimCount);
-        //        }
-        //    }
-
-        //    effect.EndShadowPass();
-        //}
-
         /// <summary>
         ///  渲染整个场景
         /// </summary>
@@ -706,28 +371,24 @@ namespace Apoc3D.Graphics
         /// </remarks>
         public virtual void RenderScene()
         {
-            VertexCount = 0;
-            BatchCount = 0;
-            PrimitiveCount = 0;
             batchData.RenderedObjectCount = 0;
 
-            EffectParams.Atmosphere = Atmosphere;
-            EffectParams.TerrainHeightScale = Data.TerrainSettings.HeightScale;
+            //EffectParams.Atmosphere = Atmosphere;
+            //EffectParams.TerrainHeightScale = Data.TerrainSettings.HeightScale;
 
             for (int i = 0; i < cameraList.Count; i++)
             {
                 EffectParams.CurrentCamera = cameraList[i];
                 CurrentCamera = cameraList[i];
 
-                PrepareVisibleClusters(EffectParams.CurrentCamera);
+                //PrepareVisibleClusters(EffectParams.CurrentCamera);
 
-                for (int j = 0; j < visibleClusters.Count; j++)
-                {
-                    visibleClusters[j].SceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
-                }
+                //for (int j = 0; j < visibleClusters.Count; j++)
+                //{
+                //    visibleClusters[j].SceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
+                //}
+                sceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
 
-                AddAxisOperation();
-                PreRender();
 
                 renderSystem.BindShader((PixelShader)null);
                 renderSystem.BindShader((VertexShader)null);
@@ -841,60 +502,7 @@ namespace Apoc3D.Graphics
             {
                 cameraList[i].Update(dt);
             }
-            for (int i = 0; i < visibleClusters.Count; i++)
-            {
-                visibleClusters[i].Update(dt);
-            }
-            Atmosphere.Update(dt);
         }
-
-        #region IDisposable 成员
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                shadowMap.Dispose();
-                //instancing.Dispose();
-                postRenderer.Dispose();
-
-                axis.Dispose();
-                batchData.Dispose();
-                //visibleObjects.Clear();
-
-               
-                //effects.Clear();
-
-            }
-            shadowMap = null;
-            //instancing = null;
-            postRenderer = null;
-            batchData = null;
-            axis = null;
-            cameraList = null;
-        }
-
-        public bool Disposed
-        {
-            get;
-            private set;
-        }
-
-        public void Dispose()
-        {
-            if (!Disposed)
-            {
-                Dispose(true);
-
-                Disposed = true;
-            }
-            else
-            {
-                throw new ObjectDisposedException(ToString());
-            }
-        }
-
-        #endregion
 
     }
 }

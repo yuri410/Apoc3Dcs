@@ -5,7 +5,7 @@ using System.Text;
 namespace Apoc3D.Scene
 {
     public class ClusterTableBase<CType> : IEnumerable<CType>
-         where CType : Cluster
+         where CType : Block
     {
         class Enumrator : IEnumerator<CType>
         {

@@ -88,4 +88,17 @@ namespace Apoc3D.Graphics.Animation
 
         #endregion
     }
+
+    public class NoAnimation : AnimationInstance 
+    {
+        public NoAnimation()
+            : base(new TransformAnimation(1))
+        {
+
+        }
+        public override Matrix GetTransform(int index)
+        {
+            return Matrix.Identity;
+        }
+    }
 }

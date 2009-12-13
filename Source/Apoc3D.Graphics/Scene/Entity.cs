@@ -74,8 +74,6 @@ namespace Apoc3D.Scene
         /// </summary>
         protected bool isTransformDirty;
 
-        bool dontDraw;
-
         Vector3 boundingSphereOffset;
 
         /// <summary>
@@ -257,26 +255,6 @@ namespace Apoc3D.Scene
         #region 方法
 
         /// <summary>
-        ///  当物体换到一个新的Cluster时被引擎调用。重写的方法应调用基类中的方法。
-        /// </summary>
-        /// <param name="newCluster">新的Cluster</param>
-        public override void NotifyClusterChanged(Cluster newCluster)
-        {
-            float ofsX = newCluster.WorldX - OffsetX;
-            float ofsY = newCluster.WorldY - OffsetY;
-            float ofsZ = newCluster.WorldZ - OffsetZ;
-
-            BoundingSphere.Center.X -= ofsX;
-            BoundingSphere.Center.Y -= ofsY;
-            BoundingSphere.Center.Z -= ofsZ;
-
-            position.X -= ofsX;
-            position.Y -= ofsY;
-            position.Z -= ofsZ;
-
-        }
-
-        /// <summary>
         ///  更新变换矩阵。
         /// </summary>
         public virtual void UpdateTransform()
@@ -344,16 +322,16 @@ namespace Apoc3D.Scene
                 ModelL1.Update(dt);
             }
 
-            if (GameScene != null)
-            {
-                ICamera camera = GameScene.CurrentCamera;
+            //if (SceneManager != null)
+            //{
+            //    ICamera camera = SceneManager.CurrentCamera;
 
-                float dist = Vector3.Distance(camera.Position, BoundingSphere.Center);
+            //    float dist = Vector3.Distance(camera.Position, BoundingSphere.Center);
 
-            //    HasLodModel = dist > BoundingSphere.Radius * 15f;
+            ////    HasLodModel = dist > BoundingSphere.Radius * 15f;
 
-                dontDraw = (dist - BoundingSphere.Radius) > camera.FarPlane * 0.75f;
-            }
+            //    dontDraw = (dist - BoundingSphere.Radius) > camera.FarPlane * 0.75f;
+            //}
             //else
             //{
             //    HasLodModel = false;

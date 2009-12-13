@@ -12,21 +12,20 @@ namespace Apoc3D.Scene
     /// </summary>
     public class OctreeSceneManager : SceneManagerBase
     {
-        OctreeSceneNode octRootNode;
+        protected OctreeSceneNode octRootNode;
 
-        Queue<OctreeSceneNode> queue;
+        protected Queue<OctreeSceneNode> queue;
 
-        List<DynamicObject> dynObjs;
+        protected List<DynamicObject> dynObjs;
 
-        List<SceneObject> farObjects;
-        ExistTable<SceneObject> farObjTable;
+        protected List<SceneObject> farObjects;
+        protected ExistTable<SceneObject> farObjTable;
 
-        internal OctreeBox range;
-        Vector3 min;
-        Vector3 max;
+        protected internal OctreeBox range;
+        protected Vector3 min;
+        protected Vector3 max;
 
-        public OctreeSceneManager(Cluster cluster, OctreeBox range, float minBVSize)
-            : base(cluster)
+        public OctreeSceneManager(OctreeBox range, float minBVSize)
         {
             this.range = range;
             MinimumBVSize = minBVSize;
@@ -97,21 +96,10 @@ namespace Apoc3D.Scene
             }
             else
             {
-                if (!ParentCluster.NotifyObjectLeaved(obj))
+                if (farObjTable.Exists(obj))
                 {
-                    if (!farObjTable.Exists(obj))
-                    {
-                        farObjects.Add(obj);
-                        farObjTable.Add(obj);
-                    }
-                }
-                else
-                {
-                    if (farObjTable.Exists(obj))
-                    {
-                        farObjTable.Remove(obj);
-                        farObjects.Remove(obj);
-                    }
+                    farObjTable.Remove(obj);
+                    farObjects.Remove(obj);
                 }
             }
         }
@@ -167,9 +155,6 @@ namespace Apoc3D.Scene
 
                     // if the node does't intersect the frustum we don't give a damn
                     Vector3 c1 = node.BoundingSphere.Center;
-                    c1.X += OffsetX;
-                    c1.Y += OffsetY;
-                    c1.Z += OffsetZ;
 
                     if (frus.IntersectsSphere(ref c1, node.BoundingSphere.Radius))
                     {
@@ -189,9 +174,6 @@ namespace Apoc3D.Scene
                             SceneObject curObj = node.AttchedObjects.Elements[i];
 
                             Vector3 c2 = node.BoundingSphere.Center;
-                            c2.X += OffsetX;
-                            c2.Y += OffsetY;
-                            c2.Z += OffsetZ;
 
                             if (frus.IntersectsSphere(ref c2, curObj.BoundingSphere.Radius))
                             {
@@ -210,10 +192,6 @@ namespace Apoc3D.Scene
 
         public override SceneObject FindObject(Ray ray)
         {
-            ray.Position.X -= OffsetX;
-            ray.Position.Y -= OffsetY;
-            ray.Position.Z -= OffsetZ;
-
             SceneObject result = null;
             float nearest = float.MaxValue;
             if (queue.Count == 0)
@@ -288,10 +266,6 @@ namespace Apoc3D.Scene
 
         public override SceneObject FindObject(Ray ray, IObjectFilter cbk)
         {
-            ray.Position.X -= OffsetX;
-            ray.Position.Y -= OffsetY;
-            ray.Position.Z -= OffsetZ;
-
             SceneObject result = null;
             float nearest = float.MaxValue;
             if (queue.Count == 0)
@@ -382,9 +356,6 @@ namespace Apoc3D.Scene
                 OctreeSceneNode node = queue.Dequeue();
 
                 Vector3 center = node.BoundingSphere.Center;
-                center.X += OffsetX;
-                center.Y += OffsetY;
-                center.Z += OffsetZ;
 
                 // if the node does't intersect the frustum we don't give a damn
                 if (frus.IntersectsSphere(ref center, node.BoundingSphere.Radius))

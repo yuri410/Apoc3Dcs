@@ -18,6 +18,12 @@ namespace Apoc3D.Graphics.Animation
     {
         MaterialAnimation data;
 
+        static MaterialAnimationInstance defAnim = new MaterialAnimationInstance(new MaterialAnimation(1, 1));
+        public static MaterialAnimationInstance DefaultAnimation
+        {
+            get { return defAnim; }
+        }
+
         public MaterialAnimationInstance(MaterialAnimation data)
             : base(data)
         {

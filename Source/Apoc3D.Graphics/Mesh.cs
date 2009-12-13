@@ -520,7 +520,7 @@ namespace Apoc3D.Graphics
             : base(dev)
         {
         }
-
+        
         public MeshData(GameMesh mesh)
             : base(mesh.RenderSystem)
         {
@@ -1058,7 +1058,7 @@ namespace Apoc3D.Graphics
 
             for (int i = 0; i < materials.Length; i++)
             {
-                this.matAnims[i] = new MaterialAnimationInstance(new MaterialAnimation(1, 1));
+                this.matAnims[i] = MaterialAnimationInstance.DefaultAnimation;
             }
         }
 
@@ -1139,7 +1139,10 @@ namespace Apoc3D.Graphics
             }
             return bufferedOp;
         }
-
+        public RenderOperation[] GetRenderOperation(int level)
+        {
+            return GetRenderOperation();
+        }
         #endregion
 
         #region IDisposable 成员

@@ -15,6 +15,6 @@ namespace Apoc3D.Graphics
         /// <returns></returns>
         RenderOperation[] GetRenderOperation();
 
-        
+        RenderOperation[] GetRenderOperation(int level);
     }
 }
