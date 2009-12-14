@@ -72,7 +72,9 @@ namespace Apoc3D.Config
             sw.Close();
         }
 
-
+        public IniConfiguration()
+            : base(string.Empty, CaseInsensitiveStringComparer.Instance)
+        { }
         public IniConfiguration(string file)
             : this(new FileLocation(file))
         { }
