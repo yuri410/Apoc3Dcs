@@ -87,7 +87,7 @@ namespace Apoc3D.Ide
             ToolManager.Instance.RegisterToolType(new ExplorerWndFactory());
             ToolManager.Instance.RegisterToolType(new ToolBoxFactory());
 
-            ConverterManager.Instance.Register(new DispMapConverter());
+            //ConverterManager.Instance.Register(new DispMapConverter());
             ConverterManager.Instance.Register(new NormalMapConverter());
 
             //if (configs.GamePath.Length > 0)

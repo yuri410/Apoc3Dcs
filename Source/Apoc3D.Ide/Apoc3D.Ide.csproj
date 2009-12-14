@@ -73,7 +73,6 @@
     <Compile Include="Converters\ConverterBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\DispMapConverter.cs" />
     <Compile Include="Converters\NormalMapConvDlg.cs">
       <SubType>Form</SubType>
     </Compile>
