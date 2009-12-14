@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Apoc3D.Core.MathLib
+namespace Apoc3D.MathLib
 {
     public struct Half
     {
@@ -61,7 +61,19 @@ namespace Apoc3D.Core.MathLib
         {
             this.value = Convert(value);
         }
-
+        public Half(ushort value)
+        {
+            this.value = value;
+        }
+        public static float[] ConvertToSingle(Half[] values)
+        {
+            float[] result = new float[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                result[i] = Half.Convert(values[i].InternalValue);
+            }
+            return result;
+        }
         public static Half[] ConvertToHalf(float[] floats)
         {
             Half[] result = new Half[floats.Length];

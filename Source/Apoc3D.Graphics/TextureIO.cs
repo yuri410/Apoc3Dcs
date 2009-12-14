@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Apoc3D.MathLib;
 using Apoc3D.Media;
 using Apoc3D.Vfs;
 
@@ -21,7 +22,7 @@ namespace Apoc3D.Graphics
         ///  表示纹理的宽度
         /// </summary>
         public int Width;
-        
+
         /// <summary>
         ///  纹理的高度
         /// </summary>
@@ -82,7 +83,7 @@ namespace Apoc3D.Graphics
         {
             ContentBinaryReader br = new ContentBinaryReader(rl);
 
-            if (br.ReadInt32() == ID) 
+            if (br.ReadInt32() == ID)
             {
                 BinaryDataReader data = br.ReadBinaryData();
 
@@ -110,15 +111,15 @@ namespace Apoc3D.Graphics
                     this.Content = br1.ReadBytes(ContentSize);
                 }
                 else
-                {                    
+                {
                     this.Content = internalLoadBuffer;
 
-                    br1.Read(Content, 0, ContentSize);                    
+                    br1.Read(Content, 0, ContentSize);
                 }
                 br1.Close();
 
                 data.Close();
-            }            
+            }
 
             br.Close();
         }
@@ -129,4 +130,90 @@ namespace Apoc3D.Graphics
         }
     }
 
+    public unsafe struct TDMP16IO
+    {
+        static readonly string XllCornerTag = "xllcorner";
+        static readonly string YllCornerTag = "yllcorner";
+        static readonly string XSpanTag = "xspan";
+        static readonly string YSpanTag = "yspan";
+
+        static readonly string WidthTag = "width";
+        static readonly string HeightTag = "height";
+        static readonly string BitsTag = "bits";
+        static readonly string DataTag = "data";
+
+        public float Xllcorner;
+        public float Yllcorner;
+        public float XSpan;
+        public float YSpan;
+        public int Width;
+        public int Height;
+
+        public Half[] Data;
+
+        public int Bits { get { return 16; } }
+
+        public void Load(ResourceLocation rl)
+        {
+            ContentBinaryReader br = new ContentBinaryReader(rl);
+
+            BinaryDataReader data = br.ReadBinaryData();
+            Xllcorner = data.GetDataSingle(XllCornerTag);
+            Yllcorner = data.GetDataSingle(YllCornerTag);
+
+            Width = data.GetDataInt32(WidthTag);
+            Height = data.GetDataInt32(HeightTag);
+
+            XSpan = data.GetDataSingle(XSpanTag, 5f);
+            YSpan = data.GetDataSingle(YSpanTag, 5f);
+
+            int bits = data.GetDataInt32(BitsTag);
+            if (bits != Bits)
+                throw new DataFormatException();
+
+            Data = new Half[Height * Width];
+            ContentBinaryReader br2 = data.GetData(DataTag);
+
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    Data[i * Width + j] = new Half(br.ReadUInt16());
+                }
+            }
+
+            br2.Close();
+
+            br.Close();
+        }
+
+        public void Save(Stream stream)
+        {
+            BinaryDataWriter result = new BinaryDataWriter();
+
+            result.AddEntry(XllCornerTag, Xllcorner);
+            result.AddEntry(YllCornerTag, Yllcorner);
+            result.AddEntry(WidthTag, Width);
+            result.AddEntry(HeightTag, Height);
+            result.AddEntry(XSpanTag, XSpan);
+            result.AddEntry(YSpanTag, YSpan);
+
+            result.AddEntry(BitsTag, 16);
+
+            Stream dataStream = result.AddEntryStream(DataTag);
+
+            ContentBinaryWriter bw = new ContentBinaryWriter(dataStream);
+            for (int i = 0; i < Data.Length; i++)
+            {
+                bw.Write(Data[i].InternalValue);
+            }
+
+            bw.Close();
+
+            bw = new ContentBinaryWriter(stream);
+            bw.Write(result);
+            bw.Close();
+        }
+
+    }
 }

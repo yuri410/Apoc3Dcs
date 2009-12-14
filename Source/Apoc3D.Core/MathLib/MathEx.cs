@@ -51,6 +51,26 @@ namespace Apoc3D.MathLib
         {
             return d * d;
         }
+        /// <summary>
+        /// 该函数计算插值曲线sin(x*PI)/(x*PI)的值 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static float Sinc(float x)
+        {
+            //下面是它的近似拟合表达式
+            const float a = -1; //a还可以取 a=-2,-1,-0.75,-0.5等等，起到调节锐化或模糊程度的作用
+
+            if (x < 0) x = -x; //x=abs(x);
+            float x2 = x * x;
+            float x3 = x2 * x;
+            if (x <= 1)
+                return (a + 2) * x3 - (a + 3) * x2 + 1;
+            else if (x <= 2)
+                return a * x3 - (5 * a) * x2 + (8 * a) * x - (4 * a);
+            else
+                return 0;
+        }
 
 
         public static bool IsFloatNormal(float f)
