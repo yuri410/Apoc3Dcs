@@ -38,6 +38,7 @@ namespace Apoc3D.Graphics
         /// </summary>
         public ImagePixelFormat Format;
 
+        
         /// <summary>
         ///  表示纹理的大小，包括所有的层
         /// </summary>
@@ -130,82 +131,157 @@ namespace Apoc3D.Graphics
         }
     }
 
-    public unsafe struct TDMP16IO
+    public unsafe class TDMPIO
     {
-        static readonly string XllCornerTag = "xllcorner";
-        static readonly string YllCornerTag = "yllcorner";
-        static readonly string XSpanTag = "xspan";
-        static readonly string YSpanTag = "yspan";
-
-        static readonly string WidthTag = "width";
-        static readonly string HeightTag = "height";
-        static readonly string BitsTag = "bits";
-        static readonly string DataTag = "data";
-
         public float Xllcorner;
         public float Yllcorner;
         public float XSpan;
         public float YSpan;
         public int Width;
         public int Height;
+        public float[] Data;
 
-        public Half[] Data;
+        public int Bits;
 
-        public int Bits { get { return 16; } }
+        public static readonly string XllCornerTag = "xllcorner";
+        public static readonly string YllCornerTag = "yllcorner";
+        public static readonly string XSpanTag = "xspan";
+        public static readonly string YSpanTag = "yspan";
 
-        public void Load(ResourceLocation rl)
+        public static readonly string WidthTag = "width";
+        public static readonly string HeightTag = "height";
+        public static readonly string BitsTag = "bits";
+        public static readonly string DataTag = "data";
+
+        public virtual void Load(ResourceLocation rl) 
         {
             ContentBinaryReader br = new ContentBinaryReader(rl);
 
             BinaryDataReader data = br.ReadBinaryData();
-            Xllcorner = data.GetDataSingle(XllCornerTag);
-            Yllcorner = data.GetDataSingle(YllCornerTag);
+            Xllcorner = data.GetDataSingle(TDMPIO.XllCornerTag);
+            Yllcorner = data.GetDataSingle(TDMPIO.YllCornerTag);
 
-            Width = data.GetDataInt32(WidthTag);
-            Height = data.GetDataInt32(HeightTag);
+            Width = data.GetDataInt32(TDMPIO.WidthTag);
+            Height = data.GetDataInt32(TDMPIO.HeightTag);
 
-            XSpan = data.GetDataSingle(XSpanTag, 5f);
-            YSpan = data.GetDataSingle(YSpanTag, 5f);
+            XSpan = data.GetDataSingle(TDMPIO.XSpanTag, 5f);
+            YSpan = data.GetDataSingle(TDMPIO.YSpanTag, 5f);
 
-            int bits = data.GetDataInt32(BitsTag);
-            if (bits != Bits)
-                throw new DataFormatException();
+            Bits = data.GetDataInt32(TDMPIO.BitsTag, 32);
+            
+            Data = new float[Height * Width];
+            ContentBinaryReader br2 = data.GetData(TDMPIO.DataTag);
 
-            Data = new Half[Height * Width];
-            ContentBinaryReader br2 = data.GetData(DataTag);
+            switch (Bits) 
+            {   
+                case 8:
+                    for (int i = 0; i < Height; i++)
+                    {
+                        for (int j = 0; j < Width; j++)
+                        {
+                            Data[i * Width + j] = br.ReadByte();
+                        }
+                    }
+                    break;
+                case 12:
+                    int len = Height * Width;
+                    for (int i = 0; i < len; i += 2)
+                    {
+                        byte a = br.ReadByte();
+                        byte b = br.ReadByte();
+                        byte c = br.ReadByte();
 
-            for (int i = 0; i < Height; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    Data[i * Width + j] = new Half(br.ReadUInt16());
-                }
+                        ushort v1 = (ushort)(a | ((0xF & (b >> 4)) << 8));
+                        ushort v2 = (ushort)(c | ((0xF & b) << 8));
+
+                        Data[i] = v1 / (float)(2 << 12);
+                        if (i + 1 < len)
+                            Data[i + 1] = v1 / (float)(2 << 12);
+                    }
+                    break;
+                case 16:
+                    for (int i = 0; i < Height; i++)
+                    {
+                        for (int j = 0; j < Width; j++)
+                        {
+                            Data[i * Width + j] = Half.Convert(br.ReadUInt16());
+                        }
+                    }
+                    break;
+                case 32:
+                    for (int i = 0; i < Height; i++)
+                    {
+                        for (int j = 0; j < Width; j++)
+                        {
+                            Data[i * Width + j] = br.ReadSingle();
+                        }
+                    }
+                    break;
             }
+            
 
             br2.Close();
-
+            data.Close();
             br.Close();
         }
 
-        public void Save(Stream stream)
+        public virtual void Save(Stream stream) 
         {
             BinaryDataWriter result = new BinaryDataWriter();
 
-            result.AddEntry(XllCornerTag, Xllcorner);
-            result.AddEntry(YllCornerTag, Yllcorner);
-            result.AddEntry(WidthTag, Width);
-            result.AddEntry(HeightTag, Height);
-            result.AddEntry(XSpanTag, XSpan);
-            result.AddEntry(YSpanTag, YSpan);
+            result.AddEntry(TDMPIO.XllCornerTag, Xllcorner);
+            result.AddEntry(TDMPIO.YllCornerTag, Yllcorner);
+            result.AddEntry(TDMPIO.WidthTag, Width);
+            result.AddEntry(TDMPIO.HeightTag, Height);
+            result.AddEntry(TDMPIO.XSpanTag, XSpan);
+            result.AddEntry(TDMPIO.YSpanTag, YSpan);
 
-            result.AddEntry(BitsTag, 16);
+            result.AddEntry(TDMPIO.BitsTag, Bits);
 
-            Stream dataStream = result.AddEntryStream(DataTag);
 
-            ContentBinaryWriter bw = new ContentBinaryWriter(dataStream);
-            for (int i = 0; i < Data.Length; i++)
+            ContentBinaryWriter bw = result.AddEntry(TDMPIO.DataTag);
+
+            switch (Bits)
             {
-                bw.Write(Data[i].InternalValue);
+                case 8:
+                    for (int i = 0; i < Data.Length; i++)
+                    {
+                        bw.Write(Data[i] * byte.MaxValue);
+                    }
+                    break;
+                case 12:
+                    int len = Data.Length;
+                    for (int i = 0; i < len; i += 2)
+                    {
+                        ushort v1 = (ushort)(Data[i] * (2 << 12));
+                        ushort v2;
+
+                        if (i + 1 < len)
+                            v2 = (ushort)(Data[i + 1] * (2 << 12));
+                        else
+                            v2 = 0;
+
+                        byte a = (byte)(v1 & 0xff);
+                        byte b = (byte)(((v1 >> 8) & 0xF) << 4 | ((v2 >> 8) & 0xF));
+                        byte c = (byte)(v2 & 0xff);
+
+                        bw.Write(a);
+                        bw.Write(b);
+                        bw.Write(c);
+                    }
+                    break;
+                case 16:
+                    for (int i = 0; i < Data.Length; i++)
+                    {
+                        bw.Write(Half.Convert(Data[i]));
+                    }
+                    break;
+                case 32:
+                    for (int i = 0; i < Data.Length; i++)
+                    {
+                        bw.Write(Data[i]);
+                    }
+                    break;
             }
 
             bw.Close();
@@ -213,7 +289,145 @@ namespace Apoc3D.Graphics
             bw = new ContentBinaryWriter(stream);
             bw.Write(result);
             bw.Close();
-        }
 
+            result.Dispose();
+        }        
     }
+
+    //public unsafe class TDMP32IO : TDMPIO
+    //{
+    //    public override int Bits { get { return 32; } }
+
+    //    public override void Load(ResourceLocation rl)
+    //    {
+    //        ContentBinaryReader br = new ContentBinaryReader(rl);
+
+    //        BinaryDataReader data = br.ReadBinaryData();
+    //        Xllcorner = data.GetDataSingle(TDMPIO.XllCornerTag);
+    //        Yllcorner = data.GetDataSingle(TDMPIO.YllCornerTag);
+
+    //        Width = data.GetDataInt32(TDMPIO.WidthTag);
+    //        Height = data.GetDataInt32(TDMPIO.HeightTag);
+
+    //        XSpan = data.GetDataSingle(TDMPIO.XSpanTag, 5f);
+    //        YSpan = data.GetDataSingle(TDMPIO.YSpanTag, 5f);
+
+    //        int bits = data.GetDataInt32(TDMPIO.BitsTag);
+    //        if (bits != Bits)
+    //            throw new DataFormatException();
+
+    //        Data = new float[Height * Width];
+    //        ContentBinaryReader br2 = data.GetData(TDMPIO.DataTag);
+
+    //        for (int i = 0; i < Height; i++)
+    //        {
+    //            for (int j = 0; j < Width; j++)
+    //            {
+    //                Data[i * Width + j] = br.ReadSingle();
+    //            }
+    //        }
+
+    //        br2.Close();
+
+    //        br.Close();
+    //    }
+
+    //    public override void Save(Stream stream)
+    //    {
+    //        BinaryDataWriter result = new BinaryDataWriter();
+
+    //        result.AddEntry(TDMPIO.XllCornerTag, Xllcorner);
+    //        result.AddEntry(TDMPIO.YllCornerTag, Yllcorner);
+    //        result.AddEntry(TDMPIO.WidthTag, Width);
+    //        result.AddEntry(TDMPIO.HeightTag, Height);
+    //        result.AddEntry(TDMPIO.XSpanTag, XSpan);
+    //        result.AddEntry(TDMPIO.YSpanTag, YSpan);
+
+    //        result.AddEntry(TDMPIO.BitsTag, Bits);
+
+    //        Stream dataStream = result.AddEntryStream(TDMPIO.DataTag);
+
+    //        ContentBinaryWriter bw = new ContentBinaryWriter(dataStream);
+    //        for (int i = 0; i < Data.Length; i++)
+    //        {
+    //            bw.Write(Data[i]);
+    //        }
+
+    //        bw.Close();
+
+    //        bw = new ContentBinaryWriter(stream);
+    //        bw.Write(result);
+    //        bw.Close();
+    //    }
+    //}
+
+    //public unsafe class TDMP16IO : TDMPIO
+    //{
+
+    //    public override int Bits { get { return 16; } }
+
+    //    public override void Load(ResourceLocation rl)
+    //    {
+    //        ContentBinaryReader br = new ContentBinaryReader(rl);
+
+    //        BinaryDataReader data = br.ReadBinaryData();
+    //        Xllcorner = data.GetDataSingle(TDMPIO.XllCornerTag);
+    //        Yllcorner = data.GetDataSingle(TDMPIO.YllCornerTag);
+
+    //        Width = data.GetDataInt32(TDMPIO.WidthTag);
+    //        Height = data.GetDataInt32(TDMPIO.HeightTag);
+
+    //        XSpan = data.GetDataSingle(TDMPIO.XSpanTag, 5f);
+    //        YSpan = data.GetDataSingle(TDMPIO.YSpanTag, 5f);
+
+    //        int bits = data.GetDataInt32(TDMPIO.BitsTag);
+    //        if (bits != Bits)
+    //            throw new DataFormatException();
+
+    //        Data = new float[Height * Width];
+    //        ContentBinaryReader br2 = data.GetData(TDMPIO.DataTag);
+
+    //        for (int i = 0; i < Height; i++)
+    //        {
+    //            for (int j = 0; j < Width; j++)
+    //            {
+    //                Data[i * Width + j] = Half.Convert(br.ReadUInt16());
+    //            }
+    //        }
+
+    //        br2.Close();
+
+    //        br.Close();
+    //    }
+
+    //    public override void Save(Stream stream)
+    //    {
+    //        BinaryDataWriter result = new BinaryDataWriter();
+
+    //        result.AddEntry(TDMPIO.XllCornerTag, Xllcorner);
+    //        result.AddEntry(TDMPIO.YllCornerTag, Yllcorner);
+    //        result.AddEntry(TDMPIO.WidthTag, Width);
+    //        result.AddEntry(TDMPIO.HeightTag, Height);
+    //        result.AddEntry(TDMPIO.XSpanTag, XSpan);
+    //        result.AddEntry(TDMPIO.YSpanTag, YSpan);
+
+    //        result.AddEntry(TDMPIO.BitsTag, Bits);
+
+    //        Stream dataStream = result.AddEntryStream(TDMPIO.DataTag);
+
+    //        ContentBinaryWriter bw = new ContentBinaryWriter(dataStream);
+    //        for (int i = 0; i < Data.Length; i++)
+    //        {
+    //            bw.Write(Half.Convert(Data[i]));
+    //        }
+
+    //        bw.Close();
+
+    //        bw = new ContentBinaryWriter(stream);
+    //        bw.Write(result);
+    //        bw.Close();
+    //    }
+    //}
+
+
 }

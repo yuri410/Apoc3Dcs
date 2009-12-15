@@ -28,19 +28,19 @@ namespace Apoc3D.MathLib
         public static unsafe float Convert(ushort value)
         {
             uint num3;
-            if ((value & 0xffff7c00) == 0x0)
+            if ((value & 0xffff7c00) == 0)
             {
-                if ((value & 0x3ff) != 0x0)
+                if ((value & 0x3ff) != 0)
                 {
                     uint num2 = 0xfffffff2;
                     uint num = (uint)(value & 0x3ff);
-                    while ((num & 0x400) == 0x0)
+                    while ((num & 0x400) == 0)
                     {
                         num2--;
                         num = num << 0x1;
                     }
                     num &= 0xfffffbff;
-                    num3 = (((((uint)value & 0x8000) << 0x10) | ((num2 + 0x7f) << 0x17))) | (num << 0xd);
+                    num3 = (((uint)value & 0x8000) << 0x10) | ((num2 + 0x7f) << 0x17) | (num << 0xd);
                 }
                 else
                 {
