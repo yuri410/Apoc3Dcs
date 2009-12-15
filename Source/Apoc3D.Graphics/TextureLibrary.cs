@@ -58,12 +58,12 @@ namespace Apoc3D.Graphics
                 ConfigurationSection texSect = config[s];
 
                 string fileName = texSect["ColorMap"];
-                FileLocation fl = FileSystem.Instance.Locate(Path.Combine(Paths.Textures, fileName), FileLocateRules.Default);
+                FileLocation fl = FileSystem.Instance.Locate(Path.Combine(Paths.Textures, fileName), FileLocateRule.Default);
 
                 entry.colorMap = TextureManager.Instance.CreateInstance(fl);
 
                 fileName = texSect["NormalMap"];
-                fl = FileSystem.Instance.Locate(Path.Combine(Paths.Textures, fileName), FileLocateRules.Default);
+                fl = FileSystem.Instance.Locate(Path.Combine(Paths.Textures, fileName), FileLocateRule.Default);
 
                 entry.normalMap = TextureManager.Instance.CreateInstance(fl);
 

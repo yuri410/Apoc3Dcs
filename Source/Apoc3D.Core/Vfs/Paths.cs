@@ -15,21 +15,21 @@ namespace Apoc3D.Vfs
         static readonly string music = "music";
         static readonly string sounds = "sounds";
         static readonly string dataUI = Path.Combine("data", "ui");
-        static readonly string dataSkybox = Path.Combine("data", "skybox");
+        //static readonly string dataSkybox = Path.Combine("data", "skybox");
         static readonly string dataParticle = Path.Combine("data", "particles");
         static readonly string textures = "textures";
         static readonly string configs = Path.Combine("data", "configs");
 
-        static readonly string mapFilter = maps + Path.DirectorySeparatorChar.ToString() + "*.vmp";
+        //static readonly string mapFilter = maps + Path.DirectorySeparatorChar.ToString() + "*.vmp";
         
         public static string Maps
         {
             get { return maps; }
         }
-        public static string MapFilter
-        {
-            get { return mapFilter; }
-        }
+        //public static string MapFilter
+        //{
+        //    get { return mapFilter; }
+        //}
 
         public static string Plugin 
         {
@@ -57,10 +57,10 @@ namespace Apoc3D.Vfs
         {
             get { return dataUI; }
         }
-        public static string DataSkybox
-        {
-            get { return dataSkybox; }
-        }
+        //public static string DataSkybox
+        //{
+        //    get { return dataSkybox; }
+        //}
         public static string DataParticles
         {
             get { return dataParticle; }

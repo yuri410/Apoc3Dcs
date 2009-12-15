@@ -11,7 +11,7 @@ namespace Apoc3D.Graphics.Effects
             : base(rs)
         {
             string filePath = FileSystem.CombinePath(Paths.Effects, "bloom.ps");
-            FileLocation fl = FileSystem.Instance.Locate(filePath, FileLocateRules.Default);
+            FileLocation fl = FileSystem.Instance.Locate(filePath, FileLocateRule.Default);
 
             LoadPixelShader(rs, fl);
         }

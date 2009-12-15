@@ -80,7 +80,6 @@
     <Compile Include="Collections\FastQueue.cs" />
     <Compile Include="Collections\HashHelpers.cs" />
     <Compile Include="Collections\PlaformCollection.cs" />
-    <Compile Include="Config\BasicConfigs.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Config\ConfigurationSection.cs" />

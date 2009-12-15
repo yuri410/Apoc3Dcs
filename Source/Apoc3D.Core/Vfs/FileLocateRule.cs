@@ -96,6 +96,21 @@ namespace Apoc3D.Vfs
     {
         List<LocateCheckPoint> pathChkPt;
 
+        public static FileLocateRule Default
+        {
+            get;
+            private set;
+        }
+
+        static FileLocateRule() 
+        {
+            LocateCheckPoint[] pts = new LocateCheckPoint[1];
+            pts[0] = new LocateCheckPoint();
+            pts[0].AddPath(string.Empty);
+
+            Default = new FileLocateRule(pts);
+
+        }
        
         public FileLocateRule()
         {

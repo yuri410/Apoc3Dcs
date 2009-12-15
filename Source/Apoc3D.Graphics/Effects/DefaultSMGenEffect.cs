@@ -48,11 +48,11 @@ namespace Apoc3D.Graphics.Effects
         {
             EnableAutoParameter = true;
 
-            FileLocation fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, "HardwareShadowMap.vs"), FileLocateRules.Default);
+            FileLocation fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, "HardwareShadowMap.vs"), FileLocateRule.Default);
 
             LoadVertexShader(rs, fl);
 
-            fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, "HardwareShadowMap.ps"), FileLocateRules.Default);
+            fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, "HardwareShadowMap.ps"), FileLocateRule.Default);
 
             LoadPixelShader(rs, fl);
 

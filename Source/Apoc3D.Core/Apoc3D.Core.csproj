@@ -50,7 +50,6 @@
     <Compile Include="Collections\FastQueue.cs" />
     <Compile Include="Collections\HashHelpers.cs" />
     <Compile Include="Collections\PlaformCollection.cs" />
-    <Compile Include="Config\BasicConfigs.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Config\ConfigurationSection.cs" />
@@ -173,7 +172,9 @@
     <Compile Include="Vfs\Exceptions.cs" />
     <Compile Include="Vfs\FileBase.cs" />
     <Compile Include="Vfs\FileLocateRule.cs" />
-    <Compile Include="Vfs\FileLocateRules.cs" />
+    <Compile Include="Vfs\FileLocateRules.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Vfs\FileSystem.cs" />
     <Compile Include="Vfs\IAbstractFactory.cs" />
     <Compile Include="Vfs\Location.cs" />
