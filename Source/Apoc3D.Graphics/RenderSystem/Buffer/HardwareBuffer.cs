@@ -94,14 +94,17 @@ namespace Apoc3D.Graphics
             }
             throw new InvalidOperationException();
         }
-        public void Unlock() 
+        public void Unlock()
         {
             if (IsLocked)
             {
                 unlock();
                 IsLocked = false;
             }
-            throw new InvalidOperationException();
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         protected abstract void unlock();

@@ -42,6 +42,8 @@ namespace Apoc3D.Core
             {
                 this.table = table;
 
+                this.manager = manager;
+
                 this.guThread = new Thread(GenerationUpdate_Main);
                 this.guThread.Name = "Generation Update Thread for" + manager.ToString();
 #if !XBOX
@@ -50,7 +52,6 @@ namespace Apoc3D.Core
                 this.guThread.IsBackground = true;
                 this.guThread.Start();
 
-                this.manager = manager;
             }
 
 
@@ -230,6 +231,7 @@ namespace Apoc3D.Core
             public MTMethod(GenerationTable table, ResourceManager manager)
             {
                 this.table = table;
+                this.manager = manager;
 
                 this.guThread = new Thread(GenerationUpdate_Main);
                 guThread.Name = "Generation Update Thread for" + manager.ToString();
@@ -246,7 +248,6 @@ namespace Apoc3D.Core
                 mgrThread.SetApartmentState(ApartmentState.MTA);
 #endif
                 mgrThread.Start();
-                this.manager = manager;
             }
 
             /// <summary>

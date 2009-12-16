@@ -34,8 +34,8 @@ namespace Apoc3D.Vfs
         {
             stream = fl.GetStream;
             stream.Position = 0;
-            
-            ContentBinaryReader br = new ContentBinaryReader(stream);
+
+            ContentBinaryReader br = new ContentBinaryReader(new VirtualStream(stream));
 
             try
             {
@@ -102,6 +102,7 @@ namespace Apoc3D.Vfs
                 {
                     System.IO.MemoryStream ms = new System.IO.MemoryStream(lpkEnt.Size + 1);
                     decoder.Code(stream, ms, lpkEnt.CompressedSize, lpkEnt.Size, null);
+                    ms.Position = 0;
                     return ms;
                 }
                 else
@@ -110,6 +111,7 @@ namespace Apoc3D.Vfs
                     {
                         Apoc3D.Vfs.MemoryStream ms = new MemoryStream(ptr, lpkEnt.Size);
                         decoder.Code(stream, ms, lpkEnt.CompressedSize, lpkEnt.Size, null);
+                        ms.Position = 0;
                         return ms;
                     }
                 }

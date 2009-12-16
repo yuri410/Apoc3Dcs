@@ -1013,15 +1013,24 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override void SetRenderTarget(int index, RenderTarget rt)
         {
-            XnaRenderTarget xrt = (XnaRenderTarget)rt;
-            Device.SetRenderTarget(index,xrt.colorBufXna);
-
-            if (xrt.depthBufXna != null) 
+            if (rt == null) 
             {
-                Device.DepthStencilBuffer = xrt.depthBufXna;
+                Device.SetRenderTarget(index, null);
+                cachedRenderTargets[index] = null;
             }
+            else
+            {
+                XnaRenderTarget xrt = (XnaRenderTarget)rt;
 
-            cachedRenderTargets[index] = xrt;
+                Device.SetRenderTarget(index, xrt.colorBufXna);
+
+                if (xrt.depthBufXna != null)
+                {
+                    Device.DepthStencilBuffer = xrt.depthBufXna;
+                }
+
+                cachedRenderTargets[index] = xrt;
+            }
         }
 
         public override RenderTarget GetRenderTarget(int index)
@@ -1031,14 +1040,28 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override void BindShader(VertexShader shader)
         {
-            XnaVertexShader vs = (XnaVertexShader)shader;
-            Device.VertexShader = vs.vsXna;
+            if (shader == null)
+            {
+                Device.VertexShader = null;
+            }
+            else
+            {
+                XnaVertexShader vs = (XnaVertexShader)shader;
+                Device.VertexShader = vs.vsXna;
+            }
         }
 
         public override void BindShader(PixelShader shader)
         {
-            XnaPixelShader ps = (XnaPixelShader)shader;
-            Device.PixelShader = ps.psXna;
+            if (shader == null)
+            {
+                Device.PixelShader = null;
+            }
+            else
+            {
+                XnaPixelShader ps = (XnaPixelShader)shader;
+                Device.PixelShader = ps.psXna;
+            }
         }
 
         public override Viewport Viewport

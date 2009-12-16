@@ -143,6 +143,7 @@ namespace Apoc3D.Graphics
 
         public int Bits;
 
+        public static readonly string Extension = ".tdmp";
         public static readonly string XllCornerTag = "xllcorner";
         public static readonly string YllCornerTag = "yllcorner";
         public static readonly string XSpanTag = "xspan";

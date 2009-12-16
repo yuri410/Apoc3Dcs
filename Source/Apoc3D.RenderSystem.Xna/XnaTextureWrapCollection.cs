@@ -10,11 +10,16 @@ namespace Apoc3D.RenderSystem.Xna
 {
     class XnaTextureWrapCollection : TextureWrapCollection
     {
-        XG.RenderState xnaState;
+        XG.GraphicsDevice device;
 
-        internal XnaTextureWrapCollection(XG.RenderState state)
+        internal XG.RenderState xnaState
         {
-            this.xnaState = state;
+            get { return device.RenderState; }
+        }
+
+        internal XnaTextureWrapCollection(XG.GraphicsDevice device)
+        {
+            this.device = device;
         }
 
         public override TextureWrapCoordinates this[int index]

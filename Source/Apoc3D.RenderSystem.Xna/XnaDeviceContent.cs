@@ -10,7 +10,7 @@ namespace Apoc3D.RenderSystem.Xna
     class XnaDeviceContent : DeviceContent
     {
         internal XnaRenderSystem renderSystem;
-        XG.GraphicsDevice device;
+        //XG.GraphicsDevice device;
         X.GraphicsDeviceManager manager;
         X.Game game;
 

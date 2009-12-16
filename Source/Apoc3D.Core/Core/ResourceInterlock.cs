@@ -37,6 +37,8 @@ namespace Apoc3D.Core
             Monitor.Exit(syncHelper);
         }
 
+        static List<object> blocked = new List<object>();
+
         public static void BlockAll()
         {
             Dictionary<Thread, object>.ValueCollection value = syncHelperTable.Values;
@@ -46,7 +48,7 @@ namespace Apoc3D.Core
                 Monitor.Enter(obj);
             }
         }
-        public static void UnblockAll() 
+        public static void UnblockAll()
         {
             Dictionary<Thread, object>.ValueCollection value = syncHelperTable.Values;
 

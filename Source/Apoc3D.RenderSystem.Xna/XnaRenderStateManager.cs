@@ -40,15 +40,19 @@ namespace Apoc3D.RenderSystem.Xna
     {
         XnaRenderSystem renderSys;
 
-        XG.GraphicsDevice device;
-        XG.RenderState xnaState;
+        XG.RenderState xnaState
+        {
+            get { return device.RenderState; }
+        }
+        XG.GraphicsDevice device
+        {
+            get { return renderSys.Device; }
+        }
 
         public XnaRenderStateManager(XnaRenderSystem rs)
             : base(rs)
         {
             this.renderSys = rs;
-            this.device = renderSys.Device;
-            this.xnaState = device.RenderState;
 
             XnaClipPlane[] planes = new XnaClipPlane[32];
             for (int i = 0; i < planes.Length; i++)
@@ -57,7 +61,7 @@ namespace Apoc3D.RenderSystem.Xna
             }
 
             this.clipPlaneCollecion = new ClipPlaneCollection(planes);
-            this.texWrapCollection = new XnaTextureWrapCollection(xnaState);
+            this.texWrapCollection = new XnaTextureWrapCollection(device);
         }
 
         #region Alpha»ìºÏ

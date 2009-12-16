@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过下列属性集
 // 控制。更改这些属性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("VirtualBicycle.Ide")]
+[assembly: AssemblyTitle("Apoc3D.Ide")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Live for Ride")]
-[assembly: AssemblyProduct("VirtualBicycle.Ide")]
+[assembly: AssemblyProduct("Apoc3D.Ide")]
 [assembly: AssemblyCopyright("Copyright © Live for Ride 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

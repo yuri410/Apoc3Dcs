@@ -5,6 +5,7 @@ using Apoc3D.Collections;
 using Apoc3D.Graphics.Effects;
 using Apoc3D.Scene;
 using Apoc3D.MathLib;
+using Apoc3D.Core;
 
 namespace Apoc3D.Graphics
 {
@@ -13,18 +14,18 @@ namespace Apoc3D.Graphics
         public bool UseShadow
         {
             get;
-            private set;
+            set;
         }
         
         public SceneManagerBase SceneManager
         {
             get;
-            private set;
+            set;
         }
         public IPostSceneRenderer PostRenderer
         {
             get;
-            private set;
+            set;
         }
 
     }
@@ -227,7 +228,7 @@ namespace Apoc3D.Graphics
             //renderSystem.SetTransform(TransformState.View, EffectParams.CurrentCamera.ViewMatrix);
 
 
-            Atmosphere.Render();
+            //Atmosphere.Render();
 
 
 
@@ -371,124 +372,136 @@ namespace Apoc3D.Graphics
         /// </remarks>
         public virtual void RenderScene()
         {
-            batchData.RenderedObjectCount = 0;
-
-            //EffectParams.Atmosphere = Atmosphere;
-            //EffectParams.TerrainHeightScale = Data.TerrainSettings.HeightScale;
-
-            for (int i = 0; i < cameraList.Count; i++)
+            ResourceInterlock.BlockAll();
+            try
             {
-                EffectParams.CurrentCamera = cameraList[i];
-                CurrentCamera = cameraList[i];
+                batchData.RenderedObjectCount = 0;
 
-                //PrepareVisibleClusters(EffectParams.CurrentCamera);
+                //EffectParams.Atmosphere = Atmosphere;
+                //EffectParams.TerrainHeightScale = Data.TerrainSettings.HeightScale;
 
-                //for (int j = 0; j < visibleClusters.Count; j++)
-                //{
-                //    visibleClusters[j].SceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
-                //}
-                sceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
-
-
-                renderSystem.BindShader((PixelShader)null);
-                renderSystem.BindShader((VertexShader)null);
-
-                renderSystem.RenderStates.DepthBufferEnable = true;
-
-                #region Shadow Map Gen
-                shadowMap.Begin(Atmosphere.LightDirection, EffectParams.CurrentCamera);
-
-                foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in batchData.batchTable)
+                for (int i = 0; i < cameraList.Count; i++)
                 {
-                    FastList<RenderOperation> opList = e1.Value;
+                    EffectParams.CurrentCamera = cameraList[i];
+                    CurrentCamera = cameraList[i];
 
-                    if (opList.Count > 0)
-                    {
-                        //RenderSMList(e1.Key, opList);
-                    }
+                    //PrepareVisibleClusters(EffectParams.CurrentCamera);
+
+                    //for (int j = 0; j < visibleClusters.Count; j++)
+                    //{
+                    //    visibleClusters[j].SceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
+                    //}
+                    sceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
+
+
+                    renderSystem.BindShader((PixelShader)null);
+                    renderSystem.BindShader((VertexShader)null);
+
+                    renderSystem.RenderStates.DepthBufferEnable = true;
+
+                    //#region Shadow Map Gen
+                    //shadowMap.Begin(Atmosphere.LightDirection, EffectParams.CurrentCamera);
+
+                    //foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in batchData.batchTable)
+                    //{
+                    //    FastList<RenderOperation> opList = e1.Value;
+
+                    //    if (opList.Count > 0)
+                    //    {
+                    //        //RenderSMList(e1.Key, opList);
+                    //    }
+                    //}
+                    //#region Instancing
+                    ////foreach (KeyValuePair<string, Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>> e2 in instanceTable)
+                    ////{
+                    ////    Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> matTable = e2.Value;
+                    ////    foreach (KeyValuePair<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> e3 in matTable)
+                    ////    {
+                    ////        Dictionary<GeomentryData, FastList<RenderOperation>> geoTable = e3.Value;
+                    ////        foreach (KeyValuePair<GeomentryData, FastList<RenderOperation>> e4 in geoTable)
+                    ////        {
+                    ////            GeomentryData gm = e4.Key;
+
+                    ////            FastList<RenderOperation> opList = e4.Value;
+
+                    ////            if (gm != null)
+                    ////            {
+                    ////                if (opList.Count < 50 || gm.VertexCount > 20)
+                    ////                {
+                    ////                    RenderSMList(e2.Key, opList);
+                    ////                }
+                    ////                else
+                    ////                {
+                    ////                    Effect effect = effects[e2.Key];
+
+                    ////                    if (effect == null)
+                    ////                        effect = shadowMap.DefaultSMGen;
+
+                    ////                    Material mate = e3.Key;
+                    ////                    if (mate == null)
+                    ////                        mate = Material.DefaultMaterial;
+
+
+                    ////                    if (gm.VertexCount == 0)
+                    ////                        continue;
+
+                    ////                    renderSystem.SetRenderState<Cull>(RenderState.CullMode, mate.CullMode);
+
+                    ////                    effect.BeginShadowPass();
+
+                    ////                    int remainingInst = opList.Count;
+                    ////                    int index = 0;
+                    ////                    while (remainingInst > 0)
+                    ////                    {
+                    ////                        BatchCount++;
+                    ////                        PrimitiveCount += gm.PrimCount;
+                    ////                        VertexCount += gm.VertexCount;
+
+                    ////                        //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
+                    ////                        RenderOperation op = new RenderOperation();
+                    ////                        effect.Setup(mate, ref op);
+
+                    ////                        renderSystem.VertexFormat = gm.Format;
+                    ////                        renderSystem.VertexDeclaration = instancing.GetInstancingDecl(gm.VertexDeclaration);
+
+                    ////                        int rendered = instancing.Setup(opList, index);
+
+                    ////                        renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
+                    ////                        renderSystem.SetStreamSourceFrequency(0, rendered, StreamSource.IndexedData);
+
+                    ////                        remainingInst -= rendered;
+                    ////                        index += rendered;
+
+                    ////                        renderSystem.Indices = gm.IndexBuffer;
+                    ////                        renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
+                    ////                            gm.BaseVertex, 0,
+                    ////                            gm.VertexCount, gm.BaseIndexStart,
+                    ////                            gm.PrimCount);
+
+                    ////                    }
+                    ////                    effect.EndShadowPass();
+                    ////                } // if (opList.Count > 0)
+                    ////            }
+                    ////        }
+                    ////    }
+                    ////}
+                    //#endregion
+                    //shadowMap.End();
+
+                    //#endregion
+
+
+                    postRenderer.Render(this, CurrentCamera.RenderTarget);
                 }
-                #region Instancing
-                //foreach (KeyValuePair<string, Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>> e2 in instanceTable)
-                //{
-                //    Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> matTable = e2.Value;
-                //    foreach (KeyValuePair<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> e3 in matTable)
-                //    {
-                //        Dictionary<GeomentryData, FastList<RenderOperation>> geoTable = e3.Value;
-                //        foreach (KeyValuePair<GeomentryData, FastList<RenderOperation>> e4 in geoTable)
-                //        {
-                //            GeomentryData gm = e4.Key;
-
-                //            FastList<RenderOperation> opList = e4.Value;
-
-                //            if (gm != null)
-                //            {
-                //                if (opList.Count < 50 || gm.VertexCount > 20)
-                //                {
-                //                    RenderSMList(e2.Key, opList);
-                //                }
-                //                else
-                //                {
-                //                    Effect effect = effects[e2.Key];
-
-                //                    if (effect == null)
-                //                        effect = shadowMap.DefaultSMGen;
-
-                //                    Material mate = e3.Key;
-                //                    if (mate == null)
-                //                        mate = Material.DefaultMaterial;
-
-
-                //                    if (gm.VertexCount == 0)
-                //                        continue;
-
-                //                    renderSystem.SetRenderState<Cull>(RenderState.CullMode, mate.CullMode);
-
-                //                    effect.BeginShadowPass();
-
-                //                    int remainingInst = opList.Count;
-                //                    int index = 0;
-                //                    while (remainingInst > 0)
-                //                    {
-                //                        BatchCount++;
-                //                        PrimitiveCount += gm.PrimCount;
-                //                        VertexCount += gm.VertexCount;
-
-                //                        //device.SetRenderState(RenderState.ZWriteEnable, !mate.IsTransparent);
-                //                        RenderOperation op = new RenderOperation();
-                //                        effect.Setup(mate, ref op);
-
-                //                        renderSystem.VertexFormat = gm.Format;
-                //                        renderSystem.VertexDeclaration = instancing.GetInstancingDecl(gm.VertexDeclaration);
-
-                //                        int rendered = instancing.Setup(opList, index);
-
-                //                        renderSystem.SetStreamSource(0, gm.VertexBuffer, 0, gm.VertexSize);
-                //                        renderSystem.SetStreamSourceFrequency(0, rendered, StreamSource.IndexedData);
-
-                //                        remainingInst -= rendered;
-                //                        index += rendered;
-
-                //                        renderSystem.Indices = gm.IndexBuffer;
-                //                        renderSystem.DrawIndexedPrimitives(gm.PrimitiveType,
-                //                            gm.BaseVertex, 0,
-                //                            gm.VertexCount, gm.BaseIndexStart,
-                //                            gm.PrimCount);
-
-                //                    }
-                //                    effect.EndShadowPass();
-                //                } // if (opList.Count > 0)
-                //            }
-                //        }
-                //    }
-                //}
-                #endregion
-                shadowMap.End();
-
-                #endregion
-
-                postRenderer.Render(this, CurrentCamera.RenderTarget);
             }
-
+            catch 
+            {
+                throw;
+            }
+            finally
+            {
+                ResourceInterlock.UnblockAll();
+            }
             //shadowMap.RenderSM();
         }
 

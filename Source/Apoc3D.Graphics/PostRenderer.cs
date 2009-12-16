@@ -34,10 +34,31 @@ namespace Apoc3D.Graphics
         void Render(ISceneRenderer renderer, RenderTarget screenTarget);
     }
 
+    public class DefaultPostRenderer : IPostSceneRenderer 
+    {
+
+        #region IPostSceneRenderer 成员
+
+        public void Render(ISceneRenderer renderer, RenderTarget screenTarget)
+        {
+            renderer.RenderScenePost(screenTarget);
+        }
+
+        #endregion
+
+        #region IDisposable 成员
+
+        public void Dispose()
+        {
+            
+        }
+
+        #endregion
+    }
     /// <summary>
     ///  后期效果渲染器
     /// </summary>
-    public class PostRenderer : UnmanagedResource, IPostSceneRenderer
+    public class BloomPostRenderer : UnmanagedResource, IPostSceneRenderer
     {
         struct RectVertex
         {
@@ -99,7 +120,7 @@ namespace Apoc3D.Graphics
         //    return effect;
         //}
 
-        public PostRenderer(RenderSystem rs)
+        public BloomPostRenderer(RenderSystem rs)
         {
             this.factory = rs.ObjectFactory;
 

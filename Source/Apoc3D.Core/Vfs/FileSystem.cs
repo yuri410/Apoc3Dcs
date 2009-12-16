@@ -354,13 +354,14 @@ namespace Apoc3D.Vfs
                 string root = Path.GetPathRoot(fullPath).ToUpper();
                 while (!CaseInsensitiveStringComparer.Compare(root, fullPath))
                 {
-                    fullPath = Path.GetDirectoryName(fullPath);
                     if (File.Exists(fullPath))
                     {
                         result.Add(CombinePath(workingDirs[i], path));
                         archivePath.Add(fullPath);
                         return true;
                     }
+                    fullPath = Path.GetDirectoryName(fullPath);
+
                 }
 
             }
@@ -516,66 +517,88 @@ namespace Apoc3D.Vfs
                             }
                             locs = locs2.ToArray();
 #endif
-                            StringBuilder sb = new StringBuilder();
-
-                            Archive entry = null;
-                            Archive last;
-
-                            bool found = true;
 
 
-                            for (int i = 0; i < locs.Length - 1; i++)
+                            if (locs.Length > 1)
                             {
-                                if (i > 0)
-                                    sb.Append(Path.DirectorySeparatorChar + locs[i]);
-                                else
-                                    sb.Append(locs[i]);
+                                StringBuilder sb = new StringBuilder();
 
-                                last = entry;
+                                Archive entry = null;
+                                Archive last;
 
+                                bool found = true;
 
-                                // 如果当前的资源包未打开过
-                                if (!IsOpened(sb.ToString(), out entry))
+                                for (int i = 0; i < locs.Length - 1; i++)
                                 {
-                                    // 如果在资源包中
-                                    if (last != null)
-                                    {
-                                        Stream entStm = last.GetEntryStream(locs[i]);
-
-                                        if (entStm != null)
-                                        {
-                                            entry = CreateArchive(new FileLocation(last, CombinePath(arcPath, sb.ToString()), entStm));
-                                            stdPack.Add(entry.FilePath, entry);
-                                        }
-                                        else
-                                        {
-                                            found = false;
-                                            break;
-                                        }
-                                    }
+                                    if (i > 0)
+                                        sb.Append(Path.DirectorySeparatorChar + locs[i]);
                                     else
+                                        sb.Append(locs[i]);
+
+                                    last = entry;
+
+
+                                    // 如果当前的资源包未打开过
+                                    if (!IsOpened(sb.ToString(), out entry))
                                     {
-                                        string arc = sb.ToString();
-                                        if (File.Exists(arc))
+                                        // 如果在资源包中
+                                        if (last != null)
                                         {
-                                            entry = CreateArchive(arc);
-                                            stdPack.Add(entry.FilePath, entry);
+                                            Stream entStm = last.GetEntryStream(locs[i]);
+
+                                            if (entStm != null)
+                                            {
+                                                entry = CreateArchive(new FileLocation(last, CombinePath(arcPath, sb.ToString()), entStm));
+                                                stdPack.Add(entry.FilePath, entry);
+                                            }
+                                            else
+                                            {
+                                                found = false;
+                                                break;
+                                            }
                                         }
                                         else
                                         {
-                                            found = false;
-                                            break;
+                                            string arc = sb.ToString();
+                                            if (File.Exists(arc))
+                                            {
+                                                entry = CreateArchive(arc);
+                                                stdPack.Add(entry.FilePath, entry);
+                                            }
+                                            else
+                                            {
+                                                found = false;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
+                                if (found && entry != null)
+                                {
+                                    Stream entStm = entry.GetEntryStream(locs[locs.Length - 1]);
+
+                                    if (entStm != null)
+                                        return new FileLocation(entry, CombinePath(arcPath, filePath), entStm);
+                                }
                             }
-
-                            if (found && entry != null)
+                            else
                             {
-                                Stream entStm = entry.GetEntryStream(locs[locs.Length - 1]);
+                                Archive entry;
+                                if (!IsOpened(arcPath, out entry))
+                                {
+                                    if (File.Exists(arcPath))
+                                    {
+                                        entry = CreateArchive(arcPath);
+                                        stdPack.Add(entry.FilePath, entry);
+                                    }
+                                }
+                                if (entry != null)
+                                {
+                                    Stream entStm = entry.GetEntryStream(locs[0]);
 
-                                if (entStm != null)
-                                    return new FileLocation(entry, CombinePath(arcPath, filePath), entStm);
+                                    if (entStm != null)
+                                        return new FileLocation(entry, CombinePath(arcPath, filePath), entStm);
+                                }
                             }
                         }
                         catch (InvalidFormatException)
