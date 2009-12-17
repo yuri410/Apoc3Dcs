@@ -30,10 +30,9 @@ namespace Apoc3D.Graphics
         protected IndexBuffer(IndexBufferType type, int size, BufferUsage usage, bool useSysMem)
             : base(usage, size, useSysMem)
         {
-            IndexCount = size / IndexSize;
             BufferType = type;
 
-
+            IndexCount = size / IndexSize;
         }
     }
 }
