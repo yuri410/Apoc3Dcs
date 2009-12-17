@@ -247,7 +247,12 @@ namespace Apoc3D.Graphics
                 case 8:
                     for (int i = 0; i < Data.Length; i++)
                     {
-                        bw.Write((byte)(Data[i] * byte.MaxValue));
+                        int val = (int)Data[i] * byte.MaxValue;
+                        if (val > byte.MaxValue)
+                            val = byte.MaxValue;
+                        if (val < 0)
+                            val = 0;
+                        bw.Write((byte)(val));
                     }
                     break;
                 case 12:
