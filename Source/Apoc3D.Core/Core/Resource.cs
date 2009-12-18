@@ -506,7 +506,7 @@ namespace Apoc3D.Core
             {
                 generation.Use(this);
 
-                if (State != ResourceState.Loaded && State != ResourceState.Loading)
+                if (State != ResourceState.Unloaded)
                 {
                     Load();
                 }
@@ -524,9 +524,6 @@ namespace Apoc3D.Core
 
                 State = ResourceState.Loading;
 
-                //if (HasCache)
-                //    manager.AddTask(resourceCReader);
-                //else
                 manager.AddTask(resourceLoader);
 
                 manager.NotifyResourceLoaded(this);
@@ -542,8 +539,6 @@ namespace Apoc3D.Core
             {
                 State = ResourceState.Unloading;
 
-                //if (HasCache)
-                //    manager.AddTask(resourceCWriter);
                 manager.AddTask(resourceUnloader);
 
                 manager.NotifyResourceUnloaded(this);
@@ -570,9 +565,6 @@ namespace Apoc3D.Core
         {
             if (disposing && IsManaged)
             {
-                //Cache.Instance.Release(cacheMem);
-                //ResetCache();
-
                 manager.NotifyResourceFinalizing(this);
             }
         }
