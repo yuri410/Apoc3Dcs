@@ -506,7 +506,7 @@ namespace Apoc3D.Core
             {
                 generation.Use(this);
 
-                if (State != ResourceState.Unloaded)
+                if (State == ResourceState.Unloaded)
                 {
                     Load();
                 }

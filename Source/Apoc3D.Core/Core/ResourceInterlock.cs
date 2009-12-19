@@ -38,7 +38,7 @@ namespace Apoc3D.Core
             Monitor.Exit(syncHelper);
         }
 
-        static List<object> blocked = new List<object>();
+        //static List<object> blocked = new List<object>();
 
         public static void BlockAll()
         {

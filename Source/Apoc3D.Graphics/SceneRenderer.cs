@@ -510,11 +510,11 @@ namespace Apoc3D.Graphics
         ///  
         /// </summary>
         /// <param name="dt">时间间隔</param>
-        public virtual void Update(float dt)
+        public virtual void Update(GameTime time)
         {
             for (int i = 0; i < cameraList.Count; i++)
             {
-                cameraList[i].Update(dt);
+                cameraList[i].Update(time);
             }
         }
 

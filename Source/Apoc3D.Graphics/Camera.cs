@@ -13,7 +13,7 @@ namespace Apoc3D
         Matrix ProjectionMatrix { get; }
         Matrix ViewMatrix { get; }
 
-        void Update(float dt);
+        void Update(GameTime time);
 
         Vector3 Position { get; }
 
@@ -210,7 +210,7 @@ namespace Apoc3D
             NearPlane = 0.1f;
             AspectRatio = aspect;
             orientation = Quaternion.Identity;
-            Update(0);
+            Update(null);
         }
 
         #region 方法
@@ -236,7 +236,7 @@ namespace Apoc3D
         ///  更新相机的状态，每一帧均被引擎调用
         /// </summary>
         /// <param name="dt">帧时间间隔，以秒为单位</param>
-        public virtual void Update(float dt)
+        public virtual void Update(GameTime time)
         {
             // 如果需要更新Projection Matrix
             if (isProjDirty)
@@ -580,8 +580,18 @@ namespace Apoc3D
         /// behind the chased object. The camera's animation is controlled by a simple
         /// physical spring attached to the camera and anchored to the desired position.
         /// </summary>
-        public override void Update(float dt)
+        public override void Update(GameTime time)
         {
+            float dt;
+            if (time != null)
+            {
+                dt = time.ElapsedGameTime;
+            }
+            else 
+            {
+                dt = 0;
+            }
+            
             UpdateWorldPositions();
 
             // Calculate spring force
