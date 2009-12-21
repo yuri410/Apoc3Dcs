@@ -373,8 +373,8 @@ namespace Apoc3D.Graphics
         public virtual void RenderScene()
         {
             ResourceInterlock.BlockAll();
-            try
-            {
+            //try
+            //{
                 batchData.RenderedObjectCount = 0;
 
                 renderSystem.RenderStates.FillMode = FillMode.WireFrame;
@@ -494,12 +494,12 @@ namespace Apoc3D.Graphics
 
                     postRenderer.Render(this, CurrentCamera.RenderTarget);
                 }
-            }
-            catch 
-            {
-                throw;
-            }
-            finally
+            //}
+            //catch 
+            //{
+            //    throw;
+            //}
+            //finally
             {
                 ResourceInterlock.UnblockAll();
             }
