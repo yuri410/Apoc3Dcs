@@ -3240,6 +3240,27 @@ namespace Apoc3D.MathLib
             result.M44 = 1.0f;
         }
 
+        public static Matrix Transformation(Vector3 o1, Vector3 o2, Vector3 o3, Vector3 p1, Vector3 p2, Vector3 p3)
+        {
+            Matrix leftVec;
+            leftVec.M11 = o1.X; leftVec.M12 = o1.Y; leftVec.M13 = o1.Z; leftVec.M14 = 1;
+            leftVec.M21 = o2.X; leftVec.M22 = o2.Y; leftVec.M23 = o2.Z; leftVec.M24 = 1;
+            leftVec.M31 = o3.X; leftVec.M32 = o3.Y; leftVec.M33 = o3.Z; leftVec.M34 = 1;
+            leftVec.M41 = 0; leftVec.M42 = 0; leftVec.M43 = 0; leftVec.M44 = 1;
+
+            Matrix rightVec;
+            rightVec.M11 = p1.X; rightVec.M12 = p1.Y; rightVec.M13 = p1.Z; rightVec.M14 = 1;
+            rightVec.M21 = p2.X; rightVec.M22 = p2.Y; rightVec.M23 = p2.Z; rightVec.M24 = 1;
+            rightVec.M31 = p3.X; rightVec.M32 = p3.Y; rightVec.M33 = p3.Z; rightVec.M34 = 1;
+            rightVec.M41 = 0; rightVec.M42 = 0; rightVec.M43 = 0; rightVec.M44 = 1;
+
+
+            Matrix invLeft;
+            Matrix.Invert(ref leftVec, out invLeft);
+
+            return invLeft * rightVec;
+        }
+
         /// <summary>
         /// Creates a translation matrix using the specified offsets.
         /// </summary>

@@ -230,14 +230,17 @@ namespace Apoc3D.Vfs
 
                 int pos = dirName.LastIndexOf(Path.DirectorySeparatorChar);
 
+                string filter = path;
                 if (pos != -1)
                 {
+                    filter = dirName.Substring(pos + 1);
+
                     dirName = dirName.Substring(0, pos + 1);
                 }
 
                 if (Directory.Exists(dirName))
                 {
-                    string[] sm = Directory.GetFiles(workingDirs[i], path);
+                    string[] sm = Directory.GetFiles(dirName, filter);
                     count += sm.Length;
                     matches.Add(sm);
                 }
