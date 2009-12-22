@@ -74,6 +74,18 @@ namespace Apoc3D.MathLib
             pl = this.planes[(int)fp];
         }
 
+        public Frustum Transform(Matrix m)
+        {
+            Frustum f = new Frustum();
+
+            for (int i = 0; i < f.planes.Length; i++)
+            {
+                Plane.Transform(ref planes[i], ref m, out f.planes[i]);
+            }
+
+            return f;
+        }
+
         /// <summary>
         ///  更新视见体的六个平面
         /// </summary>
