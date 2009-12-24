@@ -23,6 +23,9 @@ namespace Apoc3D.Graphics
 
         ImagePixelFormat colorBufferFormat;
 
+        /// <summary>
+        ///  仅限PC。若要在现有的控件中渲染，表示现有控件的对象。
+        /// </summary>
         public object Target
         {
             get;

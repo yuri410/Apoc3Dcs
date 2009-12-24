@@ -5,38 +5,36 @@ using System.Text;
 namespace Apoc3D.Graphics
 {
     /// <summary>
-    /// 	This class declares the usage of a single vertex buffer as a component
-    /// 	of a complete <see cref="VertexDeclaration"/>. 
+    ///  顶点元素，即组成一个<see cref="VertexDeclaration"/>的元素
     /// </summary>
     public struct VertexElement
     {
-        #region Fields
+        #region 字段
 
         /// <summary>
-        ///     The offset in the buffer that this element starts at.
+        ///  表示顶点元素的起始偏移量
         /// </summary>
         int offset;
         /// <summary>
-        ///     The type of element.
+        ///  表示顶点元素的格式
         /// </summary>
         VertexElementFormat type;
         /// <summary>
-        ///     The meaning of the element.
+        ///  表示顶点元素的实际用途
         /// </summary>
         VertexElementUsage semantic;
         /// <summary>
-        ///     Index of the item, only applicable for some elements like texture coords.
+        ///  顶点元素的索引，仅适用于一些类型的顶点元素例如纹理坐标
         /// </summary>
         int index;
 
         #endregion Fields
 
-        #region Constructors
+        #region 构造函数
 
         /// <summary>
-        ///     Constructor.
+        ///   
         /// </summary>
-        ///// <param name="source">The source vertex buffer, as bound to an index using <see cref="VertexBufferBinding"/>.</param>
         /// <param name="offset">The offset in the buffer that this element starts at.</param>
         /// <param name="type">The type of element.</param>
         /// <param name="semantic">The meaning of the element.</param>
@@ -46,9 +44,8 @@ namespace Apoc3D.Graphics
         }
 
         /// <summary>
-        ///     Constructor.
+        ///  
         /// </summary>
-        ///// <param name="source">The source vertex buffer, as bound to an index using <see cref="VertexBufferBinding"/>.</param>
         /// <param name="offset">The offset in the buffer that this element starts at.</param>
         /// <param name="type">The type of element.</param>
         /// <param name="semantic">The meaning of the element.</param>
@@ -67,8 +64,9 @@ namespace Apoc3D.Graphics
         #region Methods
 
         /// <summary>
-        ///     Utility method for helping to calculate offsets.
+        ///  计算顶点元素的大小
         /// </summary>
+        /// <param name="type">顶点元素的类型</param>
         public static int GetTypeSize(VertexElementFormat type)
         {
 

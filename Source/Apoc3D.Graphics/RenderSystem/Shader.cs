@@ -8,37 +8,37 @@ using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics
 {
-    /// <summary>
-    ///  表示Shader 代码中 Include 文件的文件操作处理器
-    /// </summary>
-    public interface Include
-    {
-        void Close(Stream stream);
-        void Open(string fileName, out Stream stream);
-    }
+    ///// <summary>
+    /////  表示Shader 代码中 Include 文件的文件操作处理器
+    ///// </summary>
+    //public interface Include
+    //{
+    //    void Close(Stream stream);
+    //    void Open(string fileName, out Stream stream);
+    //}
 
-    /// <summary>
-    ///  表示 Shader 代码中的 Marco
-    /// </summary>
-    public struct Macro
-    {
-        string name;
-        string defination;
+    ///// <summary>
+    /////  表示 Shader 代码中的 Marco
+    ///// </summary>
+    //public struct Macro
+    //{
+    //    string name;
+    //    string defination;
 
-        public string Name
-        {
-            get { return name; }
-        }
-        public string Defination
-        {
-            get { return defination; }
-        }
-        public Macro(string name, string def)
-        {
-            this.name = name;
-            this.defination = def;
-        }
-    }
+    //    public string Name
+    //    {
+    //        get { return name; }
+    //    }
+    //    public string Defination
+    //    {
+    //        get { return defination; }
+    //    }
+    //    public Macro(string name, string def)
+    //    {
+    //        this.name = name;
+    //        this.defination = def;
+    //    }
+    //}
 
     /// <summary>
     ///  提供Shader的抽象接口

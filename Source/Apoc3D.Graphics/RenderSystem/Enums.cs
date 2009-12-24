@@ -578,34 +578,33 @@ namespace Apoc3D.Graphics
     }
 
     /// <summary>
-    /// 
+    ///  表示顶点元素中的类型
     /// </summary>
     /// <remarks>可以直接转换的API：XNA</remarks>
     public enum VertexElementFormat : byte
     {
         /// <summary>
-        ///  Single-component, 32-bit floating-point, expanded to (float, 0, 0, 1).
+        ///  一个成员，32位浮点数，可以自动展开为 (float, 0, 0, 1)。
         /// </summary>
         Single = 0,
         /// <summary>
-        ///  Two-component, 32-bit floating-point, expanded to (float, float, 0, 1).
+        ///  两个成员，32位浮点数，可以自动展开为 (float, float, 0, 1)。
         /// </summary>
         Vector2 = 1,
         /// <summary>
-        ///  Three-component, 32-bit floating point, expanded to (float, float, float, 1).
+        ///  三个成员，32位浮点数，可以自动展开为 (float, float, float, 1)。
         /// </summary>
         Vector3 = 2,
         /// <summary>
-        ///  Four-component, 32-bit floating point, expanded to (float, float, float, float).
+        ///  四个成员，32位浮点数，可以自动展开为 (float, float, float, float)。
         /// </summary>
         Vector4 = 3,
         /// <summary>
-        ///  Four-component, packed, unsigned byte, mapped to 0 to 1 range. Input is in
-        ///     Int32 format (ARGB) expanded to (R, G, B, A).
+        ///  四个成员，打包后的byte，映射到了0-1范围内。输入为Int32类型(ARGB)，会扩展为(R, G, B, A)。
         /// </summary>
         Color = 4,
         /// <summary>
-        ///  Four-component, unsigned byte.
+        ///  四个成员，byte。
         /// </summary>
         Byte4 = 5,
         /// <summary>

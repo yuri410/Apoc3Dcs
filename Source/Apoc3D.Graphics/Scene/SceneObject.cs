@@ -148,6 +148,7 @@ namespace Apoc3D.Scene
         /// <param name="cam">
         ///  渲染到的摄像机
         /// </param>
+        /// <param name="level">LOD级别</param>
         public virtual void PrepareVisibleObjects(ICamera cam, int level)
         {
             throw new NotSupportedException();
@@ -187,6 +188,10 @@ namespace Apoc3D.Scene
         /// <returns></returns>
         public abstract RenderOperation[] GetRenderOperation();
 
+        /// <summary>
+        ///  获取该物体特定LOD级别的所有渲染操作
+        /// </summary>
+        /// <returns></returns>
         public virtual RenderOperation[] GetRenderOperation(int level) 
         {
             return GetRenderOperation();

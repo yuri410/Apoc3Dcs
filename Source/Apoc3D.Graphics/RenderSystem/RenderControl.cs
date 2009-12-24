@@ -62,6 +62,7 @@ namespace Apoc3D.Graphics
         /// <returns></returns>
         protected abstract RenderTarget CreateRenderTarget(RenderSystem rs, PresentParameters pm);
 
+
         public virtual void Present()
         {
             fpsCounter.Update();
@@ -143,10 +144,16 @@ namespace Apoc3D.Graphics
         {
         }
 
+        /// <summary>
+        ///  获取窗口的客户大小
+        /// </summary>
         public abstract Size ClientSize
         {
             get;
         }
+        /// <summary>
+        ///  获取或设置窗口的标题
+        /// </summary>
         public abstract string Title
         {
             get;
@@ -158,11 +165,17 @@ namespace Apoc3D.Graphics
         /// </summary>
         public abstract void Run();
 
+        /// <summary>
+        ///  获取或设置渲染窗口的事件处理对象
+        /// </summary>
         public IRenderWindowHandler EventHandler
         {
             get;
             set;
         }
+        /// <summary>
+        ///  引发初始化事件
+        /// </summary>
         protected void OnInitialize()
         {
             if (EventHandler != null)
