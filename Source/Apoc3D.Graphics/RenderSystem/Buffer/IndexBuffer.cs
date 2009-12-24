@@ -34,5 +34,7 @@ namespace Apoc3D.Graphics
 
             IndexCount = size / IndexSize;
         }
+        public abstract void SetData<T>(T[] data)
+                 where T : struct;
     }
 }

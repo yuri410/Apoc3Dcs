@@ -45,7 +45,17 @@ namespace Apoc3D.RenderSystem.Xna
                 indexBuffer = new XG.IndexBuffer(rs.Device, size, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(type));
             }
         }
-
+        public override void SetData<T>(T[] data)
+        {
+            if (indexBuffer != null)
+            {
+                indexBuffer.SetData<T>(data);
+            }
+            else
+            {
+                dynIb.SetData<T>(data);
+            }
+        }
         protected override IntPtr @lock(int offset, int size, LockMode mode)
         {
             if (size == 0)

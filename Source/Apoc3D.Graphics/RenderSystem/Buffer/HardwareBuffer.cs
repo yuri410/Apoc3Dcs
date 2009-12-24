@@ -4,10 +4,8 @@ using System.Text;
 
 namespace Apoc3D.Graphics
 {
-    public abstract class HardwareBuffer : IDisposable
+    public unsafe abstract class HardwareBuffer : IDisposable
     {
-       
-
         public BufferUsage Usage
         {
             get;
@@ -43,7 +41,6 @@ namespace Apoc3D.Graphics
             private set;
         }
 
-
         protected HardwareBuffer(BufferUsage usage, int sizeInBytes, bool useSysMem)
         {
             Usage = usage;
@@ -53,7 +50,7 @@ namespace Apoc3D.Graphics
 
         protected abstract IntPtr @lock(int offset, int size, LockMode mode);
 
-
+        
         public IntPtr Lock(LockMode mode)
         {
             if (!IsLocked)
@@ -108,9 +105,6 @@ namespace Apoc3D.Graphics
         }
 
         protected abstract void unlock();
-
-
-        
 
         #region IDisposable 成员
 

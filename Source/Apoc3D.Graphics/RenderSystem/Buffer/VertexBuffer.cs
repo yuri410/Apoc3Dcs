@@ -14,5 +14,7 @@ namespace Apoc3D.Graphics
         {
 
         }
+        public abstract void SetData<T>(T[] data)
+                where T : struct;
     }
 }

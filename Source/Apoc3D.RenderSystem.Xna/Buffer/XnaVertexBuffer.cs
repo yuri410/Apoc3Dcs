@@ -44,6 +44,18 @@ namespace Apoc3D.RenderSystem.Xna
             }
         }
 
+        public override void SetData<T>(T[] data)
+        {
+            if (vertexBuffer != null)
+            {
+                vertexBuffer.SetData<T>(data);
+            }
+            else
+            {
+                dynVb.SetData<T>(data);
+            }
+        }
+
         protected override IntPtr @lock(int offset, int size, LockMode mode)
         {
             if (size == 0)             
@@ -75,12 +87,10 @@ namespace Apoc3D.RenderSystem.Xna
                         break;
                 }
             }
-            void* result;
             fixed (byte* src = &buffer[0]) 
             {
-                result = src;
+                return new IntPtr(src);
             }
-            return new IntPtr(result);
         }
 
         protected override void unlock()
