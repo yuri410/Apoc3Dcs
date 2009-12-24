@@ -4,6 +4,7 @@ using System.Text;
 using Apoc3D.Graphics;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
+using Apoc3D.Core;
 
 namespace Apoc3D.RenderSystem.Xna
 {
