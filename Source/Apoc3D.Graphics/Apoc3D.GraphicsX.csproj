@@ -76,7 +76,6 @@
     <Compile Include="Effects\Effect.cs" />
     <Compile Include="Effects\EffectManager.cs" />
     <Compile Include="Effects\EffectParams.cs" />
-    <Compile Include="Effects\IncludeLoader.cs" />
     <Compile Include="Effects\Post\Bloom.cs" />
     <Compile Include="Effects\Post\Composite.cs" />
     <Compile Include="Effects\Post\GaussBlurX.cs" />
