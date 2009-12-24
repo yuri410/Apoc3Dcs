@@ -65,6 +65,15 @@ namespace Apoc3D.Core
             }
         }
 
+        public ResourceState State 
+        {
+            get { return resuorce.State; }
+        }
+        public int Generation 
+        {
+            get { return resuorce.Generation; }
+        }
+
         public static implicit operator T(ResourceHandle<T> res)
         {
             res.resuorce.Use();
@@ -101,6 +110,11 @@ namespace Apoc3D.Core
         }
 
         #endregion
+
+        public void Touch()
+        {
+            resuorce.Use();
+        }
     }
 
     /// <summary>
