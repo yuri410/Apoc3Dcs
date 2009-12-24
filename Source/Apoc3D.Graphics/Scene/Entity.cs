@@ -310,7 +310,7 @@ namespace Apoc3D.Scene
         ///  更新该物体的状态，每一帧如果可见，则被引擎调用
         /// </summary>
         /// <param name="dt">时间间隔，以秒为单位</param>
-        public override void Update(float dt)
+        public override void Update(GameTime dt)
         {
             if (ModelL0 != null)
             {

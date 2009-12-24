@@ -374,9 +374,9 @@ namespace Apoc3D.Scene
                     {
                         if (objs.Elements[i].HasSubObjects)
                         {
-                            objs.Elements[i].PrepareVisibleObjects(camera);
+                            objs.Elements[i].PrepareVisibleObjects(camera, 0);
                         }
-                        AddVisibleObject(objs.Elements[i], batchHelper);
+                        AddVisibleObject(objs.Elements[i], 0, batchHelper);
                     }
                 }
 
@@ -384,12 +384,12 @@ namespace Apoc3D.Scene
 
             for (int i = 0; i < farObjects.Count; i++)
             {
-                AddVisibleObject(farObjects[i], batchHelper);
+                AddVisibleObject(farObjects[i], 0, batchHelper);
             }
             //base.PrepareVisibleObjects(camera);
         }
 
-        public override void Update(float dt)
+        public override void Update(GameTime dt)
         {
             for (int i = 0; i < SceneObjects.Count; i++)
             {

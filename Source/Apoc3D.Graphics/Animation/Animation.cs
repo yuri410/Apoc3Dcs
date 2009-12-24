@@ -69,11 +69,11 @@ namespace Apoc3D.Graphics.Animation
         
         #region IUpdatable 成员
 
-        public virtual void Update(float dt)
+        public virtual void Update(GameTime dt)
         {
             if (data.FrameLength > float.Epsilon)
             {
-                currentTime += dt;
+                currentTime += dt.ElapsedGameTime;
 
                 if (currentTime >= totalTime)
                 {

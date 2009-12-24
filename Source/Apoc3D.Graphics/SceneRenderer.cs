@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Apoc3D.Collections;
-using Apoc3D.Graphics.Effects;
-using Apoc3D.Scene;
-using Apoc3D.MathLib;
 using Apoc3D.Core;
+using Apoc3D.Graphics.Effects;
+using Apoc3D.MathLib;
+using Apoc3D.Scene;
 
 namespace Apoc3D.Graphics
 {
@@ -516,6 +516,7 @@ namespace Apoc3D.Graphics
             {
                 cameraList[i].Update(time);
             }
+            sceneManager.Update(time);
         }
 
     }

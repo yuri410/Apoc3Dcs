@@ -415,7 +415,7 @@ namespace Apoc3D.Graphics
 
         #region IUpdatable 成员
 
-        public void Update(float dt)
+        public void Update(GameTime dt)
         {
             if (animInstance != null) 
             {

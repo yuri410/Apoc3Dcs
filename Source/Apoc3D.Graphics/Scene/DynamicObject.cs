@@ -25,7 +25,7 @@ namespace Apoc3D.Scene
 
         #region 方法
 
-        public override void Update(float dt)
+        public override void Update(GameTime dt)
         {
             if (RigidBody != null)
             {

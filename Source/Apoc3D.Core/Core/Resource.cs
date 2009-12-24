@@ -228,6 +228,8 @@ namespace Apoc3D.Core
                 lock (syncHelper)
                 {
                     timeQueue.Enqueue((float)EngineTimer.Time.TotalSeconds);
+                    while (timeQueue.Count > 5)
+                        timeQueue.Dequeue();
                 }
             }
 
@@ -237,9 +239,6 @@ namespace Apoc3D.Core
 
                 lock (syncHelper)
                 {
-                    while (timeQueue.Count > 5)
-                        timeQueue.Dequeue();
-
                     if (timeQueue.Count > 0)
                     {
                         result = 0;

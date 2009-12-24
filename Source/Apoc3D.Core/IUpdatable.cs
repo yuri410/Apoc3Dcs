@@ -13,8 +13,8 @@ namespace Apoc3D
         ///  主循环更新对象的状态
         /// </summary>
         /// <param name="dt">
-        /// 时间间隔（通常较短）
+        /// 一个GameTime对象，提供对游戏时间的访问
         /// </param>
-        void Update(float dt);
+        void Update(GameTime dt);
     }
 }

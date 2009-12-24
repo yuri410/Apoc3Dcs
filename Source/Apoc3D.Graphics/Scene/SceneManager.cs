@@ -141,13 +141,13 @@ namespace Apoc3D.Scene
         /// </summary>
         /// <param name="obj">要添加的物体</param>
         /// <remarks>用于渲染批次优化</remarks>
-        protected void AddVisibleObject(SceneObject obj, PassData batchHelper)
+        protected void AddVisibleObject(SceneObject obj, int level, PassData batchHelper)
         {
             batchHelper.RenderedObjectCount++;
 
             batchHelper.visibleObjects.Add(obj);
 
-            RenderOperation[] ops = obj.GetRenderOperation();
+            RenderOperation[] ops = obj.GetRenderOperation(level);
             if (ops != null)
             {
                 for (int k = 0; k < ops.Length; k++)
@@ -245,7 +245,7 @@ namespace Apoc3D.Scene
         }
 
 
-        public virtual void Update(float dt)
+        public virtual void Update(GameTime dt)
         {
             for (int i = 0; i < objects.Count; i++)
             {
@@ -394,10 +394,10 @@ namespace Apoc3D.Scene
                 {
                     if (objs[j].HasSubObjects)
                     {
-                        objs[j].PrepareVisibleObjects(camera);
+                        objs[j].PrepareVisibleObjects(camera, 0);
                     }
 
-                    AddVisibleObject(objs[j], batchHelper);
+                    AddVisibleObject(objs[j], 0, batchHelper);
                 }
             }
         }

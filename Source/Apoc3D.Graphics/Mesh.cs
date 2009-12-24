@@ -1200,7 +1200,7 @@ namespace Apoc3D.Graphics
 
         #region IUpdatable 成员
 
-        public void Update(float dt)
+        public void Update(GameTime dt)
         {
             for (int i = 0; i < matAnims.Length; i++)
             {

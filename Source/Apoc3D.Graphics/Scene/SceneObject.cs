@@ -148,7 +148,7 @@ namespace Apoc3D.Scene
         /// <param name="cam">
         ///  渲染到的摄像机
         /// </param>
-        public virtual void PrepareVisibleObjects(ICamera cam)
+        public virtual void PrepareVisibleObjects(ICamera cam, int level)
         {
             throw new NotSupportedException();
         }
@@ -199,7 +199,7 @@ namespace Apoc3D.Scene
         ///  更新该物体的状态，每一帧如果可见，则被引擎调用
         /// </summary>
         /// <param name="dt">帧时间间隔，以秒为单位</param>
-        public abstract void Update(float dt);
+        public abstract void Update(GameTime dt);
 
         #endregion
 

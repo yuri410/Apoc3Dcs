@@ -47,7 +47,7 @@ namespace Apoc3D.Scene
         {
             return null;
         }
-        public override void Update(float dt)
+        public override void Update(GameTime dt)
         {
             
         }

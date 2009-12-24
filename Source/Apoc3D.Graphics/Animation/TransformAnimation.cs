@@ -92,7 +92,7 @@ namespace Apoc3D.Graphics.Animation
             get { return data; }
         }
 
-        public override void Update(float dt)
+        public override void Update(GameTime dt)
         {
             base.Update(dt);
 
