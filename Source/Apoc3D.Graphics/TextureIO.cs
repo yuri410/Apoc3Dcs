@@ -154,6 +154,7 @@ namespace Apoc3D.Graphics
         public static readonly string BitsTag = "bits";
         public static readonly string DataTag = "data";
 
+
         public virtual void Load(ResourceLocation rl) 
         {
             ContentBinaryReader br = new ContentBinaryReader(rl);

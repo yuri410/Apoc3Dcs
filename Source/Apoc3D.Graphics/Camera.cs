@@ -373,12 +373,12 @@ namespace Apoc3D
         }
         public void TurnUp()
         {
-            orientation *= Quaternion.RotationAxis(new Vector3(1, 0, 0), -turnSpeed);
+            orientation *= Quaternion.RotationAxis(Right, -turnSpeed);
             orientation.Normalize();
         }
         public void TurnDown()
         {
-            orientation *= Quaternion.RotationAxis(new Vector3(1, 0, 0), turnSpeed);
+            orientation *= Quaternion.RotationAxis(Right, turnSpeed);
             orientation.Normalize();
         }
         public void RollLeft()
