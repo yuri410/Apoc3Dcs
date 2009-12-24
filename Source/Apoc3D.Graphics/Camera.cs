@@ -6,6 +6,9 @@ using Apoc3D.MathLib;
 
 namespace Apoc3D
 {
+    /// <summary>
+    ///  定义摄像机
+    /// </summary>
     public interface ICamera 
     {
         Frustum Frustum { get; }
@@ -15,13 +18,34 @@ namespace Apoc3D
 
         void Update(GameTime time);
 
+        /// <summary>
+        ///  获取摄像机的位置
+        /// </summary>
         Vector3 Position { get; }
 
+        /// <summary>
+        ///  获取摄像机的朝向
+        /// </summary>
         Quaternion Orientation { get; }
 
+        /// <summary>
+        ///  获取远裁剪平面的位置
+        /// </summary>
         float FarPlane { get; }
+
+        /// <summary>
+        ///  获取近裁剪平面的位置
+        /// </summary>
         float NearPlane { get; }
+
+        /// <summary>
+        ///  获取宽高比
+        /// </summary>
         float AspectRatio { get; }
+
+        /// <summary>
+        ///  获取视野范围，使用角度表示
+        /// </summary>
         float FieldOfView { get; }
 
         Vector3 Front { get; }
@@ -33,7 +57,7 @@ namespace Apoc3D
 
 
     /// <summary>
-    /// Represents a view onto a 3D scene.
+    /// 表示摄像机
     /// </summary>
     public class Camera : ICamera
     {

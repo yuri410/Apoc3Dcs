@@ -371,6 +371,12 @@ namespace Apoc3D.Vfs
             return result.Count > 0;
         }
 
+        /// <summary>
+        ///  定位文件包的位置
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="rule"></param>
+        /// <returns></returns>
         public Archive LocateArchive(string filePath, FileLocateRule rule)
         {
             Archive res;
@@ -398,7 +404,14 @@ namespace Apoc3D.Vfs
                 throw new FileNotFoundException(filePath);
             return res;
         }
-
+        /// <summary>
+        ///  从可能的文件路径，定位文件
+        /// </summary>
+        /// <param name="filePath">一个String数组，包含所有可能的路径</param>
+        /// <param name="defPath">默认路径</param>
+        /// <param name="rule">文件定位规则</param>
+        /// <returns>一个<see cref="FileLocation"/>，表示文件的位置</returns>
+        /// <exception cref="FileNotFoundException">当文件没有找到时，引发此异常</exception>
         public FileLocation Locate(string[] filePath, string defPath, FileLocateRule rule)
         {
             StringBuilder sb = new StringBuilder();
@@ -412,6 +425,13 @@ namespace Apoc3D.Vfs
             }
             throw new FileNotFoundException(sb.ToString());
         }
+        /// <summary>
+        ///  从可能的文件路径，定位文件
+        /// </summary>
+        /// <param name="filePath">一个String数组，包含所有可能的路径</param>
+        /// <param name="rule">文件定位规则</param>
+        /// <returns>一个<see cref="FileLocation"/>，表示文件的位置</returns>
+        /// <exception cref="FileNotFoundException">当文件没有找到时，引发此异常</exception>
         public FileLocation Locate(string[] filePath, FileLocateRule rule)
         {
             StringBuilder sb = new StringBuilder();
@@ -427,6 +447,12 @@ namespace Apoc3D.Vfs
             throw new FileNotFoundException(sb.ToString());
         }
 
+        /// <summary>
+        ///  从可能的文件路径，尝试定位文件，找不到文件时，不会引发异常
+        /// </summary>
+        /// <param name="filePath">一个String数组，包含所有可能的路径</param>
+        /// <param name="rule">文件定位规则</param>
+        /// <returns>一个<see cref="FileLocation"/>，表示文件的位置，若没有找到，则返回null</returns>
         public FileLocation TryLocate(string[] filePath, FileLocateRule rule)
         {
             StringBuilder sb = new StringBuilder();
