@@ -460,7 +460,7 @@ namespace Apoc3D.Core
                 gen[i] = new ExistTable<Resource>();
             }
 
-            manageThread = new MTMethod(this, mgr);
+            manageThread = new STMethod(this, mgr);
         }
 
         public ExistTable<Resource> this[int index]
