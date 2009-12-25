@@ -252,7 +252,7 @@ namespace Apoc3D.Core
             }
 
             /// <summary>
-            ///  通知资源被使用，更新代数
+            ///  通知资源被使用
             /// </summary>
             public void Use(Resource resource)
             {
