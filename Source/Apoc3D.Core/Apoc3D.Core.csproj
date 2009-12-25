@@ -128,7 +128,9 @@
     <Compile Include="MathLib\Matrix.cs" />
     <Compile Include="MathLib\OctreeBox.cs" />
     <Compile Include="MathLib\PackedVector.cs" />
-    <Compile Include="MathLib\PackUtils.cs" />
+    <Compile Include="MathLib\PackUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MathLib\Pair.cs" />
     <Compile Include="MathLib\Plane.cs" />
     <Compile Include="MathLib\Point.cs" />
