@@ -142,7 +142,6 @@
     <Compile Include="Scene\StaticModelObject.cs" />
     <Compile Include="ShadowMap.cs" />
     <Compile Include="TextureIO.cs" />
-    <Compile Include="TextureLibrary.cs" />
     <Compile Include="UnmanagedResource.cs" />
     <Compile Include="WaterSurface.cs" />
     <Compile Include="WeatherType.cs" />
