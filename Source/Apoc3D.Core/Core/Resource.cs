@@ -67,6 +67,10 @@ namespace Apoc3D.Core
                 return resuorce;
             }
         }
+        public T GetWeakResource()
+        {
+            return resuorce;
+        }
 
         /// <summary>
         ///  获取资源的状态。不会激活资源
