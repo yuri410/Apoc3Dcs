@@ -56,6 +56,9 @@ namespace Apoc3D.Core
             }
         }
 
+        /// <summary>
+        ///  获取引用的资源，并激活资源
+        /// </summary>
         public T Resource
         {
             get
@@ -65,10 +68,16 @@ namespace Apoc3D.Core
             }
         }
 
+        /// <summary>
+        ///  获取资源的状态。不会激活资源
+        /// </summary>
         public ResourceState State 
         {
             get { return resuorce.State; }
         }
+        /// <summary>
+        ///  获取资源的代数。不会激活资源
+        /// </summary>
         public int Generation 
         {
             get { return resuorce.Generation; }
@@ -111,9 +120,19 @@ namespace Apoc3D.Core
 
         #endregion
 
+        /// <summary>
+        ///  强制激活资源，如果资源没有加载，则在后台加载
+        /// </summary>
         public void Touch()
         {
             resuorce.Use();
+        }
+        /// <summary>
+        ///  强制激活资源，如果资源没有加载，则同步加载
+        /// </summary>
+        public void TouchSync() 
+        {
+            resuorce.UseSync();
         }
     }
 
@@ -510,8 +529,9 @@ namespace Apoc3D.Core
             get { return true; }
         }
 
+
         /// <summary>
-        ///  调用该方法表示将要使用这个资源。让资源做好准备（比如已释放的要加载好）
+        ///  调用该方法表示将要使用这个资源。让资源做好准备，已释放的要加载好。准备工作会在后台进行。
         /// </summary>
         public void Use()
         {
@@ -525,9 +545,41 @@ namespace Apoc3D.Core
                 }
             }
         }
+        /// <summary>
+        ///  Use()的同步版
+        /// </summary>
+        public void UseSync()
+        {
+            if (IsManaged)
+            {
+                generation.Use(this);
+
+                if (State == ResourceState.Unloaded)
+                {
+                    LoadSync();
+                }
+            }
+        }
 
         /// <summary>
-        ///  加载资源
+        ///  同步加载资源
+        /// </summary>
+        void LoadSync() 
+        {
+            if (IsManaged)
+            {
+                generation.Use(this);
+
+                State = ResourceState.Loading;
+
+                load();
+
+                manager.NotifyResourceLoaded(this);
+                State = ResourceState.Loaded;
+            }
+        }
+        /// <summary>
+        ///  加载资源，在后台进行
         /// </summary>
         public void Load()
         {
