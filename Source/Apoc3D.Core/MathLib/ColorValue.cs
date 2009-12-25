@@ -27,39 +27,39 @@ namespace Apoc3D.MathLib
         }
         public ColorValue(byte r, byte g, byte b)
         {
-            this.packedValue = PackHelper(r, g, b, (byte)255);
+            this.packedValue = PackValue(r, g, b, (byte)255);
         }
 
 
         public ColorValue(int r, int g, int b, int a)
         {
-            this.packedValue = PackHelper(r, g, b, a);
+            this.packedValue = PackValue(r, g, b, a);
         }
 
 
         public ColorValue(byte r, byte g, byte b, byte a)
         {
-            this.packedValue = PackHelper(r, g, b, a);
+            this.packedValue = PackValue(r, g, b, a);
         }
 
         public ColorValue(float r, float g, float b)
         {
-            this.packedValue = PackHelper(r, g, b, 1f);
+            this.packedValue = PackValue(r, g, b, 1f);
         }
 
         public ColorValue(float r, float g, float b, float a)
         {
-            this.packedValue = PackHelper(r, g, b, a);
+            this.packedValue = PackValue(r, g, b, a);
         }
 
         public ColorValue(Vector3 vector)
         {
-            this.packedValue = PackHelper(vector.X, vector.Y, vector.Z, 1f);
+            this.packedValue = PackValue(vector.X, vector.Y, vector.Z, 1f);
         }
 
         public ColorValue(Vector4 vector)
         {
-            this.packedValue = PackHelper(vector.X, vector.Y, vector.Z, vector.W);
+            this.packedValue = PackValue(vector.X, vector.Y, vector.Z, vector.W);
         }
 
         public ColorValue(ColorValue rgb, byte a)
@@ -78,10 +78,10 @@ namespace Apoc3D.MathLib
 
         void IPackedVector.PackFromVector4(Vector4 vector)
         {
-            this.packedValue = PackHelper(vector.X, vector.Y, vector.Z, vector.W);
+            this.packedValue = PackValue(vector.X, vector.Y, vector.Z, vector.W);
         }
 
-        private static uint PackHelper(float vectorX, float vectorY, float vectorZ, float vectorW)
+        public static uint PackValue(float vectorX, float vectorY, float vectorZ, float vectorW)
         {
             uint num4 = PackUtils.PackUNorm(255f, vectorX) << 16;
             uint num3 = PackUtils.PackUNorm(255f, vectorY) << 8;
@@ -90,7 +90,7 @@ namespace Apoc3D.MathLib
             return (((num4 | num3) | num2) | num);
         }
 
-        private static uint PackHelper(byte r, byte g, byte b, byte a)
+        public static uint PackValue(byte r, byte g, byte b, byte a)
         {
             uint num4 = (uint)(r << 16);
             uint num3 = (uint)(g << 8);
@@ -98,7 +98,7 @@ namespace Apoc3D.MathLib
             uint num = (uint)(a << 24);
             return (((num4 | num3) | num2) | num);
         }
-        private static uint PackHelper(int r, int g, int b, int a)
+        public static uint PackValue(int r, int g, int b, int a)
         {
             uint num4 = (uint)((r & 0xff) << 16);
             uint num3 = (uint)((g & 0xff) << 8);
