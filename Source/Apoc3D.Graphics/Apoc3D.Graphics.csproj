@@ -73,7 +73,6 @@
     <Compile Include="Scene\Lights\LightFactory.cs" />
     <Compile Include="Scene\Lights\LightObject.cs" />
     <Compile Include="TextureIO.cs" />
-    <Compile Include="TextureLibrary.cs" />
     <Compile Include="UnmanagedResource.cs" />
     <Compile Include="Scene\ObjectFactory.cs" />
     <Compile Include="Scene\ObjectTypeManager.cs" />

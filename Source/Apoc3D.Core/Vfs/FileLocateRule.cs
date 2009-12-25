@@ -94,8 +94,19 @@ namespace Apoc3D.Vfs
     /// </summary>
     public class FileLocateRule
     {
-        List<LocateCheckPoint> pathChkPt;
+        static readonly string models = "models";
+        static readonly string effects = "effects";
 
+        public static FileLocateRule Model
+        {
+            get;
+            private set;
+        }
+        public static FileLocateRule Effects
+        {
+            get;
+            private set;
+        }
         public static FileLocateRule Default
         {
             get;
@@ -110,8 +121,28 @@ namespace Apoc3D.Vfs
 
             Default = new FileLocateRule(pts);
 
+            /********************************************************************************/
+
+            pts = new LocateCheckPoint[1];
+            pts[0] = new LocateCheckPoint();
+            pts[0].AddPath(models);
+
+            Model = new FileLocateRule(pts);
+
+            /********************************************************************************/
+
+            pts = new LocateCheckPoint[1];
+            pts[0] = new LocateCheckPoint();
+            pts[0].AddPath(effects);
+
+            Effects = new FileLocateRule(pts);
+
         }
-       
+
+
+
+        List<LocateCheckPoint> pathChkPt;
+
         public FileLocateRule()
         {
             pathChkPt = new List<LocateCheckPoint>();

@@ -10,8 +10,8 @@ namespace Apoc3D.Graphics.Effects
         public GaussBlurX(RenderSystem rs)
             : base(rs)
         {
-            string filePath = FileSystem.CombinePath(Paths.Effects, "gaussBlurX.ps");
-            FileLocation fl = FileSystem.Instance.Locate(filePath, FileLocateRule.Default);
+            string filePath = "gaussBlurX.ps";
+            FileLocation fl = FileSystem.Instance.Locate(filePath, FileLocateRule.Effects);
 
             LoadPixelShader(rs, fl);
         }
