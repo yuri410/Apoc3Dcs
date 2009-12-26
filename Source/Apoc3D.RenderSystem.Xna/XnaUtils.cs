@@ -58,6 +58,8 @@ namespace Apoc3D.RenderSystem.Xna
             cfmtConv[(int)ImagePixelFormat.R8G8B8A8] = XG.SurfaceFormat.Rgba32;
             cfmtConv[(int)ImagePixelFormat.X8B8G8R8] = XG.SurfaceFormat.Rgb32;
             cfmtConv[(int)ImagePixelFormat.X8R8G8B8] = XG.SurfaceFormat.Bgr32;
+            cfmtConv[(int)ImagePixelFormat.Palette8] = XG.SurfaceFormat.Palette8;
+            cfmtConv[(int)ImagePixelFormat.Palette8Alpha8] = XG.SurfaceFormat.PaletteAlpha16;
             #endregion
 
             #region XNA2AL
@@ -106,8 +108,8 @@ namespace Apoc3D.RenderSystem.Xna
             cfmtConv2[(int)XG.SurfaceFormat.NormalizedLuminance32 + 1] = ImagePixelFormat.Unknown;
             cfmtConv2[(int)XG.SurfaceFormat.NormalizedShort2 + 1] = ImagePixelFormat.Unknown;
             cfmtConv2[(int)XG.SurfaceFormat.NormalizedShort4 + 1] = ImagePixelFormat.Unknown;
-            cfmtConv2[(int)XG.SurfaceFormat.Palette8 + 1] = ImagePixelFormat.Unknown;
-            cfmtConv2[(int)XG.SurfaceFormat.PaletteAlpha16 + 1] = ImagePixelFormat.Unknown;
+            cfmtConv2[(int)XG.SurfaceFormat.Palette8 + 1] = ImagePixelFormat.Palette8;
+            cfmtConv2[(int)XG.SurfaceFormat.PaletteAlpha16 + 1] = ImagePixelFormat.Palette8Alpha8;
             cfmtConv2[(int)XG.SurfaceFormat.Rg32 + 1] = ImagePixelFormat.G16R16;
             cfmtConv2[(int)XG.SurfaceFormat.Rgb32 + 1] = ImagePixelFormat.B8G8R8;
             cfmtConv2[(int)XG.SurfaceFormat.Rgba1010102 + 1] = ImagePixelFormat.Unknown;
@@ -117,6 +119,7 @@ namespace Apoc3D.RenderSystem.Xna
             cfmtConv2[(int)XG.SurfaceFormat.Unknown + 1] = ImagePixelFormat.Unknown;
             cfmtConv2[(int)XG.SurfaceFormat.Vector2 + 1] = ImagePixelFormat.G32R32F;
             cfmtConv2[(int)XG.SurfaceFormat.Vector4 + 1] = ImagePixelFormat.A32B32G32R32F;
+            
             #endregion
         }
         static void BuildDepthFormatConv()
