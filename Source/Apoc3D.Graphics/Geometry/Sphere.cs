@@ -89,16 +89,16 @@ namespace Apoc3D.Graphics.Geometry
             for (int i = 0, j = (countA - 1) * slices; i < slices - 1; i++, j++)
             {
                 indices.Add(
-                    new MeshFace(vertices.Count - 2, i, i + 1));
+                    new MeshFace(vertices.Count - 2, i, i + 1, 0));
 
                 indices.Add(
-                    new MeshFace(vertices.Count - 1, j + 1, j));
+                    new MeshFace(vertices.Count - 1, j + 1, j, 0));
             }
             indices.Add(
-                new MeshFace(vertices.Count - 2, slices - 1, 0));
+                new MeshFace(vertices.Count - 2, slices - 1, 0, 0));
 
             indices.Add(
-                new MeshFace(vertices.Count - 1, (countA - 1) * slices, vertices.Count - 3));
+                new MeshFace(vertices.Count - 1, (countA - 1) * slices, vertices.Count - 3, 0));
 
             // Create side of the sphere
             for (int i = 0; i < countA - 1; i++)
@@ -106,16 +106,16 @@ namespace Apoc3D.Graphics.Geometry
                 for (int j = 0; j < slices - 1; j++)
                 {
                     indices.Add(
-                        new MeshFace(i * slices + j, (i + 1) * slices + j, (i + 1) * slices + j + 1));
+                        new MeshFace(i * slices + j, (i + 1) * slices + j, (i + 1) * slices + j + 1, 0));
 
                     indices.Add(
-                        new MeshFace(i * slices + j, (i + 1) * slices + j + 1, i * slices + j + 1));
+                        new MeshFace(i * slices + j, (i + 1) * slices + j + 1, i * slices + j + 1, 0));
                 }
 
                 indices.Add(
-                       new MeshFace((i + 1) * slices - 1, (i + 2) * slices - 1, (i + 1) * slices));
+                       new MeshFace((i + 1) * slices - 1, (i + 2) * slices - 1, (i + 1) * slices, 0));
                 indices.Add(
-                       new MeshFace((i + 1) * slices - 1, (i + 1) * slices, i * slices));
+                       new MeshFace((i + 1) * slices - 1, (i + 1) * slices, i * slices, 0));
 
             }
             #endregion
@@ -137,7 +137,7 @@ namespace Apoc3D.Graphics.Geometry
                 mesh.SetData(dst, buffer.Length);
             }
             mesh.Materials = materials;
-
+            mesh.MaterialAnimation = new MaterialAnimationInstance[] { MaterialAnimationInstance.DefaultAnimation };
             return mesh;
         }
     }
