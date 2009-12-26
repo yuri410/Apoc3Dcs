@@ -21,15 +21,15 @@ namespace Apoc3D.Graphics.Geometry
         /// (similar to lines of longitude). This has to be greater than 4 and less than 101.</param>
         /// <param name="stacks">Specifies the number of subdivisions along the Y axis 
         /// (similar to lines of latitude). This has to be greater than 4 and less than 101.</param>
-        public Sphere(RenderSystem rs, float radius, int slices, int stacks)
+        public Sphere(RenderSystem rs, float radius, int slices, int stacks, Material[][] materials)
             : base(rs, 1)
         {
-            GameMesh gm = new GameMesh(rs, CreateSphere(rs, radius, slices, stacks));
+            GameMesh gm = new GameMesh(rs, CreateSphere(rs, radius, slices, stacks, materials));
             base.Entities = new GameMesh[1] { gm };
             base.CurrentAnimation = new NoAnimation();
         }
 
-        private unsafe static MeshData CreateSphere(RenderSystem rs, float radius, int slices, int stacks)
+        private unsafe static MeshData CreateSphere(RenderSystem rs, float radius, int slices, int stacks, Material[][] materials)
         {
             if (slices < 5)
                 throw new ArgumentException("Cannot draw a sphere with slices less than 5");
@@ -136,7 +136,7 @@ namespace Apoc3D.Graphics.Geometry
                 }
                 mesh.SetData(dst, buffer.Length);
             }
-            mesh.Materials = new Material[1][] { new Material[1] { Material.DefaultMaterial } };
+            mesh.Materials = materials;
 
             return mesh;
         }

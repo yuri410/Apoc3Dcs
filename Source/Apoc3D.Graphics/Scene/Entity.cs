@@ -77,7 +77,7 @@ namespace Apoc3D.Scene
         Vector3 boundingSphereOffset;
 
         /// <summary>
-        ///  这个物体的LOD界别模型，索引0为LOD级别（仅次于最精细的）1的。
+        ///  这个物体的LOD界别模型，索引0为LOD级别1的（仅次于最精细的）。
         /// </summary>
         protected Model[] lodModels;
 
