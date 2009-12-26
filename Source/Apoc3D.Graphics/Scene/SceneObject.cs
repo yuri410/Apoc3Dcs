@@ -159,14 +159,14 @@ namespace Apoc3D.Scene
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="sceneMgr">加入到的场景管理器</param>
-        public virtual void OnAddedToScene(object sender, OctreeSceneManager sceneMgr) { }
+        public virtual void OnAddedToScene(object sender, SceneManagerBase sceneMgr) { }
 
         /// <summary>
         ///  当物体从场景管理器中移除时被调用
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="sceneMgr">源场景管理器</param>
-        public virtual void OnRemovedFromScene(object sender, OctreeSceneManager sceneMgr) { }
+        public virtual void OnRemovedFromScene(object sender, SceneManagerBase sceneMgr) { }
 
 
         /// <summary>
