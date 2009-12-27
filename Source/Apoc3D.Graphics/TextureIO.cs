@@ -8,6 +8,64 @@ using Apoc3D.Vfs;
 
 namespace Apoc3D.Graphics
 {
+    public unsafe struct TextureLevelData
+    {
+        static readonly string WidthTag = "Width";
+        static readonly string HeightTag = "Height";
+        static readonly string DepthTag = "Depth";
+        static readonly string ContentTag = "Content";
+        static readonly string LevelSizeTag = "LevelSize";
+
+        /// <summary>
+        ///  纹理层的宽度
+        /// </summary>
+        public int Width;
+        /// <summary>
+        ///  纹理层的高度
+        /// </summary>
+        public int Height;
+        /// <summary>
+        ///  纹理层的深度
+        /// </summary>
+        public int Depth;
+
+        /// <summary>
+        ///  纹理层的大小
+        /// </summary>
+        public int LevelSize;
+
+        /// <summary>
+        ///  字节数据
+        /// </summary>
+        public byte[] Content;
+
+        public void LoadData(BinaryDataReader data)
+        {
+            this.Width = data.GetDataInt32(WidthTag);
+            this.Height = data.GetDataInt32(HeightTag);
+            this.Depth = data.GetDataInt32(DepthTag);
+            this.LevelSize = data.GetDataInt32(LevelSizeTag);
+
+            ContentBinaryReader br1 = data.GetData(ContentTag);
+            
+            this.Content = br1.ReadBytes(LevelSize);
+            
+            br1.Close();
+        }
+
+        public void SaveData(BinaryDataWriter data)
+        {
+            data.AddEntry(WidthTag, Width);
+            data.AddEntry(HeightTag, Height);
+            data.AddEntry(DepthTag, Depth);
+            data.AddEntry(LevelSizeTag, LevelSize);
+
+            ContentBinaryWriter bw = data.AddEntry(ContentTag);
+            bw.Write(Content);
+            bw.Close();
+        }
+    }
+
     /// <summary>
     ///  表示纹理的数据
     /// </summary>
@@ -18,26 +76,12 @@ namespace Apoc3D.Graphics
         /// </summary>
         public TextureType Type;
 
-        /// <summary>
-        ///  表示纹理的宽度
-        /// </summary>
-        public int Width;
-
-        /// <summary>
-        ///  纹理的高度
-        /// </summary>
-        public int Height;
-
-        /// <summary>
-        ///  纹理的深度
-        /// </summary>
-        public int Depth;
+        public TextureLevelData[] Levels;
 
         /// <summary>
         ///  表示纹理的像素格式
         /// </summary>
         public ImagePixelFormat Format;
-
 
         /// <summary>
         ///  表示纹理的大小，包括所有的层
@@ -49,16 +93,6 @@ namespace Apoc3D.Graphics
         /// </summary>
         public int LevelCount;
 
-        /// <summary>
-        ///  表示纹理每一层的大小
-        /// </summary>
-        public fixed int LevelSize[Material.MaxTexLayers];
-
-        /// <summary>
-        ///  纹理的像素数据，从第一层开始一层一层排列
-        /// </summary>
-        public byte[] Content;
-
         #region 常量
 
 
@@ -67,15 +101,10 @@ namespace Apoc3D.Graphics
         public const int ID = 'A' << 24 | 'T' << 16 | 'E' << 8 | 'X';
 
         static readonly string TypeTag = "Type";
-        static readonly string WidthTag = "Width";
-        static readonly string HeightTag = "Height";
-        static readonly string DepthTag = "Depth";
         static readonly string FormatTag = "Format";
-        static readonly string ContentTag = "Content";
         static readonly string ContentSizeTag = "ContentSize";
         static readonly string LevelCountTag = "LevelCount";
-        static readonly string LevelSizeTag = "LevelSize";
-
+        static readonly string LevelTag = "Level";
         //static readonly byte[] internalLoadBuffer = new byte[MaxBufferSize];
 
         #endregion
@@ -89,35 +118,21 @@ namespace Apoc3D.Graphics
                 BinaryDataReader data = br.ReadBinaryData();
 
                 this.Type = (TextureType)data.GetDataInt32(TypeTag);
-                this.Width = data.GetDataInt32(WidthTag);
-                this.Height = data.GetDataInt32(HeightTag);
-                this.Depth = data.GetDataInt32(DepthTag);
+              
                 this.Format = (ImagePixelFormat)data.GetDataInt32(FormatTag);
                 this.ContentSize = data.GetDataInt32(ContentSizeTag);
                 this.LevelCount = data.GetDataInt32(LevelCountTag);
 
-                ContentBinaryReader br1 = data.GetData(LevelSizeTag);
-                fixed (int* dst = LevelSize)
+                Levels = new TextureLevelData[LevelCount];
+                for (int i = 0; i < LevelCount; i++)
                 {
-                    for (int i = 0; i < Material.MaxTexLayers; i++)
-                    {
-                        dst[i] = br1.ReadInt32();
-                    }
+                    ContentBinaryReader br2 = data.GetData(LevelTag + i.ToString());
+                    BinaryDataReader data2 = br2.ReadBinaryData();
+                    Levels[i].LoadData(data2);
+
+                    data2.Close();
+                    br2.Close();
                 }
-                br1.Close();
-
-                br1 = data.GetData(ContentTag);
-                //if (ContentSize > MaxBufferSize)
-                //{
-                this.Content = br1.ReadBytes(ContentSize);
-                //}
-                //else
-                //{
-                //this.Content = internalLoadBuffer;
-
-                //br1.Read(Content, 0, ContentSize);
-                //}
-                br1.Close();
 
                 data.Close();
             }
@@ -134,28 +149,21 @@ namespace Apoc3D.Graphics
             BinaryDataWriter data = new BinaryDataWriter();
 
             data.AddEntry(TypeTag, (int)Type);
-            data.AddEntry(WidthTag, Width);
-            data.AddEntry(HeightTag, Height);
-            data.AddEntry(DepthTag, Depth);
             data.AddEntry(FormatTag, (int)Format);
             data.AddEntry(ContentSizeTag, ContentSize);
             data.AddEntry(LevelCountTag, LevelCount);
 
-            ContentBinaryWriter bw1 = data.AddEntry(LevelSizeTag);
-            fixed (int* dst = LevelSize)
+            for (int i = 0; i < LevelCount; i++)
             {
-                for (int i = 0; i < Material.MaxTexLayers; i++)
-                {
-                    bw.Write(dst[i]);
-                }
+                ContentBinaryWriter bw2 = data.AddEntry(LevelTag + i.ToString());
+                BinaryDataWriter data2 = new BinaryDataWriter();
+                Levels[i].SaveData(data2);
+
+                bw2.Write(data2);
+
+                data2.Dispose();
+                bw2.Close();
             }
-            bw1.Close();
-
-            bw1 = data.AddEntry(ContentTag);
-
-            bw1.Write(Content);
-
-            bw1.Close();
 
             bw.Write(data);
             data.Dispose();

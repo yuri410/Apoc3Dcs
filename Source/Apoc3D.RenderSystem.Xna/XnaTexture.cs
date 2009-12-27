@@ -111,52 +111,55 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override void Save(Stream stm)
         {
-            TextureData data = new TextureData();
-            data.ContentSize = ContentSize;
-            data.Depth = Depth;
-            data.Format = Format;
-            data.Height = Height;
-            data.LevelCount = SurfaceCount;
-            data.Type = Type;
-            data.Width = Width;
+            throw new NotImplementedException();
+            //TextureData data = new TextureData();
+            //data.ContentSize = ContentSize;
+            ////data.Depth = Depth;
+            //data.Format = Format;
+            ////data.Height = Height;
+            //data.LevelCount = SurfaceCount;
+            //data.Type = Type;
+            ////data.Width = Width;
 
-            byte[] buffer = new byte[ContentSize];
-            data.Content = buffer;
+            //data.Levels = new TextureLevelData[SurfaceCount];
+            //for (int i = 0; i < SurfaceCount; i++)
+            //{
+            //    switch (Type)
+            //    {
+            //        case TextureType.CubeTexture:
+            //            int faceSize = PixelFormat.GetMemorySize(Width, Width, 1, Format);
 
-            int startPos = 0;
-            for (int i = 0; i < data.LevelCount; i++)
-            {                
-                switch (Type) 
-                {
-                    case TextureType.CubeTexture:
-                        int faceSize = PixelFormat.GetMemorySize(Width, Width, 1, Format);
-                        
-                        cube.GetData<byte>(XG.CubeMapFace.NegativeX, i, null, buffer, startPos, faceSize);
-                        startPos += faceSize;
-                        cube.GetData<byte>(XG.CubeMapFace.NegativeY, i, null, buffer, startPos, faceSize);
-                        startPos += faceSize;
-                        cube.GetData<byte>(XG.CubeMapFace.NegativeZ, i, null, buffer, startPos, faceSize);
-                        startPos += faceSize;
-                        cube.GetData<byte>(XG.CubeMapFace.PositiveX, i, null, buffer, startPos, faceSize);
-                        startPos += faceSize;
-                        cube.GetData<byte>(XG.CubeMapFace.PositiveY, i, null, buffer, startPos, faceSize);
-                        startPos += faceSize;
-                        cube.GetData<byte>(XG.CubeMapFace.PositiveZ, i, null, buffer, startPos, faceSize);
-                        startPos += faceSize;
+            //            cube.GetData<byte>(XG.CubeMapFace.NegativeX, i, null, buffer, startPos, faceSize);
+            //            startPos += faceSize;
+            //            cube.GetData<byte>(XG.CubeMapFace.NegativeY, i, null, buffer, startPos, faceSize);
+            //            startPos += faceSize;
+            //            cube.GetData<byte>(XG.CubeMapFace.NegativeZ, i, null, buffer, startPos, faceSize);
+            //            startPos += faceSize;
+            //            cube.GetData<byte>(XG.CubeMapFace.PositiveX, i, null, buffer, startPos, faceSize);
+            //            startPos += faceSize;
+            //            cube.GetData<byte>(XG.CubeMapFace.PositiveY, i, null, buffer, startPos, faceSize);
+            //            startPos += faceSize;
+            //            cube.GetData<byte>(XG.CubeMapFace.PositiveZ, i, null, buffer, startPos, faceSize);
+            //            startPos += faceSize;
 
-                        data.LevelSize[i] = faceSize * 6;
-                        break;
-                    case TextureType.Texture1D:
-                    case TextureType.Texture2D:
-                        int lvlSize = PixelFormat.GetMemorySize(Width, Width, 1, Format);
-                        break;
-                    case TextureType.Texture3D:
-                        
-                        break;
-                }
-            }
-            data.Save(stm);
-            throw new NotSupportedException();
+            //            data.Levels[i].LevelSize = faceSize * 6;
+            //            break;
+            //        case TextureType.Texture1D:
+            //        case TextureType.Texture2D:
+            //            int lvlSize = PixelFormat.GetMemorySize(Width, Width, 1, Format);
+
+
+            //            break;
+            //        case TextureType.Texture3D:
+
+            //            break;
+            //    }
+
+                
+            //}
+
+            
+            //data.Save(stm);
         }
 
         protected override DataRectangle @lock(int surface, LockMode mode, Rectangle rect)
@@ -332,10 +335,11 @@ namespace Apoc3D.RenderSystem.Xna
                     for (int i = 0; i < SurfaceCount; i++)
                     {
                         ResourceInterlock.EnterAtomicOp();
-                        tex2D.SetData(i, null, data.Content, startPos, data.LevelSize[i], XG.SetDataOptions.None);
+                        tex2D.SetData(i, null, data.Levels[i].Content, startPos, data.Levels[i].LevelSize, XG.SetDataOptions.None);
+                        
                         ResourceInterlock.ExitAtomicOp();
 
-                        startPos += data.LevelSize[i];
+                        startPos += data.Levels[i].LevelSize;
                     }
                     break;
                 case TextureType.CubeTexture:
@@ -346,34 +350,34 @@ namespace Apoc3D.RenderSystem.Xna
                     startPos = 0;
                     for (int i = 0; i < SurfaceCount; i++)
                     {
-                        int levelSize = data.LevelSize[i] / 6;
+                        int levelSize = data.Levels[i].LevelSize / 6;
                         ResourceInterlock.EnterAtomicOp();
-                        cube.SetData(XG.CubeMapFace.NegativeX, i, null, data.Content, startPos, levelSize, XG.SetDataOptions.None);
+                        cube.SetData(XG.CubeMapFace.NegativeX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
                         ResourceInterlock.EnterAtomicOp();
-                        cube.SetData(XG.CubeMapFace.NegativeY, i, null, data.Content, startPos, levelSize, XG.SetDataOptions.None);
+                        cube.SetData(XG.CubeMapFace.NegativeY, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
                         ResourceInterlock.EnterAtomicOp();
-                        cube.SetData(XG.CubeMapFace.NegativeZ, i, null, data.Content, startPos, levelSize, XG.SetDataOptions.None);
+                        cube.SetData(XG.CubeMapFace.NegativeZ, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
                         ResourceInterlock.EnterAtomicOp();
-                        cube.SetData(XG.CubeMapFace.PositiveX, i, null, data.Content, startPos, levelSize, XG.SetDataOptions.None);
+                        cube.SetData(XG.CubeMapFace.PositiveX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         ResourceInterlock.EnterAtomicOp();
                         startPos += levelSize;
 
                         ResourceInterlock.ExitAtomicOp();
-                        cube.SetData(XG.CubeMapFace.PositiveY, i, null, data.Content, startPos, levelSize, XG.SetDataOptions.None);
+                        cube.SetData(XG.CubeMapFace.PositiveY, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
                         ResourceInterlock.EnterAtomicOp();
-                        cube.SetData(XG.CubeMapFace.PositiveZ, i, null, data.Content, startPos, levelSize, XG.SetDataOptions.None);
+                        cube.SetData(XG.CubeMapFace.PositiveZ, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
                     }
@@ -387,10 +391,10 @@ namespace Apoc3D.RenderSystem.Xna
                     for (int i = 0; i < SurfaceCount; i++)
                     {
                         ResourceInterlock.EnterAtomicOp();
-                        tex3D.SetData(i, 0, 0, 0, 0, 0, 0, data.Content, startPos, data.LevelSize[i], XG.SetDataOptions.None);
+                        tex3D.SetData(i, 0, 0, 0, 0, 0, 0, data.Levels[i].Content, startPos, data.Levels[i].LevelSize, XG.SetDataOptions.None);
                         ResourceInterlock.ExitAtomicOp();
 
-                        startPos += data.LevelSize[i];
+                        startPos += data.Levels[i].LevelSize;
                     }
                     break;
             }

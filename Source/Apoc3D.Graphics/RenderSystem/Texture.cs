@@ -164,12 +164,12 @@ namespace Apoc3D.Graphics
         protected void UpdateInfo(ref TextureData data)
         {
             this.ContentSize = data.ContentSize;
-            this.Depth = data.Depth;
+            this.Depth = data.Levels[0].Depth;
             this.Format = data.Format;
-            this.Height = data.Height;
+            this.Height = data.Levels[0].Height;
             this.SurfaceCount = data.LevelCount;
             this.Type = data.Type;
-            this.Width = data.Width;
+            this.Width = data.Levels[0].Width;
         }
 
         public override int GetSize()
