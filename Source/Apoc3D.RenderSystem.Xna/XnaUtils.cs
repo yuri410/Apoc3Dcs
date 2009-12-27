@@ -409,6 +409,7 @@ namespace Apoc3D.RenderSystem.Xna
         }
         #endregion
 
+        #region CubeMapFace
         public static XG.CubeMapFace ConvertEnum(CubeMapFace face) 
         {
             return (XG.CubeMapFace)face;
@@ -417,5 +418,6 @@ namespace Apoc3D.RenderSystem.Xna
         {
             return (CubeMapFace)face;
         }
+        #endregion
     }
 }

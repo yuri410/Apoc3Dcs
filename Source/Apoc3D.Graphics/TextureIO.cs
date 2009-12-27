@@ -38,7 +38,7 @@ namespace Apoc3D.Graphics
         /// </summary>
         public ImagePixelFormat Format;
 
-        
+
         /// <summary>
         ///  表示纹理的大小，包括所有的层
         /// </summary>
@@ -62,7 +62,7 @@ namespace Apoc3D.Graphics
         #region 常量
 
 
-        public const int MaxBufferSize = 4 * 1048576;
+        //public const int MaxBufferSize = 4 * 1048576;
 
         public const int ID = 'A' << 24 | 'T' << 16 | 'E' << 8 | 'X';
 
@@ -76,7 +76,7 @@ namespace Apoc3D.Graphics
         static readonly string LevelCountTag = "LevelCount";
         static readonly string LevelSizeTag = "LevelSize";
 
-        static readonly byte[] internalLoadBuffer = new byte[MaxBufferSize];
+        //static readonly byte[] internalLoadBuffer = new byte[MaxBufferSize];
 
         #endregion
 
@@ -101,22 +101,22 @@ namespace Apoc3D.Graphics
                 {
                     for (int i = 0; i < Material.MaxTexLayers; i++)
                     {
-                        dst[i] = br.ReadInt32();
+                        dst[i] = br1.ReadInt32();
                     }
                 }
                 br1.Close();
 
                 br1 = data.GetData(ContentTag);
-                if (ContentSize > MaxBufferSize)
-                {
-                    this.Content = br1.ReadBytes(ContentSize);
-                }
-                else
-                {
-                    this.Content = internalLoadBuffer;
+                //if (ContentSize > MaxBufferSize)
+                //{
+                this.Content = br1.ReadBytes(ContentSize);
+                //}
+                //else
+                //{
+                //this.Content = internalLoadBuffer;
 
-                    br1.Read(Content, 0, ContentSize);
-                }
+                //br1.Read(Content, 0, ContentSize);
+                //}
                 br1.Close();
 
                 data.Close();
@@ -127,7 +127,40 @@ namespace Apoc3D.Graphics
 
         public void Save(Stream stream)
         {
-            throw new NotImplementedException();
+            ContentBinaryWriter bw = new ContentBinaryWriter(stream);
+
+            bw.Write(ID);
+
+            BinaryDataWriter data = new BinaryDataWriter();
+
+            data.AddEntry(TypeTag, (int)Type);
+            data.AddEntry(WidthTag, Width);
+            data.AddEntry(HeightTag, Height);
+            data.AddEntry(DepthTag, Depth);
+            data.AddEntry(FormatTag, (int)Format);
+            data.AddEntry(ContentSizeTag, ContentSize);
+            data.AddEntry(LevelCountTag, LevelCount);
+
+            ContentBinaryWriter bw1 = data.AddEntry(LevelSizeTag);
+            fixed (int* dst = LevelSize)
+            {
+                for (int i = 0; i < Material.MaxTexLayers; i++)
+                {
+                    bw.Write(dst[i]);
+                }
+            }
+            bw1.Close();
+
+            bw1 = data.AddEntry(ContentTag);
+
+            bw1.Write(Content);
+
+            bw1.Close();
+
+            bw.Write(data);
+            data.Dispose();
+
+            bw.Close();
         }
     }
 

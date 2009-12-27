@@ -91,8 +91,7 @@ namespace Apoc3D.Vfs
             stream.Position = ent.offset;
             stream.Read(buffer, 0, sizeof(int));
 
-            return buffer[0] | (buffer[1] << 8) | (buffer[2] << 16) | (buffer[3] << 24);
-
+            return buffer[3] | (buffer[2] << 8) | (buffer[1] << 16) | (buffer[0] << 24);
         }
         //[CLSCompliant(false)]
         public uint GetDataUInt32(string name)
@@ -102,7 +101,7 @@ namespace Apoc3D.Vfs
             stream.Position = ent.offset;
             stream.Read(buffer, 0, sizeof(uint));
 
-            return (uint)(buffer[0] | (buffer[1] << 8) | (buffer[2] << 16) | (buffer[3] << 24));
+            return (uint)(buffer[3] | (buffer[2] << 8) | (buffer[1] << 16) | (buffer[0] << 24));
         }
 
         public short GetDataInt16(string name)
