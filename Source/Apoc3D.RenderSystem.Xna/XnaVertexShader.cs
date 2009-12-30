@@ -256,6 +256,14 @@ namespace Apoc3D.RenderSystem.Xna
             device.SetVertexShaderConstant(constants[index].RegisterIndex, value);
         }
 
+        public override void SetSamplerStateDirect(int index, ref ShaderSamplerState state)
+        {
+            throw new NotImplementedException();
+        }
+        public override void SetTextureDirect(int index, Texture tex)
+        {
+            throw new NotImplementedException();
+        }
         public override void SetTexture(int index, Texture tex)
         {
             int si = constants[index].SamplerIndex;

@@ -331,15 +331,12 @@ namespace Apoc3D.RenderSystem.Xna
                     tex2D = new XG.Texture2D(device, Width, Height, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
                     ResourceInterlock.ExitAtomicOp();
 
-                    int startPos = 0;
                     for (int i = 0; i < SurfaceCount; i++)
                     {
                         ResourceInterlock.EnterAtomicOp();
-                        tex2D.SetData(i, null, data.Levels[i].Content, startPos, data.Levels[i].LevelSize, XG.SetDataOptions.None);
+                        tex2D.SetData(i, null, data.Levels[i].Content, 0, data.Levels[i].LevelSize, XG.SetDataOptions.None);
                         
                         ResourceInterlock.ExitAtomicOp();
-
-                        startPos += data.Levels[i].LevelSize;
                     }
                     break;
                 case TextureType.CubeTexture:
@@ -347,9 +344,9 @@ namespace Apoc3D.RenderSystem.Xna
                     cube = new XG.TextureCube(device, Width, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
                     ResourceInterlock.ExitAtomicOp();
 
-                    startPos = 0;
                     for (int i = 0; i < SurfaceCount; i++)
                     {
+                        int startPos = 0;
                         int levelSize = data.Levels[i].LevelSize / 6;
                         ResourceInterlock.EnterAtomicOp();
                         cube.SetData(XG.CubeMapFace.NegativeX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
@@ -387,14 +384,11 @@ namespace Apoc3D.RenderSystem.Xna
                     tex3D = new XG.Texture3D(device, Width, Height, Depth, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
                     ResourceInterlock.ExitAtomicOp();
 
-                    startPos = 0;
                     for (int i = 0; i < SurfaceCount; i++)
                     {
                         ResourceInterlock.EnterAtomicOp();
-                        tex3D.SetData(i, 0, 0, 0, 0, 0, 0, data.Levels[i].Content, startPos, data.Levels[i].LevelSize, XG.SetDataOptions.None);
+                        tex3D.SetData(i, 0, 0, 0, 0, 0, 0, data.Levels[i].Content, 0, data.Levels[i].LevelSize, XG.SetDataOptions.None);
                         ResourceInterlock.ExitAtomicOp();
-
-                        startPos += data.Levels[i].LevelSize;
                     }
                     break;
             }

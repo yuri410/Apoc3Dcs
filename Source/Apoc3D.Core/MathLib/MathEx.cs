@@ -133,9 +133,13 @@ namespace Apoc3D.MathLib
             //v1.Normalize();
             if (v1.X < 0)
             {
-                return -(float)Math.Acos(v1.Y);
+                return (float)Math.Acos(v1.Y) + MathEx.PiOver2;
             }
-            return (float)Math.Acos(v1.Y) - MathEx.PIf * 2;
+            else if (v1.Y >= 0) 
+            {
+                return -(float)Math.Acos(v1.Y) + MathEx.PiOver2;
+            }
+            return -(float)Math.Acos(v1.Y) + MathEx.PiOver2 + MathEx.PIf * 2;
         }
         public static PolarCoord VectorToPolar(Vector2 v1)
         {

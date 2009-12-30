@@ -53,6 +53,9 @@ namespace Apoc3D.Graphics.Geometry
             double thetaIncr = Math.PI * 2 / slices;
             int countB, countA;
             // Add sphere vertices
+
+            float dist = radius * 2;
+
             for (countA = 0, thai = thaiIncr; thai < Math.PI - thaiIncr / 2; thai += thaiIncr, countA++)
             {
                 for (countB = 0, theta = 0; countB < slices; theta += thetaIncr, countB++)
@@ -61,6 +64,14 @@ namespace Apoc3D.Graphics.Geometry
                     vert.pos = new Vector3((float)(radius * Math.Sin(thai) * Math.Cos(theta)),
                         (float)(radius * Math.Cos(thai)), (float)(radius * Math.Sin(thai) * Math.Sin(theta)));
                     vert.n = Vector3.Normalize(vert.pos);
+
+                    vert.u = (float)(-0.5f * (theta - MathEx.PIf) / Math.PI);//(vert.pos.Y + radius) / dist;/
+                    vert.v = (float)((thai - MathEx.Degree2Radian(5)) / Math.PI);
+
+
+                    //vert.u += MathEx.PIf;
+                    //vert.v += MathEx.Degree2Radian(5);
+
                     vertices.Add(vert);
                 }
             }
@@ -68,13 +79,15 @@ namespace Apoc3D.Graphics.Geometry
             VertexPNT1 temp = new VertexPNT1();
             temp.pos = new Vector3(0, radius, 0);
             temp.n = new Vector3(0, 1, 0);
-
+            temp.u = 0.5f;
+            temp.v = 0;
             // Add north pole vertex
             vertices.Add(temp);
 
             temp.pos = new Vector3(0, -radius, 0);
             temp.n = new Vector3(0, -1, 0);
-
+            temp.u = 0.5f;
+            temp.v = 1;
             // Add south pole vertex
             vertices.Add(temp);
             #endregion

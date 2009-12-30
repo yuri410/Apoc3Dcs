@@ -5,6 +5,7 @@ using Apoc3D.MathLib;
 using Apoc3D.Vfs;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
+using Apoc3D.Core;
 
 namespace Apoc3D.RenderSystem.Xna
 {
@@ -259,13 +260,23 @@ namespace Apoc3D.RenderSystem.Xna
         {
             int si = constants[index].SamplerIndex;
 
-            XnaTexture xnatex = (XnaTexture)tex;
-            if (xnatex.tex2D != null)
-                device.Textures[si] = xnatex.tex2D;
-            else if (xnatex.cube != null)
-                device.Textures[si] = xnatex.cube;
-            else if (xnatex.tex3D != null)
-                device.Textures[si] = xnatex.tex3D;
+            if (tex != null)
+            {
+                if (tex.State == ResourceState.Loaded)
+                {
+                    XnaTexture xnatex = (XnaTexture)tex;
+                    if (xnatex.tex2D != null)
+                        device.Textures[si] = xnatex.tex2D;
+                    else if (xnatex.cube != null)
+                        device.Textures[si] = xnatex.cube;
+                    else if (xnatex.tex3D != null)
+                        device.Textures[si] = xnatex.tex3D;
+                }
+                else 
+                {
+
+                }
+            }
         }
         public override void SetSamplerState(int index, ref ShaderSamplerState state)
         {
@@ -282,7 +293,40 @@ namespace Apoc3D.RenderSystem.Xna
             xs.MaxAnisotropy = state.MaxMipLevel;
             xs.MipMapLevelOfDetailBias = state.MipMapLODBias;
         }
+        public override void SetTextureDirect(int si, Texture tex)
+        {
+            if (tex != null)
+            {
+                if (tex.State == ResourceState.Loaded)
+                {
+                    XnaTexture xnatex = (XnaTexture)tex;
+                    if (xnatex.tex2D != null)
+                        device.Textures[si] = xnatex.tex2D;
+                    else if (xnatex.cube != null)
+                        device.Textures[si] = xnatex.cube;
+                    else if (xnatex.tex3D != null)
+                        device.Textures[si] = xnatex.tex3D;
+                }
+                else
+                {
 
+                }
+            }
+        }
+        public override void SetSamplerStateDirect(int si, ref ShaderSamplerState state)
+        {
+            XG.SamplerState xs = device.SamplerStates[si];
+            xs.AddressU = XnaUtils.ConvertEnum(state.AddressU);
+            xs.AddressV = XnaUtils.ConvertEnum(state.AddressV);
+            xs.AddressW = XnaUtils.ConvertEnum(state.AddressW);
+            xs.BorderColor = new XG.Color(state.BorderColor.R, state.BorderColor.G, state.BorderColor.B, state.BorderColor.A);
+            xs.MagFilter = XnaUtils.ConvertEnum(state.MagFilter);
+            xs.MinFilter = XnaUtils.ConvertEnum(state.MinFilter);
+            xs.MipFilter = XnaUtils.ConvertEnum(state.MipFilter);
+            xs.MaxAnisotropy = state.MaxMipLevel;
+            xs.MipMapLevelOfDetailBias = state.MipMapLODBias;
+        }
+       
         #endregion
 
         #region Named Set

@@ -130,29 +130,25 @@ namespace Apoc3D.Graphics
 
 
 
-        ///// <summary>
-        /////  设置纹理
-        ///// </summary>
-        ///// <param name="index"></param>
-        ///// <param name="texture"></param>
-        //public abstract void SetTexture(int index, Texture texture);
+        /// <summary>
+        ///  设置纹理
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="texture"></param>
+        public abstract void SetTexture(int index, Texture texture);
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="index"></param>
-        ///// <returns></returns>
-        //public abstract Texture GetTexture(int index);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public abstract Texture GetTexture(int index);
 
-
-
-
-
-        ///// <summary>
-        /////  获取所有纹理层的Sampler状态
-        ///// </summary>
-        ///// <returns></returns>
-        //public abstract SamplerStateCollection GetSamplerStates();
+        /// <summary>
+        ///  获取所有纹理层的Sampler状态
+        /// </summary>
+        /// <returns></returns>
+        public abstract SamplerStateCollection GetSamplerStates();
 
         /// <summary>
         ///  设置顶点Shader

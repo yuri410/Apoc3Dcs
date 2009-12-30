@@ -8,26 +8,25 @@ using XG = Microsoft.Xna.Framework.Graphics;
 
 namespace Apoc3D.RenderSystem.Xna
 {
-    [Obsolete()]
     class XnaSamplerState : SamplerState
     {
-        XG.SamplerState xnaSS;
+        XnaRenderSystem renderSys;
 
-        public XnaSamplerState(XG.SamplerState state, int index)
+        public XnaSamplerState(XnaRenderSystem rs, int index)
             : base(index)
         {
-            xnaSS = state;
+            renderSys = rs;
         }
 
         public override TextureAddressMode AddressU
         {
             get
             {
-                return XnaUtils.ConvertEnum(xnaSS.AddressU);
+                return XnaUtils.ConvertEnum(renderSys.Device.SamplerStates[Index].AddressU);
             }
             set
             {
-                xnaSS.AddressU = XnaUtils.ConvertEnum(value);
+                renderSys.Device.SamplerStates[Index].AddressU = XnaUtils.ConvertEnum(value);
             }
         }
 
@@ -35,11 +34,11 @@ namespace Apoc3D.RenderSystem.Xna
         {
             get
             {
-                return XnaUtils.ConvertEnum(xnaSS.AddressV);
+                return XnaUtils.ConvertEnum(renderSys.Device.SamplerStates[Index].AddressV);
             }
             set
             {
-                xnaSS.AddressV = XnaUtils.ConvertEnum(value);
+                renderSys.Device.SamplerStates[Index].AddressV = XnaUtils.ConvertEnum(value);
             }
         }
 
@@ -47,11 +46,11 @@ namespace Apoc3D.RenderSystem.Xna
         {
             get
             {
-                return XnaUtils.ConvertEnum(xnaSS.AddressW);
+                return XnaUtils.ConvertEnum(renderSys.Device.SamplerStates[Index].AddressW);
             }
             set
             {
-                xnaSS.AddressW = XnaUtils.ConvertEnum(value);
+                renderSys.Device.SamplerStates[Index].AddressW = XnaUtils.ConvertEnum(value);
             }
         }
 
@@ -59,11 +58,11 @@ namespace Apoc3D.RenderSystem.Xna
         {
             get
             {
-                return new ColorValue(xnaSS.BorderColor.PackedValue);
+                return new ColorValue(renderSys.Device.SamplerStates[Index].BorderColor.PackedValue);
             }
             set
             {
-                xnaSS.BorderColor = new XG.Color(value.R, value.G, value.B, value.A);
+                renderSys.Device.SamplerStates[Index].BorderColor = new XG.Color(value.R, value.G, value.B, value.A);
             }
         }
 
@@ -71,35 +70,35 @@ namespace Apoc3D.RenderSystem.Xna
         {
             get
             {
-                return XnaUtils.ConvertEnum(xnaSS.MagFilter);
+                return XnaUtils.ConvertEnum(renderSys.Device.SamplerStates[Index].MagFilter);
             }
             set
             {
-                xnaSS.MagFilter = XnaUtils.ConvertEnum(value);
+                renderSys.Device.SamplerStates[Index].MagFilter = XnaUtils.ConvertEnum(value);
             }
         }
 
         public override int MaxAnisotropy
         {
-            get { return xnaSS.MaxAnisotropy; }
-            set { xnaSS.MaxAnisotropy = value; }
+            get { return renderSys.Device.SamplerStates[Index].MaxAnisotropy; }
+            set { renderSys.Device.SamplerStates[Index].MaxAnisotropy = value; }
         }
 
         public override int MaxMipLevel
         {
-            get { return xnaSS.MaxMipLevel; }
-            set { xnaSS.MaxMipLevel = value; }
+            get { return renderSys.Device.SamplerStates[Index].MaxMipLevel; }
+            set { renderSys.Device.SamplerStates[Index].MaxMipLevel = value; }
         }
 
         public override TextureFilter MinFilter
         {
             get
             {
-                return XnaUtils.ConvertEnum(xnaSS.MinFilter);
+                return XnaUtils.ConvertEnum(renderSys.Device.SamplerStates[Index].MinFilter);
             }
             set
             {
-                xnaSS.MinFilter = XnaUtils.ConvertEnum(value);
+                renderSys.Device.SamplerStates[Index].MinFilter = XnaUtils.ConvertEnum(value);
             }
         }
 
@@ -107,18 +106,18 @@ namespace Apoc3D.RenderSystem.Xna
         {
             get
             {
-                return XnaUtils.ConvertEnum(xnaSS.MipFilter);
+                return XnaUtils.ConvertEnum(renderSys.Device.SamplerStates[Index].MipFilter);
             }
             set
             {
-                xnaSS.MipFilter = XnaUtils.ConvertEnum(value);
+                renderSys.Device.SamplerStates[Index].MipFilter = XnaUtils.ConvertEnum(value);
             }
         }
 
         public override float MipMapLODBias
         {
-            get { return xnaSS.MipMapLevelOfDetailBias; }
-            set { xnaSS.MipMapLevelOfDetailBias = value; }
+            get { return renderSys.Device.SamplerStates[Index].MipMapLevelOfDetailBias; }
+            set { renderSys.Device.SamplerStates[Index].MipMapLevelOfDetailBias = value; }
         }
     }
 }

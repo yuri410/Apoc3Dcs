@@ -81,7 +81,10 @@ namespace Apoc3D.Core
 
                         lock (table.syncHelper2)
                         {
-                            res = table.genList[j];
+                            count = table.genList.Count;
+                            if (j < count)
+                                res = table.genList[j];
+                            else break;
                         }
 
                         if (res.generation.GenerationOutOfTime(ref timeStart))

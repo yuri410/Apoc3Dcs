@@ -24,7 +24,6 @@ namespace Apoc3D.Graphics
     /// <summary>
     ///  表示采样器的状态，可以获取或设置采样器的参数
     /// </summary>
-    [Obsolete()]
     public abstract class SamplerState
     {
         protected SamplerState(int index)

@@ -80,6 +80,9 @@ namespace Apoc3D.Graphics
         public abstract void SetTexture(int index, Texture tex);
         public abstract void SetSamplerState(int index, ref ShaderSamplerState state);
 
+        public abstract void SetTextureDirect(int index, Texture tex);
+        public abstract void SetSamplerStateDirect(int index, ref ShaderSamplerState state);
+
 
         public abstract void SetValue(string paramName, ref Vector2 value);
         public abstract void SetValue(string paramName, ref Vector3 value);

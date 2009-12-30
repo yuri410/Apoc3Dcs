@@ -99,6 +99,11 @@ namespace Apoc3D.Graphics
 
                 case VertexElementFormat.Byte4:
                     return sizeof(byte) * 4;
+                case VertexElementFormat.HalfVector2:
+                    return sizeof(ushort) * 2;
+                case VertexElementFormat.HalfVector4:
+                    return sizeof(ushort) * 4;
+
             } // end switch
 
             // keep the compiler happy
@@ -139,47 +144,52 @@ namespace Apoc3D.Graphics
 
                 case VertexElementFormat.Byte4:
                     return 4;
+
+                case VertexElementFormat.HalfVector2:
+                    return 2;
+                case VertexElementFormat.HalfVector4:
+                    return 4;
             } // end switch			
 
             // keep the compiler happy
             return 0;
         }
 
-        /// <summary>
-        ///		Returns proper enum for a base type multiplied by a value.  This is helpful
-        ///		when working with tex coords especially since you might not know the number
-        ///		of texture dimensions at runtime, and when creating the VertexBuffer you will
-        ///		have to get a VertexElementType based on that amount to creating the VertexElement.
-        /// </summary>
-        /// <param name="type">Data type.</param>
-        /// <param name="count">Multiplier.</param>
-        /// <returns>
-        ///     A <see cref="VertexElementType"/> that represents the requested type and count.
-        /// </returns>
-        /// <example>
-        ///     MultiplyTypeCount(VertexElementType.Float1, 3) returns VertexElementType.Float3.
-        /// </example>
-        public static VertexElementFormat MultiplyTypeCount(VertexElementFormat type, int count)
-        {
-            switch (type)
-            {
-                case VertexElementFormat.Single:
-                    switch (count)
-                    {
-                        case 1:
-                            return VertexElementFormat.Single;
-                        case 2:
-                            return VertexElementFormat.Vector2;
-                        case 3:
-                            return VertexElementFormat.Vector3;
-                        case 4:
-                            return VertexElementFormat.Vector4;
-                    }
-                    break;
-            }
+        ///// <summary>
+        /////		Returns proper enum for a base type multiplied by a value.  This is helpful
+        /////		when working with tex coords especially since you might not know the number
+        /////		of texture dimensions at runtime, and when creating the VertexBuffer you will
+        /////		have to get a VertexElementType based on that amount to creating the VertexElement.
+        ///// </summary>
+        ///// <param name="type">Data type.</param>
+        ///// <param name="count">Multiplier.</param>
+        ///// <returns>
+        /////     A <see cref="VertexElementType"/> that represents the requested type and count.
+        ///// </returns>
+        ///// <example>
+        /////     MultiplyTypeCount(VertexElementType.Float1, 3) returns VertexElementType.Float3.
+        ///// </example>
+        //public static VertexElementFormat MultiplyTypeCount(VertexElementFormat type, int count)
+        //{
+        //    switch (type)
+        //    {
+        //        case VertexElementFormat.Single:
+        //            switch (count)
+        //            {
+        //                case 1:
+        //                    return VertexElementFormat.Single;
+        //                case 2:
+        //                    return VertexElementFormat.Vector2;
+        //                case 3:
+        //                    return VertexElementFormat.Vector3;
+        //                case 4:
+        //                    return VertexElementFormat.Vector4;
+        //            }
+        //            break;
+        //    }
 
-            throw new Exception("Cannot multiply base vertex element type: " + type.ToString());
-        }
+        //    throw new Exception("Cannot multiply base vertex element type: " + type.ToString());
+        //}
 
         #endregion
 

@@ -36,7 +36,7 @@ namespace Apoc3D.RenderSystem.Xna
             cfmtConv[(int)ImagePixelFormat.A4L4] = XG.SurfaceFormat.LuminanceAlpha8;
             cfmtConv[(int)ImagePixelFormat.A4R4G4B4] = XG.SurfaceFormat.Bgra4444;
             cfmtConv[(int)ImagePixelFormat.Alpha8] = XG.SurfaceFormat.Alpha8;
-            cfmtConv[(int)ImagePixelFormat.A8B8G8R8] = XG.SurfaceFormat.Unknown;
+            cfmtConv[(int)ImagePixelFormat.A8B8G8R8] = XG.SurfaceFormat.Rgba32;
             cfmtConv[(int)ImagePixelFormat.A8L8] = XG.SurfaceFormat.LuminanceAlpha16;
             cfmtConv[(int)ImagePixelFormat.A8R8G8B8] = XG.SurfaceFormat.Color;
             cfmtConv[(int)ImagePixelFormat.DXT1] = XG.SurfaceFormat.Dxt1;
@@ -55,7 +55,7 @@ namespace Apoc3D.RenderSystem.Xna
             cfmtConv[(int)ImagePixelFormat.R3G3B2] = XG.SurfaceFormat.Bgr233;
             cfmtConv[(int)ImagePixelFormat.R5G6B5] = XG.SurfaceFormat.Bgr565;
             cfmtConv[(int)ImagePixelFormat.R8G8B8] = XG.SurfaceFormat.Bgr24;
-            cfmtConv[(int)ImagePixelFormat.R8G8B8A8] = XG.SurfaceFormat.Rgba32;
+            cfmtConv[(int)ImagePixelFormat.R8G8B8A8] = XG.SurfaceFormat.Unknown;
             cfmtConv[(int)ImagePixelFormat.X8B8G8R8] = XG.SurfaceFormat.Rgb32;
             cfmtConv[(int)ImagePixelFormat.X8R8G8B8] = XG.SurfaceFormat.Bgr32;
             cfmtConv[(int)ImagePixelFormat.Palette8] = XG.SurfaceFormat.Palette8;
@@ -113,7 +113,7 @@ namespace Apoc3D.RenderSystem.Xna
             cfmtConv2[(int)XG.SurfaceFormat.Rg32 + 1] = ImagePixelFormat.G16R16;
             cfmtConv2[(int)XG.SurfaceFormat.Rgb32 + 1] = ImagePixelFormat.B8G8R8;
             cfmtConv2[(int)XG.SurfaceFormat.Rgba1010102 + 1] = ImagePixelFormat.Unknown;
-            cfmtConv2[(int)XG.SurfaceFormat.Rgba32 + 1] = ImagePixelFormat.R8G8B8A8;
+            cfmtConv2[(int)XG.SurfaceFormat.Rgba32 + 1] = ImagePixelFormat.A8B8G8R8;
             cfmtConv2[(int)XG.SurfaceFormat.Rgba64 + 1] = ImagePixelFormat.Unknown;
             cfmtConv2[(int)XG.SurfaceFormat.Single + 1] = ImagePixelFormat.R32F;
             cfmtConv2[(int)XG.SurfaceFormat.Unknown + 1] = ImagePixelFormat.Unknown;

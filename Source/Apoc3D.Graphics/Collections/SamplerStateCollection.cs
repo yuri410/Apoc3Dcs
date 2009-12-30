@@ -5,7 +5,6 @@ using Apoc3D.Graphics;
 
 namespace Apoc3D.Collections
 {
-    [Obsolete()]
     public class SamplerStateCollection : CollectionBase<SamplerState>
     {
         public SamplerStateCollection(SamplerState[] states)

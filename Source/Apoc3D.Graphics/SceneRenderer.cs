@@ -378,7 +378,7 @@ namespace Apoc3D.Graphics
             //{
             batchData.RenderedObjectCount = 0;
 
-            renderSystem.RenderStates.FillMode = FillMode.WireFrame;
+            //renderSystem.RenderStates.FillMode = FillMode.WireFrame;
             //EffectParams.Atmosphere = Atmosphere;
             //EffectParams.TerrainHeightScale = Data.TerrainSettings.HeightScale;
 

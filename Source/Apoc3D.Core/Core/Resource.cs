@@ -89,8 +89,12 @@ namespace Apoc3D.Core
 
         public static implicit operator T(ResourceHandle<T> res)
         {
-            res.resuorce.Use();
-            return res.resuorce;
+            if (res != null)
+            {
+                res.resuorce.Use();
+                return res.resuorce;
+            }
+            return null;
         }
 
         public override string ToString()

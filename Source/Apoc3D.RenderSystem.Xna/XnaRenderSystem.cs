@@ -27,6 +27,11 @@ namespace Apoc3D.RenderSystem.Xna
         XnaRenderStateManager renderStates;
         XnaObjectFactory objectFactory;
 
+
+        XnaTexture[] cachedTextures = new XnaTexture[MaxTexLayers];
+
+        SamplerStateCollection samStateColl;
+
         internal XG.GraphicsDevice Device
         {
             get { return manager.GraphicsDevice; }
@@ -1003,6 +1008,13 @@ namespace Apoc3D.RenderSystem.Xna
 
             cachedRenderTargets = new XnaRenderTarget[Device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets];
 
+            XnaSamplerState[] states = new XnaSamplerState[Device.GraphicsDeviceCapabilities.MaxSimultaneousTextures];
+            for (int i = 0; i < states.Length; i++) 
+            {
+                states[i] = new XnaSamplerState(this, i);
+            }
+
+            samStateColl = new SamplerStateCollection(states);
         }
 
         public override void Clear(ClearFlags flags, ColorValue color, float depth, int stencil)
@@ -1274,5 +1286,37 @@ namespace Apoc3D.RenderSystem.Xna
 
             ResourceInterlock.UnblockAll();
         }
+
+        public override void SetTexture(int index, Texture texture)
+        {
+            XnaTexture xt = (XnaTexture)texture;
+            if (xt != null)
+            {
+                if (xt.State == ResourceState.Loaded)
+                {
+                    if (xt.cube != null)
+                        Device.Textures[index] = xt.cube;
+                    else if (xt.tex2D != null)
+                        Device.Textures[index] = xt.tex2D;
+                    else
+                        Device.Textures[index] = xt.tex3D;
+                    cachedTextures[index] = xt;
+                }
+                else 
+                {
+
+                }
+            }
+        }
+        public override Texture GetTexture(int index)
+        {
+            return cachedTextures[index];
+        }
+
+        public override SamplerStateCollection GetSamplerStates()
+        {
+            return samStateColl;
+        }
+
     }
 }
