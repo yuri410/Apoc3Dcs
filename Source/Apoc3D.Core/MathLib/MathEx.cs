@@ -712,13 +712,13 @@ namespace Apoc3D.MathLib
             float invd1 = 1.0f / ((float)Math.Sqrt(2 * Math.PI) * delta * delta);
             float invd2 = 1.0f / (2 * delta * delta);
 
-            float halfSize = (float)size * 0.5f;
+            int halfSize = size / 2;
 
             float[] result = new float[size];
 
             for (int i = 0; i < size; i++)
             {
-                float x = i - halfSize;
+                int x = i - halfSize;
 
                 result[i] = (float)(invd1 * Math.Exp(-invd2 * (x * x)));
             }
