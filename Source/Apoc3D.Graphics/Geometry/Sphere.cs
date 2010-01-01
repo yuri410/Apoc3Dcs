@@ -33,12 +33,12 @@ namespace Apoc3D.Graphics.Geometry
         {
             if (slices < 5)
                 throw new ArgumentException("Cannot draw a sphere with slices less than 5");
-            if (slices > 100)
-                throw new ArgumentException("Cannot draw a sphere with slices greater than 100");
+            //if (slices > 100)
+            //    throw new ArgumentException("Cannot draw a sphere with slices greater than 100");
             if (stacks < 5)
                 throw new ArgumentException("Cannot draw a sphere with stacks less than 5");
-            if (stacks > 100)
-                throw new ArgumentException("Cannot draw a sphere with stacks greater than 100");
+            //if (stacks > 100)
+            //    throw new ArgumentException("Cannot draw a sphere with stacks greater than 100");
             if (radius <= 0)
                 throw new ArgumentException("Radius has to be greater than 0");
 
