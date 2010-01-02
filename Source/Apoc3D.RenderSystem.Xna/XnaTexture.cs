@@ -340,55 +340,39 @@ namespace Apoc3D.RenderSystem.Xna
                     }
                     break;
                 case TextureType.CubeTexture:
-                    ResourceInterlock.EnterAtomicOp();
+
                     cube = new XG.TextureCube(device, Width, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
-                    ResourceInterlock.ExitAtomicOp();
+
 
                     for (int i = 0; i < SurfaceCount; i++)
                     {
                         int startPos = 0;
                         int levelSize = data.Levels[i].LevelSize / 6;
-                        ResourceInterlock.EnterAtomicOp();
                         cube.SetData(XG.CubeMapFace.NegativeX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
-                        ResourceInterlock.EnterAtomicOp();
                         cube.SetData(XG.CubeMapFace.NegativeY, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
-                        ResourceInterlock.EnterAtomicOp();
                         cube.SetData(XG.CubeMapFace.NegativeZ, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
-                        ResourceInterlock.EnterAtomicOp();
                         cube.SetData(XG.CubeMapFace.PositiveX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        ResourceInterlock.EnterAtomicOp();
                         startPos += levelSize;
 
-                        ResourceInterlock.ExitAtomicOp();
                         cube.SetData(XG.CubeMapFace.PositiveY, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
 
-                        ResourceInterlock.EnterAtomicOp();
                         cube.SetData(XG.CubeMapFace.PositiveZ, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        ResourceInterlock.ExitAtomicOp();
                         startPos += levelSize;
                     }
                     break;
                 case TextureType.Texture3D:
-                    ResourceInterlock.EnterAtomicOp();
                     tex3D = new XG.Texture3D(device, Width, Height, Depth, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
-                    ResourceInterlock.ExitAtomicOp();
 
                     for (int i = 0; i < SurfaceCount; i++)
                     {
-                        ResourceInterlock.EnterAtomicOp();
                         tex3D.SetData(i, 0, 0, 0, 0, 0, 0, data.Levels[i].Content, 0, data.Levels[i].LevelSize, XG.SetDataOptions.None);
-                        ResourceInterlock.ExitAtomicOp();
                     }
                     break;
             }
