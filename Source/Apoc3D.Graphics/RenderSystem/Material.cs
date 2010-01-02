@@ -27,6 +27,8 @@ namespace Apoc3D.Graphics
 
         static readonly string IsTransparentTag = "IsTransparent";
         static readonly string CullModeTag = "CullMode";
+        static readonly string ZEnabledTag = "ZEnabled";
+        static readonly string ZWriteEnabledTag = "ZWriteEnabled";
         #endregion
 
         #region Properties
@@ -42,7 +44,16 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-
+        public bool ZEnabled
+        {
+            get;
+            set;
+        }
+        public bool ZWriteEnabled
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Methods
@@ -51,12 +62,16 @@ namespace Apoc3D.Graphics
         {
             CullMode = (CullMode)data.GetDataInt32(CullModeTag, 0);
             IsTransparent = data.GetDataBool(IsTransparentTag, false);
+            ZEnabled = data.GetDataBool(ZEnabledTag, true);
+            ZWriteEnabled = data.GetDataBool(ZWriteEnabledTag, true);
         }
 
         protected virtual void WriteData(BinaryDataWriter data)
         {
             data.AddEntry(CullModeTag, (int)CullMode);
             data.AddEntry(IsTransparentTag, IsTransparent);
+            data.AddEntry(ZEnabledTag, ZEnabled);
+            data.AddEntry(ZWriteEnabledTag, ZWriteEnabled);
         }
 
         #endregion
