@@ -327,16 +327,16 @@ namespace Apoc3D.RenderSystem.Xna
             {
                 case TextureType.Texture1D:
                 case TextureType.Texture2D:
-                    ResourceInterlock.EnterAtomicOp();
+                    //ResourceInterlock.EnterAtomicOp();
                     tex2D = new XG.Texture2D(device, Width, Height, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
-                    ResourceInterlock.ExitAtomicOp();
+                    //ResourceInterlock.ExitAtomicOp();
 
                     for (int i = 0; i < SurfaceCount; i++)
                     {
-                        ResourceInterlock.EnterAtomicOp();
+                        //ResourceInterlock.EnterAtomicOp();
                         tex2D.SetData(i, null, data.Levels[i].Content, 0, data.Levels[i].LevelSize, XG.SetDataOptions.None);
                         
-                        ResourceInterlock.ExitAtomicOp();
+                        //ResourceInterlock.ExitAtomicOp();
                     }
                     break;
                 case TextureType.CubeTexture:

@@ -8,6 +8,7 @@ namespace Apoc3D.Graphics.Effects
     public class EffectManager : Singleton
     {
         static EffectManager singleton;
+        static object syncHelper = new object();
 
         public static void Initialize(RenderSystem device)
         {
@@ -61,7 +62,10 @@ namespace Apoc3D.Graphics.Effects
 
         public Effect GetModelEffect(string name)
         {
-            return Enabled ? modelFX[name] : null;
+            lock (syncHelper)
+            {
+                return Enabled ? modelFX[name] : null;
+            }
         }
 
         public int ModelEffectCount

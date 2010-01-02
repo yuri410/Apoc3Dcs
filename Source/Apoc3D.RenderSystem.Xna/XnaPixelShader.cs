@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Apoc3D.Core;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
 using X = Microsoft.Xna.Framework;
 using XG = Microsoft.Xna.Framework.Graphics;
-using Apoc3D.Core;
 
 namespace Apoc3D.RenderSystem.Xna
 {

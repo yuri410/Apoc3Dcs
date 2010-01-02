@@ -19,9 +19,9 @@ namespace Apoc3D.RenderSystem.Xna
 
         Dictionary<string, int> constIndexTable;
 
-        float[] constHelperF = new float[1];
-        int[] constHelperI = new int[1];
-        bool[] constHelperB = new bool[1];
+        float[] constHelperF = new float[4];
+        int[] constHelperI = new int[4];
+        bool[] constHelperB = new bool[4];
 
         static class Helper
         {

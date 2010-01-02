@@ -75,6 +75,14 @@ namespace Apoc3D.Graphics
             }
             return Factory.CreateTexture(length, surfaceCount, CreationUsage, format);
         }
+        public Texture CreateInstanceUnmanaged(FileLocation fl)
+        {
+            if (Factory == null)
+            {
+                throw new InvalidOperationException();
+            }
+            return Factory.CreateTexture(fl, CreationUsage);
+        }
 
         public ResourceHandle<Texture> CreateInstance(FileLocation fl)
         {
