@@ -71,6 +71,8 @@ namespace Apoc3D.Graphics
     /// </summary>
     public unsafe struct TextureData
     {
+        public static readonly string Extension = ".tex";
+
         /// <summary>
         ///  表示纹理的类型
         /// </summary>

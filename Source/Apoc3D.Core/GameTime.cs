@@ -1,4 +1,5 @@
-﻿namespace Apoc3D
+﻿using System;
+namespace Apoc3D
 {
     /// <summary>
     /// Contains the current timing state of the game.
@@ -16,12 +17,12 @@
             protected set { m_FramesPerSecond = value; }
         }
 
-		private float m_ElapsedGameTime;
+        private TimeSpan m_ElapsedGameTime;
         /// <summary>
         /// Gets the elapsed game time, in seconds.
         /// </summary>
         /// <value>The elapsed game time.</value>
-        public float ElapsedGameTime
+        public TimeSpan ElapsedGameTime
         {
 			get { return m_ElapsedGameTime; }
 			protected set { m_ElapsedGameTime = value; }
@@ -38,12 +39,12 @@
             protected set { m_ElapsedRealTime = value; }
         }
 
-		private float m_TotalGameTime;
+        private TimeSpan m_TotalGameTime;
         /// <summary>
         /// Gets the total game time, in seconds.
         /// </summary>
         /// <value>The total game time.</value>
-        public float TotalGameTime
+        public TimeSpan TotalGameTime
         {
             get { return m_TotalGameTime; }
             protected set { m_TotalGameTime = value; }
@@ -87,7 +88,7 @@
         /// <param name="elapsedRealTime">The elapsed real time.</param>
         /// <param name="totalGameTime">The total game time.</param>
         /// <param name="elapsedGameTime">The elapsed game time.</param>
-        public GameTime(float totalRealTime, float elapsedRealTime, float totalGameTime, float elapsedGameTime)
+        public GameTime(float totalRealTime, float elapsedRealTime, TimeSpan totalGameTime, TimeSpan elapsedGameTime)
         {
             TotalRealTime = totalRealTime;
             ElapsedRealTime = elapsedRealTime;

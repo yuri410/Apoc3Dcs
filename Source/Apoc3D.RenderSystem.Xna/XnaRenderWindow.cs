@@ -12,7 +12,7 @@ namespace Apoc3D.RenderSystem.Xna
     {
         class XGameTime : GameTime
         {
-            public void SetElapsedGameTime(float v)
+            public void SetElapsedGameTime(TimeSpan v)
             {
                 ElapsedGameTime = v;
             }
@@ -29,7 +29,7 @@ namespace Apoc3D.RenderSystem.Xna
             {
                 IsRunningSlowly = v;
             }
-            public void SetTotalGameTime(float v)
+            public void SetTotalGameTime(TimeSpan v)
             {
                 TotalGameTime = v;
             }
@@ -53,11 +53,11 @@ namespace Apoc3D.RenderSystem.Xna
             protected override void Update(X.GameTime gameTime)
             {
                 base.Update(gameTime);
-                time.SetElapsedGameTime((float)gameTime.ElapsedGameTime.TotalSeconds);
+                time.SetElapsedGameTime(gameTime.ElapsedGameTime);
                 time.SetElapsedRealTime((float)gameTime.ElapsedRealTime.TotalSeconds);
                 time.SetFramesPerSecond(parent.FPS);
                 time.SetIsRunningSlowly(gameTime.IsRunningSlowly);
-                time.SetTotalGameTime((float)gameTime.TotalGameTime.TotalSeconds);
+                time.SetTotalGameTime(gameTime.TotalGameTime);
                 time.SetTotalRealTime((float)gameTime.TotalRealTime.TotalSeconds);
 
                 parent.OnUpdate(time);

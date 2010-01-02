@@ -73,7 +73,7 @@ namespace Apoc3D.Graphics.Animation
         {
             if (data.FrameLength > float.Epsilon)
             {
-                currentTime += dt.ElapsedGameTime;
+                currentTime += dt.ElapsedRealTime;
 
                 if (currentTime >= totalTime)
                 {
