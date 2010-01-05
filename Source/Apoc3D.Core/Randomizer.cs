@@ -8,7 +8,10 @@ namespace Apoc3D
     {
         static Random random = new Random();
 
-
+        public static bool GetRandomBool()
+        {
+            return GetRandomInt(int.MaxValue) % 2 == 0;
+        }
         public static int GetRandomInt(int max)
         {
             return random.Next(max);
