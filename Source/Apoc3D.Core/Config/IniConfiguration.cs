@@ -245,6 +245,9 @@ namespace Apoc3D.Config
     /// </summary>
     public class IniConfigurationFormat : ConfigurationFormat
     {
+        /// <summary>
+        ///  扩展名过滤器
+        /// </summary>
         public override string[] Filters
         {
             get { return new string[] { ".ini" }; }

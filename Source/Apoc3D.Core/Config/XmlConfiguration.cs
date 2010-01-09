@@ -118,14 +118,24 @@ namespace Apoc3D.Config
         }
     }
 
+    /// <summary>
+    ///  表示XML配置文件的格式
+    /// </summary>
     public class XmlConfigurationFormat : ConfigurationFormat
     {
-
+        /// <summary>
+        ///  扩展名过滤器
+        /// </summary>
         public override string[] Filters
         {
             get { return new string[] { ".xml" }; }
         }
 
+        /// <summary>
+        ///  从资源中读取xml配置
+        /// </summary>
+        /// <param name="rl">表示资源的位置的<see cref="ResourceLocation"/></param>
+        /// <returns>一个<see cref="Configuration"/>，表示创建好的配置</returns>
         public override Configuration Load(ResourceLocation rl)
         {
             return new XmlConfiguration(rl);

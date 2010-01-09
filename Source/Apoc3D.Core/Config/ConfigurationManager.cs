@@ -11,10 +11,23 @@ namespace Apoc3D.Config
     /// </summary>
     public abstract class ConfigurationFormat
     {
+        /// <summary>
+        ///  扩展名过滤器
+        /// </summary>
         public abstract string[] Filters { get; }
 
+        /// <summary>
+        ///  从资源中读取配置
+        /// </summary>
+        /// <param name="rl">表示资源的位置的<see cref="ResourceLocation"/></param>
+        /// <returns>一个<see cref="Configuration"/>，表示创建好的配置</returns>
         public abstract Configuration Load(ResourceLocation rl);
 
+        /// <summary>
+        ///  从文件中读取xml配置
+        /// </summary>
+        /// <param name="rl">表示资源的位置的<see cref="ResourceLocation"/></param>
+        /// <returns>一个<see cref="Configuration"/>，表示创建好的配置</returns>
         public Configuration Load(string file)
         {
             return Load(new FileLocation(file));
