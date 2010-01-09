@@ -42,6 +42,9 @@ namespace Apoc3D.Config
     {
         static ConfigurationManager singleton;
 
+        /// <summary>
+        ///  获取唯一的实例
+        /// </summary>
         public static ConfigurationManager Instance
         {
             get
@@ -50,6 +53,9 @@ namespace Apoc3D.Config
             }
         }
 
+        /// <summary>
+        ///  对单件进行显式初始化
+        /// </summary>
         public static void Initialize()
         {
             if (singleton == null)

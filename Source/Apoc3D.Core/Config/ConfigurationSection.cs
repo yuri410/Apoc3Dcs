@@ -16,6 +16,11 @@ namespace Apoc3D.Config
         {
             return CaseInsensitiveStringComparer.Compare(str, none);
         }
+        /// <summary>
+        ///  检查内容是否为none
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static string CheckNone(string str)
         {
             if (str == null)
@@ -26,6 +31,8 @@ namespace Apoc3D.Config
             }
             return str;
         }
+
+
         public static string CheckNoneNull(string str)
         {
             if (str == null)
@@ -49,6 +56,9 @@ namespace Apoc3D.Config
             return arr;
         }
 
+        /// <summary>
+        ///  获取该Section所在的<see cref="Configuration"/>对象
+        /// </summary>
         protected Configuration ParentConfig
         {
             get;
@@ -100,6 +110,9 @@ namespace Apoc3D.Config
         {
         }
 
+        /// <summary>
+        ///  获取此Section的名称
+        /// </summary>
         public string Name
         {
             get;
@@ -117,6 +130,11 @@ namespace Apoc3D.Config
 
         //public abstract UIImageInformation GetImage(string key, FileLocateRule rule);
 
+        /// <summary>
+        ///  获取此Section的子Section
+        /// </summary>
+        /// <param name="key">子Section的名称</param>
+        /// <returns></returns>
         public abstract ConfigurationSection GetSubSection(string key);
         
         public abstract bool TryGetSubSection(string key, out ConfigurationSection sect);
