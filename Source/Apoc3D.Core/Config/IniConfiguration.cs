@@ -243,7 +243,7 @@ namespace Apoc3D.Config
     /// <summary>
     ///  表示Ini配置文件的格式
     /// </summary>
-    public class ConfigurationIniFormat : ConfigurationFormat
+    public class IniConfigurationFormat : ConfigurationFormat
     {
         public override string[] Filters
         {

@@ -117,4 +117,18 @@ namespace Apoc3D.Config
             }
         }
     }
+
+    public class XmlConfigurationFormat : ConfigurationFormat
+    {
+
+        public override string[] Filters
+        {
+            get { return new string[] { ".xml" }; }
+        }
+
+        public override Configuration Load(ResourceLocation rl)
+        {
+            return new XmlConfiguration(rl);
+        }
+    }
 }
