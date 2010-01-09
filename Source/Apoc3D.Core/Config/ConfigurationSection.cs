@@ -118,6 +118,7 @@ namespace Apoc3D.Config
         //public abstract UIImageInformation GetImage(string key, FileLocateRule rule);
 
         public abstract ConfigurationSection GetSubSection(string key);
+        
         public abstract bool TryGetSubSection(string key, out ConfigurationSection sect);
 
 
