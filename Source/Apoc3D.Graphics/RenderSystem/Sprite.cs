@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Apoc3D.Collections;
+using Apoc3D.Core;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
-using Apoc3D.Core;
 
 namespace Apoc3D.Graphics
 {
