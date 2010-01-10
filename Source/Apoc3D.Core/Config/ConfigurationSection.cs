@@ -119,6 +119,11 @@ namespace Apoc3D.Config
             private set;
         }
 
+        public string Value
+        {
+            get;
+            set;
+        }
         ///// <summary>
         ///// 
         ///// </summary>

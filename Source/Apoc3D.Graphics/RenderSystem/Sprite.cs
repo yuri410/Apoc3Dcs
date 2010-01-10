@@ -201,6 +201,7 @@ namespace Apoc3D.Graphics
             op.Material = buf.Material;
             op.Geomentry = buf.Geomentry;
             op.Transformation = transform;
+            op.Priority = RenderPriority.Last;
             bufferedOp.Add(ref op);
         }
 
@@ -229,6 +230,7 @@ namespace Apoc3D.Graphics
             op.Material = buf.Material;
             op.Geomentry = buf.Geomentry;
             op.Transformation = transform;
+            op.Priority = RenderPriority.Last;
             bufferedOp.Add(ref op);
         }
 

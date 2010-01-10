@@ -9,14 +9,14 @@ using Apoc3D.Scene;
 
 namespace Apoc3D.Graphics
 {
-    public class SceneRendererParameter 
+    public class SceneRendererParameter
     {
         public bool UseShadow
         {
             get;
             set;
         }
-        
+
         public SceneManagerBase SceneManager
         {
             get;
@@ -119,15 +119,24 @@ namespace Apoc3D.Graphics
                     {
                         Material mate = ops[k].Material;
                         GeomentryData geoData = ops[k].Geomentry;
+                        RenderPriority prio = ops[k].Priority;
+
+                        Dictionary<Material, FastList<RenderOperation>> matTbl;
+
+                        if (!batchData.batchTable.TryGetValue(prio, out matTbl))
+                        {
+                            matTbl = new Dictionary<Material, FastList<RenderOperation>>();
+                            batchData.batchTable.Add(prio, matTbl);
+                        }
 
                         if (mate != null)
                         {
                             FastList<RenderOperation> opList;
 
-                            if (!batchData.batchTable.TryGetValue(mate, out opList))
+                            if (!matTbl.TryGetValue(mate, out opList))
                             {
                                 opList = new FastList<RenderOperation>();
-                                batchData.batchTable.Add(mate, opList);
+                                matTbl.Add(mate, opList);
                             }
 
                             opList.Add(ops[k]);
@@ -236,15 +245,19 @@ namespace Apoc3D.Graphics
             //states.Lighting = false;
 
             #region 处理一般的Op
-            foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in batchData.batchTable)
+            foreach (KeyValuePair<RenderPriority, Dictionary<Material, FastList<RenderOperation>>> e0 in batchData.batchTable)
             {
-                FastList<RenderOperation> opList = e1.Value;
-
-                if (opList.Count > 0)
+                Dictionary<Material, FastList<RenderOperation>> matTbl = e0.Value;
+                foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in matTbl)
                 {
-                    renderSystem.Render(e1.Key, opList.Elements, opList.Count);
-                    //RenderList(e1.Key, opList);
-                } // if (opList.Count > 0)
+                    FastList<RenderOperation> opList = e1.Value;
+
+                    if (opList.Count > 0)
+                    {
+                        renderSystem.Render(e1.Key, opList.Elements, opList.Count);
+                        //RenderList(e1.Key, opList);
+                    } // if (opList.Count > 0)
+                }
             }
             #endregion
 
@@ -334,10 +347,16 @@ namespace Apoc3D.Graphics
             //}
             #endregion
 
-            Dictionary<Material, FastList<RenderOperation>>.ValueCollection vals = batchData.batchTable.Values;
-            foreach (FastList<RenderOperation> opList in vals)
+            Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>>.ValueCollection vals = batchData.batchTable.Values;
+
+
+            foreach (Dictionary<Material, FastList<RenderOperation>> matTbl in vals)
             {
-                opList.FastClear();
+                Dictionary<Material, FastList<RenderOperation>>.ValueCollection mats = matTbl.Values;
+                foreach (FastList<RenderOperation> opList in mats)
+                {
+                    opList.FastClear();
+                }
             }
 
             Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = batchData.instanceTable.Values;
@@ -378,6 +397,10 @@ namespace Apoc3D.Graphics
             //{
             batchData.RenderedObjectCount = 0;
 
+            RenderStateManager renderStates = renderSystem.RenderStates;
+            renderStates.SourceBlend = Blend.SourceAlpha;
+            renderStates.DestinationBlend = Blend.One;
+            renderStates.BlendOperation = BlendFunction.Add;
             //renderSystem.RenderStates.FillMode = FillMode.WireFrame;
             //EffectParams.Atmosphere = Atmosphere;
             //EffectParams.TerrainHeightScale = Data.TerrainSettings.HeightScale;

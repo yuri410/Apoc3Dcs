@@ -58,8 +58,6 @@
     <Compile Include="Config\IConfigurable.cs" />
     <Compile Include="Config\IniConfiguration.cs" />
     <Compile Include="Config\IniSection.cs" />
-    <Compile Include="Config\XmlConfiguration.cs" />
-    <Compile Include="Config\XmlSection.cs" />
     <Compile Include="Design\ArrayConverter.cs" />
     <Compile Include="Design\IEditControl.cs" />
     <Compile Include="Design\MatrixEditControl.cs">

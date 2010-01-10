@@ -8,25 +8,18 @@ using Apoc3D.Graphics.Effects;
 namespace Apoc3D.Scene
 {
     /// <summary>
-    ///  渲染场景时，PassInfo对象用来从Cluster的场景管理器收集信息，并存储
+    ///  渲染场景时，PassInfo对象用来从场景管理器收集信息，并存储
     /// </summary>
     public class PassData : IDisposable
     {
-        ///// <summary>
-        /////  按效果批次分组，一个效果批次有一个RenderOperation列表
-        ///// </summary>
-        //public Dictionary<string, FastList<RenderOperation>> batchTable;
+        /// <summary>
+        ///  普通渲染表。分为若干不同渲染次序的组，每组按材质分组，一个材质组有一个RenderOperation列表
+        /// </summary>
+        public Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>> batchTable;
 
         /// <summary>
-        ///  按材质分组，一个材质批次有一个RenderOperation列表
+        ///  
         /// </summary>
-        public Dictionary<Material, FastList<RenderOperation>> batchTable;
-
-        ///// <summary>
-        /////  按效果批次名称查询效果的哈希表
-        ///// </summary>
-        //public Dictionary<string, Effect> effects;
-
         public Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>> instanceTable;
 
         public FastList<SceneObject> visibleObjects;
@@ -35,7 +28,7 @@ namespace Apoc3D.Scene
 
         public PassData()
         {
-            batchTable = new Dictionary<Material, FastList<RenderOperation>>();
+            batchTable = new Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>>();
             instanceTable = new Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>();
 
             visibleObjects = new FastList<SceneObject>();
@@ -53,10 +46,14 @@ namespace Apoc3D.Scene
         {
             if (!Disposed)
             {
-                Dictionary<Material, FastList<RenderOperation>>.ValueCollection vals = batchTable.Values;
-                foreach (FastList<RenderOperation> opList in vals)
+                Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>>.ValueCollection vals = batchTable.Values;
+                foreach (Dictionary<Material, FastList<RenderOperation>> matTbl in vals)
                 {
-                    opList.Clear();
+                    Dictionary<Material, FastList<RenderOperation>>.ValueCollection mats = matTbl.Values;
+                    foreach (FastList<RenderOperation> opList in mats)
+                    {
+                        opList.Clear();
+                    }
                 }
                 batchTable.Clear();
 

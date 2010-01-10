@@ -31,6 +31,12 @@ namespace Apoc3D.Graphics
         static readonly string ZWriteEnabledTag = "ZWriteEnabled";
         #endregion
 
+        protected MaterialBase()
+        {
+            ZWriteEnabled = true;
+            ZEnabled = true;
+        }
+        
         #region Properties
 
         public CullMode CullMode

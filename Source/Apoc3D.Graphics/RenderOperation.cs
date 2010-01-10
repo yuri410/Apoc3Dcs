@@ -14,13 +14,30 @@ namespace Apoc3D.Graphics
     /// </summary>
     public struct RenderOperation
     {
+        /// <summary>
+        ///  此渲染操作的世界变换矩阵
+        /// </summary>
         public Matrix Transformation;
 
+        /// <summary>
+        ///  此渲染操作的材质
+        /// </summary>
         public Material Material;
 
-        public GeomentryData Geomentry;        
+        /// <summary>
+        ///  此渲染操作的几何数据
+        /// </summary>
+        public GeomentryData Geomentry;
+
+        /// <summary>
+        ///  此渲染操作的渲染次序
+        /// </summary>
+        public RenderPriority Priority;
     }
 
+    /// <summary>
+    ///  表示几何数据
+    /// </summary>
     public class GeomentryData
     {
         IRenderable sender;
@@ -32,6 +49,8 @@ namespace Apoc3D.Graphics
         {
             get { return sender; }
         }
+
+        public void SetSender(IRenderable sender) { }
 
         ///// <summary>
         /////  获取或设置顶点格式
@@ -69,16 +88,25 @@ namespace Apoc3D.Graphics
             get { return IndexBuffer != null; }
         }
        
+        /// <summary>
+        ///  获取或设置几何数据的图元类型
+        /// </summary>
         public RenderPrimitiveType PrimitiveType
         {
             get;
             set;
         }
+        /// <summary>
+        ///  获取或设置几何数据的图元数量
+        /// </summary>
         public int PrimCount
         {
             get;
             set;
         }
+        /// <summary>
+        ///  获取或设置几何数据的顶点数量
+        /// </summary>
         public int VertexCount
         {
             get;
@@ -87,6 +115,8 @@ namespace Apoc3D.Graphics
 
         public GeomentryData(IRenderable obj)
         {
+            if (sender != null)
+                throw new InvalidOperationException();
             sender = obj;
         }
 

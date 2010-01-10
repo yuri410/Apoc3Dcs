@@ -156,17 +156,26 @@ namespace Apoc3D.Scene
                     {
                         Matrix.Multiply(ref ops[k].Transformation, ref obj.Transformation, out ops[k].Transformation);
 
+                        RenderPriority prio = ops[k].Priority;
                         Material mate = ops[k].Material;
                         GeomentryData geoData = ops[k].Geomentry;
+
+                        Dictionary<Material, FastList<RenderOperation>> matTbl;
+
+                        if (!batchHelper.batchTable.TryGetValue(prio, out matTbl))
+                        {
+                            matTbl = new Dictionary<Material, FastList<RenderOperation>>();
+                            batchHelper.batchTable.Add(prio, matTbl);
+                        }
 
                         if (mate != null)
                         {
                             FastList<RenderOperation> opList;
 
-                            if (!batchHelper.batchTable.TryGetValue(mate, out opList))
+                            if (!matTbl.TryGetValue(mate, out opList))
                             {
                                 opList = new FastList<RenderOperation>();
-                                batchHelper.batchTable.Add(mate, opList);
+                                matTbl.Add(mate, opList);
                             }
 
                             //Matrix.Multiply(ref ops[k].Transformation, ref obj.Transformation, out ops[k].Transformation);

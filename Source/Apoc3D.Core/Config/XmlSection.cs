@@ -17,19 +17,22 @@ namespace Apoc3D.Config
             : base(config, name)
         {
             ParentSection = parent;
-            parent.children.Add(this.Name, this);
+            if (parent != null)
+                parent.children.Add(this.Name, this);
         }
         public XmlSection(XmlConfiguration config, string name, int capacity, XmlSection parent)
             : base(config, name, capacity)
         {
             ParentSection = parent;
-            parent.children.Add(this.Name, this);
+            if (parent != null)
+                parent.children.Add(this.Name, this);
         }
         public XmlSection(XmlConfiguration config, string name, IDictionary<string, string> dictionary, XmlSection parent)
             : base(config, name, dictionary)
         {
             ParentSection = parent;
-            parent.children.Add(this.Name, this);
+            if (parent != null)
+                parent.children.Add(this.Name, this);
         }
 
 

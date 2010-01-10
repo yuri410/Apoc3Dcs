@@ -41,17 +41,29 @@ namespace Apoc3D.Config
             Stack<XmlSection> stack = new Stack<XmlSection>();
             stack.Push(null);
 
+            string name = string.Empty;
             while (MoveToNextElement(xml))
             {
                 if (xml.Depth > depth)
                 {
-                    stack.Push(new XmlSection(this, xml.Name, stack.Peek()));
+                    //string name = string.Empty;
+                    //if (stack.Peek() != null)
+                    //    name = stack.Peek().Name;
+                    XmlSection sect = new XmlSection(this, name, stack.Peek());
+                    sect.Value = xml.Value;
+
+                    if (sect.ParentSection == null)
+                        Add(sect.Name, sect);
+
+                    stack.Push(sect);
                     depth = xml.Depth;
                 }
                 else if (xml.Depth == depth)
                 {
                     if (stack.Peek() != null)
                     {
+                        name = xml.Name;
+
                         stack.Peek().Add(xml.Name, xml.Value);
                     }
                 }

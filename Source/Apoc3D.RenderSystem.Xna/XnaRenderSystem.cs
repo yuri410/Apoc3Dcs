@@ -1191,7 +1191,9 @@ namespace Apoc3D.RenderSystem.Xna
                 effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
-            renderStates.AlphaBlendEnable = !material.IsTransparent;
+            renderStates.AlphaBlendEnable = material.IsTransparent;
+            renderStates.DepthBufferWriteEnable = material.ZWriteEnabled;
+            //renderStates.DepthBufferEnable = material.ZEnabled;
             renderStates.CullMode = material.CullMode;
 
             int passCount = effect.Begin();
