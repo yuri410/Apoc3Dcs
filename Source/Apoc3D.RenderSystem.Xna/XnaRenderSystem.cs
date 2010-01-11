@@ -1241,14 +1241,22 @@ namespace Apoc3D.RenderSystem.Xna
                             Device.Indices = xnaib.dynIb;
                         }
 
-                        Device.DrawIndexedPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType),
-                            gm.BaseVertex, 0,
-                            gm.VertexCount, gm.BaseIndexStart,
-                            gm.PrimCount);
+                        try
+                        {
+                            Device.DrawIndexedPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType),
+                                gm.BaseVertex, 0,
+                                gm.VertexCount, gm.BaseIndexStart,
+                                gm.PrimCount);
+                        }
+                        catch (Exception) { }
                     }
                     else
                     {
-                        Device.DrawPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType), 0, gm.PrimCount);
+                        try
+                        {
+                            Device.DrawPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType), 0, gm.PrimCount);
+                        }
+                        catch (Exception) { }
                     }
                 } // for (int j = 0; j < opList.Count; j++)
                 effect.EndPass();
