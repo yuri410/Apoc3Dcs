@@ -271,9 +271,9 @@ namespace Apoc3D
             //更新摄像机的Front,Top,Right变量
             Matrix m = Matrix.RotationQuaternion(orientation);
 
-            front = MathEx.GetMatrixFront(ref m);
-            top = MathEx.GetMatrixUp(ref m);
-            right = MathEx.GetMatrixRight(ref m);
+            front = m.Forward;// MathEx.GetMatrixFront(ref m);
+            top = m.Up;// MathEx.GetMatrixUp(ref m);
+            right = m.Right;// MathEx.GetMatrixRight(ref m);
 
             frustum.View = Matrix.LookAtRH(position, position + front, top);
 
@@ -323,7 +323,7 @@ namespace Apoc3D
 
         public void MoveAbs(Vector3 mov)
         {
-            position += MathEx.QuaternionRotate(orientation, mov);
+            position += Vector3.TransformSimple(mov, orientation);
         }
 
         public void MoveFront()
@@ -355,9 +355,9 @@ namespace Apoc3D
         {
             Quaternion iq = orientation;
             iq.Conjugate();
-            Vector3 top = MathEx.QuaternionRotate(iq, new Vector3(0, 1, 0));
+            Vector3 top = Vector3.TransformSimple(Vector3.UnitY, iq);
 
-            orientation *= Quaternion.RotationAxis(top, -turnSpeed);
+            orientation *= Quaternion.RotationAxis(top, turnSpeed);
             //qOri *= Quaternion.FromAngleAxis(dTurnSpeed, new Vector3(0, -1, 0));
             orientation.Normalize();
         }
@@ -366,19 +366,19 @@ namespace Apoc3D
             Quaternion iq = orientation;
             iq.Conjugate();
 
-            Vector3 top = MathEx.QuaternionRotate(iq, new Vector3(0, 1, 0));// (~qOri).Rotate(new Vector3(0, 1, 0));
+            Vector3 top = Vector3.TransformSimple(Vector3.UnitY, iq); // (~qOri).Rotate(new Vector3(0, 1, 0));
 
-            orientation *= Quaternion.RotationAxis(top, turnSpeed);
+            orientation *= Quaternion.RotationAxis(top, -turnSpeed);
             orientation.Normalize();
         }
         public void TurnUp()
         {
-            orientation *= Quaternion.RotationAxis(Right, -turnSpeed);
+            orientation *= Quaternion.RotationAxis(right, turnSpeed);
             orientation.Normalize();
         }
         public void TurnDown()
         {
-            orientation *= Quaternion.RotationAxis(Right, turnSpeed);
+            orientation *= Quaternion.RotationAxis(right, -turnSpeed);
             orientation.Normalize();
         }
         public void RollLeft()

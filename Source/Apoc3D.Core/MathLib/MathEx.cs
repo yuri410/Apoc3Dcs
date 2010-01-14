@@ -259,314 +259,314 @@ namespace Apoc3D.MathLib
             }
         }
 
-        public static Vector3 GetMatrixFront(ref Matrix m) 
-        {
-            return new Vector3(m.M31, m.M32, m.M33);
-        }
-        public static Vector3 GetMatrixUp(ref Matrix m) 
-        {
-            return new Vector3(m.M21, m.M22, m.M23);
-
-        }
-        public static Vector3 GetMatrixRight(ref Matrix m) 
-        {
-            return new Vector3(m.M11, m.M12, m.M13);
-
-        }
-
-        #region 四元数
-
-        public static Quaternion QuaternionFromEulerAngles(Vector3 ea)
-        {
-            float cyaw, cpitch, croll, syaw, spitch, sroll;
-            float cyawcpitch, syawspitch, cyawspitch, syawcpitch;
-
-            cyaw = (float)Math.Cos(0.5f * ea.Z);
-            cpitch = (float)Math.Cos(0.5f * ea.Y);
-            croll = (float)Math.Cos(0.5f * ea.X);
-            syaw = (float)Math.Sin(0.5f * ea.Z);
-            spitch = (float)Math.Sin(0.5f * ea.Y);
-            sroll = (float)Math.Sin(0.5f * ea.X);
-
-            cyawcpitch = cyaw * cpitch;
-            syawspitch = syaw * spitch;
-            cyawspitch = cyaw * spitch;
-            syawcpitch = syaw * cpitch;
-
-            Quaternion q;
-            q.W = (cyawcpitch * croll + syawspitch * sroll);
-            q.X = (cyawcpitch * sroll - syawspitch * croll);
-            q.Y = (cyawspitch * croll + syawcpitch * sroll);
-            q.Z = (syawcpitch * croll - cyawspitch * sroll);
-            return q;
-        }
-        public static Quaternion CreateFromRotationMatrix(Matrix matrix)
-        {
-            float num8 = (matrix.M11 + matrix.M22) + matrix.M33;
-            Quaternion quaternion = new Quaternion();
-            if (num8 > 0f)
-            {
-                float num = (float)Math.Sqrt((double)(num8 + 1f));
-                quaternion.W = num * 0.5f;
-                num = 0.5f / num;
-                quaternion.X = (matrix.M23 - matrix.M32) * num;
-                quaternion.Y = (matrix.M31 - matrix.M13) * num;
-                quaternion.Z = (matrix.M12 - matrix.M21) * num;
-                return quaternion;
-            }
-            if ((matrix.M11 >= matrix.M22) && (matrix.M11 >= matrix.M33))
-            {
-                float num7 = (float)Math.Sqrt((double)(((1f + matrix.M11) - matrix.M22) - matrix.M33));
-                float num4 = 0.5f / num7;
-                quaternion.X = 0.5f * num7;
-                quaternion.Y = (matrix.M12 + matrix.M21) * num4;
-                quaternion.Z = (matrix.M13 + matrix.M31) * num4;
-                quaternion.W = (matrix.M23 - matrix.M32) * num4;
-                return quaternion;
-            }
-            if (matrix.M22 > matrix.M33)
-            {
-                float num6 = (float)Math.Sqrt((double)(((1f + matrix.M22) - matrix.M11) - matrix.M33));
-                float num3 = 0.5f / num6;
-                quaternion.X = (matrix.M21 + matrix.M12) * num3;
-                quaternion.Y = 0.5f * num6;
-                quaternion.Z = (matrix.M32 + matrix.M23) * num3;
-                quaternion.W = (matrix.M31 - matrix.M13) * num3;
-                return quaternion;
-            }
-            float num5 = (float)Math.Sqrt((double)(((1f + matrix.M33) - matrix.M11) - matrix.M22));
-            float num2 = 0.5f / num5;
-            quaternion.X = (matrix.M31 + matrix.M13) * num2;
-            quaternion.Y = (matrix.M32 + matrix.M23) * num2;
-            quaternion.Z = 0.5f * num5;
-            quaternion.W = (matrix.M12 - matrix.M21) * num2;
-            return quaternion;
-        }
-        public static Vector3 QuaternionRotate(Quaternion q, Vector3 v)
-        {
-            Quaternion iq = q;
-            iq.X = -iq.X;
-            iq.Y = -iq.Y;
-            iq.Z = -iq.Z;
-
-            Quaternion res = q * new Quaternion(v.X, v.Y, v.Z, 0) * iq;
-            return new Vector3(res.X, res.Y, res.Z);
-        }
-
-        public static void QuaternionRotate(ref Quaternion q, ref Vector3 v, out Vector3 result)
-        {
-            Quaternion iq = q;
-            iq.X = -iq.X;
-            iq.Y = -iq.Y;
-            iq.Z = -iq.Z;
-
-            Quaternion res = q * new Quaternion(v.X, v.Y, v.Z, 0) * iq;
-
-            result = new Vector3(res.X, res.Y, res.Z);
-        }
-
-        public static void QuaternionToMatrix(ref Quaternion q, ref Vector3 tl, out Matrix m)
-        {
-            float w2, x2, y2, z2;
-            w2 = q.W * q.W;
-            x2 = q.X * q.X;
-            y2 = q.Y * q.Y;
-            z2 = q.Z * q.Z;
-
-            m.M11 = w2 + x2 - y2 - z2;
-            m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
-            m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
-
-            m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
-            m.M22 = w2 - x2 + y2 - z2;
-            m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
-
-            m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
-            m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
-            m.M33 = w2 - x2 - y2 + z2;
-
-            m.M14 = 0;
-            m.M24 = 0;
-            m.M34 = 0;
-
-            m.M41 = tl.X;
-            m.M42 = tl.Y;
-            m.M43 = tl.Z;
-            m.M44 = w2 + x2 + y2 + z2;
-
-        }
-        public static void QuaternionToMatrix(ref Quaternion q, out Matrix m)
-        {
-            float w2, x2, y2, z2;
-            w2 = q.W * q.W;
-            x2 = q.X * q.X;
-            y2 = q.Y * q.Y;
-            z2 = q.Z * q.Z;
-
-            m.M11 = w2 + x2 - y2 - z2;
-            m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
-            m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
-
-            m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
-            m.M22 = w2 - x2 + y2 - z2;
-            m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
-
-            m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
-            m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
-            m.M33 = w2 - x2 - y2 + z2;
-
-            m.M14 = 0;
-            m.M24 = 0;
-            m.M34 = 0;
-
-            m.M41 = 0;
-            m.M42 = 0;
-            m.M43 = 0;
-            m.M44 = w2 + x2 + y2 + z2;
-
-        }
-        public static Matrix QuaternionToMatrix(Quaternion q, Vector3 tl)
-        {
-            float w2, x2, y2, z2;
-
-            Matrix m;
-
-            w2 = q.W * q.W;
-            x2 = q.X * q.X;
-            y2 = q.Y * q.Y;
-            z2 = q.Z * q.Z;
-
-            m.M11 = w2 + x2 - y2 - z2;
-            m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
-            m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
-
-            m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
-            m.M22 = w2 - x2 + y2 - z2;
-            m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
-
-            m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
-            m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
-            m.M33 = w2 - x2 - y2 + z2;
-
-            m.M14 = 0;
-            m.M24 = 0;
-            m.M34 = 0;
-
-            m.M41 = tl.X;
-            m.M42 = tl.Y;
-            m.M43 = tl.Z;
-            m.M44 = w2 + x2 + y2 + z2;
-
-            return m;
-        }
-
-        public static Matrix QuaternionToMatrix(Quaternion q)
-        {
-            float w2, x2, y2, z2;
-
-            Matrix m;
-
-            w2 = q.W * q.W;
-            x2 = q.X * q.X;
-            y2 = q.Y * q.Y;
-            z2 = q.Z * q.Z;
-
-            m.M11 = w2 + x2 - y2 - z2;
-            m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
-            m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
-
-            m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
-            m.M22 = w2 - x2 + y2 - z2;
-            m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
-
-            m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
-            m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
-            m.M33 = w2 - x2 - y2 + z2;
-
-            m.M14 = 0;
-            m.M24 = 0;
-            m.M34 = 0;
-
-            m.M41 = 0;
-            m.M42 = 0;
-            m.M43 = 0;
-            m.M44 = w2 + x2 + y2 + z2;
-
-            return m;
-        }
-
-        public static Quaternion QuaternionMultiplyVector(Quaternion a, Vector3 b)
-        {
-            return new Quaternion(-(a.X * b.X + a.Y * b.Y + a.Z * b.Z),
-                                    a.W * b.X + a.Y * b.Z - a.Z * b.Y,
-                                    a.W * b.Y + a.Z * b.X - a.X * b.Z,
-                                    a.W * b.Z + a.X * b.Y - a.Y * b.X);
-        }
-
-        public static void QuaternionMultiplyVector(ref Quaternion a, ref Vector3 b, out Quaternion res)
-        {
-            res = new Quaternion(-(a.X * b.X + a.Y * b.Y + a.Z * b.Z),
-                                   a.W * b.X + a.Y * b.Z - a.Z * b.Y,
-                                   a.W * b.Y + a.Z * b.X - a.X * b.Z,
-                                   a.W * b.Z + a.X * b.Y - a.Y * b.X);
-        }
-
-        #endregion
-
-        #region 矩阵
-
-        /// <summary>
-        /// 变换向量
-        /// </summary>
-        public static Vector3 MatrixTransformVec(ref Matrix m, Vector3 v)
-        {
-            return new Vector3(m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z,
-                             m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z,
-                             m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z);
-        }
-        /// <summary>
-        /// 变换点
-        /// </summary>
-        public static Vector3 MatrixTransformPoint(ref Matrix m, Vector3 p)
-        {
-            return new Vector3(m.M11 * p.X + m.M21 * p.Y + m.M31 * p.Z + m.M41,
-                            m.M12 * p.X + m.M22 * p.Y + m.M32 * p.Z + m.M42,
-                            m.M13 * p.X + m.M23 * p.Y + m.M33 * p.Z + m.M43);
-        }
-
-        /// <summary>
-        /// 变换向量
-        /// </summary>
-        public static void MatrixTransformVec(ref Matrix m, ref Vector3 v)
-        {
-            v = new Vector3(m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z,
-                            m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z,
-                            m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z);
-        }
-        /// <summary>
-        /// 变换点
-        /// </summary>
-        public static void MatrixTransformPoint(ref Matrix m, ref Vector3 p)
-        {
-            p = new Vector3(m.M11 * p.X + m.M21 * p.Y + m.M31 * p.Z + m.M41,
-                            m.M12 * p.X + m.M22 * p.Y + m.M32 * p.Z + m.M42,
-                            m.M13 * p.X + m.M23 * p.Y + m.M33 * p.Z + m.M43);
-        }
-
-        //public static void MatrixTranspose3x3(ref Matrix m, out Matrix3x3 ret)
+        //public static Vector3 GetMatrixFront(ref Matrix m) 
         //{
-        //    ret.M11 = m.M11;
-        //    ret.M12 = m.M21;
-        //    ret.M13 = m.M31;
-        //    ret.M21 = m.M12;
-        //    ret.M22 = m.M22;
-        //    ret.M23 = m.M32;
-        //    ret.M31 = m.M13;
-        //    ret.M32 = m.M23;
-        //    ret.M33 = m.M33;
+        //    return new Vector3(m.M31, m.M32, m.M33);
+        //}
+        //public static Vector3 GetMatrixUp(ref Matrix m) 
+        //{
+        //    return new Vector3(m.M21, m.M22, m.M23);
+
+        //}
+        //public static Vector3 GetMatrixRight(ref Matrix m) 
+        //{
+        //    return new Vector3(m.M11, m.M12, m.M13);
+
         //}
 
-        #endregion
+        //#region 四元数
+
+        //public static Quaternion QuaternionFromEulerAngles(Vector3 ea)
+        //{
+        //    float cyaw, cpitch, croll, syaw, spitch, sroll;
+        //    float cyawcpitch, syawspitch, cyawspitch, syawcpitch;
+
+        //    cyaw = (float)Math.Cos(0.5f * ea.Z);
+        //    cpitch = (float)Math.Cos(0.5f * ea.Y);
+        //    croll = (float)Math.Cos(0.5f * ea.X);
+        //    syaw = (float)Math.Sin(0.5f * ea.Z);
+        //    spitch = (float)Math.Sin(0.5f * ea.Y);
+        //    sroll = (float)Math.Sin(0.5f * ea.X);
+
+        //    cyawcpitch = cyaw * cpitch;
+        //    syawspitch = syaw * spitch;
+        //    cyawspitch = cyaw * spitch;
+        //    syawcpitch = syaw * cpitch;
+
+        //    Quaternion q;
+        //    q.W = (cyawcpitch * croll + syawspitch * sroll);
+        //    q.X = (cyawcpitch * sroll - syawspitch * croll);
+        //    q.Y = (cyawspitch * croll + syawcpitch * sroll);
+        //    q.Z = (syawcpitch * croll - cyawspitch * sroll);
+        //    return q;
+        //}
+        //public static Quaternion CreateFromRotationMatrix(Matrix matrix)
+        //{
+        //    float num8 = (matrix.M11 + matrix.M22) + matrix.M33;
+        //    Quaternion quaternion = new Quaternion();
+        //    if (num8 > 0f)
+        //    {
+        //        float num = (float)Math.Sqrt((double)(num8 + 1f));
+        //        quaternion.W = num * 0.5f;
+        //        num = 0.5f / num;
+        //        quaternion.X = (matrix.M23 - matrix.M32) * num;
+        //        quaternion.Y = (matrix.M31 - matrix.M13) * num;
+        //        quaternion.Z = (matrix.M12 - matrix.M21) * num;
+        //        return quaternion;
+        //    }
+        //    if ((matrix.M11 >= matrix.M22) && (matrix.M11 >= matrix.M33))
+        //    {
+        //        float num7 = (float)Math.Sqrt((double)(((1f + matrix.M11) - matrix.M22) - matrix.M33));
+        //        float num4 = 0.5f / num7;
+        //        quaternion.X = 0.5f * num7;
+        //        quaternion.Y = (matrix.M12 + matrix.M21) * num4;
+        //        quaternion.Z = (matrix.M13 + matrix.M31) * num4;
+        //        quaternion.W = (matrix.M23 - matrix.M32) * num4;
+        //        return quaternion;
+        //    }
+        //    if (matrix.M22 > matrix.M33)
+        //    {
+        //        float num6 = (float)Math.Sqrt((double)(((1f + matrix.M22) - matrix.M11) - matrix.M33));
+        //        float num3 = 0.5f / num6;
+        //        quaternion.X = (matrix.M21 + matrix.M12) * num3;
+        //        quaternion.Y = 0.5f * num6;
+        //        quaternion.Z = (matrix.M32 + matrix.M23) * num3;
+        //        quaternion.W = (matrix.M31 - matrix.M13) * num3;
+        //        return quaternion;
+        //    }
+        //    float num5 = (float)Math.Sqrt((double)(((1f + matrix.M33) - matrix.M11) - matrix.M22));
+        //    float num2 = 0.5f / num5;
+        //    quaternion.X = (matrix.M31 + matrix.M13) * num2;
+        //    quaternion.Y = (matrix.M32 + matrix.M23) * num2;
+        //    quaternion.Z = 0.5f * num5;
+        //    quaternion.W = (matrix.M12 - matrix.M21) * num2;
+        //    return quaternion;
+        //}
+        //public static Vector3 QuaternionRotate(Quaternion q, Vector3 v)
+        //{
+        //    Quaternion iq = q;
+        //    iq.X = -iq.X;
+        //    iq.Y = -iq.Y;
+        //    iq.Z = -iq.Z;
+
+        //    Quaternion res = q * new Quaternion(v.X, v.Y, v.Z, 0) * iq;
+        //    return new Vector3(res.X, res.Y, res.Z);
+        //}
+
+        //public static void QuaternionRotate(ref Quaternion q, ref Vector3 v, out Vector3 result)
+        //{
+        //    Quaternion iq = q;
+        //    iq.X = -iq.X;
+        //    iq.Y = -iq.Y;
+        //    iq.Z = -iq.Z;
+
+        //    Quaternion res = q * new Quaternion(v.X, v.Y, v.Z, 0) * iq;
+
+        //    result = new Vector3(res.X, res.Y, res.Z);
+        //}
+
+        //public static void QuaternionToMatrix(ref Quaternion q, ref Vector3 tl, out Matrix m)
+        //{
+        //    float w2, x2, y2, z2;
+        //    w2 = q.W * q.W;
+        //    x2 = q.X * q.X;
+        //    y2 = q.Y * q.Y;
+        //    z2 = q.Z * q.Z;
+
+        //    m.M11 = w2 + x2 - y2 - z2;
+        //    m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
+        //    m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
+
+        //    m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
+        //    m.M22 = w2 - x2 + y2 - z2;
+        //    m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
+
+        //    m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
+        //    m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
+        //    m.M33 = w2 - x2 - y2 + z2;
+
+        //    m.M14 = 0;
+        //    m.M24 = 0;
+        //    m.M34 = 0;
+
+        //    m.M41 = tl.X;
+        //    m.M42 = tl.Y;
+        //    m.M43 = tl.Z;
+        //    m.M44 = w2 + x2 + y2 + z2;
+
+        //}
+        //public static void QuaternionToMatrix(ref Quaternion q, out Matrix m)
+        //{
+        //    float w2, x2, y2, z2;
+        //    w2 = q.W * q.W;
+        //    x2 = q.X * q.X;
+        //    y2 = q.Y * q.Y;
+        //    z2 = q.Z * q.Z;
+
+        //    m.M11 = w2 + x2 - y2 - z2;
+        //    m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
+        //    m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
+
+        //    m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
+        //    m.M22 = w2 - x2 + y2 - z2;
+        //    m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
+
+        //    m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
+        //    m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
+        //    m.M33 = w2 - x2 - y2 + z2;
+
+        //    m.M14 = 0;
+        //    m.M24 = 0;
+        //    m.M34 = 0;
+
+        //    m.M41 = 0;
+        //    m.M42 = 0;
+        //    m.M43 = 0;
+        //    m.M44 = w2 + x2 + y2 + z2;
+
+        //}
+        //public static Matrix QuaternionToMatrix(Quaternion q, Vector3 tl)
+        //{
+        //    float w2, x2, y2, z2;
+
+        //    Matrix m;
+
+        //    w2 = q.W * q.W;
+        //    x2 = q.X * q.X;
+        //    y2 = q.Y * q.Y;
+        //    z2 = q.Z * q.Z;
+
+        //    m.M11 = w2 + x2 - y2 - z2;
+        //    m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
+        //    m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
+
+        //    m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
+        //    m.M22 = w2 - x2 + y2 - z2;
+        //    m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
+
+        //    m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
+        //    m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
+        //    m.M33 = w2 - x2 - y2 + z2;
+
+        //    m.M14 = 0;
+        //    m.M24 = 0;
+        //    m.M34 = 0;
+
+        //    m.M41 = tl.X;
+        //    m.M42 = tl.Y;
+        //    m.M43 = tl.Z;
+        //    m.M44 = w2 + x2 + y2 + z2;
+
+        //    return m;
+        //}
+
+        //public static Matrix QuaternionToMatrix(Quaternion q)
+        //{
+        //    float w2, x2, y2, z2;
+
+        //    Matrix m;
+
+        //    w2 = q.W * q.W;
+        //    x2 = q.X * q.X;
+        //    y2 = q.Y * q.Y;
+        //    z2 = q.Z * q.Z;
+
+        //    m.M11 = w2 + x2 - y2 - z2;
+        //    m.M12 = 2 * (q.X * q.Y + q.W * q.Z);
+        //    m.M13 = 2 * (q.X * q.Z - q.W * q.Y);
+
+        //    m.M21 = 2 * (q.X * q.Y - q.W * q.Z);
+        //    m.M22 = w2 - x2 + y2 - z2;
+        //    m.M23 = 2 * (q.Y * q.Z + q.W * q.X);
+
+        //    m.M31 = 2 * (q.X * q.Z + q.W * q.Y);
+        //    m.M32 = 2 * (q.Y * q.Z - q.W * q.X);
+        //    m.M33 = w2 - x2 - y2 + z2;
+
+        //    m.M14 = 0;
+        //    m.M24 = 0;
+        //    m.M34 = 0;
+
+        //    m.M41 = 0;
+        //    m.M42 = 0;
+        //    m.M43 = 0;
+        //    m.M44 = w2 + x2 + y2 + z2;
+
+        //    return m;
+        //}
+
+        //public static Quaternion QuaternionMultiplyVector(Quaternion a, Vector3 b)
+        //{
+        //    return new Quaternion(-(a.X * b.X + a.Y * b.Y + a.Z * b.Z),
+        //                            a.W * b.X + a.Y * b.Z - a.Z * b.Y,
+        //                            a.W * b.Y + a.Z * b.X - a.X * b.Z,
+        //                            a.W * b.Z + a.X * b.Y - a.Y * b.X);
+        //}
+
+        //public static void QuaternionMultiplyVector(ref Quaternion a, ref Vector3 b, out Quaternion res)
+        //{
+        //    res = new Quaternion(-(a.X * b.X + a.Y * b.Y + a.Z * b.Z),
+        //                           a.W * b.X + a.Y * b.Z - a.Z * b.Y,
+        //                           a.W * b.Y + a.Z * b.X - a.X * b.Z,
+        //                           a.W * b.Z + a.X * b.Y - a.Y * b.X);
+        //}
+
+        //#endregion
+
+        //#region 矩阵
+
+        ///// <summary>
+        ///// 变换向量
+        ///// </summary>
+        //public static Vector3 MatrixTransformVec(ref Matrix m, Vector3 v)
+        //{
+        //    return new Vector3(m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z,
+        //                     m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z,
+        //                     m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z);
+        //}
+        ///// <summary>
+        ///// 变换点
+        ///// </summary>
+        //public static Vector3 MatrixTransformPoint(ref Matrix m, Vector3 p)
+        //{
+        //    return new Vector3(m.M11 * p.X + m.M21 * p.Y + m.M31 * p.Z + m.M41,
+        //                    m.M12 * p.X + m.M22 * p.Y + m.M32 * p.Z + m.M42,
+        //                    m.M13 * p.X + m.M23 * p.Y + m.M33 * p.Z + m.M43);
+        //}
+
+        ///// <summary>
+        ///// 变换向量
+        ///// </summary>
+        //public static void MatrixTransformVec(ref Matrix m, ref Vector3 v)
+        //{
+        //    v = new Vector3(m.M11 * v.X + m.M21 * v.Y + m.M31 * v.Z,
+        //                    m.M12 * v.X + m.M22 * v.Y + m.M32 * v.Z,
+        //                    m.M13 * v.X + m.M23 * v.Y + m.M33 * v.Z);
+        //}
+        ///// <summary>
+        ///// 变换点
+        ///// </summary>
+        //public static void MatrixTransformPoint(ref Matrix m, ref Vector3 p)
+        //{
+        //    p = new Vector3(m.M11 * p.X + m.M21 * p.Y + m.M31 * p.Z + m.M41,
+        //                    m.M12 * p.X + m.M22 * p.Y + m.M32 * p.Z + m.M42,
+        //                    m.M13 * p.X + m.M23 * p.Y + m.M33 * p.Z + m.M43);
+        //}
+
+        ////public static void MatrixTranspose3x3(ref Matrix m, out Matrix3x3 ret)
+        ////{
+        ////    ret.M11 = m.M11;
+        ////    ret.M12 = m.M21;
+        ////    ret.M13 = m.M31;
+        ////    ret.M21 = m.M12;
+        ////    ret.M22 = m.M22;
+        ////    ret.M23 = m.M32;
+        ////    ret.M31 = m.M13;
+        ////    ret.M32 = m.M23;
+        ////    ret.M33 = m.M33;
+        ////}
+
+        //#endregion
 
         #region 平面
 

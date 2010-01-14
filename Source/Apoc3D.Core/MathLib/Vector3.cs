@@ -836,6 +836,36 @@ namespace Apoc3D.MathLib
             result.Y = vector.X * transformation.M12 + vector.Y * transformation.M22 + vector.Z * transformation.M32 + transformation.M42;
             result.Z = vector.X * transformation.M13 + vector.Y * transformation.M23 + vector.Z * transformation.M33 + transformation.M43;
         }
+
+
+        /// <summary>
+        /// Transforms a 3D vector by the given <see cref="Quaternion"/> rotation.
+        /// </summary>
+        /// <param name="vector">The vector to rotate.</param>
+        /// <param name="rotation">The <see cref="Quaternion"/> rotation to apply.</param>
+        /// <returns>The transformed <see cref="Vector4"/>.</returns>
+        public static Vector3 TransformSimple(Vector3 vector, Quaternion rotation)
+        {
+            Vector3 result;
+            float x = rotation.X + rotation.X;
+            float y = rotation.Y + rotation.Y;
+            float z = rotation.Z + rotation.Z;
+            float wx = rotation.W * x;
+            float wy = rotation.W * y;
+            float wz = rotation.W * z;
+            float xx = rotation.X * x;
+            float xy = rotation.X * y;
+            float xz = rotation.X * z;
+            float yy = rotation.Y * y;
+            float yz = rotation.Y * z;
+            float zz = rotation.Z * z;
+
+            result.X = ((vector.X * ((1.0f - yy) - zz)) + (vector.Y * (xy - wz))) + (vector.Z * (xz + wy));
+            result.Y = ((vector.X * (xy + wz)) + (vector.Y * ((1.0f - xx) - zz))) + (vector.Z * (yz - wx));
+            result.Z = ((vector.X * (xz - wy)) + (vector.Y * (yz + wx))) + (vector.Z * ((1.0f - xx) - yy));
+
+            return result;
+        }
         /// <summary>
         /// Transforms an array of 3D vectors by the given <see cref="Matrix"/>.
         /// </summary>
