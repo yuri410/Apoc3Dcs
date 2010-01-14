@@ -160,13 +160,7 @@ namespace Apoc3D.Scene
                         Material mate = ops[k].Material;
                         GeomentryData geoData = ops[k].Geomentry;
 
-                        Dictionary<Material, FastList<RenderOperation>> matTbl;
-
-                        if (!batchHelper.batchTable.TryGetValue(prio, out matTbl))
-                        {
-                            matTbl = new Dictionary<Material, FastList<RenderOperation>>();
-                            batchHelper.batchTable.Add(prio, matTbl);
-                        }
+                        Dictionary<Material, FastList<RenderOperation>> matTbl = batchHelper.batchTable[(int)prio];
 
                         if (mate != null)
                         {

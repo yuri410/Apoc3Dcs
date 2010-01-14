@@ -121,17 +121,11 @@ namespace Apoc3D.Graphics
                         GeomentryData geoData = ops[k].Geomentry;
                         RenderPriority prio = ops[k].Priority;
 
-                        Dictionary<Material, FastList<RenderOperation>> matTbl;
-
-                        if (!batchData.batchTable.TryGetValue(prio, out matTbl))
-                        {
-                            matTbl = new Dictionary<Material, FastList<RenderOperation>>();
-                            batchData.batchTable.Add(prio, matTbl);
-                        }
-
                         if (mate != null)
                         {
                             FastList<RenderOperation> opList;
+
+                            Dictionary<Material, FastList<RenderOperation>> matTbl = batchData.batchTable[(int)prio];
 
                             if (!matTbl.TryGetValue(mate, out opList))
                             {
@@ -245,9 +239,9 @@ namespace Apoc3D.Graphics
             //states.Lighting = false;
 
             #region 处理一般的Op
-            foreach (KeyValuePair<RenderPriority, Dictionary<Material, FastList<RenderOperation>>> e0 in batchData.batchTable)
+            for (int i = 0; i < batchData.batchTable.Length; i++)
             {
-                Dictionary<Material, FastList<RenderOperation>> matTbl = e0.Value;
+                Dictionary<Material, FastList<RenderOperation>> matTbl = batchData.batchTable[i];
                 foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in matTbl)
                 {
                     FastList<RenderOperation> opList = e1.Value;
@@ -347,8 +341,7 @@ namespace Apoc3D.Graphics
             //}
             #endregion
 
-            Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>>.ValueCollection vals = batchData.batchTable.Values;
-
+            Dictionary<Material, FastList<RenderOperation>>[] vals = batchData.batchTable;
 
             foreach (Dictionary<Material, FastList<RenderOperation>> matTbl in vals)
             {

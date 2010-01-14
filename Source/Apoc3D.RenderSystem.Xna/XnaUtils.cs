@@ -48,6 +48,7 @@ namespace Apoc3D.RenderSystem.Xna
             cfmtConv[(int)ImagePixelFormat.G16R16F] = XG.SurfaceFormat.HalfVector2;
             cfmtConv[(int)ImagePixelFormat.G32R32F] = XG.SurfaceFormat.Vector2;
             cfmtConv[(int)ImagePixelFormat.Luminance16] = XG.SurfaceFormat.Luminance16;
+            cfmtConv[(int)ImagePixelFormat.B8G8R8] = XG.SurfaceFormat.Bgr24;
 
             cfmtConv[(int)ImagePixelFormat.Luminance8] = XG.SurfaceFormat.Luminance8;
             cfmtConv[(int)ImagePixelFormat.R16F] = XG.SurfaceFormat.HalfSingle;

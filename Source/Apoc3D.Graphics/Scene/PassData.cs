@@ -15,7 +15,7 @@ namespace Apoc3D.Scene
         /// <summary>
         ///  普通渲染表。分为若干不同渲染次序的组，每组按材质分组，一个材质组有一个RenderOperation列表
         /// </summary>
-        public Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>> batchTable;
+        public Dictionary<Material, FastList<RenderOperation>>[] batchTable;
 
         /// <summary>
         ///  
@@ -28,7 +28,12 @@ namespace Apoc3D.Scene
 
         public PassData()
         {
-            batchTable = new Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>>();
+            batchTable = new Dictionary<Material, FastList<RenderOperation>>[4];
+            for (int i = 0; i < batchTable.Length; i++)
+            {
+                batchTable[i] = new Dictionary<Material, FastList<RenderOperation>>();
+            }
+
             instanceTable = new Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>();
 
             visibleObjects = new FastList<SceneObject>();
@@ -46,16 +51,19 @@ namespace Apoc3D.Scene
         {
             if (!Disposed)
             {
-                Dictionary<RenderPriority, Dictionary<Material, FastList<RenderOperation>>>.ValueCollection vals = batchTable.Values;
-                foreach (Dictionary<Material, FastList<RenderOperation>> matTbl in vals)
+                for (int i = 0; i < batchTable.Length; i++)
                 {
-                    Dictionary<Material, FastList<RenderOperation>>.ValueCollection mats = matTbl.Values;
+                    Dictionary<Material, FastList<RenderOperation>>.ValueCollection mats = batchTable[i].Values;
+
                     foreach (FastList<RenderOperation> opList in mats)
                     {
                         opList.Clear();
                     }
+
+                    batchTable[i].Clear();
                 }
-                batchTable.Clear();
+
+               
 
                 Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = instanceTable.Values;
                 foreach (Dictionary<GeomentryData, FastList<RenderOperation>> geoTable in matTableVals)
