@@ -15,14 +15,13 @@ namespace Apoc3D.RenderSystem.Xna
 
         XnaTexture colorBuf;
         XnaDepthBuffer depthBuf;
-
+        XnaRenderSystem renderSys;
 
         internal XnaRenderTarget(XnaRenderSystem rs, XG.RenderTarget2D XnaRt)
             : base(rs, XnaRt.Width, XnaRt.Height, XnaUtils.ConvertEnum(XnaRt.Format))
         {
             this.colorBufXna = XnaRt;
-
-            this.colorBuf = new XnaTexture(rs, XnaRt.GetTexture());
+            this.renderSys = rs;
         }
         internal XnaRenderTarget(XnaRenderSystem rs, XG.RenderTarget2D xnaRt, XG.DepthStencilBuffer xnaDep)
             : base(rs, xnaRt.Width, xnaRt.Height, 
@@ -30,28 +29,32 @@ namespace Apoc3D.RenderSystem.Xna
         {
             this.colorBufXna = xnaRt;
             this.depthBufXna = xnaDep;
+            this.renderSys = rs;
 
-            this.colorBuf = new XnaTexture(rs, xnaRt.GetTexture());
             this.depthBuf = new XnaDepthBuffer(rs, xnaDep);
         }
         public XnaRenderTarget(XnaRenderSystem rs, int width, int height, ImagePixelFormat format)
             : base(rs, width, height, format)
         {
             this.colorBufXna = new XG.RenderTarget2D(rs.Device, width, height, 1, XnaUtils.ConvertEnum(format));
-            this.colorBuf = new XnaTexture(rs, colorBufXna.GetTexture());
+            this.renderSys = rs;
         }
         public XnaRenderTarget(XnaRenderSystem rs, int width, int height, ImagePixelFormat format, DepthFormat depFmt)
             : base(rs, width, height, format)
         {
             this.colorBufXna = new XG.RenderTarget2D(rs.Device, width, height, 1, XnaUtils.ConvertEnum(format));
             this.depthBufXna = new XG.DepthStencilBuffer(rs.Device, width, height, XnaUtils.ConvertEnum(depFmt));
+            this.renderSys = rs;
 
-            this.colorBuf = new XnaTexture(rs, colorBufXna.GetTexture());
             this.depthBuf = new XnaDepthBuffer(rs, depthBufXna);
         }
 
         public override Texture GetColorBufferTexture()
         {
+            if (colorBuf == null)
+            {
+                this.colorBuf = new XnaTexture(renderSys, colorBufXna.GetTexture());
+            }
             return colorBuf;
         }
 
