@@ -18,6 +18,12 @@ namespace Apoc3D.Graphics
         int primitiveCount;
         int vertexCount;
 
+        public RenderMode Mode
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         ///  获取渲染场景所用到的批次数量
         /// </summary>

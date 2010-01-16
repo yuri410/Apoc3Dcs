@@ -228,6 +228,7 @@ namespace Apoc3D.Graphics
         void ISceneRenderer.RenderScene(RenderTarget target, RenderMode mode)
         {
             RenderStateManager states = renderSystem.RenderStates;
+            renderSystem.Mode = mode;
 
             renderSystem.SetRenderTarget(0, target);
 
