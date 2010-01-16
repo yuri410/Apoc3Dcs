@@ -53,6 +53,7 @@ namespace Apoc3D
         Vector3 Right { get; }
 
         RenderTarget RenderTarget { get; }
+        RenderMode Mode { get; }
     }
 
 
@@ -82,6 +83,11 @@ namespace Apoc3D
         protected bool isProjDirty;
 
         public RenderTarget RenderTarget
+        {
+            get;
+            set;
+        }
+        public RenderMode Mode
         {
             get;
             set;

@@ -9,6 +9,14 @@ using Apoc3D.Scene;
 
 namespace Apoc3D.Graphics
 {
+    public enum RenderMode
+    {
+        Simple,
+        Depth,
+        Wireframe,
+        Final
+    }
+
     public class SceneRendererParameter
     {
         public bool UseShadow
@@ -217,7 +225,7 @@ namespace Apoc3D.Graphics
         ///  见接口<see cref="ISceneRenderer"/>
         /// </summary>
         /// <param name="target"></param>
-        void ISceneRenderer.RenderScenePost(RenderTarget target)
+        void ISceneRenderer.RenderScene(RenderTarget target, RenderMode mode)
         {
             RenderStateManager states = renderSystem.RenderStates;
 
@@ -509,7 +517,7 @@ namespace Apoc3D.Graphics
                 //#endregion
 
 
-                postRenderer.Render(this, CurrentCamera.RenderTarget);
+                postRenderer.RenderFullScene(this, CurrentCamera.RenderTarget, CurrentCamera.Mode);
             }
             renderSystem.EndFrame();
             ResourceInterlock.UnblockAll();

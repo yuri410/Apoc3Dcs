@@ -18,7 +18,7 @@ namespace Apoc3D.Graphics
         ///  正常渲染场景
         /// </summary>
         /// <param name="target">场景渲染目标</param>
-        void RenderScenePost(RenderTarget target);
+        void RenderScene(RenderTarget target, RenderMode mode);
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ namespace Apoc3D.Graphics
         /// </summary>
         /// <param name="renderer">实现ISceneRenderer可以渲染场景的对象</param>
         /// <param name="screenTarget">渲染目标</param>
-        void Render(ISceneRenderer renderer, RenderTarget screenTarget);
+        void RenderFullScene(ISceneRenderer renderer, RenderTarget screenTarget, RenderMode mode);
     }
 
     public class DefaultPostRenderer : IPostSceneRenderer 
@@ -39,9 +39,9 @@ namespace Apoc3D.Graphics
 
         #region IPostSceneRenderer 成员
 
-        public void Render(ISceneRenderer renderer, RenderTarget screenTarget)
+        public void RenderFullScene(ISceneRenderer renderer, RenderTarget screenTarget, RenderMode mode)
         {
-            renderer.RenderScenePost(screenTarget);
+            renderer.RenderScene(screenTarget, mode);
         }
 
         #endregion
@@ -159,11 +159,11 @@ namespace Apoc3D.Graphics
         /// </summary>
         /// <param name="renderer"></param>
         /// <param name="screenTarget"></param>
-        public void Render(ISceneRenderer renderer, RenderTarget screenTarget)
+        public void RenderFullScene(ISceneRenderer renderer, RenderTarget screenTarget, RenderMode mode)
         {
             RenderStateManager states = renderSys.RenderStates;
 
-            renderer.RenderScenePost(clrRt);
+            renderer.RenderScene(clrRt, RenderMode.Final);
 
             states.CullMode = CullMode.None;
 
