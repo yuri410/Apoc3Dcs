@@ -17,11 +17,12 @@ namespace Apoc3D.Graphics
         int batchCount;
         int primitiveCount;
         int vertexCount;
+        protected RenderMode mode;
 
         public RenderMode Mode
         {
-            get;
-            set;
+            get { return mode; }
+            set { mode = value; }
         }
 
         /// <summary>

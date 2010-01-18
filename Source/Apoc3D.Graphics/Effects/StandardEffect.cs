@@ -269,33 +269,33 @@ namespace Apoc3D.Graphics.Effects
         //    effectInst.CommitChanges();
         //}
 
-        public override void SetupShadowPass(Material mat, ref RenderOperation op)
-        {
-            Texture clrTex = mat.GetTexture(0);
-            //if (clrTex == null)
-            //{
-            //    shadowMapGen.SetTexture(tlParamClrMap, noTexture);
-            //}
-            //else
-            //{
-            //    shadowMapGen.SetTexture(tlParamClrMap, clrTex.GetTexture);
-            //}
+        //public override void SetupShadowPass(Material mat, ref RenderOperation op)
+        //{
+        //    Texture clrTex = mat.GetTexture(0);
+        //    //if (clrTex == null)
+        //    //{
+        //    //    shadowMapGen.SetTexture(tlParamClrMap, noTexture);
+        //    //}
+        //    //else
+        //    //{
+        //    //    shadowMapGen.SetTexture(tlParamClrMap, clrTex.GetTexture);
+        //    //}
 
-            //shadowMapGen.SetValue(tlParamMVP, op.Transformation * EffectParams.ShadowMap.ViewProj);
+        //    //shadowMapGen.SetValue(tlParamMVP, op.Transformation * EffectParams.ShadowMap.ViewProj);
 
-            //shadowMapGen.CommitChanges();
-        }
+        //    //shadowMapGen.CommitChanges();
+        //}
 
-        public override void BeginShadowPass()
-        {
-            //shadowMapGen.Begin(FX.DoNotSaveState | FX.DoNotSaveShaderState | FX.DoNotSaveSamplerState);
-            //shadowMapGen.BeginPass(0);
-        }
-        public override void EndShadowPass()
-        {
-            //shadowMapGen.EndPass();
-            //shadowMapGen.End();
-        }
+        //public override void BeginShadowPass()
+        //{
+        //    //shadowMapGen.Begin(FX.DoNotSaveState | FX.DoNotSaveShaderState | FX.DoNotSaveSamplerState);
+        //    //shadowMapGen.BeginPass(0);
+        //}
+        //public override void EndShadowPass()
+        //{
+        //    //shadowMapGen.EndPass();
+        //    //shadowMapGen.End();
+        //}
 
         protected override void Dispose(bool disposing)
         {

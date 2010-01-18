@@ -16,8 +16,9 @@ namespace Apoc3D.Graphics.Effects
     public abstract class Effect
     {
         bool begun;
+        protected RenderMode mode;
 
-        public Effect(bool supportsInstancing, string name)
+        protected Effect(bool supportsInstancing, string name)
         {
             Name = name;
             SupportsInstancing = supportsInstancing;
@@ -70,15 +71,15 @@ namespace Apoc3D.Graphics.Effects
         public abstract void BeginPass(int passId);
         public abstract void EndPass();
 
-        public abstract void BeginShadowPass();
-        public abstract void EndShadowPass();
+        //public abstract void BeginShadowPass();
+        //public abstract void EndShadowPass();
 
-        public int Begin()
+        public int Begin(RenderMode mode)
         {
             if (!begun)
             {
                 begun = true;
-
+                this.mode = mode;
                 return begin();
             }
             return -1;
@@ -135,7 +136,7 @@ namespace Apoc3D.Graphics.Effects
         }
 
         public abstract void Setup(Material mat, ref RenderOperation op);
-        public abstract void SetupShadowPass(Material mat, ref RenderOperation op);
+        //public abstract void SetupShadowPass(Material mat, ref RenderOperation op);
 
  
         #region IDisposable 成员

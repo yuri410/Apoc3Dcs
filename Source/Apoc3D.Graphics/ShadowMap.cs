@@ -49,11 +49,11 @@ namespace Apoc3D.Graphics
 
         VertexDeclaration pipDecl;
 
-        public DefaultSMGenEffect DefaultSMGen
-        {
-            get;
-            private set;
-        }
+        //public DefaultSMGenEffect DefaultSMGen
+        //{
+        //    get;
+        //    private set;
+        //}
 
         public unsafe ShadowMap(RenderSystem dev)
         {
@@ -95,7 +95,7 @@ namespace Apoc3D.Graphics
             pip.Unlock();
 
 
-            DefaultSMGen = new DefaultSMGenEffect(renderSys);
+            //DefaultSMGen = new DefaultSMGenEffect(renderSys);
         }
 
         RenderTarget stdRenderTarget;
@@ -216,7 +216,7 @@ namespace Apoc3D.Graphics
             if (disposing)
             {
                 pip.Dispose();
-                DefaultSMGen.Dispose();
+                //DefaultSMGen.Dispose();
             }
         }
 

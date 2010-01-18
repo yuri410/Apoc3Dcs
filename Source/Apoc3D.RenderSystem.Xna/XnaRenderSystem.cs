@@ -1213,8 +1213,18 @@ namespace Apoc3D.RenderSystem.Xna
                     PrimitiveCount += gm.PrimCount;
                     VertexCount += gm.VertexCount;
 
-                    effect.Setup(material, ref op);
-
+                    switch (mode)
+                    {
+                        case RenderMode.Final:
+                        case RenderMode.Wireframe:
+                            effect.Setup(material, ref op);
+                            break;
+                        //case RenderMode.Simple:
+                        //    effect.Setup(material, ref op);
+                        //case RenderMode.Depth:
+                        //    effect.Setup(material, ref op);
+                    }
+                    
 
                     XnaVertexBuffer xnavb = (XnaVertexBuffer)gm.VertexBuffer;
 
