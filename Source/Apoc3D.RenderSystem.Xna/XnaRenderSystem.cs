@@ -1122,7 +1122,7 @@ namespace Apoc3D.RenderSystem.Xna
             renderStates.AlphaBlendEnable = !material.IsTransparent;
             renderStates.CullMode = material.CullMode;
 
-            int passCount = effect.Begin();
+            int passCount = effect.Begin(RenderMode.Final);
             for (int p = 0; p < passCount; p++)
             {
                 effect.BeginPass(p);
@@ -1196,7 +1196,7 @@ namespace Apoc3D.RenderSystem.Xna
             //renderStates.DepthBufferEnable = material.ZEnabled;
             renderStates.CullMode = material.CullMode;
 
-            int passCount = effect.Begin();
+            int passCount = effect.Begin(RenderMode.Final);
             for (int p = 0; p < passCount; p++)
             {
                 effect.BeginPass(p);

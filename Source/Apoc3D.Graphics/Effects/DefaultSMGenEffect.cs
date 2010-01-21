@@ -67,29 +67,29 @@ namespace Apoc3D.Graphics.Effects
             //ehMVP = new EffectHandle("mvp");
         }
 
-        public override void BeginShadowPass()
-        {
-            renderSys.BindShader(vtxShader);
-            renderSys.BindShader(pixShader);
+        //public override void BeginShadowPass()
+        //{
+        //    renderSys.BindShader(vtxShader);
+        //    renderSys.BindShader(pixShader);
 
-            //effect.Begin(FX.DoNotSaveSamplerState | FX.DoNotSaveShaderState | FX.DoNotSaveState);
-            //effect.BeginPass(0);
-        }
+        //    //effect.Begin(FX.DoNotSaveSamplerState | FX.DoNotSaveShaderState | FX.DoNotSaveState);
+        //    //effect.BeginPass(0);
+        //}
 
-        public override void EndShadowPass()
-        {
-            //effect.EndPass();
-            //effect.End();
-        }
+        //public override void EndShadowPass()
+        //{
+        //    //effect.EndPass();
+        //    //effect.End();
+        //}
 
 
 
-        public override void SetupShadowPass(Material mat, ref RenderOperation op)
-        {
-            //effect.SetValue(ehMVP, op.Transformation * EffectParams.ShadowMap.ViewProj);
+        //public override void SetupShadowPass(Material mat, ref RenderOperation op)
+        //{
+        //    //effect.SetValue(ehMVP, op.Transformation * EffectParams.ShadowMap.ViewProj);
             
-            //effect.CommitChanges();
-        }
+        //    //effect.CommitChanges();
+        //}
 
         protected override void Dispose(bool disposing)
         {
