@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Text;
 using Apoc3D.Core;
+using Apoc3D.Design;
 using Apoc3D.Graphics.Animation;
 using Apoc3D.Vfs;
-using Apoc3D.Design;
 
 namespace Apoc3D.Graphics
 {
