@@ -68,7 +68,10 @@ namespace Apoc3D.RenderSystem.Xna
         {
             return new XnaVertexDeclaration(renderSys, elements);
         }
-
+        public override Sprite CreateSprite()
+        {
+            return new XnaSprite(renderSys);
+        }
         public override StateBlock CreateStateBlock()
         {
             return new XnaStateBlock(renderSys);
