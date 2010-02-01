@@ -9,7 +9,54 @@ using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics
 {
-    public class Sprite : IDisposable, IRenderable
+    public abstract class Sprite : IDisposable
+    {
+        public abstract void Begin();
+        public abstract void End();
+
+        public RenderSystem RenderSystem
+        {
+            get;
+            private set;
+        }
+
+        protected Sprite(RenderSystem rs)
+        {
+            RenderSystem = rs;
+        }
+
+        public abstract void Draw(Texture texture, Rectangle rect, ColorValue color);
+        public abstract void Draw(Texture texture, Vector2 pos, ColorValue color);
+        public abstract void Draw(Texture texture, Rectangle dstRect, Rectangle? srcRect, ColorValue color);
+
+        #region IDisposable 成员
+
+        public bool Disposed
+        {
+            get;
+            protected set;
+        }
+
+        protected virtual void Dispose(bool disposing) { }
+
+        public void Dispose()
+        {
+            if (!Disposed)
+            {
+                Dispose(true);
+                Disposed = true;
+            }
+            else 
+            {
+                throw new ObjectDisposedException(ToString());
+            }
+        }
+
+        #endregion
+    }
+
+
+    public class SceneSprite : IDisposable, IRenderable
     {
         [StructLayout(LayoutKind.Sequential)]
         struct SpriteVertex
@@ -59,7 +106,7 @@ namespace Apoc3D.Graphics
                 get { return geoData; }
             }
 
-            public Entry(RenderSystem rs, Sprite spr)
+            public Entry(RenderSystem rs, SceneSprite spr)
             {
                 ObjectFactory fac = rs.ObjectFactory;
 
@@ -123,7 +170,7 @@ namespace Apoc3D.Graphics
             private set;
         }
 
-        public Sprite(RenderSystem rs)
+        public SceneSprite(RenderSystem rs)
         {
             ObjectFactory fac = rs.ObjectFactory;
 
@@ -259,4 +306,5 @@ namespace Apoc3D.Graphics
 
         #endregion
     }
+
 }

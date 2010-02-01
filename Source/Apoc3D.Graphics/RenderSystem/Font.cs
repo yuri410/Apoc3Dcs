@@ -190,7 +190,7 @@ namespace Apoc3D.Graphics
             throw new NotSupportedException();
         }
 
-        public void DrawString(Sprite sprite, string text, int x, int y, float fontSize, DrawTextFormat format, int color)
+        public void DrawString(SceneSprite sprite, string text, int x, int y, float fontSize, DrawTextFormat format, int color)
         {
             float scale = fontSize / origHeight;
             for (int i = 0; i < text.Length; i++)

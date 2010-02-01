@@ -95,6 +95,7 @@
     <Compile Include="XnaRenderTarget.cs" />
     <Compile Include="XnaRenderWindow.cs" />
     <Compile Include="XnaSamplerState.cs" />
+    <Compile Include="XnaSprite.cs" />
     <Compile Include="XnaStateBlock.cs" />
     <Compile Include="XnaTexture.cs" />
     <Compile Include="XnaTextureWrapCollection.cs" />
