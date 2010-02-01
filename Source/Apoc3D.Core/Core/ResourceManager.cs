@@ -128,6 +128,14 @@ namespace Apoc3D.Core
                 return asyncProc.TaskCompleted;
             }
         }
+        public void WaitForIdle()
+        {
+            asyncProc.WaitForCompletion();
+        }
+        public int GetCurrentOperationCount()
+        {
+            return asyncProc.GetOperationCount();
+        }
 
         /// <summary>
         ///  提示资源管理器已经创建了一个新资源，将它放入管理范围

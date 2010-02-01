@@ -243,7 +243,7 @@ namespace Apoc3D.Graphics
             //Atmosphere.Render();
 
 
-
+            //states.FillMode = FillMode.WireFrame;
             states.AlphaBlendEnable = false;
             //states.Lighting = false;
 

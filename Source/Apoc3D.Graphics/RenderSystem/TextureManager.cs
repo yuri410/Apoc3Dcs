@@ -35,6 +35,11 @@ namespace Apoc3D.Graphics
             CreationUsage = TextureUsage.Static;
         }
 
+        public FileLocation Redirect
+        {
+            get;
+            set;
+        }
         public ObjectFactory Factory
         {
             get;
@@ -81,6 +86,8 @@ namespace Apoc3D.Graphics
             {
                 throw new InvalidOperationException();
             }
+            if (Redirect != null)
+                fl = Redirect;
             return Factory.CreateTexture(fl, CreationUsage);
         }
 
@@ -90,6 +97,9 @@ namespace Apoc3D.Graphics
             {
                 throw new InvalidOperationException();
             }
+            if (Redirect != null)
+                fl = Redirect;
+
             Resource retrived = base.Exists(fl.Name);
             if (retrived == null)
             {

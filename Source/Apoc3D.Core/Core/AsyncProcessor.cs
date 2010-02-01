@@ -14,10 +14,10 @@ namespace Apoc3D.Core
             get { return resource; }
         }
 
-        protected ResourceOperation(Resource res) 
+        protected ResourceOperation(Resource res)
         {
             this.resource = res;
-            
+
         }
 
         public abstract void Process();
@@ -34,12 +34,14 @@ namespace Apoc3D.Core
 
         object syncHelper = new object();
 
+        AutoResetEvent waiter;
 
-        public AsyncProcessor() 
+        public AsyncProcessor()
         {
             opQueue = new Queue<ResourceOperation>();
 
-             
+            waiter = new AutoResetEvent(true);
+            
             processThread = new Thread(Main);
             processThread.Name = "AsyncProcessor";
 
@@ -51,7 +53,7 @@ namespace Apoc3D.Core
         }
 
         [MTAThread()]
-        private void Main() 
+        private void Main()
         {
             while (!Disposed)
             {
@@ -61,6 +63,7 @@ namespace Apoc3D.Core
                 {
                     if (opQueue.Count > 0)
                     {
+                        waiter.Reset();
                         resOp = opQueue.Dequeue();
                     }
                 }
@@ -69,19 +72,20 @@ namespace Apoc3D.Core
                 {
                     resOp.Process();
                 }
-                else 
+                else
                 {
-                    Thread.Sleep(10); 
+                    waiter.Set();
+                    Thread.Sleep(10);
                 }
             }
         }
 
-        public void AddTask(ResourceOperation op) 
+        public void AddTask(ResourceOperation op)
         {
             opQueue.Enqueue(op);
         }
 
-        public bool TaskCompleted 
+        public bool TaskCompleted
         {
             get
             {
@@ -90,6 +94,18 @@ namespace Apoc3D.Core
                     return opQueue.Count == 0;
                 }
             }
+        }
+        public int GetOperationCount()
+        {
+            lock (syncHelper)
+            {
+                return opQueue.Count;
+            }
+        }
+
+        public void WaitForCompletion()
+        {
+            waiter.WaitOne();
         }
 
         #region IDisposable 成员
