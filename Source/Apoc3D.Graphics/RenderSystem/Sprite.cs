@@ -27,7 +27,10 @@ namespace Apoc3D.Graphics
 
         public abstract void Draw(Texture texture, Rectangle rect, ColorValue color);
         public abstract void Draw(Texture texture, Vector2 pos, ColorValue color);
+        public abstract void Draw(Texture texture, int x, int y, ColorValue color);
         public abstract void Draw(Texture texture, Rectangle dstRect, Rectangle? srcRect, ColorValue color);
+
+       
 
         #region IDisposable 成员
 

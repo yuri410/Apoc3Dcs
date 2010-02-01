@@ -84,9 +84,33 @@ namespace Apoc3D.RenderSystem.Xna
             }
         }
 
+        public override void Draw(Texture texture, int x, int y, ColorValue color)
+        {
+            XnaTexture xt = (XnaTexture)texture;
+            XFG.Texture2D tex2D = xt.tex2D;
+            if (tex2D != null)
+            {
+                XF.Vector2 xpos;
+                xpos.X = x;
+                xpos.Y = y;
+
+                XFG.Color clr = new XFG.Color(color.R, color.G, color.B, color.A);
+
+                sprite.Draw(tex2D, xpos, clr);
+            }
+        }
         public override void End()
         {
             sprite.End();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposing)
+            {
+                sprite.Dispose();
+            }
+            sprite = null;
         }
     }
 }
