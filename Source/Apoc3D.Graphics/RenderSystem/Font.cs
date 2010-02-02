@@ -186,9 +186,11 @@ namespace Apoc3D.Graphics
             {
                 for (int j = 0; j < origWidth; j++)
                 {
-                    *dst++ = br.ReadByte();
+                    byte lum = br.ReadByte();
+                    *dst++ = lum;
+                    *dst++ = lum;
                 }
-                dst += rect.Pitch - origWidth;
+                dst += rect.Pitch - origWidth * sizeof(ushort);
             }
             tex.Unlock(0);
             return tex;
@@ -238,7 +240,7 @@ namespace Apoc3D.Graphics
                         rect.Height = (int)(origHeight * scale);
 
                         sprite.Draw(chars[ch].Map, rect, colorValue);
-                        x += (int)(chars[ch].Width * scale);
+                        x += (int)(chars[ch].Width * scale * 0.5);
                     }
                 }
                 else
