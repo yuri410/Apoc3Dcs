@@ -76,6 +76,7 @@ namespace Apoc3D.Graphics
             public char Char;
             public T Map;
             public int Width;
+            public int Height;
         }
 
         protected int codeStart;
@@ -83,6 +84,8 @@ namespace Apoc3D.Graphics
 
         protected int origWidth;
         protected int origHeight;
+
+        protected float defFontSize;
 
         protected BitmapChar[] chars;
 
@@ -103,7 +106,7 @@ namespace Apoc3D.Graphics
             get { return origHeight; }
         }
 
-
+        
 
         protected void ReadData(ResourceLocation rl)
         {
@@ -115,6 +118,7 @@ namespace Apoc3D.Graphics
 
                 origWidth = br.ReadInt32();
                 origHeight = br.ReadInt32();
+                defFontSize = br.ReadSingle();
 
                 chars = new BitmapChar[codeEnd - codeStart];
 
@@ -122,11 +126,13 @@ namespace Apoc3D.Graphics
                 {
                     char ch = (char)br.ReadUInt16();
                     int charWidth = br.ReadInt32();
+                    int charHeight = br.ReadInt32();
 
                     T tex = LoadCharMap(br);
 
                     chars[s].Char = ch;
                     chars[s].Width = charWidth;
+                    chars[s].Height = charHeight;
                     chars[s].Map = tex;
                 }
             }
@@ -192,9 +198,10 @@ namespace Apoc3D.Graphics
             throw new NotSupportedException();
         }
 
+        [Obsolete()]
         public void DrawString(SceneSprite sprite, string text, int x, int y, float fontSize, DrawTextFormat format, int color)
         {
-            float scale = fontSize / origHeight;
+            float scale = fontSize / defFontSize;
             for (int i = 0; i < text.Length; i++)
             {
                 char ch = text[i];
@@ -215,7 +222,7 @@ namespace Apoc3D.Graphics
         public void DrawString(Sprite sprite, string text, int x, int y, float fontSize, DrawTextFormat format, int color)
         {
             ColorValue colorValue = new ColorValue(color);
-            float scale = fontSize / origHeight;
+            float scale = fontSize / defFontSize;
             for (int i = 0; i < text.Length; i++)
             {
                 char ch = text[i];
@@ -223,13 +230,19 @@ namespace Apoc3D.Graphics
                 {
                     if (ch >= codeStart && ch <= codeEnd)
                     {
-                        sprite.Draw(chars[ch].Map, x, y, colorValue);
+                        Rectangle rect;
+                        rect.X = x;
+                        rect.Y = y;
+                        rect.Width = (int)(origWidth * scale);
+                        rect.Height = (int)(origHeight * scale);
+
+                        sprite.Draw(chars[ch].Map, rect, colorValue);
                         x += (int)(chars[ch].Width * scale);
                     }
                 }
                 else
                 {
-                    y += origHeight;
+                    y += (int)(origHeight * scale);
                 }
             }
         }

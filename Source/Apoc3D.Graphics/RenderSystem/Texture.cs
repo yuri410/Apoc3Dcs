@@ -212,7 +212,7 @@ namespace Apoc3D.Graphics
             {
                 if (Type == TextureType.CubeTexture)
                 {
-                    if (!IsLocked)
+                    if (IsManaged && !IsLoaded)
                     {
                         return DataRectangle.Empty;
                     }
@@ -241,7 +241,7 @@ namespace Apoc3D.Graphics
             {
                 if (Type == TextureType.CubeTexture)
                 {
-                    if (!IsLocked)
+                    if (IsManaged && !IsLoaded)
                     {
                         return DataRectangle.Empty;
                     }
@@ -270,7 +270,7 @@ namespace Apoc3D.Graphics
             {
                 if (Type == TextureType.Texture2D || Type == TextureType.Texture1D)
                 {
-                    if (!IsLoaded)
+                    if (IsManaged && !IsLoaded)
                     {
                         return DataRectangle.Empty;
                     }
@@ -298,7 +298,7 @@ namespace Apoc3D.Graphics
             {
                 if (Type == TextureType.Texture2D || Type == TextureType.Texture1D)
                 {
-                    if (!IsLoaded)
+                    if (IsManaged && !IsLoaded)
                     {
                         return DataRectangle.Empty;
                     }
@@ -327,7 +327,7 @@ namespace Apoc3D.Graphics
             {
                 if (Type == TextureType.Texture3D)
                 {
-                    if (!IsLoaded)
+                    if (IsManaged && !IsLoaded)
                     {
                         return DataBox.Empty;
                     }
@@ -358,7 +358,10 @@ namespace Apoc3D.Graphics
                 unlock(surface);
                 IsLocked = false;
             }
-            throw new InvalidOperationException();
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
         public void Unlock(CubeMapFace cubemapFace, int surface)
         {
@@ -367,7 +370,10 @@ namespace Apoc3D.Graphics
                 unlock(cubemapFace, surface);
                 IsLocked = false;
             }
-            throw new InvalidOperationException();
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         #endregion
