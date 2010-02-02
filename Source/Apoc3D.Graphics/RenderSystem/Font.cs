@@ -219,6 +219,7 @@ namespace Apoc3D.Graphics
                 }
             }
         }
+
         public void DrawString(Sprite sprite, string text, int x, int y, float fontSize, DrawTextFormat format, int color)
         {
             ColorValue colorValue = new ColorValue(color);
