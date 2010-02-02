@@ -120,7 +120,7 @@ namespace Apoc3D.Graphics
 
                 for (int s = 0; s < chars.Length; s++)
                 {
-                    char ch = br.ReadChar();
+                    char ch = (char)br.ReadUInt16();
                     int charWidth = br.ReadInt32();
 
                     T tex = LoadCharMap(br);
@@ -170,7 +170,7 @@ namespace Apoc3D.Graphics
 
         protected override Texture LoadCharMap(ContentBinaryReader br)
         {
-            Texture tex = factory.CreateTexture(origWidth, origHeight, 1, TextureUsage.StaticWriteOnly, ImagePixelFormat.Luminance8);
+            Texture tex = factory.CreateTexture(origWidth, origHeight, 1, TextureUsage.StaticWriteOnly, ImagePixelFormat.A8L8);
 
             DataRectangle rect = tex.Lock(0, LockMode.None);
 
