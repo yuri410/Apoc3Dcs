@@ -40,7 +40,7 @@ namespace Apoc3D.Graphics
             set;
         }
 
-        public AnimationInstance CurrentAnimation 
+        public AnimationInstance CurrentAnimation
         {
             get { return animInstance; }
             set { animInstance = value; }
@@ -237,36 +237,20 @@ namespace Apoc3D.Graphics
         public Model(RenderSystem renderSystem, ResourceLocation rl)
             : base(renderSystem, rl)
         {
-            
-        }
 
-        //public Model(RenderSystem rs, Animation anim, Mesh[] meshes)
-        //    : base(rs)
-        //{
-        //    this.animation = animation;
-        //    this.entities = meshes;
-        //}
-        //public Model(RenderSystem device, string name)
-        //    : base(device, name, false)
-        //{
-        //}
+        }
 
         public Model(RenderSystem renderSystem, GameMesh[] entities)
             : base(renderSystem)
         {
             this.entities = entities;
-
-            //TransformAnimation animData = new TransformAnimation(entities.Length);
-            //this.TransformAnim = new TransformAnimationInstance(animData);
         }
         public Model(RenderSystem device, int entityCount)
             : base(device)
         {
             this.entities = new GameMesh[entityCount];
-
-            //TransformAnimation animData = new TransformAnimation(entityCount);
-            //this.TransformAnim = new TransformAnimationInstance(animData);
         }
+
 
         protected override void unload()
         {
@@ -286,7 +270,6 @@ namespace Apoc3D.Graphics
         private Model(RenderSystem dev)
             : base(dev)
         {
-            //isResourceEntity = true;
         }
 
         protected override GameMesh LoadMesh(BinaryDataReader data)
@@ -384,7 +367,7 @@ namespace Apoc3D.Graphics
             }
             return opBuffer;
         }
-        public RenderOperation[] GetRenderOperation(int level) 
+        public RenderOperation[] GetRenderOperation(int level)
         {
             return GetRenderOperation();
         }
@@ -417,7 +400,7 @@ namespace Apoc3D.Graphics
 
         public void Update(GameTime dt)
         {
-            if (animInstance != null) 
+            if (animInstance != null)
             {
                 animInstance.Update(dt);
             }
