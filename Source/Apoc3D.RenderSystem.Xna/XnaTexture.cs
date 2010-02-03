@@ -382,23 +382,23 @@ namespace Apoc3D.RenderSystem.Xna
         {
             if (tex2D != null)
             {
-                ResourceInterlock.EnterAtomicOp();
+                //ResourceInterlock.EnterAtomicOp();
                 tex2D.Dispose();
-                ResourceInterlock.ExitAtomicOp();
+                //ResourceInterlock.ExitAtomicOp();
                 tex2D = null;
             }
             if (cube != null)
             {
-                ResourceInterlock.EnterAtomicOp();
+                //ResourceInterlock.EnterAtomicOp();
                 cube.Dispose();
-                ResourceInterlock.ExitAtomicOp();
+                //ResourceInterlock.ExitAtomicOp();
                 cube = null;
             }
             if (tex3D != null)
             {
-                ResourceInterlock.EnterAtomicOp();
+                //ResourceInterlock.EnterAtomicOp();
                 tex3D.Dispose();
-                ResourceInterlock.ExitAtomicOp();
+                //ResourceInterlock.ExitAtomicOp();
                 tex3D = null;
             }
 
