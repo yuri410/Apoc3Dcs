@@ -13,7 +13,7 @@ namespace Apoc3D.Graphics
         ///  处理初始化事件
         /// </summary>
         void Initialize();
-        void Finalize();
+        void finalize();
 
         void Load();
         void Unload();

@@ -181,6 +181,11 @@ namespace Apoc3D.Graphics
             if (EventHandler != null)
                 EventHandler.Initialize();
         }
+        protected void OnFinalize()
+        {
+            if (EventHandler != null)
+                EventHandler.finalize();
+        }
         protected void OnLoad() 
         {
             if (EventHandler != null)

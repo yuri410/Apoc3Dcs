@@ -245,6 +245,7 @@ namespace Apoc3D.Graphics
                 }
                 else
                 {
+                    x = 0;
                     y += (int)(origHeight * scale);
                 }
             }

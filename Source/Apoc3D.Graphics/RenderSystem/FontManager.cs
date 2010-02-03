@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Apoc3D.Vfs;
 
 namespace Apoc3D.Graphics
 {
@@ -35,7 +36,17 @@ namespace Apoc3D.Graphics
         }
 
 
-
+        public Font CreateInstance(RenderSystem rs, ResourceLocation rl, string name) 
+        {
+            Font result;
+            if (!loadedFonts.TryGetValue(name, out result)) 
+            {
+                result = Font.FromResource(rs, rl, name);
+                loadedFonts.Add(name, result);
+            }
+            return result;
+        }
+        
         //public Font CreateInstance(RenderSystem rs, System.Drawing.Font font)
         //{
         //    Font gfont;

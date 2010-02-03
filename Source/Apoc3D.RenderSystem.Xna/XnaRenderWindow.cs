@@ -77,8 +77,11 @@ namespace Apoc3D.RenderSystem.Xna
             }
             protected override void OnExiting(object sender, EventArgs args)
             {
+                parent.OnFinalize();
+
                 base.OnExiting(sender, args);
             }
+          
             protected override void UnloadContent()
             {
                 base.UnloadContent();

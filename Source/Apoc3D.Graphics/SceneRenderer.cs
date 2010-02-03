@@ -221,6 +221,33 @@ namespace Apoc3D.Graphics
             protected set;
         }
 
+        void ClearBatchData()
+        {
+
+            Dictionary<Material, FastList<RenderOperation>>[] vals = batchData.batchTable;
+
+            foreach (Dictionary<Material, FastList<RenderOperation>> matTbl in vals)
+            {
+                Dictionary<Material, FastList<RenderOperation>>.ValueCollection mats = matTbl.Values;
+                foreach (FastList<RenderOperation> opList in mats)
+                {
+                    opList.FastClear();
+                }
+            }
+
+            Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = batchData.instanceTable.Values;
+            foreach (Dictionary<GeomentryData, FastList<RenderOperation>> geoTable in matTableVals)
+            {
+                Dictionary<GeomentryData, FastList<RenderOperation>>.ValueCollection geoTableVals = geoTable.Values;
+                foreach (FastList<RenderOperation> opList in geoTableVals)
+                {
+                    opList.FastClear();
+                }
+
+            }
+        }
+
+        
         /// <summary>
         ///  见接口<see cref="ISceneRenderer"/>
         /// </summary>
@@ -349,29 +376,52 @@ namespace Apoc3D.Graphics
             //    }
             //}
             #endregion
-
-            Dictionary<Material, FastList<RenderOperation>>[] vals = batchData.batchTable;
-
-            foreach (Dictionary<Material, FastList<RenderOperation>> matTbl in vals)
-            {
-                Dictionary<Material, FastList<RenderOperation>>.ValueCollection mats = matTbl.Values;
-                foreach (FastList<RenderOperation> opList in mats)
-                {
-                    opList.FastClear();
-                }
-            }
-
-            Dictionary<Material, Dictionary<GeomentryData, FastList<RenderOperation>>>.ValueCollection matTableVals = batchData.instanceTable.Values;
-            foreach (Dictionary<GeomentryData, FastList<RenderOperation>> geoTable in matTableVals)
-            {
-                Dictionary<GeomentryData, FastList<RenderOperation>>.ValueCollection geoTableVals = geoTable.Values;
-                foreach (FastList<RenderOperation> opList in geoTableVals)
-                {
-                    opList.FastClear();
-                }
-
-            }
+            ClearBatchData();
         }
+
+        void ActivateScene()
+        {
+            for (int i = 0; i < batchData.batchTable.Length; i++)
+            {
+                Dictionary<Material, FastList<RenderOperation>> matTbl = batchData.batchTable[i];
+                foreach (KeyValuePair<Material, FastList<RenderOperation>> e1 in matTbl)
+                {
+                    FastList<RenderOperation> opList = e1.Value;
+                    for (int j = 0; j < opList.Count; j++)
+                    {
+                        for (int k = 0; k < Material.MaxTexLayers; k++)
+                        {
+                            ResourceHandle<Texture> tex = opList[j].Material.GetTexture(k);
+                            if (tex != null)
+                                tex.Touch();
+                        }
+                    }
+                }
+            }
+
+            ClearBatchData();
+        }
+        public void ActivateVisibles()
+        {
+            ResourceInterlock.BlockAll();
+            renderSystem.BeginFrame();
+
+
+            for (int i = 0; i < cameraList.Count; i++)
+            {
+                EffectParams.CurrentCamera = cameraList[i];
+                CurrentCamera = cameraList[i];
+
+                sceneManager.PrepareVisibleObjects(EffectParams.CurrentCamera, batchData);
+
+                ActivateScene();
+            }
+
+            renderSystem.EndFrame();
+            ResourceInterlock.UnblockAll();
+
+        }
+
 
         /// <summary>
         ///  渲染整个场景
