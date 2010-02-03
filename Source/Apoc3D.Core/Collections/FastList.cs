@@ -175,13 +175,15 @@ namespace Apoc3D.Collections
                 return -1;
             }
         }
-        public void Remove(T item)
+        public bool Remove(T item)
         {
             int index = IndexOf(item);
             if (index != -1)
             {
                 RemoveAt(index);
+                return true;
             }
+            return false;
         }
 
         public void RemoveAt(int idx)
