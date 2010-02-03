@@ -1176,6 +1176,15 @@ namespace Apoc3D.MathLib
             return (f2 - f1) * amount + f1;
         }
 
+        public static Vector2 CatmullRom(Vector2 value1, Vector2 value2, Vector2 value3, Vector2 value4, float amount)
+        {
+            Vector2 vector;
+            float num = amount * amount;
+            float num2 = amount * num;
+            vector.X = 0.5f * ((((2f * value2.X) + ((-value1.X + value3.X) * amount)) + (((((2f * value1.X) - (5f * value2.X)) + (4f * value3.X)) - value4.X) * num)) + ((((-value1.X + (3f * value2.X)) - (3f * value3.X)) + value4.X) * num2));
+            vector.Y = 0.5f * ((((2f * value2.Y) + ((-value1.Y + value3.Y) * amount)) + (((((2f * value1.Y) - (5f * value2.Y)) + (4f * value3.Y)) - value4.Y) * num)) + ((((-value1.Y + (3f * value2.Y)) - (3f * value3.Y)) + value4.Y) * num2));
+            return vector;
+        }
         public static float CatmullRom(float value1, float value2, float value3, float value4, float amount)
         {
             //float num = amount * amount;
