@@ -23,8 +23,8 @@ namespace Apoc3D.Graphics
             if (singleton == null)
             {
                 singleton = new ModelManager(1048576 * 92);
+                EngineConsole.Instance.Write("模型管理器初始化完毕。内存使用上限" + Math.Round(singleton.TotalCacheSize / 1048576.0, 2).ToString() + "MB。", ConsoleMessageType.Information);
             }
-            EngineConsole.Instance.Write("模型管理器初始化完毕。内存使用上限" + Math.Round(singleton.TotalCacheSize / 1048576.0, 2).ToString() + "MB。", ConsoleMessageType.Information);
         }
 
         public ModelManager() { }
