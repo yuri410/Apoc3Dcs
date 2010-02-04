@@ -960,9 +960,9 @@ namespace Apoc3D.MathLib
         /// </summary>
         public static bool BoundingSphereIntersects(ref BoundingSphere bs, ref BoundingBox aabb)
         {
-            return ((aabb.Minimum.X - bs.Radius <= bs.Center.X) & (bs.Center.X <= aabb.Maximum.X + bs.Radius) &
-                    (aabb.Minimum.Y - bs.Radius <= bs.Center.Y) & (bs.Center.Y <= aabb.Maximum.Y + bs.Radius) &
-                    (aabb.Minimum.Z - bs.Radius <= bs.Center.Z) & (bs.Center.Z <= aabb.Maximum.Z + bs.Radius));
+            return ((aabb.Minimum.X - bs.Radius <= bs.Center.X) && (bs.Center.X <= aabb.Maximum.X + bs.Radius) &&
+                    (aabb.Minimum.Y - bs.Radius <= bs.Center.Y) && (bs.Center.Y <= aabb.Maximum.Y + bs.Radius) &&
+                    (aabb.Minimum.Z - bs.Radius <= bs.Center.Z) && (bs.Center.Z <= aabb.Maximum.Z + bs.Radius));
         }
 
         public static bool BoundingSphereIntersects(ref BoundingSphere bs, ref Ray ra)
