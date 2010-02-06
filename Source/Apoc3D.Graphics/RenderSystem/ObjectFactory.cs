@@ -23,7 +23,7 @@ namespace Apoc3D.Graphics
         }
 
 
-        public abstract Texture CreateTexture(ResourceLocation rl, TextureUsage usage);
+        public abstract Texture CreateTexture(ResourceLocation rl, TextureUsage usage, bool managed);
 
         public abstract Texture CreateTexture(int width, int height, int levelCount, TextureUsage usage, ImagePixelFormat format);
 

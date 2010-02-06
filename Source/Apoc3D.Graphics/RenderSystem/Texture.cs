@@ -103,20 +103,16 @@ namespace Apoc3D.Graphics
         #endregion
 
         #region 构造函数
-        protected Texture(RenderSystem rs, ResourceLocation rl)
-            : base(TextureManager.Instance, rl.Name)
-        {
-            this.RenderSystem = rs;
-            this.ResourceLocation = rl;
-            this.Usage = TextureUsage.Static;
-        }
-        protected Texture(RenderSystem rs, ResourceLocation rl, TextureUsage usage)
-            : base(TextureManager.Instance, rl.Name)
+
+        protected Texture(RenderSystem rs, ResourceLocation rl, TextureUsage usage, bool managed)
+            : base(managed ? TextureManager.Instance : null, rl.Name)
         {
             this.RenderSystem = rs;
             this.ResourceLocation = rl;
             this.Usage = usage;
+
         }
+
 
         protected Texture(RenderSystem rs, int width, int height, int depth, int surfaceCount, ImagePixelFormat format, TextureUsage usage)
         {

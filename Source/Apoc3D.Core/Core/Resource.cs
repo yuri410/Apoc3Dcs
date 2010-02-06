@@ -41,9 +41,21 @@ namespace Apoc3D.Core
     {
         T resuorce;
         object syncHelper = new object();
+        bool dummy;
+
+        public ResourceHandle(T res, bool dummy)
+        {
+            this.dummy = dummy;
+            if (!dummy)
+            {
+                res.Reference();
+            }
+            this.resuorce = res;
+        }
 
         public ResourceHandle(T res)
         {
+            dummy = false;
             res.Reference();
             this.resuorce = res;
         }
@@ -63,7 +75,8 @@ namespace Apoc3D.Core
         {
             get
             {
-                resuorce.Use();
+                if (!dummy)
+                    resuorce.Use();
                 return resuorce;
             }
         }
@@ -91,7 +104,8 @@ namespace Apoc3D.Core
         {
             if (res != null)
             {
-                res.resuorce.Use();
+                if (!res.dummy)
+                    res.resuorce.Use();
                 return res.resuorce;
             }
             return null;
@@ -116,7 +130,8 @@ namespace Apoc3D.Core
             {
                 if (!Disposed)
                 {
-                    resuorce.Dereference();
+                    if (!dummy)
+                        resuorce.Dereference();
                     Disposed = true;
                 }
                 else
@@ -468,8 +483,11 @@ namespace Apoc3D.Core
             : this()
         {
             this.hashString = hashString;
-            this.manager = manager;
-            this.generation = new GenerationCalculator(manager.Table);
+            if (manager != null)
+            {
+                this.manager = manager;
+                this.generation = new GenerationCalculator(manager.Table);
+            }
         }
 
 

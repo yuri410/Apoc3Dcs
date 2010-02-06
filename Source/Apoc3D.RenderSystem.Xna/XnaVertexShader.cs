@@ -267,7 +267,7 @@ namespace Apoc3D.RenderSystem.Xna
         public override void SetTexture(int index, Texture tex)
         {
             int si = constants[index].SamplerIndex;
-
+            
             if (tex.IsLoaded)
             {
                 XnaTexture xnatex = (XnaTexture)tex;

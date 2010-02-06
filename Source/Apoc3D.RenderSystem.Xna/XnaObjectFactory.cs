@@ -21,9 +21,9 @@ namespace Apoc3D.RenderSystem.Xna
         }
 
         #region ¥¥Ω®Œ∆¿Ì
-        public override Texture CreateTexture(ResourceLocation rl, TextureUsage usage)
+        public override Texture CreateTexture(ResourceLocation rl, TextureUsage usage, bool managed)
         {
-            return new XnaTexture(renderSys, rl, usage);
+            return new XnaTexture(renderSys, rl, usage, managed);
         }
 
         public override Texture CreateTexture(int width, int height, int levelCount, TextureUsage usage, ImagePixelFormat format)

@@ -17,8 +17,7 @@ namespace Apoc3D.RenderSystem.Xna
         internal XG.Texture2D tex2D;
         internal XG.Texture3D tex3D;
         internal XG.TextureCube cube;
-
-        XG.GraphicsDevice device;
+        XnaRenderSystem renderSys;
 
         struct LockInfo 
         {
@@ -36,7 +35,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs, tex2d.Width, tex2d.Height, 1, tex2d.LevelCount,
                    XnaUtils.ConvertEnum(tex2d.Format), XnaUtils.ConvertEnum(tex2d.TextureUsage))
         {
-            this.device = rs.Device;
+            this.renderSys = rs;
             this.tex2D = tex2d;
             this.lockInfo = new LockInfo[tex2d.LevelCount];
         }
@@ -44,7 +43,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs, tex3d.Width, tex3d.Height, tex3d.Depth, tex3d.LevelCount,
                    XnaUtils.ConvertEnum(tex3d.Format), XnaUtils.ConvertEnum(tex3d.TextureUsage))
         {
-            this.device = rs.Device;
+            this.renderSys = rs;
             this.tex3D = tex3d;
             this.lockInfo = new LockInfo[tex3d.LevelCount];
         }
@@ -52,7 +51,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(rs, texCube.Size, texCube.LevelCount,
                    XnaUtils.ConvertEnum(texCube.TextureUsage), XnaUtils.ConvertEnum(texCube.Format))
         {
-            this.device = rs.Device;
+            this.renderSys = rs;
             this.cube = texCube;
             this.lockInfo = new LockInfo[texCube.LevelCount];
         }
@@ -64,10 +63,14 @@ namespace Apoc3D.RenderSystem.Xna
         /// <param name="rs"></param>
         /// <param name="rl"></param>
         /// <param name="usage"></param>
-        public XnaTexture(XnaRenderSystem rs, ResourceLocation rl, TextureUsage usage)
-            : base(rs, rl, usage)
+        public XnaTexture(XnaRenderSystem rs, ResourceLocation rl, TextureUsage usage, bool managed)
+            : base(rs, rl, usage, managed)
         {
-            this.device = rs.Device;
+            this.renderSys = rs;
+            if (!managed)
+            {
+                load();
+            }
         }
 
         /// <summary>
@@ -83,7 +86,7 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaTexture(XnaRenderSystem rs, int width, int height, int depth, int level, ImagePixelFormat format, TextureUsage usage)
             : base(rs, width, height, depth, level, format, usage)
         {
-            this.device = rs.Device;
+            this.renderSys = rs;
 
             if (Type == TextureType.Texture2D || Type == TextureType.Texture1D)
             {
@@ -103,7 +106,7 @@ namespace Apoc3D.RenderSystem.Xna
         public XnaTexture(XnaRenderSystem rs, int length, int level, ImagePixelFormat format, TextureUsage usage)
             : base(rs, length, level, usage, format)
         {
-            this.device = rs.Device;
+            this.renderSys = rs;
 
             this.cube = new XG.TextureCube(rs.Device, length, level, XnaUtils.ConvertEnum(usage), XnaUtils.ConvertEnum(format));
             this.lockInfo = new LockInfo[level];
@@ -328,7 +331,7 @@ namespace Apoc3D.RenderSystem.Xna
                 case TextureType.Texture1D:
                 case TextureType.Texture2D:
                     //ResourceInterlock.EnterAtomicOp();
-                    tex2D = new XG.Texture2D(device, Width, Height, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
+                    tex2D = new XG.Texture2D(renderSys.Device, Width, Height, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
                     //ResourceInterlock.ExitAtomicOp();
 
                     for (int i = 0; i < SurfaceCount; i++)
@@ -341,7 +344,7 @@ namespace Apoc3D.RenderSystem.Xna
                     break;
                 case TextureType.CubeTexture:
 
-                    cube = new XG.TextureCube(device, Width, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
+                    cube = new XG.TextureCube(renderSys.Device, Width, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
 
 
                     for (int i = 0; i < SurfaceCount; i++)
@@ -368,7 +371,7 @@ namespace Apoc3D.RenderSystem.Xna
                     }
                     break;
                 case TextureType.Texture3D:
-                    tex3D = new XG.Texture3D(device, Width, Height, Depth, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
+                    tex3D = new XG.Texture3D(renderSys.Device, Width, Height, Depth, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
 
                     for (int i = 0; i < SurfaceCount; i++)
                     {

@@ -12,25 +12,21 @@ namespace Apoc3D.Graphics
         static volatile TextureManager singleton;
         static volatile object syncHelper = new object();
 
+        public static void Initialize(int cacheSize)
+        {
+            singleton = new TextureManager(cacheSize);
+        }
+
         public static TextureManager Instance
         {
             get
             {
-                if (singleton == null)
-                {
-                    lock (syncHelper)
-                    {
-                        if (singleton == null)
-                        {
-                            singleton = new TextureManager();
-                        }
-                    }
-                }
                 return singleton;
             }
         }
 
-        private TextureManager()
+        private TextureManager(int cbSize)
+            : base(cbSize)
         {
             CreationUsage = TextureUsage.Static;
         }
@@ -88,7 +84,7 @@ namespace Apoc3D.Graphics
             }
             if (Redirect != null)
                 fl = Redirect;
-            return Factory.CreateTexture(fl, CreationUsage);
+            return Factory.CreateTexture(fl, CreationUsage, false);
         }
 
         public ResourceHandle<Texture> CreateInstance(FileLocation fl)
@@ -103,7 +99,7 @@ namespace Apoc3D.Graphics
             Resource retrived = base.Exists(fl.Name);
             if (retrived == null)
             {
-                Texture tex = Factory.CreateTexture(fl, CreationUsage);
+                Texture tex = Factory.CreateTexture(fl, CreationUsage, true);
                 retrived = tex;
                 base.NotifyResourceNew(tex);
             }

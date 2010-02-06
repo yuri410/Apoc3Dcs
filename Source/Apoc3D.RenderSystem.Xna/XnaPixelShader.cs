@@ -260,23 +260,23 @@ namespace Apoc3D.RenderSystem.Xna
         {
             int si = constants[index].SamplerIndex;
 
+            XG.Texture value = null;
+
             if (tex != null)
             {
-                if (tex.State == ResourceState.Loaded)
+                if (tex.State == ResourceState.Loaded || !tex.IsManaged)
                 {
                     XnaTexture xnatex = (XnaTexture)tex;
                     if (xnatex.tex2D != null)
-                        device.Textures[si] = xnatex.tex2D;
+                        value = xnatex.tex2D;
                     else if (xnatex.cube != null)
-                        device.Textures[si] = xnatex.cube;
+                        value = xnatex.cube;
                     else if (xnatex.tex3D != null)
-                        device.Textures[si] = xnatex.tex3D;
-                }
-                else 
-                {
-
+                        value = xnatex.tex3D;
                 }
             }
+            device.Textures[si] = value;
+
         }
         public override void SetSamplerState(int index, ref ShaderSamplerState state)
         {
@@ -295,23 +295,22 @@ namespace Apoc3D.RenderSystem.Xna
         }
         public override void SetTextureDirect(int si, Texture tex)
         {
+            XG.Texture value = null;
+
             if (tex != null)
             {
-                if (tex.State == ResourceState.Loaded)
+                if (tex.State == ResourceState.Loaded || !tex.IsManaged)
                 {
                     XnaTexture xnatex = (XnaTexture)tex;
                     if (xnatex.tex2D != null)
-                        device.Textures[si] = xnatex.tex2D;
+                        value = xnatex.tex2D;
                     else if (xnatex.cube != null)
-                        device.Textures[si] = xnatex.cube;
+                        value = xnatex.cube;
                     else if (xnatex.tex3D != null)
-                        device.Textures[si] = xnatex.tex3D;
-                }
-                else
-                {
-
+                        value = xnatex.tex3D;
                 }
             }
+            device.Textures[si] = value;
         }
         public override void SetSamplerStateDirect(int si, ref ShaderSamplerState state)
         {
