@@ -53,6 +53,9 @@
     <Compile Include="Geometry\Sphere.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ParticleSystem\Particle.cs" />
+    <Compile Include="ParticleSystem\ParticleEmitter.cs" />
+    <Compile Include="ParticleSystem\ParticleManager.cs" />
     <Compile Include="RenderSystem\IRenderWindowHandler.cs" />
     <Compile Include="RenderSystem\Line.cs">
       <SubType>Code</SubType>
@@ -156,6 +159,7 @@
   <ItemGroup>
     <Folder Include="Core\" />
     <Folder Include="EffectSystem\" />
+    <Folder Include="ParticleSystem\old\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

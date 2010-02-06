@@ -114,7 +114,7 @@ namespace Apoc3D.Graphics
                 meshData.Close();
                 br.Close();
             }
-
+            CurrentAnimation = new NoAnimation();
             //ModelAnimationFlags flags = (ModelAnimationFlags)data.GetDataInt32(AnimationFlagTag);
             //BinaryDataReader animData;
 
@@ -149,7 +149,7 @@ namespace Apoc3D.Graphics
         }
         protected void WriteData(BinaryDataWriter data)
         {
-            Use();
+            UseSync();
             data.AddEntry(EntityCountTag, entities.Length);
 
             ContentBinaryWriter bw;
