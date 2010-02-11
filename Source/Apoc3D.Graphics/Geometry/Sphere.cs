@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Apoc3D.Graphics.Animation;
 using Apoc3D.MathLib;
+using Apoc3D.Core;
 
 namespace Apoc3D.Graphics.Geometry
 {
@@ -22,11 +23,14 @@ namespace Apoc3D.Graphics.Geometry
         /// <param name="stacks">Specifies the number of subdivisions along the Y axis 
         /// (similar to lines of latitude). This has to be greater than 4 and less than 101.</param>
         public Sphere(RenderSystem rs, float radius, int slices, int stacks, Material[][] materials)
-            : base(rs, 1)
+            //: base(rs, 1)
         {
             GameMesh gm = new GameMesh(rs, CreateSphere(rs, radius, slices, stacks, materials));
-            base.Entities = new GameMesh[1] { gm };
+            ModelData data = new ModelData(rs, 1);
+            data.Entities = new GameMesh[1] { gm };
             base.CurrentAnimation = new NoAnimation();
+
+            base.data = new ResourceHandle<ModelData>(data, true);
         }
 
         private unsafe static MeshData CreateSphere(RenderSystem rs, float radius, int slices, int stacks, Material[][] materials)

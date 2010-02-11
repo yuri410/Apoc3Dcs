@@ -10,6 +10,7 @@ using Apoc3D.Vfs;
 
 namespace Apoc3D.Graphics
 {
+
     /// <summary>
     ///  定义3D模型提供基础结构
     /// </summary>
@@ -27,9 +28,6 @@ namespace Apoc3D.Graphics
 
         protected MeshType[] entities;
         //protected Animation animation;
-        protected RenderSystem renderSystem;
-
-        protected AnimationInstance animInstance;
 
         //TransformAnimationInstance transAnim;
         //SkinAnimationInstance skinAnim;
@@ -40,11 +38,6 @@ namespace Apoc3D.Graphics
             set;
         }
 
-        public AnimationInstance CurrentAnimation
-        {
-            get { return animInstance; }
-            set { animInstance = value; }
-        }
         //public TransformAnimationInstance TransformAnim
         //{
         //    get { return transAnim; }
@@ -62,29 +55,19 @@ namespace Apoc3D.Graphics
             private set;
         }
 
-        protected ModelBase(RenderSystem dev, ResourceLocation rl)
+        protected ModelBase(ResourceLocation rl)
             : base(ModelManager.Instance, rl.Name)
         {
-            renderSystem = dev;
             DataSource = rl;
         }
 
-        protected ModelBase(RenderSystem rs)
+        protected ModelBase()
         {
-            renderSystem = rs;
         }
 
-        protected ModelBase(RenderSystem rs, string name)
+        protected ModelBase(string name)
             : base(ModelManager.Instance, name)
         {
-            renderSystem = rs;
-        }
-
-
-        [Browsable(false)]
-        public RenderSystem RenderSystem
-        {
-            get { return renderSystem; }
         }
 
         public MeshType[] Entities
@@ -114,7 +97,7 @@ namespace Apoc3D.Graphics
                 meshData.Close();
                 br.Close();
             }
-            CurrentAnimation = new NoAnimation();
+            
             //ModelAnimationFlags flags = (ModelAnimationFlags)data.GetDataInt32(AnimationFlagTag);
             //BinaryDataReader animData;
 
@@ -220,106 +203,42 @@ namespace Apoc3D.Graphics
         }
     }
 
-    /// <summary>
-    ///  表示3D模型
-    /// </summary>
-    public class Model : ModelBase<GameMesh>, IRenderable, IDisposable, IUpdatable
+    public class Model: IRenderable, IUpdatable
     {
         /// <summary>
         ///  已缓存的RenderOperation
         /// </summary>
         RenderOperation[] opBuffer;
+
         /// <summary>
         ///  renderOpEntId[i] 表示索引为i的renderOperation的Entity索引
         /// </summary>
         int[] renderOpEntId;
 
-        public Model(RenderSystem renderSystem, ResourceLocation rl)
-            : base(renderSystem, rl)
-        {
+        protected ResourceHandle<ModelData> data;
+        protected AnimationInstance animInstance;
 
+        public AnimationInstance CurrentAnimation
+        {
+            get { return animInstance; }
+            set { animInstance = value; }
         }
-
-        public Model(RenderSystem renderSystem, GameMesh[] entities)
-            : base(renderSystem)
+        public Model(ResourceHandle<ModelData> data)
         {
-            this.entities = entities;
+            CurrentAnimation = new NoAnimation(); 
+            this.data = data;
         }
-        public Model(RenderSystem device, int entityCount)
-            : base(device)
+        protected Model()
         {
-            this.entities = new GameMesh[entityCount];
-        }
-
-
-        protected override void unload()
-        {
-            if (entities != null)
-            {
-                for (int i = 0; i < entities.Length; i++)
-                {
-                    if (!entities[i].Disposed)
-                    {
-                        entities[i].Dispose();
-                    }
-                    entities[i] = null;
-                }
-            }
-        }
-
-        private Model(RenderSystem dev)
-            : base(dev)
-        {
-        }
-
-        protected override GameMesh LoadMesh(BinaryDataReader data)
-        {
-            MeshData md = new MeshData(renderSystem);
-            md.Load(data);
-            return new GameMesh(renderSystem, md);
-        }
-        protected override BinaryDataWriter SaveMesh(GameMesh mesh)
-        {
-            MeshData md = new MeshData(mesh);
-            return md.Save();
-        }
-
-        public static BinaryDataWriter ToBinary(Model mdl)
-        {
-            BinaryDataWriter data = new BinaryDataWriter();
-            mdl.WriteData(data);
-            return data;
-        }
-        public static void ToFile(Model mdl, string file)
-        {
-            FileStream fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write);
-            fs.SetLength(0);
-            ContentBinaryWriter bw = new ContentBinaryWriter(fs);
-
-            bw.Write(Model.MdlId);
-            BinaryDataWriter mdlData = ToBinary(mdl);
-            bw.Write(mdlData);
-            mdlData.Dispose();
-
-            bw.Close();
-        }
-        public static void ToStream(Model mdl, Stream stm)
-        {
-            ContentBinaryWriter bw = new ContentBinaryWriter(stm, Encoding.Default);
-
-            bw.Write(MdlId);
-
-            BinaryDataWriter mdlData = ToBinary(mdl);
-            bw.Write(mdlData);
-            mdlData.Dispose();
-
-            bw.Close();
+            CurrentAnimation = new NoAnimation();
         }
 
         #region IRenderable 成员
 
         public RenderOperation[] GetRenderOperation()
         {
+            GameMesh[] entities = data.Resource.Entities;
+
             if (opBuffer == null)
             {
                 RenderOperation[][] entOps = new RenderOperation[entities.Length][];
@@ -374,6 +293,123 @@ namespace Apoc3D.Graphics
 
         #endregion
 
+        #region IUpdatable 成员
+
+        public void Update(GameTime dt)
+        {
+            if (animInstance != null)
+            {
+                animInstance.Update(dt);
+            }
+            //GameMesh[] entities = data.Resource.Entities;
+            //if (entities != null)
+            //{
+            //    for (int i = 0; i < entities.Length; i++)
+            //    {
+            //        entities[i].Update(dt);
+            //    }
+            //}
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///  表示3D模型的数据
+    /// </summary>
+    public class ModelData : ModelBase<GameMesh>, IDisposable
+    {
+        protected RenderSystem renderSystem;
+        [Browsable(false)]
+        public RenderSystem RenderSystem
+        {
+            get { return renderSystem; }
+        }
+
+        public ModelData(RenderSystem renderSystem, ResourceLocation rl)
+            : base(rl)
+        {
+            this.renderSystem = renderSystem;
+        }
+
+        public ModelData(RenderSystem renderSystem, GameMesh[] entities)
+        {
+            this.renderSystem = renderSystem;
+
+            this.entities = entities;
+        }
+        public ModelData(RenderSystem renderSystem, int entityCount)
+        {
+            this.renderSystem = renderSystem;
+
+            this.entities = new GameMesh[entityCount];
+        }
+
+
+        protected override void unload()
+        {
+            if (entities != null)
+            {
+                for (int i = 0; i < entities.Length; i++)
+                {
+                    if (!entities[i].Disposed)
+                    {
+                        entities[i].Dispose();
+                    }
+                    entities[i] = null;
+                }
+            }
+        }
+
+        private ModelData(RenderSystem dev)
+        {
+            this.renderSystem = dev;
+        }
+
+        protected override GameMesh LoadMesh(BinaryDataReader data)
+        {
+            MeshData md = new MeshData(renderSystem);
+            md.Load(data);
+            return new GameMesh(renderSystem, md);
+        }
+        protected override BinaryDataWriter SaveMesh(GameMesh mesh)
+        {
+            MeshData md = new MeshData(mesh);
+            return md.Save();
+        }
+
+        public static BinaryDataWriter ToBinary(ModelData mdl)
+        {
+            BinaryDataWriter data = new BinaryDataWriter();
+            mdl.WriteData(data);
+            return data;
+        }
+        public static void ToFile(ModelData mdl, string file)
+        {
+            FileStream fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write);
+            fs.SetLength(0);
+            ContentBinaryWriter bw = new ContentBinaryWriter(fs);
+
+            bw.Write(ModelData.MdlId);
+            BinaryDataWriter mdlData = ToBinary(mdl);
+            bw.Write(mdlData);
+            mdlData.Dispose();
+
+            bw.Close();
+        }
+        public static void ToStream(ModelData mdl, Stream stm)
+        {
+            ContentBinaryWriter bw = new ContentBinaryWriter(stm, Encoding.Default);
+
+            bw.Write(MdlId);
+
+            BinaryDataWriter mdlData = ToBinary(mdl);
+            bw.Write(mdlData);
+            mdlData.Dispose();
+
+            bw.Close();
+        }
+
         #region IDisposable 成员
 
         protected override void dispose(bool disposing)
@@ -396,24 +432,5 @@ namespace Apoc3D.Graphics
 
         #endregion
 
-        #region IUpdatable 成员
-
-        public void Update(GameTime dt)
-        {
-            if (animInstance != null)
-            {
-                animInstance.Update(dt);
-            }
-
-            if (entities != null)
-            {
-                for (int i = 0; i < entities.Length; i++)
-                {
-                    entities[i].Update(dt);
-                }
-            }
-        }
-
-        #endregion
     }
 }
