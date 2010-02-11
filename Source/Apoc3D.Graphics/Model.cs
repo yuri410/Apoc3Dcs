@@ -201,6 +201,41 @@ namespace Apoc3D.Graphics
                 br.Close();
             }
         }
+
+
+        public static BinaryDataWriter ToBinary(ModelBase<MeshType> mdl)
+        {
+            BinaryDataWriter data = new BinaryDataWriter();
+            mdl.WriteData(data);
+            return data;
+        }
+
+        public static void ToFile(ModelBase<MeshType> mdl, string file)
+        {
+            FileStream fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write);
+            fs.SetLength(0);
+            ContentBinaryWriter bw = new ContentBinaryWriter(fs);
+
+            bw.Write(ModelData.MdlId);
+            BinaryDataWriter mdlData = ToBinary(mdl);
+            bw.Write(mdlData);
+            mdlData.Dispose();
+
+            bw.Close();
+        }
+
+        public static void ToStream(ModelBase<MeshType> mdl, Stream stm)
+        {
+            ContentBinaryWriter bw = new ContentBinaryWriter(stm, Encoding.Default);
+
+            bw.Write(MdlId);
+
+            BinaryDataWriter mdlData = ToBinary(mdl);
+            bw.Write(mdlData);
+            mdlData.Dispose();
+
+            bw.Close();
+        }
     }
 
     public class Model: IRenderable, IUpdatable
@@ -378,37 +413,6 @@ namespace Apoc3D.Graphics
             return md.Save();
         }
 
-        public static BinaryDataWriter ToBinary(ModelData mdl)
-        {
-            BinaryDataWriter data = new BinaryDataWriter();
-            mdl.WriteData(data);
-            return data;
-        }
-        public static void ToFile(ModelData mdl, string file)
-        {
-            FileStream fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write);
-            fs.SetLength(0);
-            ContentBinaryWriter bw = new ContentBinaryWriter(fs);
-
-            bw.Write(ModelData.MdlId);
-            BinaryDataWriter mdlData = ToBinary(mdl);
-            bw.Write(mdlData);
-            mdlData.Dispose();
-
-            bw.Close();
-        }
-        public static void ToStream(ModelData mdl, Stream stm)
-        {
-            ContentBinaryWriter bw = new ContentBinaryWriter(stm, Encoding.Default);
-
-            bw.Write(MdlId);
-
-            BinaryDataWriter mdlData = ToBinary(mdl);
-            bw.Write(mdlData);
-            mdlData.Dispose();
-
-            bw.Close();
-        }
 
         #region IDisposable 成员
 

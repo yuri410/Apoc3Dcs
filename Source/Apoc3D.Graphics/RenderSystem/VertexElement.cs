@@ -63,6 +63,23 @@ namespace Apoc3D.Graphics
 
         #region Methods
 
+        public static bool Compare(VertexElement[] e1, VertexElement[] e2)
+        {
+            if (e1.Length == e2.Length) 
+            {
+                for (int i = 0; i < e1.Length; i++)
+                {
+                    if (e1[i] != e2[i]) 
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+
         /// <summary>
         ///  计算顶点元素的大小
         /// </summary>
