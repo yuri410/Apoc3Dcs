@@ -71,6 +71,11 @@ namespace Apoc3D.Graphics
             private set;
         }
 
+        public SceneManagerBase SceneManager
+        {
+            get { return sceneManager; }
+        }
+
         /// <summary>
         ///  获取渲染物体的数量
         /// </summary>

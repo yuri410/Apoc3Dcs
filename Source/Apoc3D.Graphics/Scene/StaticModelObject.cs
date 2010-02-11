@@ -5,8 +5,6 @@ using System.Text;
 using Apoc3D.Design;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
-using JigLibX.Geometry;
-using JigLibX.Physics;
 
 namespace Apoc3D.Scene
 {
@@ -19,7 +17,7 @@ namespace Apoc3D.Scene
 
         bool isPhyBuilt;
 
-        TriangleMesh cdMesh;
+        //TriangleMesh cdMesh;
 
         #endregion
 
@@ -91,57 +89,57 @@ namespace Apoc3D.Scene
         {
             get { return true; }
         }
-        public override bool IntersectsSelectionRay(ref Apoc3D.MathLib.Ray ray)
-        {
-            if (cdMesh != null) 
-            {
-                float frac;
-                Vector3 p1, p2;
-                Segment seg = new Segment(ray.Position, ray.Direction * 1000);
-                if (cdMesh.SegmentIntersect(out frac, out p1, out p2, seg)) 
-                {
-                    return true;
-                }
-            }
-            return base.IntersectsSelectionRay(ref ray);
-        }
+        //public override bool IntersectsSelectionRay(ref Apoc3D.MathLib.Ray ray)
+        //{
+        //    if (cdMesh != null) 
+        //    {
+        //        float frac;
+        //        Vector3 p1, p2;
+        //        Segment seg = new Segment(ray.Position, ray.Direction * 1000);
+        //        if (cdMesh.SegmentIntersect(out frac, out p1, out p2, seg)) 
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return base.IntersectsSelectionRay(ref ray);
+        //}
 
-        public unsafe override void BuildPhysicsModel(PhysicsSystem world)
-        {
-            if (!isPhyBuilt)
-            {
-                //UpdateTransform();
+        //public unsafe override void BuildPhysicsModel(PhysicsSystem world)
+        //{
+        //    if (!isPhyBuilt)
+        //    {
+        //        //UpdateTransform();
 
-                //Matrix trans = Transformation;
-                //trans.M41 = 0;
-                //trans.M42 = 0;
-                //trans.M43 = 0;
+        //        //Matrix trans = Transformation;
+        //        //trans.M41 = 0;
+        //        //trans.M42 = 0;
+        //        //trans.M43 = 0;
 
-                //cdMesh = CollisionMeshManager.Instance.CreateInstance(ModelL0, trans);
-                //BvhTriMeshResShape shape = new BvhTriMeshResShape(cdMesh);
+        //        //cdMesh = CollisionMeshManager.Instance.CreateInstance(ModelL0, trans);
+        //        //BvhTriMeshResShape shape = new BvhTriMeshResShape(cdMesh);
 
 
-                //motionState = new DefaultMotionState(Matrix.Translation(position));
+        //        //motionState = new DefaultMotionState(Matrix.Translation(position));
 
-                //RigidBody = new RigidBody(0, motionState, shape);
-                //RigidBody.CollisionFlags |= CollisionOptions.StaticObject;
+        //        //RigidBody = new RigidBody(0, motionState, shape);
+        //        //RigidBody.CollisionFlags |= CollisionOptions.StaticObject;
 
-                //PM.Vector3 aabbMin;
-                //PM.Vector3 aabbMax;
-                //shape.GetAabb(PM.Matrix.Identity, out aabbMin, out aabbMax);
+        //        //PM.Vector3 aabbMin;
+        //        //PM.Vector3 aabbMax;
+        //        //shape.GetAabb(PM.Matrix.Identity, out aabbMin, out aabbMax);
 
-                //float rad = PM.Vector3.Distance(aabbMin, aabbMax) * 0.5f;
+        //        //float rad = PM.Vector3.Distance(aabbMin, aabbMax) * 0.5f;
 
-                //BoundingSphereOffset = 0.5f * (aabbMin + aabbMax);
-                //BoundingSphere.Radius = rad;
+        //        //BoundingSphereOffset = 0.5f * (aabbMin + aabbMax);
+        //        //BoundingSphere.Radius = rad;
 
-                //if (world != null)
-                //{
-                //    world.AddRigidBody(RigidBody);
-                //}
-                isPhyBuilt = true;
-            }
-        }
+        //        //if (world != null)
+        //        //{
+        //        //    world.AddRigidBody(RigidBody);
+        //        //}
+        //        isPhyBuilt = true;
+        //    }
+        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -151,7 +149,7 @@ namespace Apoc3D.Scene
             //{
             //    CollisionMeshManager.Instance.DestoryInstance(cdMesh);
             //}
-            cdMesh = null;
+            //cdMesh = null;
         }
         #endregion
     }

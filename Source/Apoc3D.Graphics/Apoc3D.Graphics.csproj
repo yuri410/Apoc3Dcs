@@ -145,10 +145,6 @@
       <Project>{767AFD72-02F7-4543-B193-A2E19645A4B9}</Project>
       <Name>Apoc3D.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JigLibX\JigLibX.csproj">
-      <Project>{7C3F7EE7-7E67-462B-80C8-588331703AE9}</Project>
-      <Name>JigLibX</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Effects\Post\note.txt" />

@@ -124,10 +124,10 @@ namespace Apoc3D.Scene
             get { return orientation; }
             set
             {
-                if (RigidBody != null)
-                {
-                    RigidBody.Orientation = value;
-                }
+                //if (RigidBody != null)
+                //{
+                //    RigidBody.Orientation = value;
+                //}
                 orientation = value;
                 isTransformDirty = true;
             }
@@ -139,10 +139,10 @@ namespace Apoc3D.Scene
             set
             {
                 Matrix newori = Matrix.RotationQuaternion(value);
-                if (RigidBody != null) 
-                {
-                    RigidBody.Orientation = newori;
-                }
+                //if (RigidBody != null) 
+                //{
+                //    RigidBody.Orientation = newori;
+                //}
                 orientation = newori;
                 isTransformDirty = true;
             }
@@ -160,10 +160,10 @@ namespace Apoc3D.Scene
 
                 BoundingSphere.Center = value + BoundingSphereOffset;
 
-                if (RigidBody != null)
-                {
-                    RigidBody.Position = value;
-                }
+                //if (RigidBody != null)
+                //{
+                //    RigidBody.Position = value;
+                //}
                 isTransformDirty = true;
             }
         }

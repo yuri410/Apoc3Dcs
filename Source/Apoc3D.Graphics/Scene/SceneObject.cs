@@ -7,8 +7,6 @@ using Apoc3D.Design;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
-using JigLibX.Collision;
-using JigLibX.Physics;
 
 namespace Apoc3D.Scene
 {
@@ -19,21 +17,17 @@ namespace Apoc3D.Scene
     {
         #region 物理相关
 
-        ///// <summary>
-        /////  【见方法】
-        ///// </summary>
-        //RigidBody rigidBody;
-        Body rigidBody;
+        //Body rigidBody;
 
-        /// <summary>
-        ///  获取该物体在物理引擎中的的刚体对象
-        /// </summary>
-        [Browsable(false)]
-        public Body RigidBody
-        {
-            get { return rigidBody; }
-            protected set { rigidBody = value; }
-        }
+        ///// <summary>
+        /////  获取该物体在物理引擎中的的刚体对象
+        ///// </summary>
+        //[Browsable(false)]
+        //public Body RigidBody
+        //{
+        //    get { return rigidBody; }
+        //    protected set { rigidBody = value; }
+        //}
 
         /// <summary>
         ///  获取一个布尔值，表示该物体是否有物理方面的资源需要创建。
@@ -45,26 +39,26 @@ namespace Apoc3D.Scene
             get { return false; }
         }
 
-        /// <summary>
-        ///  加载该物体所有与物体有关的资源，当场景中所有物体均被加载后，引擎才会开始调用该方法。
-        /// </summary>
-        /// <param name="world"></param>
-        public virtual void BuildPhysicsModel(PhysicsSystem world)
-        {
-            throw new NotSupportedException();
-        }
+        ///// <summary>
+        /////  加载该物体所有与物体有关的资源，当场景中所有物体均被加载后，引擎才会开始调用该方法。
+        ///// </summary>
+        ///// <param name="world"></param>
+        //public virtual void BuildPhysicsModel(PhysicsSystem world)
+        //{
+        //    throw new NotSupportedException();
+        //}
 
-        public CollisionSkin CollisionShape 
-        {
-            get 
-            {
-                if (rigidBody == null) 
-                {
-                    return null;
-                }
-                return rigidBody.CollisionSkin;
-            }
-        }
+        //public CollisionSkin CollisionShape 
+        //{
+        //    get 
+        //    {
+        //        if (rigidBody == null) 
+        //        {
+        //            return null;
+        //        }
+        //        return rigidBody.CollisionSkin;
+        //    }
+        //}
 
         #endregion
 
