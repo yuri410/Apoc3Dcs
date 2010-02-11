@@ -10,7 +10,6 @@ using Apoc3D.Vfs;
 
 namespace Apoc3D.Graphics
 {
-
     /// <summary>
     ///  定义3D模型提供基础结构
     /// </summary>
