@@ -96,10 +96,10 @@ namespace Apoc3D.MathLib
         {
             return new Vector3(vector3.X / aabbSize.X, vector3.Y / aabbSize.Y, vector3.Z / aabbSize.Z);
         }
-        public static float Vec3Cross(Vector3 a, Vector3 b)
-        {
-            return (float)(a.Length() * b.Length() * Math.Sin(Vec3AngleAbs(a, b)));
-        }
+        //public static float Vec3Cross(Vector3 a, Vector3 b)
+        //{
+        //    return (float)(a.Length() * b.Length() * Math.Sin(Vec3AngleAbs(a, b)));
+        //}
         public static float Vec3AngleAbs(Vector3 v1, Vector3 v2)
         {
             if (v1.Length() < 0.01f || (v2.Length() < 0.01f))
@@ -111,14 +111,14 @@ namespace Apoc3D.MathLib
             return (float)Math.Acos(a);
         }
 
-        public static float Vec2Cross(Vector2 a, Vector2 b)
-        {
-            return (float)(a.Length() * b.Length() * Math.Sin(Vec2AngleAbs(a, b)));
-        }
-        public static float Vec2AngleAbs(Vector2 v1, Vector2 v2)
-        {
-            return (float)Math.Acos(Vector2.Dot(v1, v2) / (v1.Length() * v2.Length()));
-        }
+        //public static float Vec2Cross(Vector2 a, Vector2 b)
+        //{
+        //    return a.X * b.Y - b.X * a.Y;// (float)(a.Length() * b.Length() * Math.Sin(Vec2AngleAbs(a, b)));
+        //}
+        //public static float Vec2AngleAbs(Vector2 v1, Vector2 v2)
+        //{
+        //    return (float)Math.Acos(Vector2.Dot(v1, v2) / (v1.Length() * v2.Length()));
+        //}
         public static Vector2 GetRotateVector2(Vector2 v1, float sita)
         {
             float len = v1.Length();

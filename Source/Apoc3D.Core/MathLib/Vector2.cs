@@ -202,6 +202,11 @@ namespace Apoc3D.MathLib
             return new Vector2(value.X * scale, value.Y * scale);
         }
 
+        public static float Cross(Vector2 a, Vector2 b)
+        {
+            return a.X * b.Y - b.X * a.Y;
+        }
+
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
