@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Apoc3D.Core;
 using Apoc3D.Graphics.Effects;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
-using Apoc3D.Core;
 
 namespace Apoc3D.Graphics
 {
