@@ -29,6 +29,7 @@ namespace Apoc3D.Graphics
         static readonly string CullModeTag = "CullMode";
         static readonly string ZEnabledTag = "ZEnabled";
         static readonly string ZWriteEnabledTag = "ZWriteEnabled";
+        static readonly string AlphaRefTag = "AlphaRef";
         #endregion
 
         protected MaterialBase()
@@ -50,6 +51,13 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
+
+        public float AlphaRef
+        {
+            get;
+            set;
+        }
+
         public bool ZEnabled
         {
             get;
@@ -66,6 +74,8 @@ namespace Apoc3D.Graphics
 
         protected virtual void ReadData(BinaryDataReader data)
         {
+            AlphaRef = data.GetDataSingle(AlphaRefTag, float.NaN);
+
             CullMode = (CullMode)data.GetDataInt32(CullModeTag, 0);
             IsTransparent = data.GetDataBool(IsTransparentTag, false);
             ZEnabled = data.GetDataBool(ZEnabledTag, true);
@@ -74,6 +84,8 @@ namespace Apoc3D.Graphics
 
         protected virtual void WriteData(BinaryDataWriter data)
         {
+            data.AddEntry(AlphaRefTag, AlphaRef);
+
             data.AddEntry(CullModeTag, (int)CullMode);
             data.AddEntry(IsTransparentTag, IsTransparent);
             data.AddEntry(ZEnabledTag, ZEnabled);
