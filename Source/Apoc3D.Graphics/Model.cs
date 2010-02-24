@@ -20,33 +20,15 @@ namespace Apoc3D.Graphics
         public const int MdlId = 0;
 
         protected readonly string EntityCountTag = "EntityCount";
-
         protected readonly string EntityPrefix = "Ent";
-        //protected readonly string AnimationTag = "Animation";
-        //protected readonly string AnimationFlagTag = "AnimationFlag";
 
         protected MeshType[] entities;
-        //protected Animation animation;
-
-        //TransformAnimationInstance transAnim;
-        //SkinAnimationInstance skinAnim;
 
         public Dictionary<string, TapeHelper> TapeHelpers
         {
             get;
             set;
         }
-
-        //public TransformAnimationInstance TransformAnim
-        //{
-        //    get { return transAnim; }
-        //    protected set { transAnim = value; }
-        //}
-        //public SkinAnimationInstance SkinAnim
-        //{
-        //    get { return skinAnim; }
-        //    protected set { skinAnim = value; }
-        //}
 
         public ResourceLocation DataSource
         {
@@ -271,6 +253,12 @@ namespace Apoc3D.Graphics
 
         public RenderOperation[] GetRenderOperation()
         {
+            if (data.State != ResourceState.Loaded)
+            {
+                data.Touch();
+                return null;
+            }
+
             GameMesh[] entities = data.Resource.Entities;
 
             if (opBuffer == null)
