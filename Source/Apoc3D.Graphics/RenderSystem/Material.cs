@@ -467,7 +467,7 @@ namespace Apoc3D.Graphics
             fileName = fileName.Trim();
             if (!string.IsNullOrEmpty(fileName))
             {
-                FileLocation fl = FileSystem.Instance.TryLocate(fileName, FileLocateRule.Model);
+                FileLocation fl = FileSystem.Instance.TryLocate(fileName, FileLocateRule.Textures);
                 if (fl != null)
                 {
                     return TextureManager.Instance.CreateInstance(fl);
