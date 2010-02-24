@@ -256,9 +256,10 @@ namespace Apoc3D.Graphics
 
             br = data.GetData(EffectTag);
             effectName = br.ReadStringUnicode();
-            if (effectName.Length == 0)
-                effectName = StandardEffectFactory.Name;
-            Effect = LoadEffect(effectName);
+            //if (effectName.Length == 0)
+            //    effectName = StandardEffectFactory.Name;
+            if (!string.IsNullOrEmpty(effectName))
+                Effect = LoadEffect(effectName);
 
             br.Close();
 

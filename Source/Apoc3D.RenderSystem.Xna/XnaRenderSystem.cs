@@ -1116,7 +1116,8 @@ namespace Apoc3D.RenderSystem.Xna
 
             if (effect == null)
             {
-                effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
+                return;
+                //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
             renderStates.AlphaBlendEnable = !material.IsTransparent;
@@ -1188,7 +1189,8 @@ namespace Apoc3D.RenderSystem.Xna
 
             if (effect == null)
             {
-                effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
+                return;
+                //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
             renderStates.AlphaBlendEnable = material.IsTransparent;
