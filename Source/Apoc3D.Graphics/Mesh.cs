@@ -347,24 +347,48 @@ namespace Apoc3D.Graphics
             br.Close();
             #endregion
 
-            #region 读取顶点声明元素
-            br = data.GetData(VertexDeclTag);
-
-            int elemCount = br.ReadInt32();
-            VertexElement[] elements = new VertexElement[elemCount];
-
-            for (int i = 0; i < elemCount; i++)
+           
+            if (!data.Contains(VertexDeclTag))
             {
-                int emOfs = br.ReadInt32();
-                VertexElementFormat emFormat = (VertexElementFormat)br.ReadInt32();
-                VertexElementUsage emUsage = (VertexElementUsage)br.ReadInt32();
-                int emIndex = br.ReadInt32();
-                elements[i] = new VertexElement(emOfs, emFormat, emUsage, emIndex);
-            }
-            VertexElements = elements;
+                #region 旧版兼容VtxFormat
 
-            br.Close();
-            #endregion
+                int fvf = data.GetDataInt32("VertexFormat");
+
+                if (fvf == (256 | 2 | 16))
+                {
+                    VertexElement[] elements = new VertexElement[3];
+                    Array.Copy(VertexPNT1.Elements, elements, 3);
+                    VertexElements = elements;
+                }
+                else 
+                {
+                    throw new NotSupportedException();
+                }
+                #endregion
+            }
+            else 
+            {
+
+                #region 读取顶点声明元素
+                br = data.GetData(VertexDeclTag);
+
+                int elemCount = br.ReadInt32();
+                VertexElement[] elements = new VertexElement[elemCount];
+
+                for (int i = 0; i < elemCount; i++)
+                {
+                    int emOfs = br.ReadInt32();
+                    VertexElementFormat emFormat = (VertexElementFormat)br.ReadInt32();
+                    VertexElementUsage emUsage = (VertexElementUsage)br.ReadInt32();
+                    int emIndex = br.ReadInt32();
+                    elements[i] = new VertexElement(emOfs, emFormat, emUsage, emIndex);
+                }
+                VertexElements = elements;
+
+                br.Close();
+                #endregion
+            }
+
 
             if (data.Contains(VertexSizeTag))
             {
