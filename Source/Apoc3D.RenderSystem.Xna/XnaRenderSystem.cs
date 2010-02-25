@@ -1122,11 +1122,12 @@ namespace Apoc3D.RenderSystem.Xna
 
             renderStates.AlphaBlendEnable = material.IsTransparent;
             renderStates.CullMode = material.CullMode;
-            renderStates.AlphaFunction = CompareFunction.LessEqual;
+            
             if (material.AlphaRef > 0)
             {
                 renderStates.AlphaTestEnable = true;
                 renderStates.AlphaReference = (int)(material.AlphaRef * byte.MaxValue);
+                renderStates.AlphaFunction = CompareFunction.GreaterEqual;
             }
             else
             {
@@ -1209,10 +1210,9 @@ namespace Apoc3D.RenderSystem.Xna
             renderStates.CullMode = material.CullMode;
             if (material.AlphaRef > 0)
             {
-                renderStates.AlphaFunction = CompareFunction.LessEqual;
-
                 renderStates.AlphaTestEnable = true;
                 renderStates.AlphaReference = (int)(material.AlphaRef * byte.MaxValue);
+                renderStates.AlphaFunction = CompareFunction.GreaterEqual;
             }
             else
             {

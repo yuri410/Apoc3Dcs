@@ -351,24 +351,26 @@ namespace Apoc3D.RenderSystem.Xna
                     {
                         int startPos = 0;
                         int levelSize = data.Levels[i].LevelSize / 6;
-                        cube.SetData(XG.CubeMapFace.NegativeX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        startPos += levelSize;
-
-                        cube.SetData(XG.CubeMapFace.NegativeY, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        startPos += levelSize;
-
-                        cube.SetData(XG.CubeMapFace.NegativeZ, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
-                        startPos += levelSize;
-
                         cube.SetData(XG.CubeMapFace.PositiveX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
+                        startPos += levelSize;
+
+                        cube.SetData(XG.CubeMapFace.NegativeX, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         startPos += levelSize;
 
                         cube.SetData(XG.CubeMapFace.PositiveY, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         startPos += levelSize;
 
+                        cube.SetData(XG.CubeMapFace.NegativeY, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
+                        startPos += levelSize;
+
                         cube.SetData(XG.CubeMapFace.PositiveZ, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
                         startPos += levelSize;
+
+                        cube.SetData(XG.CubeMapFace.NegativeZ, i, null, data.Levels[i].Content, startPos, levelSize, XG.SetDataOptions.None);
+                        startPos += levelSize;
                     }
+
+                    //cube.Save(@"E:\Desktop\sss.dds", Microsoft.Xna.Framework.Graphics.ImageFileFormat.Dds);
                     break;
                 case TextureType.Texture3D:
                     tex3D = new XG.Texture3D(renderSys.Device, Width, Height, Depth, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
