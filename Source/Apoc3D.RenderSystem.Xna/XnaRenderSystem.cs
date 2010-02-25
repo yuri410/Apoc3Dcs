@@ -1120,7 +1120,7 @@ namespace Apoc3D.RenderSystem.Xna
                 //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
-            renderStates.AlphaBlendEnable = !material.IsTransparent;
+            renderStates.AlphaBlendEnable = material.IsTransparent;
             renderStates.CullMode = material.CullMode;
             renderStates.AlphaFunction = CompareFunction.LessEqual;
             if (material.AlphaRef > 0)
@@ -1205,7 +1205,7 @@ namespace Apoc3D.RenderSystem.Xna
                 //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
-            renderStates.AlphaBlendEnable = !material.IsTransparent;
+            renderStates.AlphaBlendEnable = material.IsTransparent;
             renderStates.CullMode = material.CullMode;
             if (material.AlphaRef > 0)
             {
