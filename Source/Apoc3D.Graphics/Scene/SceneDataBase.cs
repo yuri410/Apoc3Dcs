@@ -6,6 +6,7 @@ using Apoc3D.Design;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
+using AG = Apoc3D.Graphics;
 
 namespace Apoc3D.Scene
 {
@@ -38,7 +39,7 @@ namespace Apoc3D.Scene
 
         protected SceneObject[] sceneObjects;
 
-        protected RenderSystem device;
+        protected AG.RenderSystem device;
 
         protected BoundingBox boundingBox;
 
@@ -102,7 +103,7 @@ namespace Apoc3D.Scene
         }
         #endregion
 
-        public SceneDataBase(RenderSystem device, ObjectTypeManager mgr)
+        public SceneDataBase(AG.RenderSystem device, ObjectTypeManager mgr)
         {
             this.ObjectManager = mgr;
             this.device = device;

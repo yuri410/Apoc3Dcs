@@ -6,6 +6,7 @@ using System.Text;
 using Apoc3D.Graphics;
 using Apoc3D.Vfs;
 using Apoc3D.MathLib;
+using AG = Apoc3D.Graphics;
 
 namespace Apoc3D.Scene
 {
@@ -189,7 +190,7 @@ namespace Apoc3D.Scene
     {
         #region 构造函数
 
-        public SceneData(RenderSystem device, ObjectTypeManager mgr)
+        public SceneData(AG.RenderSystem device, ObjectTypeManager mgr)
             : base(device, mgr)
         {
 
@@ -199,12 +200,12 @@ namespace Apoc3D.Scene
 
         #region 静态方法
 
-        public static SceneData FromFile(RenderSystem device, ObjectTypeManager mgr, string file, ProgressCallBack cbk)
+        public static SceneData FromFile(AG.RenderSystem device, ObjectTypeManager mgr, string file, ProgressCallBack cbk)
         {
             return FromFile(device, mgr, new FileLocation(file), cbk);
         }
 
-        public static SceneData FromFile(RenderSystem device, ObjectTypeManager mgr, FileLocation fl, ProgressCallBack cbk)
+        public static SceneData FromFile(AG.RenderSystem device, ObjectTypeManager mgr, FileLocation fl, ProgressCallBack cbk)
         {
             ContentBinaryReader br = new ContentBinaryReader(fl);
 

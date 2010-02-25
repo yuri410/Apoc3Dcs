@@ -7,6 +7,7 @@ using Apoc3D.Design;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 using Apoc3D.Vfs;
+using AG = Apoc3D.Graphics;
 
 namespace Apoc3D.Scene
 {
@@ -296,7 +297,7 @@ namespace Apoc3D.Scene
 
         //SkyBox skyBox;
         AtmosphereInfo info;
-        RenderSystem renderSystem;
+        AG.RenderSystem renderSystem;
 
         Light light = new Light();
         Light currentLight = new Light();
@@ -396,7 +397,7 @@ namespace Apoc3D.Scene
         /// <param name="dev"></param>
         /// <param name="info"></param>
         /// <param name="sblcbk">用于创建天空盒的回调函数</param>
-        public Atmosphere(RenderSystem rs, AtmosphereInfo info)
+        public Atmosphere(AG.RenderSystem rs, AtmosphereInfo info)
         {
             this.renderSystem = rs;
             this.info = info;
