@@ -10,7 +10,8 @@ namespace Apoc3D.Graphics
     /// </summary>
     public class GraphicsAPIManager : Singleton
     {
-        static GraphicsAPIManager singleton;
+        static volatile GraphicsAPIManager singleton;
+        static object syncHelper = new object();
 
         public static GraphicsAPIManager Instance
         {
@@ -18,7 +19,13 @@ namespace Apoc3D.Graphics
             {
                 if (singleton == null)
                 {
-                    singleton = new GraphicsAPIManager();
+                    lock (syncHelper)
+                    {
+                        if (singleton == null)
+                        {
+                            singleton = new GraphicsAPIManager();
+                        }
+                    }
                 }
                 return singleton;
             }
@@ -48,6 +55,7 @@ namespace Apoc3D.Graphics
 
         Dictionary<string, FastList<Entry>> factories;
         ExistTable<string> registered;
+
 
         private GraphicsAPIManager()
         {

@@ -249,6 +249,11 @@ namespace Apoc3D.Graphics
             CurrentAnimation = new NoAnimation();
         }
 
+        public ModelData GetData() 
+        {
+            data.TouchSync();
+            return data.Resource;
+        }
         #region IRenderable 成员
 
         public RenderOperation[] GetRenderOperation()

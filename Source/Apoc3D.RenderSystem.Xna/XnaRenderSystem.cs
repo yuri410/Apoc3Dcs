@@ -1122,6 +1122,18 @@ namespace Apoc3D.RenderSystem.Xna
 
             renderStates.AlphaBlendEnable = !material.IsTransparent;
             renderStates.CullMode = material.CullMode;
+            renderStates.AlphaFunction = CompareFunction.LessEqual;
+            if (material.AlphaRef > 0)
+            {
+                renderStates.AlphaTestEnable = true;
+                renderStates.AlphaReference = (int)(material.AlphaRef * byte.MaxValue);
+            }
+            else
+            {
+                renderStates.AlphaTestEnable = false;
+            }
+            renderStates.DepthBufferEnable = material.ZEnabled;
+            renderStates.DepthBufferWriteEnable = material.ZWriteEnabled;
 
             int passCount = effect.Begin(RenderMode.Final);
             for (int p = 0; p < passCount; p++)
@@ -1193,10 +1205,21 @@ namespace Apoc3D.RenderSystem.Xna
                 //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
-            renderStates.AlphaBlendEnable = material.IsTransparent;
-            renderStates.DepthBufferWriteEnable = material.ZWriteEnabled;
-            //renderStates.DepthBufferEnable = material.ZEnabled;
+            renderStates.AlphaBlendEnable = !material.IsTransparent;
             renderStates.CullMode = material.CullMode;
+            if (material.AlphaRef > 0)
+            {
+                renderStates.AlphaFunction = CompareFunction.LessEqual;
+
+                renderStates.AlphaTestEnable = true;
+                renderStates.AlphaReference = (int)(material.AlphaRef * byte.MaxValue);
+            }
+            else
+            {
+                renderStates.AlphaTestEnable = false;
+            }
+            renderStates.DepthBufferEnable = material.ZEnabled;
+            renderStates.DepthBufferWriteEnable = material.ZWriteEnabled;
 
             int passCount = effect.Begin(RenderMode.Final);
             for (int p = 0; p < passCount; p++)

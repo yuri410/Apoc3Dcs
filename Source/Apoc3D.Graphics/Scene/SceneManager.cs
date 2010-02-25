@@ -308,7 +308,7 @@ namespace Apoc3D.Scene
 
         #region 构造函数
 
-        public SceneManager(Atmosphere atmos)
+        public SceneManager()
         {
         }
 

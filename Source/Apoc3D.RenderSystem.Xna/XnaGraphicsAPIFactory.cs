@@ -7,7 +7,7 @@ using XG = Microsoft.Xna.Framework;
 
 namespace Apoc3D.RenderSystem.Xna
 {
-    class XnaGraphicsAPIFactory : GraphicsAPIFactory
+    public class XnaGraphicsAPIFactory : GraphicsAPIFactory
     {
         internal static readonly string APIName = "XNA3.0";
 
