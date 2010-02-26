@@ -440,9 +440,6 @@ namespace Apoc3D.Graphics
             }
             bw.Close();
 
-            bw = data.AddEntry(VertexDeclTag);
-
-            bw.Close();
 
 
             bw = data.AddEntry(NameTag);

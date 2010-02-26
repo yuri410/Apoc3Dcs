@@ -19,8 +19,8 @@ namespace Apoc3D.Graphics
     {
         public const int MdlId = 0;
 
-        protected readonly string EntityCountTag = "EntityCount";
-        protected readonly string EntityPrefix = "Ent";
+        protected static readonly string EntityCountTag = "EntityCount";
+        protected static readonly string EntityPrefix = "Ent";
 
         protected MeshType[] entities;
 
