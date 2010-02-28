@@ -44,6 +44,7 @@ namespace Apoc3D.RenderSystem.Xna
                 manager.SynchronizeWithVerticalRetrace = pm.PresentInterval == PresentInterval.Default;
                 manager.IsFullScreen = !pm.IsWindowed;
 
+
                 manager.ApplyChanges();
 
 

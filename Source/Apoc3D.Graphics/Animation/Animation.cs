@@ -91,14 +91,21 @@ namespace Apoc3D.Graphics.Animation
 
     public class NoAnimation : AnimationInstance 
     {
+        Matrix transform;
+
+        public NoAnimation(Matrix matrix)
+            : base(new TransformAnimation(1))
+        {
+            this.transform = matrix;
+        }
         public NoAnimation()
             : base(new TransformAnimation(1))
         {
-
+            this.transform = Matrix.Identity;
         }
         public override Matrix GetTransform(int index)
         {
-            return Matrix.Identity;
+            return transform;
         }
     }
 }
