@@ -201,7 +201,7 @@ namespace Apoc3D.Graphics
         public virtual void Load(ResourceLocation rl) 
         {
             ContentBinaryReader br = new ContentBinaryReader(rl);
-
+            
             BinaryDataReader data = br.ReadBinaryData();
             Xllcorner = data.GetDataSingle(TDMPIO.XllCornerTag);
             Yllcorner = data.GetDataSingle(TDMPIO.YllCornerTag);

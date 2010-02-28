@@ -95,5 +95,31 @@ namespace Apoc3D
             TotalGameTime = totalGameTime;
             ElapsedGameTime = elapsedGameTime;
         }
+
+        public void SetElapsedGameTime(TimeSpan v)
+        {
+            ElapsedGameTime = v;
+        }
+        public void SetElapsedRealTime(float v)
+        {
+            ElapsedRealTime = v;
+        }
+
+        public void SetFramesPerSecond(float v)
+        {
+            FramesPerSecond = v;
+        }
+        public void SetIsRunningSlowly(bool v)
+        {
+            IsRunningSlowly = v;
+        }
+        public void SetTotalGameTime(TimeSpan v)
+        {
+            TotalGameTime = v;
+        }
+        public void SetTotalRealTime(float v)
+        {
+            TotalRealTime = v;
+        }
     }
 }

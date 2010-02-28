@@ -74,7 +74,7 @@ namespace Apoc3D.Graphics
 
         protected virtual void ReadData(BinaryDataReader data)
         {
-            AlphaRef = data.GetDataSingle(AlphaRefTag, float.NaN);
+            AlphaRef = data.GetDataSingle(AlphaRefTag, -1);
 
             CullMode = (CullMode)data.GetDataInt32(CullModeTag, 0);
             IsTransparent = data.GetDataBool(IsTransparentTag, false);

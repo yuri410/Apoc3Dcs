@@ -130,6 +130,11 @@ namespace Apoc3D.Collections
             Array.Copy(data.Elements, 0, Elements, internalPointer, len);
             internalPointer += len;
         }
+        public void Trim()
+        {
+            if (internalPointer < length)
+                Resize(internalPointer);
+        }
 
         public void FastClear()
         {

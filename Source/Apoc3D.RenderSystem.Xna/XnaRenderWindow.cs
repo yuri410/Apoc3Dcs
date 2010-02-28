@@ -12,31 +12,7 @@ namespace Apoc3D.RenderSystem.Xna
     {
         class XGameTime : GameTime
         {
-            public void SetElapsedGameTime(TimeSpan v)
-            {
-                ElapsedGameTime = v;
-            }
-            public void SetElapsedRealTime(float v)
-            {
-                ElapsedRealTime = v;
-            }
-
-            public void SetFramesPerSecond(float v)
-            {
-                FramesPerSecond = v;
-            }
-            public void SetIsRunningSlowly(bool v)
-            {
-                IsRunningSlowly = v;
-            }
-            public void SetTotalGameTime(TimeSpan v)
-            {
-                TotalGameTime = v;
-            }
-            public void SetTotalRealTime(float v)
-            {
-                TotalRealTime = v;
-            }
+           
         }
 
         public class XGame : X.Game

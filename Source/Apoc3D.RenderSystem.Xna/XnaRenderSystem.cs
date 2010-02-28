@@ -1121,7 +1121,7 @@ namespace Apoc3D.RenderSystem.Xna
             }
 
             renderStates.AlphaBlendEnable = material.IsTransparent;
-            renderStates.CullMode = material.CullMode;
+            renderStates.CullMode = CullMode.None;// material.CullMode;
             
             if (material.AlphaRef > 0)
             {
@@ -1207,7 +1207,7 @@ namespace Apoc3D.RenderSystem.Xna
             }
 
             renderStates.AlphaBlendEnable = material.IsTransparent;
-            renderStates.CullMode = material.CullMode;
+            renderStates.CullMode = CullMode.None;// material.CullMode;
             if (material.AlphaRef > 0)
             {
                 renderStates.AlphaTestEnable = true;
