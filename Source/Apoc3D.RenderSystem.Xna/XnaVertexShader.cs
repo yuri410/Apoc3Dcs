@@ -90,6 +90,35 @@ namespace Apoc3D.RenderSystem.Xna
 
         #region Index Set
         #region Struct Set
+        public override void SetValue(int index, Vector2 value)
+        {
+            device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector2*)&value);
+        }
+        public override void SetValue(int index, Vector3 value)
+        {
+            device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector3*)&value);
+        }
+        public override void SetValue(int index, Vector4 value)
+        {
+            device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector4*)&value);
+        }
+        public override void SetValue(int index, Color4F value)
+        {
+            device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector4*)&value);
+        }
+        public override void SetValue(int index, Quaternion value)
+        {
+            device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Quaternion*)&value);
+        }
+        public override void SetValue(int index, Matrix value)
+        {
+            device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Matrix*)&value);
+        }
+        public override void SetValue(int index, Plane value)
+        {
+            device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector4*)&value);
+        }
+        
         public override void SetValue(int index, ref Vector2 value)
         {
             fixed (Vector2* ptr = &value)
@@ -125,6 +154,22 @@ namespace Apoc3D.RenderSystem.Xna
                 device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Matrix*)ptr);
             }
         }
+        public override void SetValue(int index, ref Color4F value)
+        {
+            fixed (Color4F* ptr = &value)
+            {
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector4*)ptr);
+            }
+        }
+        public override void SetValue(int index, ref Plane value)
+        {
+            fixed (Plane* ptr = &value)
+            {
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector4*)ptr);
+            }
+        }
+
+
         #endregion
 
         #region Struct array set
@@ -172,6 +217,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Vector4) * value.Length);
                     }
                 }
+                device.SetVertexShaderConstant(index, Helper.v4Buffer[len]);
             }
             else
             {
@@ -183,6 +229,61 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Vector4) * buffer.Length);
                     }
                 }
+                device.SetVertexShaderConstant(index, buffer);
+            }
+        }
+        public override void SetValue(int index, Color4F[] value)
+        {
+            int len = value.Length;
+            if (len <= Helper.MaxBufferSize)
+            {
+                fixed (X.Vector4* dst = &Helper.v4Buffer[len][0])
+                {
+                    fixed (Color4F* src = &value[0])
+                    {
+                        Memory.Copy(src, dst, sizeof(Color4F) * value.Length);
+                    }
+                }
+                device.SetVertexShaderConstant(index, Helper.v4Buffer[len]);
+            }
+            else
+            {
+                X.Vector4[] buffer = new X.Vector4[value.Length];
+                fixed (X.Vector4* dst = &buffer[0])
+                {
+                    fixed (Color4F* src = &value[0])
+                    {
+                        Memory.Copy(src, dst, sizeof(Color4F) * buffer.Length);
+                    }
+                }
+                device.SetVertexShaderConstant(index, buffer);
+            }
+        }
+        public override void SetValue(int index, Plane[] value)
+        {
+            int len = value.Length;
+            if (len <= Helper.MaxBufferSize)
+            {
+                fixed (X.Vector4* dst = &Helper.v4Buffer[len][0])
+                {
+                    fixed (Plane* src = &value[0])
+                    {
+                        Memory.Copy(src, dst, sizeof(Color4F) * value.Length);
+                    }
+                }
+                device.SetVertexShaderConstant(index, Helper.v4Buffer[len]);
+            }
+            else
+            {
+                X.Vector4[] buffer = new X.Vector4[value.Length];
+                fixed (X.Vector4* dst = &buffer[0])
+                {
+                    fixed (Plane* src = &value[0])
+                    {
+                        Memory.Copy(src, dst, sizeof(Color4F) * buffer.Length);
+                    }
+                }
+                device.SetVertexShaderConstant(index, buffer);
             }
         }
         public override void SetValue(int index, Quaternion[] value)
@@ -213,6 +314,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Matrix) * value.Length);
                     }
                 }
+                device.SetVertexShaderConstant(index, Helper.m4Buffer[len]);
             }
             else
             {
@@ -224,6 +326,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Matrix) * buffer.Length);
                     }
                 }
+                device.SetVertexShaderConstant(index, buffer);
             }
         }
         #endregion
@@ -323,7 +426,53 @@ namespace Apoc3D.RenderSystem.Xna
             int index = GetConstantIndex(paramName);
             SetValue(index, ref value);
         }
+        public override void SetValue(string paramName, ref Color4F value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        public override void SetValue(string paramName, ref Plane value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
 
+        public override void SetValue(string paramName, Vector2 value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        public override void SetValue(string paramName, Vector3 value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        public override void SetValue(string paramName, Vector4 value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        public override void SetValue(string paramName, Quaternion value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        public override void SetValue(string paramName, Matrix value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        public override void SetValue(string paramName, Color4F value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        public override void SetValue(string paramName, Plane value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, ref value);
+        }
+        
         public override void SetValue(string paramName, Vector2[] value)
         {
             int index = GetConstantIndex(paramName);
@@ -345,6 +494,16 @@ namespace Apoc3D.RenderSystem.Xna
             SetValue(index, value);
         }
         public override void SetValue(string paramName, Matrix[] value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, value);
+        }
+        public override void SetValue(string paramName, Color4F[] value)
+        {
+            int index = GetConstantIndex(paramName);
+            SetValue(index, value);
+        }
+        public override void SetValue(string paramName, Plane[] value)
         {
             int index = GetConstantIndex(paramName);
             SetValue(index, value);

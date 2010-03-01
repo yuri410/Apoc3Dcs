@@ -58,17 +58,29 @@ namespace Apoc3D.Graphics
 
         public abstract int GetConstantIndex(string name);
 
+        public abstract void SetValue(int index, Vector2 value);
+        public abstract void SetValue(int index, Vector3 value);
+        public abstract void SetValue(int index, Vector4 value);
+        public abstract void SetValue(int index, Quaternion value);
+        public abstract void SetValue(int index, Matrix value);
+        public abstract void SetValue(int index, Color4F value);
+        public abstract void SetValue(int index, Plane value);
+
         public abstract void SetValue(int index, ref Vector2 value);
         public abstract void SetValue(int index, ref Vector3 value);
         public abstract void SetValue(int index, ref Vector4 value);
         public abstract void SetValue(int index, ref Quaternion value);
         public abstract void SetValue(int index, ref Matrix value);
+        public abstract void SetValue(int index, ref Color4F value);
+        public abstract void SetValue(int index, ref Plane value);
 
         public abstract void SetValue(int index, Vector2[] value);
         public abstract void SetValue(int index, Vector3[] value);
         public abstract void SetValue(int index, Vector4[] value);
         public abstract void SetValue(int index, Quaternion[] value);
         public abstract void SetValue(int index, Matrix[] value);
+        public abstract void SetValue(int index, Color4F[] value);
+        public abstract void SetValue(int index, Plane[] value);
 
         public abstract void SetValue(int index, bool value);
         public abstract void SetValue(int index, float value);
@@ -83,18 +95,30 @@ namespace Apoc3D.Graphics
         public abstract void SetTextureDirect(int index, Texture tex);
         public abstract void SetSamplerStateDirect(int index, ref ShaderSamplerState state);
 
+        public abstract void SetValue(string paramName, Vector2 value);
+        public abstract void SetValue(string paramName, Vector3 value);
+        public abstract void SetValue(string paramName, Vector4 value);
+        public abstract void SetValue(string paramName, Quaternion value);
+        public abstract void SetValue(string paramName, Matrix value);
+        public abstract void SetValue(string paramName, Color4F value);
+        public abstract void SetValue(string paramName, Plane value);
 
         public abstract void SetValue(string paramName, ref Vector2 value);
         public abstract void SetValue(string paramName, ref Vector3 value);
         public abstract void SetValue(string paramName, ref Vector4 value);
         public abstract void SetValue(string paramName, ref Quaternion value);
         public abstract void SetValue(string paramName, ref Matrix value);
+        public abstract void SetValue(string paramName, ref Color4F value);
+        public abstract void SetValue(string paramName, ref Plane value);
+
 
         public abstract void SetValue(string paramName, Vector2[] value);
         public abstract void SetValue(string paramName, Vector3[] value);
         public abstract void SetValue(string paramName, Vector4[] value);
         public abstract void SetValue(string paramName, Quaternion[] value);
         public abstract void SetValue(string paramName, Matrix[] value);
+        public abstract void SetValue(string paramName, Plane[] value);
+        public abstract void SetValue(string paramName, Color4F[] value);
 
         public abstract void SetValue(string paramName, bool value);
         public abstract void SetValue(string paramName, float value);

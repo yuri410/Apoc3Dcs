@@ -96,6 +96,9 @@ namespace Apoc3D.Graphics
 
         #endregion
 
+        /// <summary>
+        ///  顶点数据
+        /// </summary>
         byte[] buffer;
 
 
@@ -628,14 +631,33 @@ namespace Apoc3D.Graphics
         VertexDeclaration vtxDecl;
         int vertexSize;
 
+        /// <summary>
+        ///  渲染操作缓冲
+        /// </summary>
         RenderOperation[] bufferedOp;
 
+        /// <summary>
+        ///  第一个索引为子网格材质，第二个索引为帧
+        /// </summary>
         protected Material[][] materials;
         protected MaterialAnimationInstance[] matAnims;
 
+        /// <summary>
+        ///  网格总顶点缓冲
+        /// </summary>
         protected VertexBuffer vertexBuffer;
+        /// <summary>
+        ///  子网格的索引缓冲
+        /// </summary>
         protected IndexBuffer[] indexBuffers;
+
+        /// <summary>
+        ///  表示子网格的图元数量
+        /// </summary>
         protected int[] partPrimCount;
+        /// <summary>
+        ///  表示子网格的顶点数量
+        /// </summary>
         protected int[] partVtxCount;
 
         RenderSystem renderSystem;
@@ -644,7 +666,13 @@ namespace Apoc3D.Graphics
 
         bool disposed;
 
+        /// <summary>
+        ///  表示网格的图元总数
+        /// </summary>
         int primCount;
+        /// <summary>
+        ///  表示网格的顶点总数
+        /// </summary>
         int vertexCount;
         #endregion
 

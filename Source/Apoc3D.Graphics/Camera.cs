@@ -616,6 +616,8 @@ namespace Apoc3D
             if (time != null)
             {
                 dt = time.ElapsedRealTime;
+                if (dt > 0.05f)
+                    dt = 0.05f;
             }
             else 
             {

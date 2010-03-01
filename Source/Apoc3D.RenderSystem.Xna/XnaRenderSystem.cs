@@ -41,6 +41,7 @@ namespace Apoc3D.RenderSystem.Xna
             : base(XnaGraphicsAPIFactory.APIName + " RenderSystem")
         {
             this.manager = manager;
+            this.mode = RenderMode.Final;
         }
 
         public override void Init()
@@ -1206,7 +1207,7 @@ namespace Apoc3D.RenderSystem.Xna
                 //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
-            renderStates.AlphaBlendEnable = material.IsTransparent;
+            renderStates.AlphaBlendEnable = false;// material.IsTransparent;
             renderStates.CullMode = CullMode.None;// material.CullMode;
             if (material.AlphaRef > 0)
             {
