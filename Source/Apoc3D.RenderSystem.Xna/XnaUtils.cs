@@ -249,10 +249,28 @@ namespace Apoc3D.RenderSystem.Xna
         #region CullMode
         public static XG.CullMode ConvertEnum(CullMode mode)
         {
+            //switch (mode)
+            //{
+            //    case CullMode.None:
+            //        return XG.CullMode.None;
+            //    case CullMode.CounterClockwise:
+            //        return XG.CullMode.CullClockwiseFace;
+            //    case CullMode.Clockwise:
+            //        return XG.CullMode.CullCounterClockwiseFace;
+            //}
             return (XG.CullMode)mode;
         }
         public static CullMode ConvertEnum(XG.CullMode mode)
         {
+            //switch (mode)
+            //{
+            //    case XG.CullMode.None:
+            //        return CullMode.None;
+            //    case XG.CullMode.CullClockwiseFace:
+            //        return CullMode.CounterClockwise;
+            //    case XG.CullMode.CullCounterClockwiseFace:
+            //        return CullMode.Clockwise;
+            //}
             return (CullMode)mode;
         }
         #endregion

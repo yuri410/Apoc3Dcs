@@ -408,7 +408,6 @@ namespace Apoc3D.Graphics
         }
         public void ActivateVisibles()
         {
-            ResourceInterlock.BlockAll();
             renderSystem.BeginFrame();
 
 
@@ -423,7 +422,6 @@ namespace Apoc3D.Graphics
             }
 
             renderSystem.EndFrame();
-            ResourceInterlock.UnblockAll();
 
         }
 
@@ -448,7 +446,6 @@ namespace Apoc3D.Graphics
         /// </remarks>
         public virtual void RenderScene()
         {
-            ResourceInterlock.BlockAll();
             renderSystem.BeginFrame();
             //try
             //{
@@ -576,7 +573,6 @@ namespace Apoc3D.Graphics
                 postRenderer.RenderFullScene(this, CurrentCamera.RenderTarget, CurrentCamera.Mode);
             }
             renderSystem.EndFrame();
-            ResourceInterlock.UnblockAll();
 
             //shadowMap.RenderSM();
         }

@@ -1007,6 +1007,7 @@ namespace Apoc3D.RenderSystem.Xna
 
             #endregion
 
+            
             cachedRenderTargets = new XnaRenderTarget[Device.GraphicsDeviceCapabilities.MaxSimultaneousRenderTargets];
 
             XnaSamplerState[] states = new XnaSamplerState[Device.GraphicsDeviceCapabilities.MaxSimultaneousTextures];
