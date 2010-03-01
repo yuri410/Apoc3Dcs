@@ -553,6 +553,7 @@ namespace Apoc3D.Graphics
             this.Name = mesh.Name;
             this.VertexCount = mesh.VertexCount;
             this.VertexSize = mesh.VertexSize;
+            this.VertexElements = mesh.VertexElements;
 
             void* src = mesh.VertexBuffer.Lock(0, 0, LockMode.ReadOnly).ToPointer();
 
@@ -913,6 +914,7 @@ namespace Apoc3D.Graphics
             this.vertexSize = data.VertexSize;
 
             this.vtxDecl = factory.CreateVertexDeclaration(data.VertexElements);
+            this.VertexElements = data.VertexElements;
 
             #region 复制顶点数据
             this.vertexBuffer = factory.CreateVertexBuffer(vertexCount, vtxDecl, BufferUsage.Static);
@@ -1061,6 +1063,7 @@ namespace Apoc3D.Graphics
 
             this.renderSystem = rs;
             this.vtxDecl = factory.CreateVertexDeclaration(VertexPNT1.Elements);
+            this.VertexElements = VertexPNT1.Elements;
             this.materials = materials;
 
             this.matAnims = new MaterialAnimationInstance[materials.Length];
@@ -1115,6 +1118,11 @@ namespace Apoc3D.Graphics
 
         #region 属性
 
+        public VertexElement[] VertexElements
+        {
+            get;
+            private set;
+        }
         public int[] PartPrimitiveCount
         {
             get { return partPrimCount; }

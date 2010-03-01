@@ -1122,7 +1122,7 @@ namespace Apoc3D.RenderSystem.Xna
             }
 
             renderStates.AlphaBlendEnable = material.IsTransparent;
-            renderStates.CullMode = CullMode.None;// material.CullMode;
+            renderStates.CullMode = material.CullMode;
             
             if (material.AlphaRef > 0)
             {
@@ -1207,8 +1207,8 @@ namespace Apoc3D.RenderSystem.Xna
                 //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
-            renderStates.AlphaBlendEnable = false;// material.IsTransparent;
-            renderStates.CullMode = CullMode.None;// material.CullMode;
+            renderStates.AlphaBlendEnable = material.IsTransparent;
+            renderStates.CullMode = material.CullMode;
             if (material.AlphaRef > 0)
             {
                 renderStates.AlphaTestEnable = true;

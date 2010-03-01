@@ -30,6 +30,7 @@ namespace Apoc3D.Graphics
         static readonly string ZEnabledTag = "ZEnabled";
         static readonly string ZWriteEnabledTag = "ZWriteEnabled";
         static readonly string AlphaRefTag = "AlphaRef";
+        static readonly string IsVegetationTag = "IsVegetation";
         #endregion
 
         protected MaterialBase()
@@ -58,6 +59,15 @@ namespace Apoc3D.Graphics
             set;
         }
 
+        /// <summary>
+        ///  获取或设置一个值表示材质的法向量是否总是朝上。
+        /// </summary>
+        public bool IsVegetation
+        {
+            get;
+            set;
+        }
+
         public bool ZEnabled
         {
             get;
@@ -76,6 +86,8 @@ namespace Apoc3D.Graphics
         {
             AlphaRef = data.GetDataSingle(AlphaRefTag, -1);
 
+            IsVegetation = data.GetDataBool(IsVegetationTag, false);
+
             CullMode = (CullMode)data.GetDataInt32(CullModeTag, 0);
             IsTransparent = data.GetDataBool(IsTransparentTag, false);
             ZEnabled = data.GetDataBool(ZEnabledTag, true);
@@ -85,6 +97,8 @@ namespace Apoc3D.Graphics
         protected virtual void WriteData(BinaryDataWriter data)
         {
             data.AddEntry(AlphaRefTag, AlphaRef);
+
+            data.AddEntry(IsVegetationTag, IsVegetation);
 
             data.AddEntry(CullModeTag, (int)CullMode);
             data.AddEntry(IsTransparentTag, IsTransparent);
@@ -290,6 +304,8 @@ namespace Apoc3D.Graphics
             }
         }
 
+     
+
         protected override void WriteData(BinaryDataWriter data)
         {
             base.WriteData(data);
@@ -458,6 +474,17 @@ namespace Apoc3D.Graphics
         #endregion
 
         #region 方法
+
+        public void ReloadTextures()
+        {
+            for (int i = 0; i < MaxTexLayers; i++)
+            {
+                if (!string.IsNullOrEmpty(textureFiles[i]))
+                {
+                    textures[i] = LoadTexture(textureFiles[i]);
+                }
+            }
+        }
 
         /// <summary>
         ///  重写以适应不同环境下的使用
