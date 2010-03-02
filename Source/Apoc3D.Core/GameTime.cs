@@ -25,9 +25,17 @@ namespace Apoc3D
         public TimeSpan ElapsedGameTime
         {
 			get { return m_ElapsedGameTime; }
-			protected set { m_ElapsedGameTime = value; }
+            protected set
+            {
+                m_ElapsedGameTime = value;
+                ElapsedGameTimeSeconds = (float)value.TotalSeconds;
+            }
         }
-
+        public float ElapsedGameTimeSeconds
+        {
+            get;
+            private set;
+        }
 		private float m_ElapsedRealTime;
         /// <summary>
         /// Gets the elapsed real time, in seconds.
@@ -35,9 +43,10 @@ namespace Apoc3D
         /// <value>The elapsed real time.</value>
         public float ElapsedRealTime
         {
-			get { return m_ElapsedRealTime; }
+            get { return m_ElapsedRealTime; }
             protected set { m_ElapsedRealTime = value; }
         }
+      
 
         private TimeSpan m_TotalGameTime;
         /// <summary>
@@ -49,6 +58,7 @@ namespace Apoc3D
             get { return m_TotalGameTime; }
             protected set { m_TotalGameTime = value; }
         }
+        
 
         private float m_TotalRealTime;
         /// <summary>

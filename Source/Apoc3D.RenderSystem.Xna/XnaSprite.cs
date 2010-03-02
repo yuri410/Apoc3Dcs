@@ -11,16 +11,21 @@ namespace Apoc3D.RenderSystem.Xna
     class XnaSprite : Sprite
     {
         XFG.SpriteBatch sprite;
+        XnaRenderSystem xnaRs;
+
         bool begun;
 
         public XnaSprite(XnaRenderSystem rs)
             : base(rs)
         {
             sprite = new XFG.SpriteBatch(rs.Device);
+            xnaRs = rs;
         }
         public override void Begin()
         {
             sprite.Begin(XFG.SpriteBlendMode.AlphaBlend, XFG.SpriteSortMode.Immediate, XFG.SaveStateMode.None);
+            xnaRs.Device.RenderState.AlphaDestinationBlend = XFG.Blend.InverseDestinationColor;
+            xnaRs.Device.RenderState.AlphaSourceBlend = XFG.Blend.SourceColor;
             begun = true;
 
         }
