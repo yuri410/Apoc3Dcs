@@ -258,7 +258,7 @@ namespace Apoc3D.Graphics
 
         public RenderOperation[] GetRenderOperation()
         {
-            if (data.State != ResourceState.Loaded)
+            if (data.State != ResourceState.Loaded && data.GetWeakResource().IsManaged)
             {
                 data.Touch();
                 return null;
