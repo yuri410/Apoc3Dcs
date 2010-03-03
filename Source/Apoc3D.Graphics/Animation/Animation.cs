@@ -107,5 +107,9 @@ namespace Apoc3D.Graphics.Animation
         {
             return transform;
         }
+        public void SetTransform(Matrix matrix)
+        {
+            transform = matrix;
+        }
     }
 }

@@ -136,11 +136,12 @@ namespace Apoc3D.Graphics
         protected string[] textureFiles = new string[MaxTexLayers];
 
         protected TexType[] textures = new TexType[MaxTexLayers];
+        protected bool[] hasTexture = new bool[MaxTexLayers];
 
         string effectName;
 
         bool disposed;
-
+        
         #endregion
 
         #region 属性
@@ -284,7 +285,7 @@ namespace Apoc3D.Graphics
             //}
             //br.Close();
 
-            bool[] hasTexture = new bool[MaxTexLayers];
+            hasTexture = new bool[MaxTexLayers];
             br = data.GetData(HasTextureTag);
             for (int i = 0; i < MaxTexLayers; i++)
             {
@@ -543,6 +544,37 @@ namespace Apoc3D.Graphics
         protected override void DestroyTexture(ResourceHandle<Texture> tex)
         {
             tex.Dispose();
+        }
+
+
+        public Material Clone()
+        {
+            Material result = new Material(device);
+            result.AlphaRef = AlphaRef;
+            result.Ambient = Ambient;
+            result.CullMode = CullMode;
+            result.Diffuse = Diffuse;
+            result.Effect = Effect;
+            result.Emissive = Emissive;
+            result.Flags = Flags;
+            result.IsTransparent = IsTransparent;
+            result.IsVegetation = IsVegetation;
+            result.Power = Power;
+            result.Specular = Specular;
+            result.ZEnabled = ZEnabled;
+            result.ZWriteEnabled = ZWriteEnabled;
+
+            for (int i = 0; i < hasTexture.Length; i++)
+            {
+                result.hasTexture[i] = hasTexture[i];
+                result.textureFiles[i] = textureFiles[i];
+                if (hasTexture[i])
+                {
+                    result.textures[i] = LoadTexture(textureFiles[i]);
+                }
+
+            }
+            return result;
         }
 
         #endregion
