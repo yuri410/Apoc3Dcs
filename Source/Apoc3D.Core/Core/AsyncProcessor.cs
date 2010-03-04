@@ -82,7 +82,10 @@ namespace Apoc3D.Core
 
         public void AddTask(ResourceOperation op)
         {
-            opQueue.Enqueue(op);
+            lock (syncHelper)
+            {
+                opQueue.Enqueue(op);
+            }
         }
 
         public bool TaskCompleted

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace Apoc3D.Vfs
 {
@@ -16,26 +17,29 @@ namespace Apoc3D.Vfs
 
     public class LpkArchive : Archive
     {
-        static byte[] buffer = new byte[1048576 * 4];
+        //static byte[] buffer = new byte[1048576 * 4];
+
+        static Dictionary<int, Stream> threadStreams = new Dictionary<int, Stream>();
 
         public const int FileId = 'L' << 16 | 'P' << 8 | 'K';
 
-        SevenZip.Compression.LZMA.Decoder decoder = new SevenZip.Compression.LZMA.Decoder();
+        //SevenZip.Compression.LZMA.Decoder decoder = new SevenZip.Compression.LZMA.Decoder();
 
         Dictionary<string, LpkArchiveEntry> entries =
             new Dictionary<string, LpkArchiveEntry>(CaseInsensitiveStringComparer.Instance);
 
-        Stream stream;
+        FileLocation file;
 
         int fileCount;
 
         public LpkArchive(FileLocation fl)
             : base(fl.Path, fl.Size, fl.IsInArchive)
         {
-            stream = fl.GetStream;
+            this.file = fl;
+            Stream stream = fl.GetStream;
             stream.Position = 0;
 
-            ContentBinaryReader br = new ContentBinaryReader(new VirtualStream(stream));
+            ContentBinaryReader br = new ContentBinaryReader(stream);
 
             try
             {
@@ -56,9 +60,9 @@ namespace Apoc3D.Vfs
                         entries.Add(ent.Name, ent);
                     }
 
-                    int propLen = br.ReadInt32();
-                    byte[] props = br.ReadBytes(propLen);
-                    decoder.SetDecoderProperties(props);
+                    //int propLen = br.ReadInt32();
+                    //byte[] props = br.ReadBytes(propLen);
+                    //decoder.SetDecoderProperties(props);
                 }
                 else
                 {
@@ -98,23 +102,35 @@ namespace Apoc3D.Vfs
 
             if (entries.TryGetValue(file, out lpkEnt))
             {
-                if (lpkEnt.Size > buffer.Length)
+                int threadId = Thread.CurrentThread.ManagedThreadId;
+                Stream thStream;
+
+                if (!threadStreams.TryGetValue(threadId, out thStream))
                 {
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream(lpkEnt.Size + 1);
-                    decoder.Code(stream, ms, lpkEnt.CompressedSize, lpkEnt.Size, null);
-                    ms.Position = 0;
-                    return ms;
+                    thStream = this.file.GetStream;
                 }
-                else
-                {
-                    fixed (byte* ptr = &buffer[0])
-                    {
-                        Apoc3D.Vfs.MemoryStream ms = new MemoryStream(ptr, lpkEnt.Size);
-                        decoder.Code(stream, ms, lpkEnt.CompressedSize, lpkEnt.Size, null);
-                        ms.Position = 0;
-                        return ms;
-                    }
-                }
+
+
+                VirtualStream res = new VirtualStream(thStream, lpkEnt.Offset, lpkEnt.Size);
+                res.Position = 0;
+                return res;
+                //if (lpkEnt.Size > buffer.Length)
+                //{
+                //    System.IO.MemoryStream ms = new System.IO.MemoryStream(lpkEnt.Size + 1);
+                //    decoder.Code(stream, ms, lpkEnt.CompressedSize, lpkEnt.Size, null);
+                //    ms.Position = 0;
+                //    return ms;
+                //}
+                //else
+                //{
+                //    fixed (byte* ptr = &buffer[0])
+                //    {
+                //        Apoc3D.Vfs.MemoryStream ms = new MemoryStream(ptr, lpkEnt.Size);
+                //        decoder.Code(stream, ms, lpkEnt.CompressedSize, lpkEnt.Size, null);
+                //        ms.Position = 0;
+                //        return ms;
+                //    }
+                //}
             }
             return null;
         }
@@ -123,8 +139,8 @@ namespace Apoc3D.Vfs
         {
             if (disposing)
             {
-                stream.Close();
-                stream = null;
+                //stream.Close();
+                //stream = null;
             }
         }
     }

@@ -145,6 +145,8 @@ namespace Apoc3D.Vfs
         }
         public VirtualStream(Stream stream, long baseOffset, long length)
         {
+            stream.Position = baseOffset;
+
             this.stream = stream;
             this.length = length;
             this.baseOffset = baseOffset;

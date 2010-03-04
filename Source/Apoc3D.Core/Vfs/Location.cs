@@ -52,7 +52,7 @@ namespace Apoc3D.Vfs
         Archive parent;
         string path;
 
-        int offset;
+        //int offset;
 
         Stream stm;
 
@@ -61,7 +61,7 @@ namespace Apoc3D.Vfs
         {
             this.parent = fl.parent;
             this.path = fl.path;
-            this.offset = fl.offset;
+            //this.offset = fl.offset;
         }
 
         public FileLocation(string filePath)
@@ -83,7 +83,7 @@ namespace Apoc3D.Vfs
             parent = pack;
             path = filePath;
 
-            offset = 0;
+            //offset = 0;
             size = (int)stm.Length;
             this.stm = stm;
 
@@ -107,13 +107,13 @@ namespace Apoc3D.Vfs
         }
 
 
-        /// <summary>
-        ///  文件在资源包中的局部offset
-        /// </summary>
-        public int Offset
-        {
-            get { return offset; }
-        }
+        ///// <summary>
+        /////  文件在资源包中的局部offset
+        ///// </summary>
+        //public int Offset
+        //{
+        //    get { return offset; }
+        //}
         public bool IsInArchive
         {
             get { return parent != null; }
