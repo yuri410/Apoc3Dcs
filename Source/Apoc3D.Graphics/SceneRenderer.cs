@@ -267,11 +267,6 @@ namespace Apoc3D.Graphics
             renderSystem.Clear(ClearFlags.DepthBuffer | ClearFlags.Target, ColorValue.Black, 1, 0);
 
 
-            //renderSystem.SetTransform(TransformState.Projection, EffectParams.CurrentCamera.ProjectionMatrix);
-            //renderSystem.SetTransform(TransformState.World, Matrix.Identity);
-            //renderSystem.SetTransform(TransformState.View, EffectParams.CurrentCamera.ViewMatrix);
-
-
             //Atmosphere.Render();
 
 
@@ -441,7 +436,7 @@ namespace Apoc3D.Graphics
         ///    检测可见物体
         ///    完成阴影贴图渲染
         ///   -> IPostSceneRender.Render
-        ///   -> ISceneRenderer.RenderScenePost 或者说 GameSceneBase.RenderScenePost
+        ///   -> ISceneRenderer.RenderScenePost
         ///    渲染场景
         /// </remarks>
         public virtual void RenderScene()
@@ -453,8 +448,9 @@ namespace Apoc3D.Graphics
 
             RenderStateManager renderStates = renderSystem.RenderStates;
             renderStates.SourceBlend = Blend.SourceAlpha;
-            renderStates.DestinationBlend = Blend.One;
+            renderStates.DestinationBlend = Blend.InverseSourceAlpha;
             renderStates.BlendOperation = BlendFunction.Add;
+
             //renderSystem.RenderStates.FillMode = FillMode.WireFrame;
             //EffectParams.Atmosphere = Atmosphere;
             //EffectParams.TerrainHeightScale = Data.TerrainSettings.HeightScale;

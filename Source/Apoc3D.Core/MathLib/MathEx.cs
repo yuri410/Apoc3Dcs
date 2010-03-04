@@ -141,6 +141,7 @@ namespace Apoc3D.MathLib
             }
             return -(float)Math.Acos(v1.Y) + MathEx.PiOver2 + MathEx.PIf * 2;
         }
+        
         public static PolarCoord VectorToPolar(Vector2 v1)
         {
             PolarCoord pc = new PolarCoord();

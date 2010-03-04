@@ -13,7 +13,9 @@ namespace Apoc3D.Graphics
     public enum MaterialFlags
     {
         None = 0,
-        RemapColor = 1
+        RemapColor = 1,
+        BlendBright = 1 << 1,
+        BlendBright_Color = 1 << 2
     }
 
     public abstract class MaterialBase
@@ -31,16 +33,24 @@ namespace Apoc3D.Graphics
         static readonly string ZWriteEnabledTag = "ZWriteEnabled";
         static readonly string AlphaRefTag = "AlphaRef";
         static readonly string IsVegetationTag = "IsVegetation";
+
+        static readonly string RenderPriorityTag = "RenderPriority";
         #endregion
 
         protected MaterialBase()
         {
             ZWriteEnabled = true;
             ZEnabled = true;
+            PriorityHint = RenderPriority.Second;
         }
         
         #region Properties
 
+        public RenderPriority PriorityHint
+        {
+            get;
+            set;
+        }
         public CullMode CullMode
         {
             get;
@@ -92,6 +102,8 @@ namespace Apoc3D.Graphics
             IsTransparent = data.GetDataBool(IsTransparentTag, false);
             ZEnabled = data.GetDataBool(ZEnabledTag, true);
             ZWriteEnabled = data.GetDataBool(ZWriteEnabledTag, true);
+
+            PriorityHint = (RenderPriority)data.GetDataInt32(RenderPriorityTag, (int)RenderPriority.Second);
         }
 
         protected virtual void WriteData(BinaryDataWriter data)
@@ -104,6 +116,8 @@ namespace Apoc3D.Graphics
             data.AddEntry(IsTransparentTag, IsTransparent);
             data.AddEntry(ZEnabledTag, ZEnabled);
             data.AddEntry(ZWriteEnabledTag, ZWriteEnabled);
+
+            data.AddEntry(RenderPriorityTag, (int)PriorityHint);
         }
 
         #endregion
@@ -187,6 +201,23 @@ namespace Apoc3D.Graphics
         {
             get;
             protected set;
+        }
+
+        public string GetEffectName()
+        {
+            return effectName;
+        }
+        public void SetEffectName(string v)
+        {
+            effectName = v;
+            if (!string.IsNullOrEmpty(v))
+            {
+                SetEffect(EffectManager.Instance.GetModelEffect(v));
+            }
+            else
+            {
+                SetEffect(null);
+            }
         }
 
         public string GetTextureFile(int idx)
@@ -319,11 +350,11 @@ namespace Apoc3D.Graphics
             bw = data.AddEntry(EffectTag);
             //if (Effect == null)
             //{
-            bw.WriteStringUnicode(effectName);
+                bw.WriteStringUnicode(effectName);
             //}
             //else
             //{
-            //    bw.WriteStringUnicode(Effect.Name);
+                //bw.WriteStringUnicode(Effect.Name);
             //}
             bw.Close();
 

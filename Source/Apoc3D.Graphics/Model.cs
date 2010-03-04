@@ -296,7 +296,7 @@ namespace Apoc3D.Graphics
                         //opBuffer[dstIdx + j].Geomentry = entOps[i][j];
                         //animation.GetTransform(i, out  opBuffer[dstIdx + j].Transformation);
                         opBuffer[i].Transformation = animInstance.GetTransform(renderOpEntId[i]);
-                        opBuffer[i].Priority = RenderPriority.Second;
+                        //opBuffer[i].Priority = RenderPriority.Second;
                     }
 
                     dstIdx += entOps[i].Length;

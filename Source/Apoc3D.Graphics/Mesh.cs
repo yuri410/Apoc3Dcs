@@ -1191,7 +1191,7 @@ namespace Apoc3D.Graphics
 
                     bufferedOp[i].Material = materials[i][matAnims[i].CurrentFrame];
                     bufferedOp[i].Geomentry = gd;
-                    bufferedOp[i].Priority = RenderPriority.Second;
+                    bufferedOp[i].Priority = bufferedOp[i].Material.PriorityHint;
                     //bufferedOp[i].Transformation 
                 }
             }
