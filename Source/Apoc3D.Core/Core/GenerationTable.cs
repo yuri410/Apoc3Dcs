@@ -38,7 +38,7 @@ namespace Apoc3D.Core
             Thread guThread;
             ResourceManager manager;
 
-            public STMethod(GenerationTable table, ResourceManager manager) 
+            public STMethod(GenerationTable table, ResourceManager manager)
             {
                 this.table = table;
 
@@ -181,9 +181,9 @@ namespace Apoc3D.Core
 
 #if !XBOX
                     const int MaxWait = 10;
-                    for (int i = 0; i < MaxWait; i++) 
+                    for (int i = 0; i < MaxWait; i++)
                     {
-                        if (guThread.IsAlive) 
+                        if (guThread.IsAlive)
                         {
                             Thread.Sleep(10);
                         }
@@ -437,7 +437,7 @@ namespace Apoc3D.Core
 
             #endregion
         }
-        
+
 
         /// <summary>
         ///  对gen的线程锁
@@ -517,6 +517,7 @@ namespace Apoc3D.Core
                     gen[newGeneration].Add(resource);
             }
         }
+
         #region IDisposable 成员
 
         public bool Disposed

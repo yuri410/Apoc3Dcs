@@ -151,7 +151,7 @@ namespace Apoc3D.Core
 
             thread = new Thread(Update);
             thread.Name = "Timer Auto Update";
-
+            thread.IsBackground = true;
 #if !XBOX
             thread.SetApartmentState(ApartmentState.MTA);
 #endif
@@ -178,7 +178,7 @@ namespace Apoc3D.Core
         #region 方法
         private static void Update()
         {
-            while (true)
+            while (!Disposed)
             {
                 clock.Step();
 
@@ -192,6 +192,27 @@ namespace Apoc3D.Core
 
         #endregion
 
+        public static bool Disposed
+        {
+            get;
+            private set;
+        }
 
+        public static void Dispose() 
+        {
+            if (!Disposed)
+            {
+                Disposed = true;
+                const int MaxWait = 10;
+
+                for (int i = 0; i < MaxWait; i++)
+                {
+                    if (thread.IsAlive)
+                        Thread.Sleep(10);
+                }
+                thread.Abort();
+
+            }
+        }
     }
 }

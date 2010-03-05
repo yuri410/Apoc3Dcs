@@ -104,42 +104,42 @@ namespace Apoc3D.Graphics
         }
 
 
-        /// <summary>
-        ///     Tests equality of 2 <see cref="VertexElement"/> objects.
-        /// </summary>
-        /// <param name="left">A <see cref="VertexElement"/></param>
-        /// <param name="right">A <see cref="VertexElement"/></param>
-        /// <returns>true if equal, false otherwise.</returns>
-        public static bool operator ==(VertexDeclaration left, VertexDeclaration right)
-        {
-            // if element lists are different sizes, they can't be equal
-            if (left.elements.Count != right.elements.Count)
-                return false;
+        ///// <summary>
+        /////     Tests equality of 2 <see cref="VertexElement"/> objects.
+        ///// </summary>
+        ///// <param name="left">A <see cref="VertexElement"/></param>
+        ///// <param name="right">A <see cref="VertexElement"/></param>
+        ///// <returns>true if equal, false otherwise.</returns>
+        //public static bool operator ==(VertexDeclaration left, VertexDeclaration right)
+        //{
+        //    // if element lists are different sizes, they can't be equal
+        //    if (left.elements.Count != right.elements.Count)
+        //        return false;
 
-            for (int i = 0; i < right.elements.Count; i++)
-            {
-                VertexElement a = left.elements[i];
-                VertexElement b = right.elements[i];
+        //    for (int i = 0; i < right.elements.Count; i++)
+        //    {
+        //        VertexElement a = left.elements[i];
+        //        VertexElement b = right.elements[i];
 
-                // if they are not equal, this declaration differs
-                if (!(a == b))
-                    return false;
-            }
+        //        // if they are not equal, this declaration differs
+        //        if (!(a == b))
+        //            return false;
+        //    }
 
-            // if we got thise far, they are equal
-            return true;
-        }
+        //    // if we got thise far, they are equal
+        //    return true;
+        //}
 
-        /// <summary>
-        ///     Tests in-equality of 2 <see cref="VertexElement"/> objects.
-        /// </summary>
-        /// <param name="left">A <see cref="VertexElement"/></param>
-        /// <param name="right">A <see cref="VertexElement"/></param>
-        /// <returns>true if not equal, false otherwise.</returns>
-        public static bool operator !=(VertexDeclaration left, VertexDeclaration right)
-        {
-            return !(left == right);
-        }
+        ///// <summary>
+        /////     Tests in-equality of 2 <see cref="VertexElement"/> objects.
+        ///// </summary>
+        ///// <param name="left">A <see cref="VertexElement"/></param>
+        ///// <param name="right">A <see cref="VertexElement"/></param>
+        ///// <returns>true if not equal, false otherwise.</returns>
+        //public static bool operator !=(VertexDeclaration left, VertexDeclaration right)
+        //{
+        //    return !(left == right);
+        //}
 
         #endregion
 

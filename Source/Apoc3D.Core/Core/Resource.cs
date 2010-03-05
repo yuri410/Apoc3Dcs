@@ -134,10 +134,10 @@ namespace Apoc3D.Core
                         resuorce.Dereference();
                     Disposed = true;
                 }
-                else
-                {
-                    throw new ObjectDisposedException(ToString());
-                }
+                //else
+                //{
+                //    throw new ObjectDisposedException(ToString());
+                //}
             }
         }
 

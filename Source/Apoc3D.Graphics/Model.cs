@@ -414,13 +414,16 @@ namespace Apoc3D.Graphics
 
             if (disposing)
             {
-                for (int i = 0; i < entities.Length; i++)
+                if (entities != null)
                 {
-                    if (!entities[i].Disposed)
+                    for (int i = 0; i < entities.Length; i++)
                     {
-                        entities[i].Dispose();
+                        if (!entities[i].Disposed)
+                        {
+                            entities[i].Dispose();
+                        }
+                        entities[i] = null;
                     }
-                    entities[i] = null;
                 }
             }
             entities = null;

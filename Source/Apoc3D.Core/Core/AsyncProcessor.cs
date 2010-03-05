@@ -36,19 +36,19 @@ namespace Apoc3D.Core
 
         AutoResetEvent waiter;
 
-        public AsyncProcessor()
+        public AsyncProcessor(string name)
         {
             opQueue = new Queue<ResourceOperation>();
 
             waiter = new AutoResetEvent(true);
             
             processThread = new Thread(Main);
-            processThread.Name = "AsyncProcessor";
+            processThread.Name = "AsyncProcessor " + name;
 
 #if !XBOX
             processThread.SetApartmentState(ApartmentState.MTA);
 #endif
-
+            processThread.IsBackground = true;
             processThread.Start();
         }
 

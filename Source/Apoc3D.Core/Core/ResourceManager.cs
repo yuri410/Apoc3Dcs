@@ -34,7 +34,7 @@ namespace Apoc3D.Core
         int curUsedCache;
 
         
-        AsyncProcessor asyncProc = new AsyncProcessor();
+        AsyncProcessor asyncProc;
 
         /// <summary>
         ///  以默认缓存大小创建一个资源管理器
@@ -50,6 +50,7 @@ namespace Apoc3D.Core
         /// <param name="cacheSize">缓存大小</param>
         protected ResourceManager(int cacheSize)
         {
+            asyncProc = new AsyncProcessor(this.GetType().Name);
             hashTable = new Dictionary<string, Resource>();
             totalCacheSize = cacheSize;
             genTable = new GenerationTable(this);
@@ -113,8 +114,11 @@ namespace Apoc3D.Core
         /// <param name="res">资源</param>
         public void NotifyResourceFinalizing(Resource res)
         {
-            hashTable.Remove(res.HashString);
-            genTable.RemoveResource(res);
+            if (!Disposed)
+            {
+                hashTable.Remove(res.HashString);
+                genTable.RemoveResource(res);
+            }
         }
 
         internal void AddTask(ResourceOperation op) 
@@ -143,8 +147,11 @@ namespace Apoc3D.Core
         /// <param name="res"></param>
         protected void NotifyResourceNew(Resource res)
         {
-            hashTable.Add(res.HashString, res);
-            genTable.AddResource(res);
+            if (!Disposed)
+            {
+                hashTable.Add(res.HashString, res);
+                genTable.AddResource(res);
+            }
         }
 
         /// <summary>
@@ -174,6 +181,13 @@ namespace Apoc3D.Core
         {
             if (!Disposed)
             {
+                if (asyncProc != null &&
+                    !asyncProc.Disposed)
+                {
+                    asyncProc.Dispose();
+                    asyncProc = null;
+                }
+
                 if (genTable != null &&
                     !genTable.Disposed)
                 {

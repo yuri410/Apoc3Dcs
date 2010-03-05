@@ -4204,7 +4204,7 @@ namespace Apoc3D.MathLib
         /// <returns>The scaled matrix.</returns>
         public static Matrix operator *(float left, Matrix right)
         {
-            return left * right;
+            return right * left;
         }
 
         /// <summary>
