@@ -119,7 +119,7 @@ namespace Apoc3D.Graphics
                 material = new Material(rs);
                 material.Ambient = new Color4F(1, 1, 1, 1);
 
-                geoData = new GeomentryData(spr);
+                geoData = new GeomentryData();
                 geoData.VertexBuffer = buffer;
                 geoData.VertexSize = SpriteVertex.Size;
                 geoData.VertexDeclaration = SpriteVertex.vtxDecl;
@@ -245,6 +245,7 @@ namespace Apoc3D.Graphics
                 new Vector3(x, y + texture.Height, 0),
                 new Vector3(x + texture.Width, y + texture.Height, 0));
             buf.Material.SetTexture(0, new ResourceHandle<Texture>(texture));
+            buf.Material.PriorityHint = RenderPriority.Last;
 
             curIndex++;
 
@@ -252,7 +253,7 @@ namespace Apoc3D.Graphics
             op.Material = buf.Material;
             op.Geomentry = buf.Geomentry;
             op.Transformation = transform;
-            op.Priority = RenderPriority.Last;
+            op.Sender = this;
             bufferedOp.Add(ref op);
         }
 
@@ -274,6 +275,7 @@ namespace Apoc3D.Graphics
                new Vector3(rect.X, rect.Y + rect.Height, 0),
                new Vector3(rect.X + rect.Width, rect.Y + texture.Height, 0));
             buf.Material.SetTexture(0, new ResourceHandle<Texture>(texture));
+            buf.Material.PriorityHint = RenderPriority.Last;
 
             curIndex++;
 
@@ -281,7 +283,7 @@ namespace Apoc3D.Graphics
             op.Material = buf.Material;
             op.Geomentry = buf.Geomentry;
             op.Transformation = transform;
-            op.Priority = RenderPriority.Last;
+            op.Sender = this;
             bufferedOp.Add(ref op);
         }
 

@@ -1178,7 +1178,7 @@ namespace Apoc3D.Graphics
                 bufferedOp = new RenderOperation[materials.Length];
                 for (int i = 0; i < bufferedOp.Length; i++)
                 {
-                    GeomentryData gd = new GeomentryData(this);
+                    GeomentryData gd = new GeomentryData();
 
                     //bufferedGm[i].Material = materials[i];
                     gd.IndexBuffer = indexBuffers[i];
@@ -1191,7 +1191,7 @@ namespace Apoc3D.Graphics
 
                     bufferedOp[i].Material = materials[i][matAnims[i].CurrentFrame];
                     bufferedOp[i].Geomentry = gd;
-                    bufferedOp[i].Priority = bufferedOp[i].Material.PriorityHint;
+                    //bufferedOp[i].Priority = bufferedOp[i].Material.PriorityHint;
                     //bufferedOp[i].Transformation 
                 }
             }

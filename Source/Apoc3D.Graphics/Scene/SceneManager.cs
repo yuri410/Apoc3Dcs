@@ -156,9 +156,9 @@ namespace Apoc3D.Scene
                     {
                         Matrix.Multiply(ref ops[k].Transformation, ref obj.Transformation, out ops[k].Transformation);
 
-                        RenderPriority prio = ops[k].Priority;
                         Material mate = ops[k].Material;
                         GeomentryData geoData = ops[k].Geomentry;
+                        RenderPriority prio = mate.PriorityHint;
 
                         Dictionary<Material, FastList<RenderOperation>> matTbl = batchHelper.batchTable[(int)prio];
 

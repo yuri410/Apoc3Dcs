@@ -132,7 +132,7 @@ namespace Apoc3D.Graphics
                     {
                         Material mate = ops[k].Material;
                         GeomentryData geoData = ops[k].Geomentry;
-                        RenderPriority prio = ops[k].Priority;
+                        RenderPriority prio = mate.PriorityHint;
 
                         if (mate != null)
                         {
@@ -445,11 +445,6 @@ namespace Apoc3D.Graphics
             //try
             //{
             batchData.RenderedObjectCount = 0;
-
-            RenderStateManager renderStates = renderSystem.RenderStates;
-            renderStates.SourceBlend = Blend.SourceAlpha;
-            renderStates.DestinationBlend = Blend.InverseSourceAlpha;
-            renderStates.BlendOperation = BlendFunction.Add;
 
             //renderSystem.RenderStates.FillMode = FillMode.WireFrame;
             //EffectParams.Atmosphere = Atmosphere;

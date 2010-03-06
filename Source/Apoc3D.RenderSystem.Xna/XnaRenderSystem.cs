@@ -1192,6 +1192,10 @@ namespace Apoc3D.RenderSystem.Xna
         {
             Render(material, op, op.Length);
         }
+
+
+        MaterialFlags currentBlendFlags;
+
         public override void Render(Material material, RenderOperation[] opList, int count)
         {
             if (opList == null)
@@ -1206,6 +1210,32 @@ namespace Apoc3D.RenderSystem.Xna
             {
                 return;
                 //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
+            }
+
+            if (currentBlendFlags != material.Flags)
+            {
+                switch (material.Flags)
+                {
+                    case MaterialFlags.None:
+                        renderStates.SourceBlend = Blend.SourceAlpha;
+                        renderStates.DestinationBlend = Blend.InverseSourceAlpha;
+                        renderStates.BlendOperation = BlendFunction.Add;
+                        break;
+
+                    case MaterialFlags.BlendBright_Color:
+                        renderStates.SourceBlend = Blend.SourceColor;
+                        renderStates.DestinationBlend = Blend.One;
+                        renderStates.BlendOperation = BlendFunction.Add;
+                        break;
+
+                    case MaterialFlags.BlendBright:
+
+                        renderStates.SourceBlend = Blend.SourceAlpha;
+                        renderStates.DestinationBlend = Blend.One;
+                        renderStates.BlendOperation = BlendFunction.Add;
+                        break;
+                }
+                currentBlendFlags = material.Flags;
             }
 
             renderStates.AlphaBlendEnable = material.IsTransparent;

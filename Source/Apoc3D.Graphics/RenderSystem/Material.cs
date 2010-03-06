@@ -14,8 +14,8 @@ namespace Apoc3D.Graphics
     {
         None = 0,
         RemapColor = 1,
-        BlendBright = 1 << 1,
-        BlendBright_Color = 1 << 2
+        BlendBright = 2,
+        BlendBright_Color = 3
     }
 
     public abstract class MaterialBase

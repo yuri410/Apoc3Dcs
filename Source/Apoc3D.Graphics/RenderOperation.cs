@@ -30,9 +30,9 @@ namespace Apoc3D.Graphics
         public GeomentryData Geomentry;
 
         /// <summary>
-        ///  此渲染操作的渲染次序
+        ///  此渲染操作的源对象
         /// </summary>
-        public RenderPriority Priority;
+        public object Sender;
     }
 
     /// <summary>
@@ -40,26 +40,6 @@ namespace Apoc3D.Graphics
     /// </summary>
     public class GeomentryData
     {
-        IRenderable sender;
-
-        /// <summary>
-        /// 渲染操作的来源
-        /// </summary>
-        public IRenderable Sender
-        {
-            get { return sender; }
-        }
-
-        public void SetSender(IRenderable sender) { }
-
-        ///// <summary>
-        /////  获取或设置顶点格式
-        ///// </summary>
-        //public VertexFormat Format
-        //{
-        //    get;
-        //    set;
-        //}
         public int VertexSize
         {
             get;
@@ -70,8 +50,6 @@ namespace Apoc3D.Graphics
             get;
             set;
         }
-
-
 
         public VertexBuffer VertexBuffer
         {
@@ -113,11 +91,11 @@ namespace Apoc3D.Graphics
             set;
         }
 
-        public GeomentryData(IRenderable obj)
+        public GeomentryData()
         {
-            if (sender != null)
-                throw new InvalidOperationException();
-            sender = obj;
+            //if (sender != null)
+            //    throw new InvalidOperationException();
+            //sender = obj;
         }
 
         public int BaseVertex
