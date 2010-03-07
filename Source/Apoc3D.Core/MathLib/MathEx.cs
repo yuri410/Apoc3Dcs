@@ -1248,5 +1248,12 @@ namespace Apoc3D.MathLib
             return a > max ? max : a;
         }
         #endregion
+
+        public static float Saturate(float p)
+        {
+            if (p < 0)
+                p = 0;
+            return p > 1 ? 1 : p;
+        }
     }
 }
