@@ -30,7 +30,10 @@ namespace Apoc3D.MathLib
             while (valueQueue.Count > smoothSize)
                 valueQueue.Dequeue();
         }
-
+        public void Clear ()
+        {
+            valueQueue.Clear();
+        }
         public T Result 
         {
             get 
