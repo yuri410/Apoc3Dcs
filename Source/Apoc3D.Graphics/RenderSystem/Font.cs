@@ -222,6 +222,37 @@ namespace Apoc3D.Graphics
             }
         }
 
+        public Size MeasureString(string text, float fontSize, DrawTextFormat format)
+        {
+            Size result = new Size();
+
+            int x = 0, y = 0;
+            float scale = fontSize / defFontSize;
+            for (int i = 0; i < text.Length; i++)
+            {
+                char ch = text[i];
+                if (ch != '\n')
+                {
+                    if (ch >= codeStart && ch <= codeEnd)
+                    {
+                        x += (int)(chars[ch].Width * scale * 0.5);
+                    }
+                }
+                else
+                {
+                    x = 0;
+                    y += (int)(origHeight * scale);
+                }
+
+                if (result.Width < x)
+                    result.Width = x;
+                if (result.Height < y)
+                    result.Height = y;
+            }
+            result.Height += (int)(origHeight * scale);
+            return result;
+        }
+
         public void DrawString(Sprite sprite, string text, int x, int y, float fontSize, DrawTextFormat format, int color)
         {
             ColorValue colorValue = new ColorValue(color);
