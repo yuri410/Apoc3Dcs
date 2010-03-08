@@ -999,6 +999,7 @@ namespace Apoc3D.Graphics
                     for (int j = 0; j < idx.Count; j++)
                     {
                         ib[j] = (uint)idx[j];
+                        passed[idx[j]] = true;
                     }
                     indexBuffers[i].Unlock();
 
