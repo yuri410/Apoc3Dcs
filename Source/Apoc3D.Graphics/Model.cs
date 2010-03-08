@@ -33,7 +33,7 @@ namespace Apoc3D.Graphics
         public ResourceLocation DataSource
         {
             get;
-            private set;
+            protected set;
         }
 
         protected ModelBase(ResourceLocation rl)
@@ -350,9 +350,10 @@ namespace Apoc3D.Graphics
             get { return renderSystem; }
         }
         public ModelMemoryData(RenderSystem renderSystem, ResourceLocation rl)
-            : base(rl)
         {
             this.renderSystem = renderSystem;
+            DataSource = rl;
+            load();
         }
 
         public ModelMemoryData(RenderSystem renderSystem, MeshData[] entities)
