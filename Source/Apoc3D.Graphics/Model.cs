@@ -341,7 +341,51 @@ namespace Apoc3D.Graphics
         #endregion
     }
 
-    
+    public class ModelMemoryData : ModelBase<MeshData>
+    {
+        protected RenderSystem renderSystem;
+        [Browsable(false)]
+        public RenderSystem RenderSystem
+        {
+            get { return renderSystem; }
+        }
+        public ModelMemoryData(RenderSystem renderSystem, ResourceLocation rl)
+            : base(rl)
+        {
+            this.renderSystem = renderSystem;
+        }
+
+        public ModelMemoryData(RenderSystem renderSystem, MeshData[] entities)
+        {
+            this.renderSystem = renderSystem;
+
+            this.entities = entities;
+        }
+        public ModelMemoryData(RenderSystem renderSystem, int entityCount)
+        {
+            this.renderSystem = renderSystem;
+
+            this.entities = new MeshData[entityCount];
+        }
+
+        protected override MeshData LoadMesh(BinaryDataReader data)
+        {
+            MeshData md = new MeshData(renderSystem);
+            md.Load(data);
+            return md;
+        }
+
+        protected override BinaryDataWriter SaveMesh(MeshData mesh)
+        {
+            return mesh.Save();
+        }
+
+        protected override void unload()
+        {
+            
+        }
+    }
+
     /// <summary>
     ///  表示3D模型的数据
     /// </summary>
