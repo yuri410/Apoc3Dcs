@@ -545,7 +545,7 @@ namespace Apoc3D.Graphics
         {
         }
         
-        public MeshData(GameMesh mesh)
+        public MeshData(Mesh mesh)
             : base(mesh.RenderSystem)
         {
             this.Materials = mesh.Materials;
@@ -574,7 +574,7 @@ namespace Apoc3D.Graphics
             return vertexSize;
         }
 
-        void GetFaces(GameMesh mesh)
+        void GetFaces(Mesh mesh)
         {
             IndexBuffer[] ibs = mesh.IndexBuffers;
 
@@ -626,7 +626,7 @@ namespace Apoc3D.Graphics
     /// <summary>
     /// 游戏中的mesh
     /// </summary>
-    public unsafe class GameMesh : IRenderable, IDisposable, IUpdatable
+    public unsafe class Mesh : IRenderable, IDisposable, IUpdatable
     {
         #region Fields
         VertexDeclaration vtxDecl;
@@ -1022,11 +1022,11 @@ namespace Apoc3D.Graphics
         /// <param name="dev"></param>
         /// <param name="stm"></param>
         /// <returns></returns>
-        public static GameMesh FromStream(RenderSystem dev, Stream stm)
+        public static Mesh FromStream(RenderSystem dev, Stream stm)
         {
             MeshData data = new MeshData(dev);
             data.Load(stm);
-            return new GameMesh(dev, data);
+            return new Mesh(dev, data);
         }
 
         /// <summary>
@@ -1034,7 +1034,7 @@ namespace Apoc3D.Graphics
         /// </summary>
         /// <param name="mesh">网格</param>
         /// <param name="stm">要保存到的流</param>
-        public static void ToStream(GameMesh mesh, Stream stm)
+        public static void ToStream(Mesh mesh, Stream stm)
         {
             MeshData data = new MeshData(mesh);
             data.Save(stm);
@@ -1049,7 +1049,7 @@ namespace Apoc3D.Graphics
         /// </summary>
         /// <param name="dev"></param>
         /// <param name="data"></param>
-        public GameMesh(RenderSystem rs, MeshData data)
+        public Mesh(RenderSystem rs, MeshData data)
         {
             this.renderSystem = rs;
             this.factory = rs.ObjectFactory;
@@ -1057,7 +1057,7 @@ namespace Apoc3D.Graphics
             BuildFromData(rs, data);
         }
 
-        public GameMesh(RenderSystem rs, VertexPNT1[] vertices, int[] indices, Material[][] materials)
+        public Mesh(RenderSystem rs, VertexPNT1[] vertices, int[] indices, Material[][] materials)
         {
             this.factory = rs.ObjectFactory;
 
@@ -1268,7 +1268,7 @@ namespace Apoc3D.Graphics
 
         #endregion
 
-        ~GameMesh()
+        ~Mesh()
         {
             if (!disposed)
                 Dispose();

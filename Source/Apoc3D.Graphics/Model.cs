@@ -264,7 +264,7 @@ namespace Apoc3D.Graphics
                 return null;
             }
 
-            GameMesh[] entities = data.Resource.Entities;
+            Mesh[] entities = data.Resource.Entities;
 
             if (opBuffer == null)
             {
@@ -341,10 +341,11 @@ namespace Apoc3D.Graphics
         #endregion
     }
 
+    
     /// <summary>
     ///  表示3D模型的数据
     /// </summary>
-    public class ModelData : ModelBase<GameMesh>, IDisposable
+    public class ModelData : ModelBase<Mesh>, IDisposable
     {
         protected RenderSystem renderSystem;
         [Browsable(false)]
@@ -359,7 +360,7 @@ namespace Apoc3D.Graphics
             this.renderSystem = renderSystem;
         }
 
-        public ModelData(RenderSystem renderSystem, GameMesh[] entities)
+        public ModelData(RenderSystem renderSystem, Mesh[] entities)
         {
             this.renderSystem = renderSystem;
 
@@ -369,7 +370,7 @@ namespace Apoc3D.Graphics
         {
             this.renderSystem = renderSystem;
 
-            this.entities = new GameMesh[entityCount];
+            this.entities = new Mesh[entityCount];
         }
 
 
@@ -393,13 +394,13 @@ namespace Apoc3D.Graphics
             this.renderSystem = dev;
         }
 
-        protected override GameMesh LoadMesh(BinaryDataReader data)
+        protected override Mesh LoadMesh(BinaryDataReader data)
         {
             MeshData md = new MeshData(renderSystem);
             md.Load(data);
-            return new GameMesh(renderSystem, md);
+            return new Mesh(renderSystem, md);
         }
-        protected override BinaryDataWriter SaveMesh(GameMesh mesh)
+        protected override BinaryDataWriter SaveMesh(Mesh mesh)
         {
             MeshData md = new MeshData(mesh);
             return md.Save();

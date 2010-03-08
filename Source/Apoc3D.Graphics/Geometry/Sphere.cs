@@ -25,9 +25,9 @@ namespace Apoc3D.Graphics.Geometry
         public Sphere(RenderSystem rs, float radius, int slices, int stacks, Material[][] materials)
             //: base(rs, 1)
         {
-            GameMesh gm = new GameMesh(rs, CreateSphere(rs, radius, slices, stacks, materials));
+            Mesh gm = new Mesh(rs, CreateSphere(rs, radius, slices, stacks, materials));
             ModelData data = new ModelData(rs, 1);
-            data.Entities = new GameMesh[1] { gm };
+            data.Entities = new Mesh[1] { gm };
             base.CurrentAnimation = new NoAnimation();
 
             base.data = new ResourceHandle<ModelData>(data, true);
