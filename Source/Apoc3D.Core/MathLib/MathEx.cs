@@ -128,19 +128,19 @@ namespace Apoc3D.MathLib
                 (float)(v1.X * Math.Sin(sita) + v1.Y * Math.Cos(sita)));
         }
 
-        public static float Vector2DirAngle(Vector2 v1)
-        {
-            //v1.Normalize();
-            if (v1.X < 0)
-            {
-                return (float)Math.Acos(v1.Y) + MathEx.PiOver2;
-            }
-            else if (v1.Y >= 0) 
-            {
-                return -(float)Math.Acos(v1.Y) + MathEx.PiOver2;
-            }
-            return -(float)Math.Acos(v1.Y) + MathEx.PiOver2 + MathEx.PIf * 2;
-        }
+        //public static float Vector2DirAngle(Vector2 v1)
+        //{
+        //    //v1.Normalize();
+        //    if (v1.X < 0)
+        //    {
+        //        return (float)Math.Acos(v1.Y) + MathEx.PiOver2;
+        //    }
+        //    else if (v1.Y >= 0) 
+        //    {
+        //        return -(float)Math.Acos(v1.Y) + MathEx.PiOver2;
+        //    }
+        //    return -(float)Math.Acos(v1.Y) + MathEx.PiOver2 + MathEx.PIf * 2;
+        //}
         
         public static PolarCoord VectorToPolar(Vector2 v1)
         {
