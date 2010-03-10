@@ -384,7 +384,11 @@ namespace Apoc3D.Scene
 
             for (int i = 0; i < farObjects.Count; i++)
             {
-                AddVisibleObject(farObjects[i], 0, batchHelper);
+                SceneObject obj = farObjects[i];
+                if (frus.IntersectsSphere(ref obj.BoundingSphere.Center, obj.BoundingSphere.Radius))
+                {
+                    AddVisibleObject(farObjects[i], 0, batchHelper);
+                }
             }
             //base.PrepareVisibleObjects(camera);
         }
