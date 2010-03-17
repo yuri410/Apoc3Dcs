@@ -165,6 +165,12 @@ namespace Apoc3D.RenderSystem.Xna
             //data.Save(stm);
         }
 
+        public override void SetData(byte[] data)
+        {
+            if (tex2D != null)
+                tex2D.SetData<byte>(data);
+        }
+
         protected override DataRectangle @lock(int surface, LockMode mode, Rectangle rect)
         {
             LockInfo info = new LockInfo();

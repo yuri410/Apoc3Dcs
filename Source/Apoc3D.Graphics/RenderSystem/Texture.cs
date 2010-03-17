@@ -175,6 +175,8 @@ namespace Apoc3D.Graphics
 
         public abstract void Save(Stream stm);
 
+        public abstract void SetData(byte[] data);
+
         #region locks
         /// <summary>
         ///  相应lock的api相关实现

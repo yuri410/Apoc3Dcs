@@ -178,21 +178,21 @@ namespace Apoc3D.Graphics
         {
             Texture tex = factory.CreateTexture(origWidth, origHeight, 1, TextureUsage.StaticWriteOnly, ImagePixelFormat.A8L8);
 
-            DataRectangle rect = tex.Lock(0, LockMode.None);
 
-            byte* dst = (byte*)rect.Pointer;
+            byte[] buffer = new byte[origHeight * origWidth * 2];
 
             for (int i = 0; i < origHeight; i++)
             {
                 for (int j = 0; j < origWidth; j++)
                 {
-                    byte lum = br.ReadByte();
-                    *dst++ = lum;
-                    *dst++ = lum;
+                    int index = 2 * (i * origWidth + j);
+                    byte v = br.ReadByte();
+                    buffer[index] = v;
+                    buffer[index + 1] = v;
                 }
-                dst += rect.Pitch - origWidth * sizeof(ushort);
             }
-            tex.Unlock(0);
+
+            tex.SetData(buffer);
             return tex;
         }
         protected override void SaveCharMap(ContentBinaryWriter bw, Texture tex)
