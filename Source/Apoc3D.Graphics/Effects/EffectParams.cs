@@ -12,11 +12,6 @@ namespace Apoc3D.Graphics.Effects
         public static readonly Color4F LightAmbient = new Color4F(1f, 1f, 1f, 1f);
         public static readonly Color4F LightDiffuse = new Color4F(1f, 1f, 1f, 1f);
         public static readonly Color4F LightSpecular = new Color4F(1f, 1f, 1f, 1f);
-        public static float TerrainHeightScale
-        {
-            get;
-            set;
-        }
 
         public static ShadowMap ShadowMap
         {

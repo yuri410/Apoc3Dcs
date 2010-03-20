@@ -15,7 +15,7 @@ namespace Apoc3D.Scene
     {
         #region 字段
 
-        bool isPhyBuilt;
+        //bool isPhyBuilt;
 
         //TriangleMesh cdMesh;
 
