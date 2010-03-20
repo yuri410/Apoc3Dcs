@@ -368,6 +368,23 @@ namespace Apoc3D.MathLib
             return Ray.Intersects(ray, sphere, out distance);
         }
 
+        public static bool Intersects(BoundingSphere sphere, Ray ray, out Vector3 p1)
+        {
+            Vector3 sc;
+            Vector3.Subtract(ref sphere.Center, ref ray.Position, out sc);
+
+            float slen = Math.Abs(Vector3.Dot(ref ray.Direction, ref sc));
+            float dist = (float)Math.Sqrt(sc.LengthSquared() - slen * slen);
+
+            if (dist <= sphere.Radius)
+            {
+                p1 = ray.Position + ray.Direction * slen - ray.Direction * (float)Math.Sqrt(sphere.Radius * sphere.Radius - dist * dist);
+                return true;
+            }
+            p1 = new Vector3();
+            return false;
+        }
+
         /// <summary>
         /// Finds the intersection between a plane and a sphere.
         /// </summary>
