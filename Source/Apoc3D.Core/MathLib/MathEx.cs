@@ -2,18 +2,6 @@
 
 namespace Apoc3D.MathLib
 {
-    public struct PolarCoord
-    {
-        public float len;
-        public float sita; //在屏幕坐标系
-
-        public PolarCoord(float l, float s)
-        {
-            len = l;
-            sita = s;
-        }
-    }
-
     public static class MathEx
     {
         #region 常量
@@ -142,29 +130,29 @@ namespace Apoc3D.MathLib
         //    return -(float)Math.Acos(v1.Y) + MathEx.PiOver2 + MathEx.PIf * 2;
         //}
         
-        public static PolarCoord VectorToPolar(Vector2 v1)
-        {
-            PolarCoord pc = new PolarCoord();
-            pc.len = v1.Length();
-            ////pc.sita = (float)Math.Acos(v1.X / v1.Length());
-            ////if (v1.Y < 0)
-            ////{
-            ////    pc.sita = (float)Math.PI * 2 - pc.sita;
-            ////}
-            //pc.sita = (float)Math.Atan2(v1.Y, v1.X);
-            //return pc;
-            v1.Normalize();
+        //public static PolarCoord VectorToPolar(Vector2 v1)
+        //{
+        //    PolarCoord pc = new PolarCoord();
+        //    pc.len = v1.Length();
+        //    ////pc.sita = (float)Math.Acos(v1.X / v1.Length());
+        //    ////if (v1.Y < 0)
+        //    ////{
+        //    ////    pc.sita = (float)Math.PI * 2 - pc.sita;
+        //    ////}
+        //    //pc.sita = (float)Math.Atan2(v1.Y, v1.X);
+        //    //return pc;
+        //    v1.Normalize();
 
-            if (v1.X < 0)
-            {
-                pc.sita = -(float)Math.Acos(v1.Y);
-            }
-            else
-            {
-                pc.sita = (float)Math.Acos(v1.Y) - MathEx.PIf * 2;
-            }
-            return pc;
-        }
+        //    if (v1.X < 0)
+        //    {
+        //        pc.sita = -(float)Math.Acos(v1.Y);
+        //    }
+        //    else
+        //    {
+        //        pc.sita = (float)Math.Acos(v1.Y) - MathEx.PIf * 2;
+        //    }
+        //    return pc;
+        //}
 
         #endregion
 

@@ -1212,7 +1212,7 @@ namespace Apoc3D.RenderSystem.Xna
                 //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
             }
 
-            if (currentBlendFlags != material.Flags)
+            //if (currentBlendFlags != material.Flags)
             {
                 switch (material.Flags)
                 {
