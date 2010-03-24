@@ -23,18 +23,18 @@ namespace Apoc3D.Scene
 
         #region 构造函数
 
-        public StaticModelObject()
+        protected StaticModelObject()
             : base(false)
         {
         }
 
-        public StaticModelObject(bool hasSubObjects)
+        protected StaticModelObject(bool hasSubObjects)
             : base(hasSubObjects)
         {
 
         }
 
-        public StaticModelObject(Vector3 position, Quaternion orientation, bool hasSubObjects)
+        protected StaticModelObject(Vector3 position, Quaternion orientation, bool hasSubObjects)
             : base(hasSubObjects)
         {
             base.position = position;
@@ -152,5 +152,6 @@ namespace Apoc3D.Scene
             //cdMesh = null;
         }
         #endregion
+
     }
 }

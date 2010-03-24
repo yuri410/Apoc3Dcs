@@ -35,7 +35,10 @@ namespace Apoc3D.Graphics
             loadedFonts = new Dictionary<string, Font>();
         }
 
-
+        public Font GetFont(string name) 
+        {
+            return loadedFonts[name];
+        }
         public Font CreateInstance(RenderSystem rs, ResourceLocation rl, string name) 
         {
             Font result;

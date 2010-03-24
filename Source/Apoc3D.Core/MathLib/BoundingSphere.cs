@@ -373,13 +373,27 @@ namespace Apoc3D.MathLib
             Vector3 sc;
             Vector3.Subtract(ref sphere.Center, ref ray.Position, out sc);
 
-            float slen = Math.Abs(Vector3.Dot(ref ray.Direction, ref sc));
-            float dist = (float)Math.Sqrt(sc.LengthSquared() - slen * slen);
+            float slen = Vector3.Dot(ref ray.Direction, ref sc);
 
-            if (dist <= sphere.Radius)
+            if (slen > 0)
             {
-                p1 = ray.Position + ray.Direction * slen - ray.Direction * (float)Math.Sqrt(sphere.Radius * sphere.Radius - dist * dist);
-                return true;
+                float dist = (float)Math.Sqrt(sc.LengthSquared() - slen * slen);
+
+                if (dist <= sphere.Radius)
+                {
+                    p1 = ray.Position + ray.Direction * slen - ray.Direction * (float)Math.Sqrt(sphere.Radius * sphere.Radius - dist * dist);
+
+                    Vector3 p2 = ray.Position + ray.Direction * slen + ray.Direction * (float)Math.Sqrt(sphere.Radius * sphere.Radius - dist * dist);
+
+                    float d1 = Vector3.DistanceSquared(ref p1, ref ray.Position);
+                    float d2 = Vector3.DistanceSquared(ref p2, ref ray.Position);
+
+                    if (d2 < d1)
+                    {
+                        p1 = p2;
+                    }
+                    return true;
+                }
             }
             p1 = new Vector3();
             return false;
