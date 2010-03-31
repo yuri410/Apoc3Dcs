@@ -42,7 +42,7 @@ namespace Apoc3D.Scene
             max = octRootNode.BoundingVolume.Center + new Vector3(octRootNode.BoundingVolume.Length * 0.5f);
         }
 
-        
+
         public float MinimumBVSize
         {
             get;
@@ -314,7 +314,7 @@ namespace Apoc3D.Scene
 
             for (int i = 0; i < dynObjs.Count; i++)
             {
-                if (cbk.Check(dynObjs[i]) && 
+                if (cbk.Check(dynObjs[i]) &&
                     dynObjs[i].IntersectsSelectionRay(ref ray))
                 {
                     float dist = MathEx.DistanceSquared(ref  dynObjs[i].BoundingSphere.Center, ref ray.Position);
@@ -395,18 +395,19 @@ namespace Apoc3D.Scene
 
         public override void Update(GameTime dt)
         {
-            for (int i = 0; i < SceneObjects.Count; i++)
+            for (int i = SceneObjects.Count - 1; i >= 0; i--)
             {
-                SceneObjects[i].Update(dt);
+                SceneObject sceObj = SceneObjects[i];
+                sceObj.Update(dt);
 
-                if (SceneObjects[i].RequiresUpdate)
+                if (sceObj.RequiresUpdate)
                 {
-                    octRootNode.RemoveObject(SceneObjects[i]);
-                    AddObject(SceneObjects[i]);
+                    octRootNode.RemoveObject(sceObj);
+                    AddObject(sceObj);
                 }
             }
 
-            for (int i = 0; i < dynObjs.Count; i++)
+            for (int i = dynObjs.Count - 1; i >= 0; i--)
             {
                 DynamicObject obj = dynObjs[i];
 

@@ -135,6 +135,12 @@ namespace Apoc3D.Collections
             if (internalPointer < length)
                 Resize(internalPointer);
         }
+        public void TrimClear()
+        {
+            if (internalPointer < length)
+                Array.Clear(Elements, internalPointer, length - internalPointer);
+        }
+
 
         public void FastClear()
         {
