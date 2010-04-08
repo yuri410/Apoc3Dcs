@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Apoc3D.Collections;
 using Apoc3D.MathLib;
+using Code2015.Effects;
 
 namespace Apoc3D.Graphics
 {
@@ -201,13 +202,12 @@ namespace Apoc3D.Graphics
                 vertexCount += op[i].Geomentry.VertexCount;
             }
         }
-        public virtual void RenderSimple(RenderOperation op) 
+        public virtual void RenderSimple(GeomentryData op) 
         {
             batchCount++;
-            primitiveCount += op.Geomentry.PrimCount;
-            vertexCount += op.Geomentry.VertexCount;
+            primitiveCount += op.PrimCount;
+            vertexCount += op.VertexCount;
         }
-
         public abstract Viewport Viewport { get; set; }
     }
 }

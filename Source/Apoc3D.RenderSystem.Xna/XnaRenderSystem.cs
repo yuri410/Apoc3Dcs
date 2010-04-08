@@ -1024,7 +1024,7 @@ namespace Apoc3D.RenderSystem.Xna
             XG.Color clr = new XG.Color(color.R, color.G, color.B, color.A);
             Device.Clear(XnaUtils.ConvertEnum(flags), clr, depth, stencil);
         }
-
+        
         public override void SetRenderTarget(int index, RenderTarget rt)
         {
             if (rt == null) 
@@ -1105,88 +1105,56 @@ namespace Apoc3D.RenderSystem.Xna
             }
         }
 
-        public override void RenderSimple(RenderOperation op)
+        public override void RenderSimple(GeomentryData op)
         {
             base.RenderSimple(op);
 
-            Material material = op.Material;
 
-            BindShader((PixelShader)null);
-            BindShader((VertexShader)null);
+            renderStates.AlphaBlendEnable = false;
+            renderStates.CullMode = CullMode.Clockwise;
 
-            Effect effect = material.Effect;
+            renderStates.AlphaTestEnable = false;
 
-            if (effect == null)
-            {
+            renderStates.DepthBufferEnable = false;
+            renderStates.DepthBufferWriteEnable = false;
+
+            if (op.VertexCount == 0)
                 return;
-                //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
-            }
 
-            renderStates.AlphaBlendEnable = material.IsTransparent;
-            renderStates.CullMode = material.CullMode;
-            
-            if (material.AlphaRef > 0)
+            XnaVertexBuffer xnavb = (XnaVertexBuffer)op.VertexBuffer;
+
+            if (xnavb.vertexBuffer != null)
             {
-                renderStates.AlphaTestEnable = true;
-                renderStates.AlphaReference = (int)(material.AlphaRef * byte.MaxValue);
-                renderStates.AlphaFunction = CompareFunction.GreaterEqual;
+                Device.Vertices[0].SetSource(xnavb.vertexBuffer, 0, op.VertexSize);
             }
             else
             {
-                renderStates.AlphaTestEnable = false;
+                Device.Vertices[0].SetSource(xnavb.dynVb, 0, op.VertexSize);
             }
-            renderStates.DepthBufferEnable = material.ZEnabled;
-            renderStates.DepthBufferWriteEnable = material.ZWriteEnabled;
 
-            int passCount = effect.Begin(RenderMode.Final);
-            for (int p = 0; p < passCount; p++)
+            Device.VertexDeclaration = ((XnaVertexDeclaration)op.VertexDeclaration).vtxDecl;
+
+            if (op.UseIndices)
             {
-                effect.BeginPass(p);
-
-                GeomentryData gm = op.Geomentry;
-
-                if (gm.VertexCount == 0)
-                    continue;
-
-                effect.Setup(material, ref op);
-
-                XnaVertexBuffer xnavb = (XnaVertexBuffer)gm.VertexBuffer;
-
-                if (xnavb.vertexBuffer != null)
+                XnaIndexBuffer xnaib = (XnaIndexBuffer)op.IndexBuffer;
+                if (xnaib.indexBuffer != null)
                 {
-                    Device.Vertices[0].SetSource(xnavb.vertexBuffer, 0, gm.VertexSize);
+                    Device.Indices = xnaib.indexBuffer;
                 }
                 else
                 {
-                    Device.Vertices[0].SetSource(xnavb.dynVb, 0, gm.VertexSize);
+                    Device.Indices = xnaib.dynIb;
                 }
 
-                Device.VertexDeclaration = ((XnaVertexDeclaration)gm.VertexDeclaration).vtxDecl;
-
-                if (gm.UseIndices)
-                {
-                    XnaIndexBuffer xnaib = (XnaIndexBuffer)gm.IndexBuffer;
-                    if (xnaib.indexBuffer != null)
-                    {
-                        Device.Indices = xnaib.indexBuffer;
-                    }
-                    else
-                    {
-                        Device.Indices = xnaib.dynIb;
-                    }
-
-                    Device.DrawIndexedPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType),
-                        gm.BaseVertex, 0,
-                        gm.VertexCount, gm.BaseIndexStart,
-                        gm.PrimCount);
-                }
-                else
-                {
-                    Device.DrawPrimitives(XnaUtils.ConvertEnum(gm.PrimitiveType), 0, gm.PrimCount);
-                }
-                effect.EndPass();
+                Device.DrawIndexedPrimitives(XnaUtils.ConvertEnum(op.PrimitiveType),
+                    op.BaseVertex, 0,
+                    op.VertexCount, op.BaseIndexStart,
+                    op.PrimCount);
             }
-            effect.End();
+            else
+            {
+                Device.DrawPrimitives(XnaUtils.ConvertEnum(op.PrimitiveType), 0, op.PrimCount);
+            }
         }
         public override void Render(Material material, RenderOperation[] op)
         {
