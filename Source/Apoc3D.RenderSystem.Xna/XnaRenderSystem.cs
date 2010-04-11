@@ -28,6 +28,8 @@ namespace Apoc3D.RenderSystem.Xna
         XnaObjectFactory objectFactory;
 
 
+        XG.DepthStencilBuffer defaultDSBuffer;
+
         XnaTexture[] cachedTextures = new XnaTexture[MaxTexLayers];
 
         SamplerStateCollection samStateColl;
@@ -42,6 +44,7 @@ namespace Apoc3D.RenderSystem.Xna
         {
             this.manager = manager;
             this.mode = RenderMode.Final;
+
         }
 
         public override void Init()
@@ -1017,6 +1020,7 @@ namespace Apoc3D.RenderSystem.Xna
             }
 
             samStateColl = new SamplerStateCollection(states);
+
         }
 
         public override void Clear(ClearFlags flags, ColorValue color, float depth, int stencil)
@@ -1031,6 +1035,7 @@ namespace Apoc3D.RenderSystem.Xna
             {
                 Device.SetRenderTarget(index, null);
                 cachedRenderTargets[index] = null;
+                Device.DepthStencilBuffer = defaultDSBuffer;
             }
             else
             {
@@ -1040,6 +1045,8 @@ namespace Apoc3D.RenderSystem.Xna
 
                 if (xrt.depthBufXna != null)
                 {
+#warning
+                    this.defaultDSBuffer = Device.DepthStencilBuffer;
                     Device.DepthStencilBuffer = xrt.depthBufXna;
                 }
 
@@ -1177,7 +1184,10 @@ namespace Apoc3D.RenderSystem.Xna
             if (effect == null)
             {
                 return;
-                //effect = EffectManager.Instance.GetModelEffect(StandardEffectFactory.Name);
+            }
+            if (!effect.SupportsMode(mode))
+            {
+                return;
             }
 
             //if (currentBlendFlags != material.Flags)
@@ -1221,7 +1231,7 @@ namespace Apoc3D.RenderSystem.Xna
             renderStates.DepthBufferEnable = material.ZEnabled;
             renderStates.DepthBufferWriteEnable = material.ZWriteEnabled;
 
-            int passCount = effect.Begin(RenderMode.Final);
+            int passCount = effect.Begin(mode);
             for (int p = 0; p < passCount; p++)
             {
                 effect.BeginPass(p);
@@ -1238,18 +1248,7 @@ namespace Apoc3D.RenderSystem.Xna
                     PrimitiveCount += gm.PrimCount;
                     VertexCount += gm.VertexCount;
 
-                    switch (mode)
-                    {
-                        case RenderMode.Final:
-                        case RenderMode.Wireframe:
-                            effect.Setup(material, ref op);
-                            break;
-                        //case RenderMode.Simple:
-                        //    effect.Setup(material, ref op);
-                        //case RenderMode.Depth:
-                        //    effect.Setup(material, ref op);
-                    }
-                    
+                    effect.Setup(material, ref op);
 
                     XnaVertexBuffer xnavb = (XnaVertexBuffer)gm.VertexBuffer;
 
@@ -1300,10 +1299,13 @@ namespace Apoc3D.RenderSystem.Xna
         }
 
         public override void BeginFrame()
-        {
+        {    
             base.BeginFrame();
 
-            ResourceInterlock.BlockAll();
+            this.defaultDSBuffer = Device.DepthStencilBuffer;
+
+
+            //ResourceInterlock.BlockAll();
         }
         public override void EndFrame()
         {
@@ -1329,7 +1331,7 @@ namespace Apoc3D.RenderSystem.Xna
 
             base.EndFrame();
 
-            ResourceInterlock.UnblockAll();
+            //ResourceInterlock.UnblockAll();
         }
 
         public override void SetTexture(int index, Texture texture)
@@ -1349,7 +1351,13 @@ namespace Apoc3D.RenderSystem.Xna
                 }
                 else 
                 {
-
+                    if (xt.cube != null)
+                        Device.Textures[index] = null;
+                    else if (xt.tex2D != null)
+                        Device.Textures[index] = null;
+                    else
+                        Device.Textures[index] = null;
+                    cachedTextures[index] = null;
                 }
             }
         }

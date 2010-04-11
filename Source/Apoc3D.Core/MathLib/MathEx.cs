@@ -701,7 +701,7 @@ namespace Apoc3D.MathLib
 
         public static float[] ComputeGuassFilter1D(float delta, int size)
         {
-            float invd1 = 1.0f / ((float)Math.Sqrt(2 * Math.PI) * delta * delta);
+            float invd1 = 1.0f / ((float)Math.Sqrt(2 * Math.PI * delta));
             float invd2 = 1.0f / (2 * delta * delta);
 
             int halfSize = size / 2;

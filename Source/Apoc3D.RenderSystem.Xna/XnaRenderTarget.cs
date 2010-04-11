@@ -30,13 +30,14 @@ namespace Apoc3D.RenderSystem.Xna
             this.colorBufXna = xnaRt;
             this.depthBufXna = xnaDep;
             this.renderSys = rs;
-
+            
             this.depthBuf = new XnaDepthBuffer(rs, xnaDep);
         }
         public XnaRenderTarget(XnaRenderSystem rs, int width, int height, ImagePixelFormat format)
             : base(rs, width, height, format)
         {
             this.colorBufXna = new XG.RenderTarget2D(rs.Device, width, height, 1, XnaUtils.ConvertEnum(format));
+          
             this.renderSys = rs;
         }
         public XnaRenderTarget(XnaRenderSystem rs, int width, int height, ImagePixelFormat format, DepthFormat depFmt)

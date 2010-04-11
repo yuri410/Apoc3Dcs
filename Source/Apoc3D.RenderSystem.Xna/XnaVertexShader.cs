@@ -118,7 +118,14 @@ namespace Apoc3D.RenderSystem.Xna
         {
             device.SetVertexShaderConstant(constants[index].RegisterIndex, *(X.Vector4*)&value);
         }
-        
+
+        public override void SetValueDirect(int reg, ref Vector2 value)
+        {
+            fixed (Vector2* ptr = &value)
+            {
+                device.SetVertexShaderConstant(reg, *(X.Vector2*)ptr);
+            }
+        }
         public override void SetValue(int index, ref Vector2 value)
         {
             fixed (Vector2* ptr = &value)
@@ -340,6 +347,11 @@ namespace Apoc3D.RenderSystem.Xna
         {
             constHelperF[0] = value;
             device.SetVertexShaderConstant(constants[index].RegisterIndex, constHelperF);
+        }
+        public override void SetValueDirect(int reg, float value)
+        {
+            constHelperF[0] = value;
+            device.SetVertexShaderConstant(reg, constHelperF);
         }
         public override void SetValue(int index, int value)
         {

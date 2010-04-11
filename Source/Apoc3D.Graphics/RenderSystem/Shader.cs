@@ -66,6 +66,7 @@ namespace Apoc3D.Graphics
         public abstract void SetValue(int index, Color4F value);
         public abstract void SetValue(int index, Plane value);
 
+        public abstract void SetValueDirect(int reg, ref Vector2 value);
         public abstract void SetValue(int index, ref Vector2 value);
         public abstract void SetValue(int index, ref Vector3 value);
         public abstract void SetValue(int index, ref Vector4 value);
@@ -82,6 +83,7 @@ namespace Apoc3D.Graphics
         public abstract void SetValue(int index, Color4F[] value);
         public abstract void SetValue(int index, Plane[] value);
 
+        public abstract void SetValueDirect(int reg, float value);
         public abstract void SetValue(int index, bool value);
         public abstract void SetValue(int index, float value);
         public abstract void SetValue(int index, int value);
@@ -129,7 +131,7 @@ namespace Apoc3D.Graphics
 
         public abstract void SetTexture(string paramName, Texture tex);
         public abstract void SetSamplerState(string paramName, ref  ShaderSamplerState state);
-
+        
         public abstract void AutoSetParameters();
 
         #region IDisposable 成员

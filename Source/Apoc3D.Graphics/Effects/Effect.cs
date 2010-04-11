@@ -36,6 +36,10 @@ namespace Apoc3D.Graphics.Effects
         }
 
         #region 属性
+        public virtual bool SupportsMode(RenderMode mode)
+        {
+            return true;
+        }
         public bool SupportsInstancing
         {
             get;

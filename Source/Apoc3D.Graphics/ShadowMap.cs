@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Apoc3D;
+using Apoc3D.Graphics;
 using Apoc3D.Graphics.Effects;
 using Apoc3D.MathLib;
 using Apoc3D.Media;
 using Apoc3D.Vfs;
+using Code2015.EngineEx;
+using Code2015.World;
 
 namespace Apoc3D.Graphics
 {
@@ -13,66 +17,25 @@ namespace Apoc3D.Graphics
     /// </summary>
     public class ShadowMap : UnmanagedResource, IDisposable
     {
-        struct TestVertex
-        {
-            public Vector3 pos;
-            public float dummy;
-            public Vector2 tex1;
+        public const int ShadowMapLength = 512;
 
-            static readonly VertexElement[] elements;
-
-            public static VertexElement[] Elements 
-            {
-                get { return elements; }
-            }
-
-            static TestVertex ()
-            {
-                elements = new VertexElement[2];
-                elements[0] = new VertexElement(0, VertexElementFormat.Vector4, VertexElementUsage.PositionTransformed);
-                elements[1] = new VertexElement(elements[0].Offset, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0);
-            }
-        }
-
-        //Texture shadowDepthMap;
         RenderTarget shadowRt;
 
-        //RenderTarget shadowRtSurface;
+        RenderTarget stdRenderTarget;
+        Viewport stdVp;
 
-        public const int ShadowMapLength = 1024;
-
-        VertexBuffer pip;
+        public Matrix LightProjection;
+        public Matrix ViewTransform;
+        public Matrix ViewProj;
 
         Viewport smVp;
         RenderSystem renderSys;
         ObjectFactory factory;
 
-        VertexDeclaration pipDecl;
-
-        //public DefaultSMGenEffect DefaultSMGen
-        //{
-        //    get;
-        //    private set;
-        //}
-
         public unsafe ShadowMap(RenderSystem dev)
         {
-            renderSys = dev;
-            factory = dev.ObjectFactory;
-            //FileLocation fl = FileSystem.Instance.Locate(FileSystem.CombinePath(Paths.Effects, "StandardShadow.fx"), FileLocateRules.Default);
-            //ContentStreamReader sr = new ContentStreamReader(fl);
-            //string code = sr.ReadToEnd();
-
-            //string err;
-            //effect = Effect.FromString(device, code, null, null, null, ShaderFlags.None, null, out err);
-            //sr.Close();
-
-            //mvpParam = new EffectHandle("mvp");
-
-            //genSMTec = new EffectHandle("StandardShadow");
-            //effect.Technique = genSMTec;
-            //drawSceneTec = new EffectHandle("RenderScene");
-
+            this.renderSys = dev;
+            this.factory = dev.ObjectFactory;
 
             LoadUnmanagedResources();
 
@@ -82,35 +45,41 @@ namespace Apoc3D.Graphics
             smVp.Width = ShadowMapLength;
             smVp.X = 0;
             smVp.Y = 0;
-
-            pipDecl = factory.CreateVertexDeclaration(TestVertex.Elements);
-            pip = factory.CreateVertexBuffer(4, pipDecl, BufferUsage.Static);
-
-            TestVertex* ptr = (TestVertex*)pip.Lock(0, 0, LockMode.None);
-            ptr[0] = new TestVertex { pos = new Vector3(0, 0, 0), tex1 = new Vector2(0, 0), dummy = 0 };
-            ptr[1] = new TestVertex { pos = new Vector3(0, 512, 0), tex1 = new Vector2(0, 1), dummy = 0 };
-            ptr[2] = new TestVertex { pos = new Vector3(512, 0, 0), tex1 = new Vector2(1, 0), dummy = 0 };
-            ptr[3] = new TestVertex { pos = new Vector3(512, 512, 0), tex1 = new Vector2(1, 1), dummy = 0 };
-
-            pip.Unlock();
-
-
-            //DefaultSMGen = new DefaultSMGenEffect(renderSys);
         }
-
-        RenderTarget stdRenderTarget;
-        Viewport stdVp;
-
-        public Matrix LightProjection;
-        public Matrix ViewTransform;
-        public Matrix ViewProj;
 
         public void End()
         {
-            renderSys.SetRenderTarget(0, stdRenderTarget);
-            stdRenderTarget = null;
-            
             renderSys.Viewport = stdVp;
+        }
+
+        Matrix GetLightView(float longitude, float latitude, float h)
+        {
+            const float rotation = -MathEx.PIf / 6f;
+            const float yaw = -MathEx.PiOver4;
+
+
+            float p = h * 0.022f;
+
+            Vector3 target = PlanetEarth.GetPosition(longitude - p * MathEx.PIf / 90f, latitude);
+
+            Vector3 axis = target;
+            axis.Normalize();
+
+            //float sign = latitude > 0 ? 1 : -1;
+            Vector3 up = Vector3.UnitY;
+
+            Vector3 rotAxis = axis;
+
+            Vector3 yawAxis = Vector3.Cross(axis, up);
+            yawAxis.Normalize();
+
+            Quaternion rotTrans = Quaternion.RotationAxis(rotAxis, rotation);
+            axis = Vector3.TransformSimple(axis, Quaternion.RotationAxis(yawAxis, yaw) * rotTrans);
+
+            Vector3 position = target + axis * h * 35;
+            return Matrix.LookAtRH(position, target,
+                Vector3.TransformSimple(up, rotTrans));
+
         }
         public void Begin(Vector3 lightDir, ICamera cam)
         {
@@ -124,28 +93,32 @@ namespace Apoc3D.Graphics
 
             renderSys.Clear(ClearFlags.Target | ClearFlags.DepthBuffer, ColorValue.White, 1, 0);
 
+            RtsCamera rtsCamera = (RtsCamera)cam;
+            float height = rtsCamera.Height;
 
-            //effect.Begin(FX.DoNotSaveSamplerState | FX.DoNotSaveShaderState | FX.DoNotSaveState);
-            //effect.BeginPass(0);
-            float zFar = cam.FarPlane;
-
-            Matrix.OrthoRH((float)ShadowMapLength / 10f, (float)ShadowMapLength / 10f, cam.NearPlane, zFar, out LightProjection);
-
-            Vector3 camPos = cam.Position;
-            Vector3 up = cam.Front;
+            Matrix.OrthoRH((float)ShadowMapLength * height * 0.1f, 
+                (float)ShadowMapLength * height * 0.1f, 
+                cam.NearPlane, cam.FarPlane, out LightProjection);
 
 
-            Vector3 lightTarget = camPos;
-            Vector3 offset = up;
-            Vector3.Multiply(ref offset, 0.5f * zFar, out offset);
+            ViewTransform = GetLightView(rtsCamera.Longitude, rtsCamera.Latitude, height);
+            //LightProjection = cam.ProjectionMatrix;
 
-            Vector3.Add(ref lightTarget, ref offset, out lightTarget);
+            //Vector3 camPos = cam.Position;
+            //Vector3 up = cam.Front;
 
 
-            Vector3 lightPos = lightTarget;
-            offset = lightDir;
-            Vector3.Multiply(ref offset, 0.5f * zFar, out offset);
-            Vector3.Subtract(ref lightPos, ref offset, out lightPos);
+            //Vector3 lightTarget = camPos;
+            //Vector3 offset = up;
+            //Vector3.Multiply(ref offset, 0.5f * zFar, out offset);
+
+            //Vector3.Add(ref lightTarget, ref offset, out lightTarget);
+
+
+            //Vector3 lightPos = lightTarget;
+            //offset = lightDir;
+            //Vector3.Multiply(ref offset, 0.5f * zFar, out offset);
+            //Vector3.Subtract(ref lightPos, ref offset, out lightPos);
 
 
             //Vector3 v1;
@@ -154,27 +127,27 @@ namespace Apoc3D.Graphics
 
             //Vector3.Cross(ref lightDir, ref v1, out up);
             //Vector3.Cross(ref lightDir, ref up, out up);
-            up.Y = 0;
-            if (up.LengthSquared() == 0)
-            {
-                up = new Vector3(0.707f, 0, 0.707f);
-            }
+            //up.Y = 0;
+            //if (up.LengthSquared() == 0)
+            //{
+            //    up = new Vector3(0.707f, 0, 0.707f);
+            //}
 
-            up = Vector3.UnitY;
+            //up = Vector3.UnitY;
 
 
-            lightTarget = camPos + (cam.Front - lightDir) * 40;
-            lightTarget.Y = camPos.Y;
+            //lightTarget = camPos + (cam.Front - lightDir) * 40;
+            //lightTarget.Y = camPos.Y;
 
-            lightPos = lightTarget - lightDir * 50;
+            //lightPos = lightTarget - lightDir * 50;
 
-            Matrix.LookAtRH(ref lightPos, ref lightTarget, ref up, out ViewTransform);
+            //Matrix.LookAtRH(ref lightPos, ref lightTarget, ref up, out ViewTransform);
 
 
 
 
             ViewProj = ViewTransform * LightProjection;
-
+            EffectParams.DepthViewProj = ViewProj;
             //Matrix proj = cam.Frustum.proj;
             //Matrix view = cam.Frustum.view;
 
@@ -192,21 +165,12 @@ namespace Apoc3D.Graphics
 
         protected override void loadUnmanagedResources()
         {
-            //shadowDepthMap = new Texture(renderSys, ShadowMapLength, ShadowMapLength, 1, Usage.DepthStencil, Format.D24X8, Pool.Default);
             shadowRt = factory.CreateRenderTarget(ShadowMapLength, ShadowMapLength, ImagePixelFormat.R32F, DepthFormat.Depth24X8);
-
-            //shadowRtSurface = shadowRt.GetSurfaceLevel(0);
-            //shadowDepSurface = shadowDepthMap.GetSurfaceLevel(0);
-
         }
 
         protected override void unloadUnmanagedResources()
         {
-            //shadowDepthMap.Dispose();
             shadowRt.Dispose();
-
-            //shadowRtSurface.Dispose();
-            //shadowDepSurface.Dispose();
         }
 
         protected override void Dispose(bool disposing)
@@ -215,7 +179,7 @@ namespace Apoc3D.Graphics
 
             if (disposing)
             {
-                pip.Dispose();
+                //pip.Dispose();
                 //DefaultSMGen.Dispose();
             }
         }

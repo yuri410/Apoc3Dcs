@@ -12,6 +12,7 @@ namespace Apoc3D.Graphics
     public abstract class Sprite : IDisposable
     {
         public abstract void Begin();
+        public abstract void Begin(bool alpha);
         public abstract void End();
 
         public RenderSystem RenderSystem

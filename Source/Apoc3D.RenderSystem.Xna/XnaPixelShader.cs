@@ -90,6 +90,13 @@ namespace Apoc3D.RenderSystem.Xna
 
         #region Index Set
         #region Struct Set
+        public override void SetValueDirect(int reg, ref Vector2 value)
+        {
+            fixed (Vector2* ptr = &value)
+            {
+                device.SetPixelShaderConstant(reg, *(X.Vector2*)ptr);
+            }
+        }
         public override void SetValue(int index, Vector2 value)
         {
             device.SetPixelShaderConstant(constants[index].RegisterIndex, *(X.Vector2*)&value);
@@ -333,6 +340,11 @@ namespace Apoc3D.RenderSystem.Xna
         {
             constHelperB[0] = value;
             device.SetPixelShaderConstant(constants[index].RegisterIndex, constHelperB);
+        }
+        public override void SetValueDirect(int reg, float value)
+        {
+            constHelperF[0] = value;
+            device.SetPixelShaderConstant(reg, constHelperF);
         }
         public override void SetValue(int index, float value)
         {

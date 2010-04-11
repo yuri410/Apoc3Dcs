@@ -21,6 +21,12 @@ namespace Apoc3D.RenderSystem.Xna
             sprite = new XFG.SpriteBatch(rs.Device);
             xnaRs = rs;
         }
+        public override void Begin(bool alphaBlend)
+        {
+            sprite.Begin(alphaBlend ? XFG.SpriteBlendMode.AlphaBlend : XFG.SpriteBlendMode.None, XFG.SpriteSortMode.Immediate, XFG.SaveStateMode.None);
+            begun = true;
+
+        }
         public override void Begin()
         {
             sprite.Begin(XFG.SpriteBlendMode.AlphaBlend, XFG.SpriteSortMode.Immediate, XFG.SaveStateMode.None);

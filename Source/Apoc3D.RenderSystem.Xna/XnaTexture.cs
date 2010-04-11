@@ -114,7 +114,7 @@ namespace Apoc3D.RenderSystem.Xna
 
         public override void Save(Stream stm)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
             //TextureData data = new TextureData();
             //data.ContentSize = ContentSize;
             ////data.Depth = Depth;
