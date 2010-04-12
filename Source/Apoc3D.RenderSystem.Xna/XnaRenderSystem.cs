@@ -24,11 +24,11 @@ namespace Apoc3D.RenderSystem.Xna
 
         XnaRenderTarget[] cachedRenderTargets;
 
+        XnaRenderTarget defaultRT;
+
         XnaRenderStateManager renderStates;
         XnaObjectFactory objectFactory;
 
-
-        XG.DepthStencilBuffer defaultDSBuffer;
 
         XnaTexture[] cachedTextures = new XnaTexture[MaxTexLayers];
 
@@ -1028,34 +1028,38 @@ namespace Apoc3D.RenderSystem.Xna
             XG.Color clr = new XG.Color(color.R, color.G, color.B, color.A);
             Device.Clear(XnaUtils.ConvertEnum(flags), clr, depth, stencil);
         }
-        
+
         public override void SetRenderTarget(int index, RenderTarget rt)
         {
-            if (rt == null) 
+            if (rt == null)
             {
-                Device.SetRenderTarget(index, null);
-                cachedRenderTargets[index] = null;
-                Device.DepthStencilBuffer = defaultDSBuffer;
+                throw new ArgumentNullException("rt");
+                //Device.SetRenderTarget(index, null);
+                //cachedRenderTargets[index] = null;
+                //Device.DepthStencilBuffer = defaultDSBuffer;
             }
-            else
+            //else
+            //{
+            XnaRenderTarget xrt = (XnaRenderTarget)rt;
+
+            Device.SetRenderTarget(index, xrt.colorBufXna);
+
+            if (xrt.depthBufXna != null)
             {
-                XnaRenderTarget xrt = (XnaRenderTarget)rt;
-
-                Device.SetRenderTarget(index, xrt.colorBufXna);
-
-                if (xrt.depthBufXna != null)
-                {
-#warning
-                    this.defaultDSBuffer = Device.DepthStencilBuffer;
-                    Device.DepthStencilBuffer = xrt.depthBufXna;
-                }
-
-                cachedRenderTargets[index] = xrt;
+                Device.DepthStencilBuffer = xrt.depthBufXna;
             }
+
+            cachedRenderTargets[index] = xrt;
+            //}
         }
 
         public override RenderTarget GetRenderTarget(int index)
         {
+            if (defaultRT == null)
+            {
+                defaultRT = new XnaRenderTarget(this, Device.DepthStencilBuffer);
+                cachedRenderTargets[0] = defaultRT;
+            }
             return cachedRenderTargets[index];
         }
 
@@ -1302,7 +1306,7 @@ namespace Apoc3D.RenderSystem.Xna
         {    
             base.BeginFrame();
 
-            this.defaultDSBuffer = Device.DepthStencilBuffer;
+            //this.defaultDSBuffer = Device.DepthStencilBuffer;
 
 
             //ResourceInterlock.BlockAll();

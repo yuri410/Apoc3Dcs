@@ -23,6 +23,15 @@ namespace Apoc3D.RenderSystem.Xna
             this.colorBufXna = XnaRt;
             this.renderSys = rs;
         }
+        internal XnaRenderTarget(XnaRenderSystem rs, XG.DepthStencilBuffer xnaDep)
+            : base(rs, xnaDep.Width, xnaDep.Height,
+                   XnaUtils.ConvertEnum(rs.Device.PresentationParameters.BackBufferFormat), XnaUtils.ConvertEnum(xnaDep.Format))
+        {
+            this.depthBufXna = xnaDep;
+            this.renderSys = rs;
+
+            this.depthBuf = new XnaDepthBuffer(rs, xnaDep);
+        }
         internal XnaRenderTarget(XnaRenderSystem rs, XG.RenderTarget2D xnaRt, XG.DepthStencilBuffer xnaDep)
             : base(rs, xnaRt.Width, xnaRt.Height, 
                    XnaUtils.ConvertEnum(xnaRt.Format), XnaUtils.ConvertEnum(xnaDep.Format))
