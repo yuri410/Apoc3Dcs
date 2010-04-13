@@ -39,5 +39,7 @@ namespace Apoc3D.Graphics.Effects
         }
 
         public static Matrix DepthViewProj;
+
+        public static Matrix InvView;
     }
 }
