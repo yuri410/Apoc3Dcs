@@ -97,7 +97,7 @@ namespace Apoc3D.Scene
         public SceneManagerBase SceneManager
         {
             get;
-            private set;
+            protected set;
         }
 
         /// <summary>
