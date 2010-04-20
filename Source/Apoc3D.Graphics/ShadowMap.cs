@@ -262,9 +262,12 @@ namespace Apoc3D.Graphics
             RtsCamera rtsCamera = (RtsCamera)cam;
             float height = rtsCamera.Height;
 
-            Matrix.OrthoRH((float)ShadowMapLength * height * 0.1f,
-                (float)ShadowMapLength * height * 0.1f,
-                cam.NearPlane, cam.FarPlane, out LightProjection);
+            //Matrix.OrthoRH((float)ShadowMapLength * height * 0.1f,
+            //    (float)ShadowMapLength * height * 0.1f,
+            //    cam.NearPlane, cam.FarPlane, out LightProjection);
+            Matrix.OrthoRH((float)ShadowMapLength * 7.5f,
+               (float)ShadowMapLength * 7.5f,
+               cam.NearPlane, cam.FarPlane, out LightProjection);
 
 
             ViewTransform = GetLightView(rtsCamera.Longitude, rtsCamera.Latitude, height);
