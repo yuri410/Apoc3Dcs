@@ -21,6 +21,7 @@ namespace Apoc3D.MathLib
         public const float GravityAcceleration = 9.80665f;
 
         #endregion
+        
 
         public static float Sqr(float d)
         {

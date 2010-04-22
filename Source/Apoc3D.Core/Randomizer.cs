@@ -18,8 +18,52 @@ namespace Apoc3D
         }
 
         public static float GetRandomSingle()
-        {
+        {            
             return (float)random.NextDouble();
+        }
+
+        public unsafe static int Random(float* p, int count)
+        {
+            float total = 0;
+            for (int i = 0; i < count; i++)
+            {
+                total += p[i];
+            }
+
+            float rnd = GetRandomSingle() * total;
+
+            float cmp = 0;
+            for (int i = 0; i < count; i++)
+            {
+                cmp += p[i];
+                if (rnd < cmp)
+                {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
+        public static int Random(float[] p)
+        {
+            float total = 0;
+            for (int i = 0; i < p.Length; i++)
+            {
+                total += p[i];
+            }
+
+            float rnd = GetRandomSingle() * total;
+
+            float cmp = 0;
+            for (int i = 0; i < p.Length; i++)
+            {
+                cmp += p[i];
+                if (rnd < cmp)
+                {
+                    return i;
+                }                
+            }
+            return 0;
         }
     }
 }
