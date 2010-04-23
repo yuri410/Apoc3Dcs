@@ -401,7 +401,7 @@ namespace Apoc3D.Vfs
         {
             FileLocation res = TryLocate(filePath, rule);
             if (res == null)
-                throw new FileNotFoundException(filePath);
+                 throw new FileNotFoundException(filePath);
             return res;
         }
         /// <summary>
