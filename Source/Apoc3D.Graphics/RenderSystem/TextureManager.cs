@@ -103,10 +103,8 @@ namespace Apoc3D.Graphics
                 retrived = tex;
                 base.NotifyResourceNew(tex);
             }
-            else
-            {
-                retrived.Use();
-            }
+
+            retrived.Use();
 
             return new ResourceHandle<Texture>((Texture)retrived);
         }

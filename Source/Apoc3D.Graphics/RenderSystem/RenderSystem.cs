@@ -202,6 +202,12 @@ namespace Apoc3D.Graphics
                 vertexCount += op[i].Geomentry.VertexCount;
             }
         }
+        public virtual void RenderSimpleBlend(GeomentryData op)
+        {
+            batchCount++;
+            primitiveCount += op.PrimCount;
+            vertexCount += op.VertexCount;
+        }
         public virtual void RenderSimple(GeomentryData op) 
         {
             batchCount++;

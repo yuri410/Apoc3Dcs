@@ -37,13 +37,14 @@ namespace Apoc3D.RenderSystem.Xna
         }
         public override void DrawQuad(GeomentryData quad, Code2015.Effects.PostEffect effect)
         {
-            End();
+            //End();
 
             effect.Begin();
-            xnaRs.RenderSimple(quad);
+
+            xnaRs.RenderSimpleBlend(quad);
             effect.End();
 
-            Begin();
+            //Begin();
         }
         public override void Draw(Texture texture, Rectangle rect, ColorValue color)
         {

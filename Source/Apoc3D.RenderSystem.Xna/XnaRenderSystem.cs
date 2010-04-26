@@ -1115,7 +1115,61 @@ namespace Apoc3D.RenderSystem.Xna
                 Device.Viewport = result;
             }
         }
+        public override void RenderSimpleBlend(GeomentryData op)
+        {
+            base.RenderSimpleBlend(op);
 
+
+            renderStates.AlphaBlendEnable = true;
+            renderStates.SourceBlend = Blend.SourceAlpha;
+            renderStates.DestinationBlend = Blend.InverseSourceAlpha;
+            renderStates.BlendOperation = BlendFunction.Add;
+
+            renderStates.CullMode = CullMode.Clockwise;
+
+            renderStates.AlphaTestEnable = false;
+
+            renderStates.DepthBufferEnable = false;
+            renderStates.DepthBufferWriteEnable = false;
+
+            if (op.VertexCount == 0)
+                return;
+
+            XnaVertexBuffer xnavb = (XnaVertexBuffer)op.VertexBuffer;
+
+            if (xnavb.vertexBuffer != null)
+            {
+                Device.Vertices[0].SetSource(xnavb.vertexBuffer, 0, op.VertexSize);
+            }
+            else
+            {
+                Device.Vertices[0].SetSource(xnavb.dynVb, 0, op.VertexSize);
+            }
+
+            Device.VertexDeclaration = ((XnaVertexDeclaration)op.VertexDeclaration).vtxDecl;
+
+            if (op.UseIndices)
+            {
+                XnaIndexBuffer xnaib = (XnaIndexBuffer)op.IndexBuffer;
+                if (xnaib.indexBuffer != null)
+                {
+                    Device.Indices = xnaib.indexBuffer;
+                }
+                else
+                {
+                    Device.Indices = xnaib.dynIb;
+                }
+
+                Device.DrawIndexedPrimitives(XnaUtils.ConvertEnum(op.PrimitiveType),
+                    op.BaseVertex, 0,
+                    op.VertexCount, op.BaseIndexStart,
+                    op.PrimCount);
+            }
+            else
+            {
+                Device.DrawPrimitives(XnaUtils.ConvertEnum(op.PrimitiveType), 0, op.PrimCount);
+            }
+        }
         public override void RenderSimple(GeomentryData op)
         {
             base.RenderSimple(op);

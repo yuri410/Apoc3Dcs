@@ -1239,6 +1239,14 @@ namespace Apoc3D.MathLib
             }
             return a > max ? max : a;
         }
+        public static int Clamp(int min, int max, int a)
+        {
+            if (a < min)
+            {
+                return min;
+            }
+            return a > max ? max : a;
+        }
         #endregion
 
         public static float Saturate(float p)
