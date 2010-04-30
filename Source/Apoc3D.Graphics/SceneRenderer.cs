@@ -55,11 +55,24 @@ namespace Apoc3D.Graphics
         SceneRendererParameter sceneParams;
         PassData batchData = new PassData();
 
+<<<<<<< .mine
+        public ColorValue ClearColor
+        {
+            get;
+            set;
+        }
         public bool ClearScreen
         {
             get;
             set;
         }
+=======
+        public bool ClearScreen
+        {
+            get;
+            set;
+        }
+>>>>>>> .r777
         /// <summary>
         ///  获取或设置后期效果渲染器
         /// </summary>
@@ -88,9 +101,16 @@ namespace Apoc3D.Graphics
             protected set { batchData.RenderedObjectCount = value; }
         }
 
+
+
         public SceneRenderer(RenderSystem rs, SceneRendererParameter sm)
         {
+<<<<<<< .mine
+            this.ClearColor = ColorValue.Transparent;
             this.ClearScreen = true;
+=======
+            this.ClearScreen = true;
+>>>>>>> .r777
             this.sceneParams = sm;
             this.renderSystem = rs;
             this.factory = rs.ObjectFactory;
@@ -271,6 +291,13 @@ namespace Apoc3D.Graphics
 
             renderSystem.SetRenderTarget(0, target);
 
+<<<<<<< .mine
+            if (ClearScreen)
+            {
+                renderSystem.Clear(ClearFlags.DepthBuffer | ClearFlags.Target, ClearColor, 1, 0);
+            }
+
+=======
             if (ClearScreen)
             {
                 renderSystem.Clear(ClearFlags.DepthBuffer | ClearFlags.Target, ColorValue.Black, 1, 0);
@@ -279,6 +306,7 @@ namespace Apoc3D.Graphics
             //{
             //    renderSystem.Clear(ClearFlags.DepthBuffer, ColorValue.Black, 1, 0);
             //}
+>>>>>>> .r777
             states.AlphaBlendEnable = false;
             //states.FillMode = FillMode.WireFrame;
 

@@ -9,7 +9,7 @@ namespace Apoc3D
     /// <summary>
     ///  ∂®“Â…„œÒª˙
     /// </summary>
-    public interface ICamera 
+    public interface ICamera
     {
         Frustum Frustum { get; }
 
@@ -54,6 +54,9 @@ namespace Apoc3D
 
         RenderTarget RenderTarget { get; }
         RenderMode Mode { get; }
+
+        Matrix GetSMTrans();
+        float GetSMScale();
     }
 
 
@@ -292,6 +295,15 @@ namespace Apoc3D
         public virtual void ResetView() { }
 
         #endregion
+
+        public virtual float GetSMScale() 
+        {
+            return 9.5f;
+        }
+        public virtual Matrix GetSMTrans()
+        {
+            return Matrix.Identity;
+        }
     }
 
     /// <summary>

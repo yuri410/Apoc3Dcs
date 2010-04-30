@@ -245,7 +245,7 @@ namespace Apoc3D.Graphics
                 Vector3.TransformSimple(up, rotTrans));
 
         }
-
+      
 
         public void Begin(Vector3 lightDir, ICamera cam)
         {
@@ -259,18 +259,20 @@ namespace Apoc3D.Graphics
 
             renderSys.Clear(ClearFlags.Target | ClearFlags.DepthBuffer, ColorValue.White, 1, 0);
 
-            RtsCamera rtsCamera = (RtsCamera)cam;
-            float height = rtsCamera.Height;
+            float scale = cam.GetSMScale();
 
-            //Matrix.OrthoRH((float)ShadowMapLength * height * 0.1f,
-            //    (float)ShadowMapLength * height * 0.1f,
-            //    cam.NearPlane, cam.FarPlane, out LightProjection);
-            Matrix.OrthoRH((float)ShadowMapLength * 7.5f,
-               (float)ShadowMapLength * 7.5f,
+            Matrix.OrthoRH((float)ShadowMapLength * scale,
+               (float)ShadowMapLength * scale,
                cam.NearPlane, cam.FarPlane, out LightProjection);
 
+            //RtsCamera rtsCamera = (RtsCamera)cam;
+            //float height = 2000;// cam.Position.Length() - PlanetEarth.PlanetRadius; // rtsCamera.Height;
+            //float lng, lat;
+            //PlanetEarth.GetCoord(cam.Position, out lng, out lat);
 
-            ViewTransform = GetLightView(rtsCamera.Longitude, rtsCamera.Latitude, height);
+            //Matrix iv = Matrix.Invert (cam.ViewMatrix );
+            ViewTransform = cam.GetSMTrans();
+            // GetLightView(cam.Position, iv.Forward, iv.Up, iv.Right, cam.Position.Length() - PlanetEarth.PlanetRadius); // GetLightView(lng, lat, height);
 
             ViewProj = ViewTransform * LightProjection;
             EffectParams.DepthViewProj = ViewProj;
