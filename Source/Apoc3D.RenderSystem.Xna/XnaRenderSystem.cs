@@ -1119,7 +1119,6 @@ namespace Apoc3D.RenderSystem.Xna
         {
             base.RenderSimpleBlend(op);
 
-
             renderStates.AlphaBlendEnable = true;
             renderStates.SourceBlend = Blend.SourceAlpha;
             renderStates.DestinationBlend = Blend.InverseSourceAlpha;

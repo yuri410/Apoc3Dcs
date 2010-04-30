@@ -55,6 +55,11 @@ namespace Apoc3D.Graphics
         SceneRendererParameter sceneParams;
         PassData batchData = new PassData();
 
+        public bool ClearScreen
+        {
+            get;
+            set;
+        }
         /// <summary>
         ///  获取或设置后期效果渲染器
         /// </summary>
@@ -85,6 +90,7 @@ namespace Apoc3D.Graphics
 
         public SceneRenderer(RenderSystem rs, SceneRendererParameter sm)
         {
+            this.ClearScreen = true;
             this.sceneParams = sm;
             this.renderSystem = rs;
             this.factory = rs.ObjectFactory;
@@ -265,8 +271,14 @@ namespace Apoc3D.Graphics
 
             renderSystem.SetRenderTarget(0, target);
 
-            renderSystem.Clear(ClearFlags.DepthBuffer | ClearFlags.Target, ColorValue.Black, 1, 0);
-
+            if (ClearScreen)
+            {
+                renderSystem.Clear(ClearFlags.DepthBuffer | ClearFlags.Target, ColorValue.Black, 1, 0);
+            }
+            //else
+            //{
+            //    renderSystem.Clear(ClearFlags.DepthBuffer, ColorValue.Black, 1, 0);
+            //}
             states.AlphaBlendEnable = false;
             //states.FillMode = FillMode.WireFrame;
 

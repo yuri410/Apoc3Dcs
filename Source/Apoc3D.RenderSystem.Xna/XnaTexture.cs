@@ -336,17 +336,19 @@ namespace Apoc3D.RenderSystem.Xna
             {
                 case TextureType.Texture1D:
                 case TextureType.Texture2D:
-                    //ResourceInterlock.EnterAtomicOp();
                     tex2D = new XG.Texture2D(renderSys.Device, Width, Height, SurfaceCount, XnaUtils.ConvertEnum(Usage), XnaUtils.ConvertEnum(Format));
-                    //ResourceInterlock.ExitAtomicOp();
 
                     for (int i = 0; i < SurfaceCount; i++)
                     {
-                        //ResourceInterlock.EnterAtomicOp();
-                        tex2D.SetData(i, null, data.Levels[i].Content, 0, data.Levels[i].LevelSize, XG.SetDataOptions.None);
-                        
-                        //ResourceInterlock.ExitAtomicOp();
+                        tex2D.SetData(i, null, data.Levels[i].Content, 0, data.Levels[i].LevelSize, XG.SetDataOptions.None);                       
                     }
+
+
+                    //FileLocation fl = ResourceLocation as FileLocation;
+                    //if (fl != null)
+                    //{
+                    //    tex2D.Save(Path.Combine(@"E:\Desktop\recover2", Path.GetFileNameWithoutExtension(fl.Path) + ".png"), Microsoft.Xna.Framework.Graphics.ImageFileFormat.Png);
+                    //}
                     break;
                 case TextureType.CubeTexture:
 
