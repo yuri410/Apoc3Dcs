@@ -89,6 +89,7 @@ namespace Apoc3D.Vfs
         }
     }
 
+
     /// <summary>
     ///  文件系统。用来定位，查找文件。
     /// </summary>
