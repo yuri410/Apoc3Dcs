@@ -38,6 +38,9 @@ namespace Apoc3D.MathLib
         {
             get 
             {
+                if (valueQueue.Count == 0)
+                    return 0;
+
                 T result = default(T);
                 for (int i = 0; i < valueQueue.Count; i++)
                 {
