@@ -28,7 +28,7 @@ namespace Apoc3D.Graphics.Geometry
             Mesh gm = new Mesh(rs, CreateSphere(rs, radius, slices, stacks, materials));
             ModelData data = new ModelData(rs, 1);
             data.Entities = new Mesh[1] { gm };
-            base.CurrentAnimation = new NoAnimation();
+            base.CurrentAnimation.Add(new NoAnimaionPlayer());
 
             base.data = new ResourceHandle<ModelData>(data, true);
         }
@@ -154,7 +154,10 @@ namespace Apoc3D.Graphics.Geometry
                 mesh.SetData(dst, buffer.Length);
             }
             mesh.Materials = materials;
-            mesh.MaterialAnimation = new MaterialAnimationInstance[] { MaterialAnimationInstance.DefaultAnimation };
+            mesh.ParentBoneID = -1;
+            mesh.BoundingSphere = new BoundingSphere(Vector3.Zero, radius);
+
+            //mesh.MaterialAnimation = new MaterialAnimationInstance[] { MaterialAnimationInstance.DefaultAnimation };
             return mesh;
         }
     }

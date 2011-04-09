@@ -36,27 +36,34 @@ namespace Apoc3D.Graphics.Animation
             this.Index = index;
         }
 
-        public Bone(int index, Matrix[] transforms, Bone[] children, Bone parent)
+        public Bone(int index, Matrix transform, int[] children, int parent, string name)
         {
+            this.Name = name;
             this.Index = index;
-            this.Transforms = transforms;
-            this.Children = new BoneCollection(children);
+            this.Transforms = transform;
+            this.Children = children;
             this.Parent = parent;
         }
 
-        public Matrix[] Transforms
+        public Matrix Transforms
         {
             get;
             set;
         }
 
-        public Bone Parent
+        public string Name
         {
             get;
             set;
         }
 
-        public BoneCollection Children
+        public int Parent
+        {
+            get;
+            set;
+        }
+
+        public int[] Children
         {
             get;
             private set;

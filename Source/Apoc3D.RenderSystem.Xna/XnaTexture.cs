@@ -370,7 +370,7 @@ namespace Apoc3D.RenderSystem.Xna
                     //FileLocation fl = ResourceLocation as FileLocation;
                     //if (fl != null)
                     //{
-                    //    tex2D.Save(Path.Combine(@"E:\Desktop\recover2", Path.GetFileNameWithoutExtension(fl.Path) + ".png"), Microsoft.Xna.Framework.Graphics.ImageFileFormat.Png);
+                    //    tex2D.Save(Path.Combine(@"E:\Desktop\dump", Path.GetFileNameWithoutExtension(fl.Path) + ".dds"), Microsoft.Xna.Framework.Graphics.ImageFileFormat.Dds);
                     //}
                     break;
                 case TextureType.CubeTexture:
@@ -401,6 +401,11 @@ namespace Apoc3D.RenderSystem.Xna
                         startPos += levelSize;
                     }
 
+                    //FileLocation fl2 = ResourceLocation as FileLocation;
+                    //if (fl2 != null)
+                    //{
+                    //    cube.Save(Path.Combine(@"E:\Desktop\dump", Path.GetFileNameWithoutExtension(fl2.Path) + ".dds"), Microsoft.Xna.Framework.Graphics.ImageFileFormat.Dds);
+                    //}
                     //cube.Save(@"E:\Desktop\sss.dds", Microsoft.Xna.Framework.Graphics.ImageFileFormat.Dds);
                     break;
                 case TextureType.Texture3D:

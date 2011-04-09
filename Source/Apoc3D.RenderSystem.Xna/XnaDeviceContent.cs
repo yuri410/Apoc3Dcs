@@ -60,6 +60,7 @@ namespace Apoc3D.RenderSystem.Xna
                 manager.MinimumPixelShaderProfile = XG.ShaderProfile.PS_2_0;
                 manager.MinimumVertexShaderProfile = XG.ShaderProfile.VS_2_0;
                 manager.PreferMultiSampling = false;
+               
                 manager.PreferredDepthStencilFormat = XnaUtils.ConvertEnum(pm.DepthFormat);
                 manager.PreferredBackBufferFormat = XnaUtils.ConvertEnum(pm.BackBufferFormat);
                 manager.PreferredBackBufferHeight = pm.BackBufferHeight;

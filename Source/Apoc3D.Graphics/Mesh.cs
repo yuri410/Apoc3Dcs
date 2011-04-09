@@ -106,6 +106,7 @@ namespace Apoc3D.Graphics
         protected static readonly string MaterialsTag = "Materials";
 
         protected static readonly string MaterialAnimationTag = "MaterialAnimation";
+        protected static readonly string MaterialAnimationTag2 = "MaterialAnimation2.0";
         protected static readonly string FaceCountTag = "FaceCount";
         protected static readonly string FacesTag = "Faces";
         //protected static readonly string VertexFormatTag = "VertexFormat";
@@ -116,6 +117,9 @@ namespace Apoc3D.Graphics
         protected static readonly string DataTag = "VertexData";
 
         protected static readonly string NameTag = "Name";
+
+        static readonly string ParentBoneTag = "ParentBone";
+        static readonly string BoundingSphereTag = "BoundingSphere";
 
         #endregion
 
@@ -139,6 +143,18 @@ namespace Apoc3D.Graphics
 
         #region 属性
 
+
+        public int ParentBoneID
+        {
+            get;
+            set;
+        }
+        public BoundingSphere BoundingSphere
+        {
+            get;
+            set;
+        }
+
         [Browsable(false)]
         public RenderSystem Device
         {
@@ -152,14 +168,14 @@ namespace Apoc3D.Graphics
             set;
         }
 
-        /// <summary>
-        ///  先entity后frameIndex
-        /// </summary>
-        public MaterialAnimationInstance[] MaterialAnimation
-        {
-            get;
-            set;
-        }
+        ///// <summary>
+        /////  先entity后frameIndex
+        ///// </summary>
+        //public MaterialAnimationInstance[] MaterialAnimation
+        //{
+        //    get;
+        //    set;
+        //}
 
         public string Name
         {
@@ -341,17 +357,49 @@ namespace Apoc3D.Graphics
             }
             br.Close();
 
-            MaterialAnimation = new MaterialAnimationInstance[materialCount];
-            br = data.GetData(MaterialAnimationTag);
-            for (int i = 0; i < materialCount; i++)
-            {
-                int frameCount = br.ReadInt32();
-                float frameLength = br.ReadSingle();
+            //MaterialAnimation = new MaterialAnimationInstance[materialCount];
 
-                MaterialAnimation animData = new MaterialAnimation(frameCount, frameLength);
-                MaterialAnimation[i] = new MaterialAnimationInstance(animData);
+            //if (data.Contains(MaterialAnimationTag))
+            //{
+            //    br = data.GetData(MaterialAnimationTag);
+            //    for (int i = 0; i < materialCount; i++)
+            //    {
+            //        int frameCount = br.ReadInt32();
+            //        float frameLength = br.ReadSingle();
+
+            //        MaterialAnimation animData = new MaterialAnimation(frameCount, frameLength);
+            //        MaterialAnimation[i] = new MaterialAnimationInstance(animData);
+            //    }
+            //    br.Close();
+            //}
+            //else 
+            //{
+            //    for (int i = 0; i < materialCount; i++)
+            //    {
+            //        int frameCount = 1;
+            //        float frameLength = 1;
+
+            //        MaterialAnimation animData = new MaterialAnimation(frameCount, frameLength);
+            //        MaterialAnimation[i] = new MaterialAnimationInstance(animData);
+            //    }
+            //}
+
+
+            ParentBoneID = data.GetDataInt32(ParentBoneTag, -1);
+
+            if (data.Contains(BoundingSphereTag)) 
+            {
+                br = data.GetData(BoundingSphereTag);
+                BoundingSphere bs;
+                bs.Center.X = br.ReadSingle();
+                bs.Center.Y = br.ReadSingle();
+                bs.Center.Z = br.ReadSingle();
+                bs.Radius = br.ReadSingle();
+                BoundingSphere = bs;
+
+                br.Close();
             }
-            br.Close();
+
 
             br = data.GetData(NameTag);
             Name = br.ReadStringUnicode();
@@ -458,13 +506,13 @@ namespace Apoc3D.Graphics
             }
             bw.Close();
 
-            bw = data.AddEntry(MaterialAnimationTag);
-            for (int i = 0; i < MaterialAnimation.Length; i++)
-            {
-                bw.Write(MaterialAnimation[i].Data.FrameCount);
-                bw.Write(MaterialAnimation[i].Data.FrameLength);
-            }
-            bw.Close();
+            //bw = data.AddEntry(MaterialAnimationTag);
+            //for (int i = 0; i < MaterialAnimation.Length; i++)
+            //{
+            //    bw.Write(MaterialAnimation[i].Data.FrameCount);
+            //    bw.Write(MaterialAnimation[i].Data.FrameLength);
+            //}
+            //bw.Close();
 
 
 
@@ -572,12 +620,15 @@ namespace Apoc3D.Graphics
             : base(mesh.RenderSystem)
         {
             this.Materials = mesh.Materials;
-            this.MaterialAnimation = mesh.MaterialAnimation;
+            //this.MaterialAnimation = mesh.MaterialAnimation;
             this.Name = mesh.Name;
             this.VertexCount = mesh.VertexCount;
             this.VertexSize = mesh.VertexSize;
             this.VertexElements = mesh.VertexElements;
+            this.ParentBoneID = mesh.ParentBoneID;
+            this.BoundingSphere = mesh.BoundingSphere;
 
+                
             void* src = mesh.VertexBuffer.Lock(0, 0, LockMode.ReadOnly).ToPointer();
 
             SetData(src, VertexSize * VertexCount);
@@ -654,7 +705,7 @@ namespace Apoc3D.Graphics
         #region Fields
         VertexDeclaration vtxDecl;
         int vertexSize;
-
+        int materialFrameIndex;
         /// <summary>
         ///  渲染操作缓冲
         /// </summary>
@@ -664,7 +715,7 @@ namespace Apoc3D.Graphics
         ///  第一个索引为子网格材质，第二个索引为帧
         /// </summary>
         protected Material[][] materials;
-        protected MaterialAnimationInstance[] matAnims;
+        //protected MaterialAnimationInstance[] matAnims;
 
         /// <summary>
         ///  网格总顶点缓冲
@@ -823,6 +874,17 @@ namespace Apoc3D.Graphics
         //}
         //#endregion
 
+        public int ParentBoneID
+        {
+            get;
+            private set;
+        }
+        public BoundingSphere BoundingSphere
+        {
+            get;
+            private set;
+        }
+
         #region 获取网格数据
 
         public VertexBuffer VertexBuffer
@@ -925,7 +987,7 @@ namespace Apoc3D.Graphics
             this.name = data.Name;
 
             this.materials = data.Materials;
-            this.matAnims = data.MaterialAnimation;
+            //this.matAnims = data.MaterialAnimation;
 
             int matCount = data.Materials.Length;
             int vertexCount = data.VertexCount;
@@ -938,6 +1000,8 @@ namespace Apoc3D.Graphics
 
             this.vtxDecl = factory.CreateVertexDeclaration(data.VertexElements);
             this.VertexElements = data.VertexElements;
+            this.ParentBoneID = data.ParentBoneID;
+            this.BoundingSphere = data.BoundingSphere;
 
             #region 复制顶点数据
             this.vertexBuffer = factory.CreateVertexBuffer(vertexCount, vtxDecl, BufferUsage.Static);
@@ -1090,7 +1154,7 @@ namespace Apoc3D.Graphics
             this.VertexElements = VertexPNT1.Elements;
             this.materials = materials;
 
-            this.matAnims = new MaterialAnimationInstance[materials.Length];
+            //this.matAnims = new MaterialAnimationInstance[materials.Length];
 
             this.vertexSize = sizeof(VertexPNT1);
             int vbSize = vertexSize * vertices.Length;
@@ -1131,11 +1195,12 @@ namespace Apoc3D.Graphics
 
             this.primCount = partPrimCount[0];
             this.vertexCount = vertices.Length;
+            this.ParentBoneID = -1;
 
-            for (int i = 0; i < materials.Length; i++)
-            {
-                this.matAnims[i] = MaterialAnimationInstance.DefaultAnimation;
-            }
+            //for (int i = 0; i < materials.Length; i++)
+            //{
+            //    this.matAnims[i] = MaterialAnimationInstance.DefaultAnimation;
+            //}
         }
 
         #endregion
@@ -1152,10 +1217,10 @@ namespace Apoc3D.Graphics
             get { return partPrimCount; }
         }
 
-        public MaterialAnimationInstance[] MaterialAnimation
-        {
-            get { return matAnims; }
-        }
+        //public MaterialAnimationInstance[] MaterialAnimation
+        //{
+        //    get { return matAnims; }
+        //}
         public Material[][] Materials
         {
             get { return materials; }
@@ -1174,7 +1239,11 @@ namespace Apoc3D.Graphics
         {
             get { return primCount; }
         }
-
+        public int MaterialFrameIndex
+        {
+            get { return materialFrameIndex; }
+            set { materialFrameIndex = value; }
+        }
         /// <summary>
         ///  获取或设置网格的名称
         /// </summary>
@@ -1213,7 +1282,7 @@ namespace Apoc3D.Graphics
                     gd.VertexDeclaration = vtxDecl;
                     gd.VertexSize = vertexSize;
 
-                    bufferedOp[i].Material = materials[i][matAnims[i].CurrentFrame];
+                    bufferedOp[i].Material = materials[i][materialFrameIndex];//matAnims[i].CurrentFrame];
                     bufferedOp[i].Geomentry = gd;
                     //bufferedOp[i].Priority = bufferedOp[i].Material.PriorityHint;
                     //bufferedOp[i].Transformation 
@@ -1284,10 +1353,10 @@ namespace Apoc3D.Graphics
 
         public void Update(GameTime dt)
         {
-            for (int i = 0; i < matAnims.Length; i++)
-            {
-                matAnims[i].Update(dt);
-            }
+            //for (int i = 0; i < matAnims.Length; i++)
+            //{
+            //    matAnims[i].Update(dt);
+            //}
         }
 
         #endregion
