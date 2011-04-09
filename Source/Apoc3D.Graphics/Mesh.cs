@@ -514,6 +514,16 @@ namespace Apoc3D.Graphics
             //}
             //bw.Close();
 
+            data.AddEntry(ParentBoneTag, ParentBoneID);
+
+            bw = data.AddEntry(BoundingSphereTag);
+
+            bw.Write(BoundingSphere.Center.X);
+            bw.Write(BoundingSphere.Center.Y);
+            bw.Write(BoundingSphere.Center.Z);
+            bw.Write(BoundingSphere.Radius);
+
+            bw.Close();
 
 
             bw = data.AddEntry(NameTag);
