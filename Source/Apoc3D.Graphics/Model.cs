@@ -120,6 +120,324 @@ namespace Apoc3D.Graphics
         protected abstract MeshType LoadMesh(BinaryDataReader data);
         protected abstract BinaryDataWriter SaveMesh(MeshType mesh);
 
+        BinaryDataWriter SaveAnimation() 
+        {
+            BinaryDataWriter data = new BinaryDataWriter();
+
+            #region Bones
+            if (Bones != null)
+            {
+                data.AddEntry(BoneCountTag, Bones.Length);
+
+                ContentBinaryWriter bw = data.AddEntry(BonesTag);
+                for (int i = 0; i < Bones.Length; i++)
+                {
+                    bw.Write(Bones[i].Index);
+                    bw.WriteStringUnicode(Bones[i].Name);
+                    bw.Write(Bones[i].Transforms);
+
+                    bw.Write(Bones[i].Parent);
+
+                    int cldCount = Bones[i].Children.Length;
+                    bw.Write(cldCount);
+
+                    for (int j = 0; j < cldCount; j++)
+                    {
+                        bw.Write(Bones[i].Children[j]);
+                    }
+
+                }
+                bw.Close();
+
+                data.AddEntry(RootBoneTag, rootBone);
+            }
+            #endregion
+
+            #region BindPoseTag
+            List<Matrix> bindPose = animData.BindPose;
+
+            if (bindPose != null)
+            {
+                data.AddEntry(BindPoseCountTag, bindPose.Count);
+
+                ContentBinaryWriter bw = data.AddEntry(BindPoseTag);
+                for (int i = 0; i < bindPose.Count; i++)
+                {
+                    bw.Write(bindPose[i]);
+                }
+                bw.Close();
+            }
+            #endregion
+
+            #region InvBindPoseTag
+            List<Matrix> invBindPose = animData.InverseBindPose;
+            if (invBindPose != null)
+            {
+                data.AddEntry(InvBindPoseCountTag, invBindPose.Count);
+
+                ContentBinaryWriter bw = data.AddEntry(InvBindPoseTag);
+                for (int i = 0; i < invBindPose.Count; i++)
+                {
+                    bw.Write(invBindPose[i]);
+                }
+                bw.Close();
+            }
+
+            #endregion
+
+            #region AnimationClipTag
+
+            var aclip = animData.ModelAnimationClips;
+
+            if (aclip != null)
+            {
+                data.AddEntry(ModelAnimationClipCountTag, aclip.Count);
+
+                ContentBinaryWriter bw = data.AddEntry(ModelAnimationClipTag);
+                foreach (var e in aclip)
+                {
+                    bw.WriteStringUnicode(e.Key);
+
+                    ModelAnimationClip clip = e.Value;
+                    bw.Write(clip.Duration.TotalSeconds);
+
+                    bw.Write(clip.Keyframes.Count);
+
+                    for (int i = 0; i < clip.Keyframes.Count; i++)
+                    {
+                        bw.Write(clip.Keyframes[i].Bone);
+                        bw.Write(clip.Keyframes[i].Time.TotalSeconds);
+                        bw.Write(clip.Keyframes[i].Transform);
+                    }
+                }
+                bw.Close();
+            }
+
+
+            #endregion
+
+            #region RootAnimationClipTag
+            aclip = animData.RootAnimationClips;
+
+            if (aclip != null)
+            {
+                data.AddEntry(RootAnimationClipCountTag, aclip.Count);
+
+                ContentBinaryWriter bw = data.AddEntry(RootAnimationClipTag);
+                foreach (var e in aclip)
+                {
+                    bw.WriteStringUnicode(e.Key);
+
+                    ModelAnimationClip clip = e.Value;
+                    bw.Write(clip.Duration.TotalSeconds);
+
+                    bw.Write(clip.Keyframes.Count);
+
+                    for (int i = 0; i < clip.Keyframes.Count; i++)
+                    {
+                        bw.Write(clip.Keyframes[i].Bone);
+                        bw.Write(clip.Keyframes[i].Time.TotalSeconds);
+                        bw.Write(clip.Keyframes[i].Transform);
+                    }
+                }
+                bw.Close();
+            }
+
+            #endregion
+
+            #region BoneHierarchyTag
+
+            List<int> bh = animData.SkeletonHierarchy;
+            if (bh != null)
+            {
+                data.AddEntry(BoneHierarchyCountTag, bh.Count);
+
+                ContentBinaryWriter bw = data.AddEntry(BoneHierarchyTag);
+                for (int i = 0; i < bh.Count; i++)
+                {
+                    bw.Write(bh[i]);
+                }
+                bw.Close();
+            }
+
+            #endregion
+            return data;
+        }
+        void LoadAnimation(BinaryDataReader ad) 
+        {
+
+            #region Bones
+            if (ad.Contains(BoneCountTag))
+            {
+                int boenCount = ad.GetDataInt32(BoneCountTag);
+
+                ContentBinaryReader br2 = ad.GetData(BonesTag);
+                List<Bone> bones = new List<Bone>(boenCount);
+
+                for (int i = 0; i < boenCount; i++)
+                {
+
+                    int bidx = br2.ReadInt32();
+                    string name = br2.ReadStringUnicode();
+                    Matrix transform = br2.ReadMatrix();
+
+                    int parentId = br2.ReadInt32();
+
+                    int cldCount = br2.ReadInt32();
+                    List<int> children = new List<int>(cldCount);
+                    for (int j = 0; j < cldCount; j++)
+                    {
+                        children.Add(br2.ReadInt32());
+                    }
+
+                    bones.Add(new Bone(bidx, transform, children.ToArray(), parentId, name));
+                }
+                br2.Close();
+
+                rootBone = ad.GetDataInt32(RootBoneTag);
+            }
+
+
+
+            #endregion
+
+            List<Matrix> bindPose = null;
+            List<Matrix> invBindPose = null;
+            Dictionary<string, ModelAnimationClip> modelAnim = null;
+            Dictionary<string, ModelAnimationClip> rootAnim = null;
+            List<int> skeleHierarchy = null;
+
+            #region BindPoseTag
+            if (ad.Contains(BindPoseCountTag))
+            {
+                int count = ad.GetDataInt32(BindPoseCountTag);
+                bindPose = new List<Matrix>(count);
+
+                ContentBinaryReader br2 = ad.GetData(BindPoseTag);
+                for (int i = 0; i < count; i++)
+                {
+                    bindPose.Add(br2.ReadMatrix());
+                }
+                br2.Close();
+            }
+
+
+            #endregion
+
+            #region InvBindPoseTag
+
+
+            if (ad.Contains(InvBindPoseCountTag))
+            {
+                int count = ad.GetDataInt32(InvBindPoseCountTag);
+                invBindPose = new List<Matrix>(count);
+
+                ContentBinaryReader br2 = ad.GetData(InvBindPoseTag);
+                for (int i = 0; i < count; i++)
+                {
+                    invBindPose.Add(br2.ReadMatrix());
+                }
+                br2.Close();
+            }
+
+            #endregion
+
+            #region AnimationClipTag
+
+            if (ad.Contains(ModelAnimationClipCountTag))
+            {
+                int count = ad.GetDataInt32(ModelAnimationClipCountTag);
+
+                modelAnim = new Dictionary<string, ModelAnimationClip>(count);
+
+                ContentBinaryReader br2 = ad.GetData(ModelAnimationClipTag);
+
+                for (int i = 0; i < count; i++)
+                {
+                    string key = br2.ReadStringUnicode();
+
+                    TimeSpan duration = TimeSpan.FromSeconds(br2.ReadDouble());
+
+                    int frameCount = br2.ReadInt32();
+                    List<ModelKeyframe> frames = new List<ModelKeyframe>(frameCount);
+                    for (int j = 0; j < frameCount; j++)
+                    {
+                        int bone = br2.ReadInt32();
+                        TimeSpan totalSec = TimeSpan.FromSeconds(br2.ReadDouble());
+                        Matrix transform = br2.ReadMatrix();
+
+                        ModelKeyframe frame = new ModelKeyframe(bone, totalSec, transform);
+                        frames.Add(frame);
+                    }
+
+                    ModelAnimationClip clip = new ModelAnimationClip(duration, frames);
+
+                    modelAnim.Add(key, clip);
+                }
+                br2.Close();
+            }
+
+
+            #endregion
+
+            #region RootAnimationClipTag
+
+            if (ad.Contains(RootAnimationClipCountTag))
+            {
+                int count = ad.GetDataInt32(RootAnimationClipCountTag);
+
+                rootAnim = new Dictionary<string, ModelAnimationClip>(count);
+
+                ContentBinaryReader br2 = ad.GetData(RootAnimationClipTag);
+
+                for (int i = 0; i < count; i++)
+                {
+                    string key = br2.ReadStringUnicode();
+
+                    TimeSpan duration = TimeSpan.FromSeconds(br2.ReadDouble());
+
+                    int frameCount = br2.ReadInt32();
+                    List<ModelKeyframe> frames = new List<ModelKeyframe>(frameCount);
+                    for (int j = 0; j < frameCount; j++)
+                    {
+                        int bone = br2.ReadInt32();
+                        TimeSpan totalSec = TimeSpan.FromSeconds(br2.ReadDouble());
+                        Matrix transform = br2.ReadMatrix();
+
+                        ModelKeyframe frame = new ModelKeyframe(bone, totalSec, transform);
+                        frames.Add(frame);
+                    }
+
+                    ModelAnimationClip clip = new ModelAnimationClip(duration, frames);
+                    rootAnim.Add(key, clip);
+                }
+                br2.Close();
+            }
+
+            #endregion
+
+            #region BoneHierarchyTag
+
+            if (ad.Contains(BoneHierarchyCountTag))
+            {
+                int count = ad.GetDataInt32(BoneHierarchyCountTag);
+                skeleHierarchy = new List<int>(count);
+
+
+                ContentBinaryReader br2 = ad.GetData(BoneHierarchyTag);
+                for (int i = 0; i < count; i++)
+                {
+                    skeleHierarchy.Add(br2.ReadInt32());
+                }
+
+                br2.Close();
+            }
+
+
+            #endregion
+
+            this.animData = new AnimationData(modelAnim, rootAnim, bindPose, invBindPose, skeleHierarchy);
+        }
         protected void ReadData(BinaryDataReader data)
         {
             int entCount = data.GetDataInt32(EntityCountTag);
@@ -142,185 +460,11 @@ namespace Apoc3D.Graphics
 
                 BinaryDataReader ad = br.ReadBinaryData();
 
-
-                #region Bones
-                if (ad.Contains(BoneCountTag))
-                {
-                    int boenCount = ad.GetDataInt32(BoneCountTag);
-
-                    ContentBinaryReader br2 = ad.GetData(BonesTag);
-                    List<Bone> bones = new List<Bone>(boenCount);
-
-                    for (int i = 0; i < boenCount; i++)
-                    {
-
-                        int bidx = br2.ReadInt32();
-                        string name = br2.ReadStringUnicode();
-                        Matrix transform = br2.ReadMatrix();
-
-                        int parentId = br2.ReadInt32();
-
-                        int cldCount = br2.ReadInt32();
-                        List<int> children = new List<int>(cldCount);
-                        for (int j = 0; j < cldCount; j++)
-                        {
-                            children.Add(br.ReadInt32());                            
-                        }
-
-                        bones.Add(new Bone(bidx, transform, children.ToArray(), parentId, name));
-                    }
-                    br2.Close();
-
-                    rootBone = ad.GetDataInt32(RootBoneTag);
-                }
-
-
-             
-                #endregion
-
-                List<Matrix> bindPose = null;
-                List<Matrix> invBindPose = null;
-                Dictionary<string, ModelAnimationClip> modelAnim = null;
-                Dictionary<string, ModelAnimationClip> rootAnim = null;
-                List<int> skeleHierarchy = null;
-
-                #region BindPoseTag
-                if (ad.Contains(BindPoseCountTag)) 
-                {
-                    int count = ad.GetDataInt32(BindPoseCountTag);
-                    bindPose = new List<Matrix>(count);
-
-                    ContentBinaryReader br2 = ad.GetData(BindPoseTag);
-                    for (int i = 0; i < count; i++)
-                    {
-                        bindPose.Add(br2.ReadMatrix());
-                    }
-                    br2.Close();
-                }
-
-
-                #endregion
-
-                #region InvBindPoseTag
-
-
-                if (ad.Contains(InvBindPoseCountTag))
-                {
-                    int count = ad.GetDataInt32(InvBindPoseCountTag);
-                    invBindPose = new List<Matrix>(count);
-
-                    ContentBinaryReader br2 = ad.GetData(InvBindPoseTag);
-                    for (int i = 0; i < count; i++)
-                    {
-                        invBindPose.Add(br2.ReadMatrix());
-                    }
-                    br2.Close();
-                }
-
-                #endregion
-
-                #region AnimationClipTag
-
-                if (ad.Contains(ModelAnimationClipCountTag))
-                {
-                    int count = ad.GetDataInt32(ModelAnimationClipCountTag);
-
-                    modelAnim = new Dictionary<string, ModelAnimationClip>(count);
-
-                    ContentBinaryReader br2 = ad.GetData(ModelAnimationClipTag);
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        string key = br2.ReadStringUnicode();
-
-                        TimeSpan duration = TimeSpan.FromSeconds(br.ReadDouble());
-
-                        int frameCount = br2.ReadInt32();
-                        List<ModelKeyframe> frames = new List<ModelKeyframe>(frameCount);
-                        for (int j = 0; j < frameCount; j++)
-                        {
-                            int bone = br2.ReadInt32();
-                            TimeSpan totalSec = TimeSpan.FromSeconds(br.ReadDouble());
-                            Matrix transform = br2.ReadMatrix();
-
-                            ModelKeyframe frame = new ModelKeyframe(bone, totalSec, transform);
-                            frames.Add(frame);
-                        }
-
-                        ModelAnimationClip clip = new ModelAnimationClip(duration, frames);
-
-                        modelAnim.Add(key, clip);
-                    }
-                    br2.Close();
-                }
-
-
-                #endregion
-
-                #region RootAnimationClipTag
-
-                if (ad.Contains(RootAnimationClipCountTag))
-                {
-                    int count = ad.GetDataInt32(RootAnimationClipCountTag);
-
-                    rootAnim = new Dictionary<string, ModelAnimationClip>(count);
-
-                    ContentBinaryReader br2 = ad.GetData(RootAnimationClipTag);
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        string key = br2.ReadStringUnicode();
-
-                        TimeSpan duration = TimeSpan.FromSeconds(br.ReadDouble());
-
-                        int frameCount = br2.ReadInt32();
-                        List<ModelKeyframe> frames = new List<ModelKeyframe>(frameCount);
-                        for (int j = 0; j < frameCount; j++)
-                        {
-                            int bone = br2.ReadInt32();
-                            TimeSpan totalSec = TimeSpan.FromSeconds(br.ReadDouble());
-                            Matrix transform = br2.ReadMatrix();
-
-                            ModelKeyframe frame = new ModelKeyframe(bone, totalSec, transform);
-                            frames.Add(frame);
-                        }
-
-                        ModelAnimationClip clip = new ModelAnimationClip(duration, frames);
-                        rootAnim.Add(key, clip);
-                    }
-                    br2.Close();
-                }
-
-                #endregion
-
-                #region BoneHierarchyTag
-
-                if (ad.Contains(BoneHierarchyCountTag)) 
-                {
-                    int count = ad.GetDataInt32(BoneHierarchyCountTag);
-                    skeleHierarchy = new List<int>(count);
-
-
-                    ContentBinaryReader br2 = ad.GetData(BoneHierarchyTag);
-                    for (int i = 0; i < count; i++) 
-                    {
-                        skeleHierarchy.Add(br2.ReadInt32());
-                    }
-
-                    br2.Close();
-                }
-                
-
-                #endregion
-
+                LoadAnimation(ad);
 
                 ad.Close();
                 br.Close();
-
-                this.animData = new AnimationData(modelAnim, rootAnim, bindPose, invBindPose, skeleHierarchy);
             }
-
-
         }
         protected void WriteData(BinaryDataWriter data)
         {
@@ -337,6 +481,14 @@ namespace Apoc3D.Graphics
                 meshData.Dispose();
                 bw.Close();
             }
+
+            bw = data.AddEntry(AnimationDataTag);
+
+            BinaryDataWriter ad = SaveAnimation();
+            bw.Write(ad);
+            ad.Dispose();
+            bw.Close();
+
 
             //ModelAnimationFlags flags = ModelAnimationFlags.EntityTransform;
 
@@ -445,9 +597,11 @@ namespace Apoc3D.Graphics
         bool animationInitialized;
         bool rigidAnimCompleted;
         bool rootAnimCompleted;
+        bool skinAnimCompleted;
 
         protected ResourceHandle<ModelData> data;
 
+        SkinnedAnimationPlayer skinPlayer;
         RootAnimationPlayer rootPlayer;
         RigidAnimationPlayer rigidPlayer;
 
@@ -481,12 +635,19 @@ namespace Apoc3D.Graphics
         {
             rigidAnimCompleted = true;
         }
+        void SkinAnim_Completed(object sender, EventArgs e)
+        {
+            skinAnimCompleted = true;
+        }
         #region IRenderable 成员
 
         void InitializeAnimation() 
         {
             ModelData mdlData = data.GetWeakResource();
             AnimationData animData = mdlData.Animation;
+
+            if (animData == null)
+                return;
 
             if (animData.RootAnimationClips != null)
             {
@@ -504,15 +665,32 @@ namespace Apoc3D.Graphics
             }
             if (animData.ModelAnimationClips != null)
             {
-                if (animData.ModelAnimationClips.ContainsKey("Take 001"))
+                if (animData.BindPose != null && animData.InverseBindPose != null)
                 {
-                    ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+                    if (animData.ModelAnimationClips.ContainsKey("Take 001"))
+                    {
+                        ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
 
-                    rigidPlayer = new RigidAnimationPlayer(mdlData.Bones.Length);
-                    CurrentAnimation.Add(rigidPlayer);
+                        skinPlayer = new SkinnedAnimationPlayer(animData.BindPose, animData.InverseBindPose, animData.SkeletonHierarchy);
+                        CurrentAnimation.Add(skinPlayer);
 
-                    rigidPlayer.Completed += RigidAnim_Competed;
-                    rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                        skinPlayer.Completed += SkinAnim_Completed;
+                        skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                    }
+                    
+                }
+                else
+                {
+                    if (animData.ModelAnimationClips.ContainsKey("Take 001"))
+                    {
+                        ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+
+                        rigidPlayer = new RigidAnimationPlayer(mdlData.Bones.Length);
+                        CurrentAnimation.Add(rigidPlayer);
+
+                        rigidPlayer.Completed += RigidAnim_Competed;
+                        rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                    }
                 }
             }
         }
@@ -548,7 +726,25 @@ namespace Apoc3D.Graphics
                         rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
                     }
                 }
-                rootAnimCompleted = false;
+                rigidAnimCompleted = false;
+            }
+            if (skinAnimCompleted)
+            {
+                ModelData mdlData = data.GetWeakResource();
+                AnimationData animData = mdlData.Animation;
+
+                
+                if (animData.ModelAnimationClips != null)
+                {
+                    if (animData.ModelAnimationClips.ContainsKey("Take 001"))
+                    {
+                        ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+
+                        skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                    }
+                }
+                
+                skinAnimCompleted = false;
             }
         }
         public RenderOperation[] GetRenderOperation()
@@ -596,27 +792,30 @@ namespace Apoc3D.Graphics
 
                     for (int j = 0; j < entOps[i].Length; j++)
                     {
-                        renderOpEntId[dstIdx + j] = i;
+                        int opid = dstIdx + j;
+                        renderOpEntId[opid] = i;
+
+                        opBuffer[opid].BoneTransforms = skinPlayer == null ? null : skinPlayer.GetSkinTransforms();
                         //opBuffer[dstIdx + j].Geomentry = entOps[i][j];
                         //animation.GetTransform(i, out  opBuffer[dstIdx + j].Transformation);
-
+                        
                         if (animInstance.Count > 0)
                         {
-                            opBuffer[i].Transformation = Matrix.Identity;
+                            opBuffer[opid].Transformation = Matrix.Identity;
 
                             for (int k = 0; k < animInstance.Count; k++)
                             {
-                                int entId = renderOpEntId[i];
+                                int entId = i;// renderOpEntId[i];
 
                                 int boneId = entities[entId].ParentBoneID;
 
-                                opBuffer[i].Transformation *= animInstance[k].GetTransform(boneId);
+                                opBuffer[opid].Transformation *= animInstance[k].GetTransform(boneId);
 
                             }
                         }
                         else
                         {
-                            opBuffer[i].Transformation = Matrix.Identity;// animInstance.GetTransform(renderOpEntId[i]);
+                            opBuffer[opid].Transformation = Matrix.Identity;// animInstance.GetTransform(renderOpEntId[i]);
                         }
                         //opBuffer[i].Priority = RenderPriority.Second;
                     }
@@ -647,6 +846,7 @@ namespace Apoc3D.Graphics
                         opBuffer[i].Transformation = Matrix.Identity;// animInstance.GetTransform(renderOpEntId[i]);
                     }
 
+                    opBuffer[i].BoneTransforms = skinPlayer == null ? null : skinPlayer.GetSkinTransforms();
                     //opBuffer[i].Transformation = Matrix.Identity;// animInstance.GetTransform(renderOpEntId[i]);
                     //animation.GetTransform(renderOpEntId[i], out opBuffer[i].Transformation);
                 }

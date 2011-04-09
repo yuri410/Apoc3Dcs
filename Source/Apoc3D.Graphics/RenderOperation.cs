@@ -43,6 +43,11 @@ namespace Apoc3D.Graphics
         public Matrix Transformation;
 
         /// <summary>
+        ///  骨骼变换矩阵
+        /// </summary>
+        public Matrix[] BoneTransforms;
+
+        /// <summary>
         ///  此渲染操作的材质
         /// </summary>
         public Material Material;

@@ -247,7 +247,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Vector4) * value.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, Helper.v4Buffer[len]);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, Helper.v4Buffer[len]);
             }
             else
             {
@@ -259,7 +259,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Vector4) * buffer.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, buffer);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, buffer);
             }
         }
         public override void SetValue(int index, Color4F[] value)
@@ -274,7 +274,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Color4F) * value.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, Helper.v4Buffer[len]);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, Helper.v4Buffer[len]);
             }
             else
             {
@@ -286,7 +286,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Color4F) * buffer.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, buffer);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, buffer);
             }
         }
         public override void SetValue(int index, Plane[] value)
@@ -301,7 +301,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Color4F) * value.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, Helper.v4Buffer[len]);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, Helper.v4Buffer[len]);
             }
             else
             {
@@ -313,7 +313,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Color4F) * buffer.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, buffer);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, buffer);
             }
         }
         public override void SetValue(int index, Quaternion[] value)
@@ -344,7 +344,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Matrix) * value.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, Helper.m4Buffer[len]);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, Helper.m4Buffer[len]);
             }
             else
             {
@@ -356,7 +356,7 @@ namespace Apoc3D.RenderSystem.Xna
                         Memory.Copy(src, dst, sizeof(Matrix) * buffer.Length);
                     }
                 }
-                device.SetVertexShaderConstant(index, buffer);
+                device.SetVertexShaderConstant(constants[index].RegisterIndex, buffer);
             }
         }
         #endregion

@@ -280,6 +280,7 @@ namespace Apoc3D.Graphics
             op.Geomentry = buf.Geomentry;
             op.Transformation = transform;
             op.Sender = this;
+            op.BoneTransforms = null;
             bufferedOp.Add(ref op);
         }
 
@@ -310,6 +311,7 @@ namespace Apoc3D.Graphics
             op.Geomentry = buf.Geomentry;
             op.Transformation = transform;
             op.Sender = this;
+            op.BoneTransforms = null;
             bufferedOp.Add(ref op);
         }
 
