@@ -36,6 +36,7 @@ namespace Apoc3D.Graphics
     {
         Simple,
         Depth,
+        DeferredNormal,
         Wireframe,
         Final
     }
