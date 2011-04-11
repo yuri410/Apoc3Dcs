@@ -38,8 +38,6 @@ namespace Apoc3D.Graphics.Effects
 
     public abstract class Effect
     {
-        public static readonly string DefaultTechnique = "Default";
-
         bool begun;
         protected RenderMode mode;
 
@@ -62,10 +60,6 @@ namespace Apoc3D.Graphics.Effects
 
         #region 属性
 
-        public virtual bool SupportsTechnique(string name)
-        {
-            return true;
-        }
         public virtual bool SupportsMode(RenderMode mode)
         {
             return true;
