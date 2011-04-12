@@ -650,7 +650,7 @@ namespace Apoc3D
             float dt;
             if (time != null)
             {
-                dt = (float)time.ElapsedGameTime.TotalSeconds;
+                dt = (float)time.ElapsedGameTimeSeconds;
             }
             else 
             {
