@@ -412,7 +412,6 @@ namespace Apoc3D.Graphics
             //    }
             //}
             #endregion
-            ClearBatchData();
         }
 
         void RenderDepth()
@@ -611,6 +610,8 @@ namespace Apoc3D.Graphics
                 
                
                 postRenderer.RenderFullScene(this, CurrentCamera.RenderTarget, CurrentCamera.Mode);
+
+                ClearBatchData();
             }
             renderSystem.EndFrame();
         }
