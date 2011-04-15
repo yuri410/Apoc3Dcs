@@ -311,7 +311,7 @@ namespace Apoc3D.Graphics
             shadowRt = factory.CreateRenderTarget(ShadowMapLength, ShadowMapLength, ImagePixelFormat.G32R32F, DepthFormat.Depth24X8);
             shadowRt2 = factory.CreateRenderTarget(ShadowMapLength, ShadowMapLength, ImagePixelFormat.G32R32F);
 
-            guassFilter = new GuassBlurFilter(5, 2, ShadowMapLength, ShadowMapLength);
+            guassFilter = new GuassBlurFilter(3, 2, ShadowMapLength, ShadowMapLength);
             #region 建立小quad
 
             float adj = -0.5f;
