@@ -370,7 +370,7 @@ namespace Apoc3D.RenderSystem.Xna
                     //FileLocation fl = ResourceLocation as FileLocation;
                     //if (fl != null)
                     //{
-                    //    tex2D.Save(Path.Combine(@"E:\Desktop\dump", Path.GetFileNameWithoutExtension(fl.Path) + ".dds"), Microsoft.Xna.Framework.Graphics.ImageFileFormat.Dds);
+                    //    tex2D.Save(Path.Combine(@"E:\Desktop\dump", Path.GetFileNameWithoutExtension(fl.Path) + ".png"), Microsoft.Xna.Framework.Graphics.ImageFileFormat.Png);
                     //}
                     break;
                 case TextureType.CubeTexture:
