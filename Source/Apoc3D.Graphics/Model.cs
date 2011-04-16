@@ -120,7 +120,7 @@ namespace Apoc3D.Graphics
         protected abstract MeshType LoadMesh(BinaryDataReader data);
         protected abstract BinaryDataWriter SaveMesh(MeshType mesh);
 
-        BinaryDataWriter SaveAnimation() 
+        BinaryDataWriter SaveAnimation()
         {
             BinaryDataWriter data = new BinaryDataWriter();
 
@@ -152,6 +152,7 @@ namespace Apoc3D.Graphics
                 data.AddEntry(RootBoneTag, rootBone);
             }
             #endregion
+
 
             #region BindPoseTag
             List<Matrix> bindPose = animData.BindPose;
@@ -261,6 +262,7 @@ namespace Apoc3D.Graphics
             }
 
             #endregion
+
             return data;
         }
         void LoadAnimation(BinaryDataReader ad) 
@@ -482,13 +484,15 @@ namespace Apoc3D.Graphics
                 bw.Close();
             }
 
-            bw = data.AddEntry(AnimationDataTag);
-
-            BinaryDataWriter ad = SaveAnimation();
-            bw.Write(ad);
-            ad.Dispose();
-            bw.Close();
-
+           
+            if (animData != null)
+            {
+                bw = data.AddEntry(AnimationDataTag);
+                BinaryDataWriter ad = SaveAnimation();
+                bw.Write(ad);
+                ad.Dispose();
+                bw.Close();
+            }
 
             //ModelAnimationFlags flags = ModelAnimationFlags.EntityTransform;
 
