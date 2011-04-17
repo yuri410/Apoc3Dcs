@@ -34,6 +34,19 @@ using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics
 {
+    public class AnimationCompletedEventArgs : EventArgs 
+    {
+        public enum AnimationType { Root, Rigid, Skinned };
+
+        public AnimationType Type { get; private set; }
+
+        public AnimationCompletedEventArgs(AnimationType type) 
+        {
+            Type = type;
+        }
+    }
+    public delegate void AnimationCompeletedEventHandler(object sender, AnimationCompletedEventArgs e);
+
     /// <summary>
     ///  定义3D模型提供基础结构
     /// </summary>
@@ -588,6 +601,13 @@ namespace Apoc3D.Graphics
 
     public class Model: IRenderable, IUpdatable
     {
+        enum AnimationControl 
+        {
+            Play,
+            Stop,
+            Resume,
+            Pause
+        }
         /// <summary>
         ///  已缓存的RenderOperation
         /// </summary>
@@ -598,7 +618,7 @@ namespace Apoc3D.Graphics
         /// </summary>
         int[] renderOpEntId;
 
-        bool animationInitialized;
+        //bool animationInitialized;
         bool rigidAnimCompleted;
         bool rootAnimCompleted;
         bool skinAnimCompleted;
@@ -615,14 +635,171 @@ namespace Apoc3D.Graphics
         {
             get { return animInstance; }
         }
-        public Model(ResourceHandle<ModelData> data)
+
+        public event AnimationCompeletedEventHandler AnimationCompeleted;
+
+        public bool AutoLoop
+        {
+            get;
+            set;
+        }
+
+        public Model(ResourceHandle<ModelData> data)            
         {
             //CurrentAnimation = new NoAnimation(); 
             this.data = data;
+
+            //if (!animationInitialized)
+            //{
+                InitializeAnimation();
+                //animationInitialized = true;
+            //}
         }
         protected Model()
         {
             //CurrentAnimation = new NoAnimation();
+        }
+
+        private void ControlRootAnimation(AnimationControl ctrl) 
+        {
+            if (rootPlayer == null)
+                return;
+            ModelData mdlData = data.GetWeakResource();
+            AnimationData animData = mdlData.Animation;
+
+            if (animData.RootAnimationClips != null)
+            {
+                if (animData.RootAnimationClips.ContainsKey("Take 001"))
+                {
+                    ModelAnimationClip clip = animData.RootAnimationClips["Take 001"];
+
+                    switch (ctrl) 
+                    {
+                        case AnimationControl.Play:
+                            rootPlayer.StartClip(clip, 1, TimeSpan.Zero);                            
+                            break;
+                        case AnimationControl.Pause:
+                            rootPlayer.PauseClip();
+                            break;
+                        case AnimationControl.Stop:
+                            rootPlayer.PauseClip();
+                            rootPlayer.CurrentKeyFrame = clip.Keyframes.Count > 10 ? 10 : 0;
+                            break;
+                        case AnimationControl.Resume:
+                            rootPlayer.ResumeClip();
+                            break;
+                    }
+                    
+                }
+            }
+        }
+        private void ControlSkinnedAnimation(AnimationControl ctrl) 
+        {
+            if (skinPlayer == null)
+                return;
+            ModelData mdlData = data.GetWeakResource();
+            AnimationData animData = mdlData.Animation;
+
+
+            if (animData.ModelAnimationClips != null)
+            {
+                if (animData.ModelAnimationClips.ContainsKey("Take 001"))
+                {
+                    ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+
+                    switch (ctrl)
+                    {
+                        case AnimationControl.Play:
+                            skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                            break;
+                        case AnimationControl.Stop:
+                            skinPlayer.PauseClip();
+                            skinPlayer.CurrentKeyFrame = clip.Keyframes.Count > 10 ? 10 : 0;
+                            break;
+                        case AnimationControl.Pause:
+                            skinPlayer.PauseClip();
+                            break;
+                        case AnimationControl.Resume:
+                            skinPlayer.ResumeClip();
+                            break;
+                    }
+                }
+            }
+        }
+        private void ControlRigidAnimation(AnimationControl ctrl)
+        {
+            if (rigidPlayer == null)
+                return;
+            ModelData mdlData = data.GetWeakResource();
+            AnimationData animData = mdlData.Animation;
+
+            if (animData.ModelAnimationClips != null)
+            {
+                if (animData.ModelAnimationClips.ContainsKey("Take 001"))
+                {
+                    ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+
+                    switch (ctrl)
+                    {
+                        case AnimationControl.Play:
+                            rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                            break;
+                        case AnimationControl.Pause:
+                            rigidPlayer.PauseClip();
+                            break;
+                        case AnimationControl.Stop:
+                            rigidPlayer.PauseClip();
+                            rigidPlayer.CurrentKeyFrame = clip.Keyframes.Count > 10 ? 10 : 0;
+                            break;
+                            break;
+                        case AnimationControl.Resume:
+                            rigidPlayer.ResumeClip();
+                            break;
+                    }
+                }
+            }
+        }
+        
+        public void PlayAnimation()
+        {            
+            ControlRootAnimation(AnimationControl.Play);
+            ControlSkinnedAnimation(AnimationControl.Play);
+            ControlRigidAnimation(AnimationControl.Play);
+        }
+        public void PauseAnimation()
+        {
+            ControlRootAnimation(AnimationControl.Pause);
+            ControlSkinnedAnimation(AnimationControl.Pause);
+            ControlRigidAnimation(AnimationControl.Pause);
+        }
+        public void ResumeAnimation()
+        {
+            ControlRootAnimation(AnimationControl.Resume);
+            ControlSkinnedAnimation(AnimationControl.Resume);
+            ControlRigidAnimation(AnimationControl.Resume);
+        }
+        public void StopAnimation() 
+        {
+            ControlRootAnimation(AnimationControl.Play);
+            ControlSkinnedAnimation(AnimationControl.Play);
+            ControlRigidAnimation(AnimationControl.Play);
+        }
+
+        public float GetAnimationDuration() 
+        {
+            if (skinPlayer != null) 
+            {
+                return (float)skinPlayer.CurrentClip.Duration.TotalSeconds;
+            }
+            else if (rigidPlayer != null) 
+            {
+                return (float)rigidPlayer.CurrentClip.Duration.TotalSeconds;
+            }
+            else if (rootPlayer != null)
+            {
+                return (float)rootPlayer.CurrentClip.Duration.TotalSeconds;
+            }
+            return 0;
         }
 
         public ModelData GetData() 
@@ -634,19 +811,27 @@ namespace Apoc3D.Graphics
         void RootAnim_Completed(object sender, EventArgs e)
         {
             rootAnimCompleted = true;
+            if (AnimationCompeleted != null)
+                AnimationCompeleted(sender, new AnimationCompletedEventArgs(AnimationCompletedEventArgs.AnimationType.Root));
         }
         void RigidAnim_Competed(object sender, EventArgs e) 
         {
             rigidAnimCompleted = true;
+            if (AnimationCompeleted != null)
+                AnimationCompeleted(sender, new AnimationCompletedEventArgs(AnimationCompletedEventArgs.AnimationType.Rigid));
         }
         void SkinAnim_Completed(object sender, EventArgs e)
         {
             skinAnimCompleted = true;
+            if (AnimationCompeleted != null)
+                AnimationCompeleted(sender, new AnimationCompletedEventArgs(AnimationCompletedEventArgs.AnimationType.Skinned));
         }
         #region IRenderable 成员
 
         void InitializeAnimation() 
         {
+            data.TouchSync();
+
             ModelData mdlData = data.GetWeakResource();
             AnimationData animData = mdlData.Animation;
 
@@ -663,7 +848,7 @@ namespace Apoc3D.Graphics
                     CurrentAnimation.Add(rootPlayer);
 
                     rootPlayer.Completed += RootAnim_Completed;
-                    rootPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                    //rootPlayer.StartClip(clip, 1, TimeSpan.Zero);
 
                 }
             }
@@ -679,7 +864,7 @@ namespace Apoc3D.Graphics
                         CurrentAnimation.Add(skinPlayer);
 
                         skinPlayer.Completed += SkinAnim_Completed;
-                        skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                        //skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
                     }
                     
                 }
@@ -693,61 +878,29 @@ namespace Apoc3D.Graphics
                         CurrentAnimation.Add(rigidPlayer);
 
                         rigidPlayer.Completed += RigidAnim_Competed;
-                        rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                        //rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
                     }
                 }
             }
         }
-        void UpdateAnimtaion() 
+        void UpdateAnimtaion()
         {
             if (rootAnimCompleted)
             {
-                ModelData mdlData = data.GetWeakResource();
-                AnimationData animData = mdlData.Animation;
-
-                if (animData.RootAnimationClips != null)
-                {
-                    if (animData.RootAnimationClips.ContainsKey("Take 001"))
-                    {
-                        ModelAnimationClip clip = animData.RootAnimationClips["Take 001"];
-
-                        rootPlayer.StartClip(clip, 1, TimeSpan.Zero);
-                    }
-                }
+                if (AutoLoop)
+                    ControlRootAnimation(AnimationControl.Play);
                 rootAnimCompleted = false;
             }
             if (rigidAnimCompleted)
             {
-                ModelData mdlData = data.GetWeakResource();
-                AnimationData animData = mdlData.Animation;
-
-                if (animData.ModelAnimationClips != null)
-                {
-                    if (animData.ModelAnimationClips.ContainsKey("Take 001"))
-                    {
-                        ModelAnimationClip clip = animData.RootAnimationClips["Take 001"];
-
-                        rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
-                    }
-                }
+                if (AutoLoop)
+                    ControlRigidAnimation(AnimationControl.Play);
                 rigidAnimCompleted = false;
             }
             if (skinAnimCompleted)
             {
-                ModelData mdlData = data.GetWeakResource();
-                AnimationData animData = mdlData.Animation;
-
-                
-                if (animData.ModelAnimationClips != null)
-                {
-                    if (animData.ModelAnimationClips.ContainsKey("Take 001"))
-                    {
-                        ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
-
-                        skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
-                    }
-                }
-                
+                if (AutoLoop)
+                    ControlSkinnedAnimation(AnimationControl.Play);
                 skinAnimCompleted = false;
             }
         }
@@ -759,12 +912,6 @@ namespace Apoc3D.Graphics
                 return null;
             }
 
-
-            if (!animationInitialized)
-            {
-                InitializeAnimation();
-                animationInitialized = true;
-            }
             UpdateAnimtaion();
 
             Mesh[] entities = data.Resource.Entities;

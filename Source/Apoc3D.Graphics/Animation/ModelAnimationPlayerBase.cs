@@ -63,7 +63,7 @@ namespace Apoc3D.Graphics.Animation
             get { return currentTimeValue; }
             set
             {
-                TimeSpan time = value;
+                TimeSpan time = value + TimeSpan.FromSeconds(0.0005);
 
                 // If the position moved backwards, reset the keyframe index.
                 if (time < currentTimeValue)
@@ -72,7 +72,7 @@ namespace Apoc3D.Graphics.Animation
                     InitClip();
                 }
 
-                currentTimeValue = time;
+                currentTimeValue = time ;
 
                 // Read keyframe matrices.
                 IList<ModelKeyframe> keyframes = currentClipValue.Keyframes;
@@ -86,7 +86,9 @@ namespace Apoc3D.Graphics.Animation
                     //{
                     // Stop when we've read up to the current time position.                    
                     if (keyframe.Time > currentTimeValue)
+                    {
                         break;
+                    }
 
                     // Use this keyframe
                     SetKeyframe(keyframe);
@@ -117,6 +119,9 @@ namespace Apoc3D.Graphics.Animation
             StartClip(clip, 1.0f, TimeSpan.MaxValue);
         }
 
+
+        
+
         /// <summary>
         /// Starts playing a clip
         /// </summary>
@@ -127,7 +132,7 @@ namespace Apoc3D.Graphics.Animation
         {
             if (clip == null)
                 throw new ArgumentNullException("Clip required");
-
+            
             // Store the clip and reset playing data            
             currentClipValue = clip;
             currentKeyframe = 0;
