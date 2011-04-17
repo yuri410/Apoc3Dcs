@@ -1,40 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 
 namespace Apoc3D.Graphics.Animation
 {
     class MaterialAnimationPlayer
     {
-        private int MaxKeyframeIndex;
+        // Clip currently being played
+        MaterialAnimationClip currentClipValue;
 
-        //Current key frame 
-        private float intervalPerFrame;
+        // Current timeindex and keyframe in the clip
+        float currentTimeValue;
+        int currentKeyframe;
 
-        // Current frame index
-        private int currentIndex;
-    
         // Speed of playback
         float playbackRate = 1.0f;
 
-        bool isLoop;
+        // The amount of time for which the animation will play.
+        // TimeSpan.MaxValue will loop forever. TimeSpan.Zero will play once. 
+        float duration = float.MaxValue;
 
         // Amount of time elapsed while playing
-        float elapsedTime;
+        float elapsedPlaybackTime = 0;
 
         // Whether or not playback is paused
         bool paused;
 
-        int back = 1;
-
-        public int FrameCount 
+        /// <summary>
+        /// Gets the clip currently being decoded.
+        /// </summary>
+        public MaterialAnimationClip CurrentClip
         {
-            get { return MaxKeyframeIndex; }
+            get { return currentClipValue; }
         }
-        public int CurrentFrameIndex
+
+        /// <summary>
+        /// Get/Set the current key frame index
+        /// </summary>
+        public int CurrentKeyFrame
         {
-            get { return currentIndex; }
+            get { return currentKeyframe; }
+            set
+            {
+                List<MaterialAnimationKeyFrame> keyframes = currentClipValue.Keyframes;
+                float time = keyframes[value].Time;
+                CurrentTimeValue = time;
+            }
+        }
+
+        /// <summary>
+        /// Gets/set the current play position.
+        /// </summary>
+        public float CurrentTimeValue
+        {
+            get { return currentTimeValue; }
+            set
+            {
+                float time = value;
+
+                // If the position moved backwards, reset the keyframe index.
+                if (time < currentTimeValue)
+                {
+                    currentKeyframe = 0;
+                    InitClip();
+                }
+
+                currentTimeValue = time;
+
+                // Read keyframe matrices.
+                IList<MaterialAnimationKeyFrame> keyframes = currentClipValue.Keyframes;
+
+
+                while (currentKeyframe < keyframes.Count)
+                {
+                    MaterialAnimationKeyFrame keyframe = keyframes[currentKeyframe];
+
+                    // Stop when we've read up to the current time position.                    
+                    if (keyframe.Time > currentTimeValue)
+                    {
+                        break;
+                    }
+
+                    // Use this keyframe
+                    SetKeyframe(keyframe);
+
+                    currentKeyframe++;
+                }
+
+            }
         }
 
         /// <summary>
@@ -42,79 +95,119 @@ namespace Apoc3D.Graphics.Animation
         /// </summary>
         public event EventHandler Completed;
 
-        public MaterialAnimationPlayer(float interval, int frameCount)
+        /// <summary>
+        /// Starts decoding the specified animation clip.
+        /// </summary>        
+        public void StartClip(MaterialAnimationClip clip)
         {
-            MaxKeyframeIndex = frameCount;
-            this.intervalPerFrame = interval;
-            currentIndex = 0;
-            elapsedTime = 0;
-            isLoop = false;
+            StartClip(clip, 1.0f, 0);
         }
 
-        public void StartAnimation(int startIndex, float playbackRate, int playDirection)
-        {
-            this.back = Math.Sign(playDirection);
-            this.currentIndex = startIndex;
-            this.playbackRate = playbackRate;
-            this.elapsedTime = 0;
 
+        public int CurrentFrame
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Starts playing a clip
+        /// </summary>
+        /// <param name="clip">Animation clip to play</param>
+        /// <param name="playbackRate">Speed to playback</param>
+        /// <param name="duration">Length of time to play (max is looping, 0 is once)</param>
+        public void StartClip(MaterialAnimationClip clip, float playbackRate, float duration)
+        {
+            if (clip == null)
+                throw new ArgumentNullException("Clip required");
+
+            // Store the clip and reset playing data            
+            currentClipValue = clip;
+            currentKeyframe = 0;
+            CurrentTimeValue = 0;
+            elapsedPlaybackTime = 0;
             paused = false;
+
+            // Store the data about how we want to playback
+            this.playbackRate = playbackRate;
+            this.duration = duration;
+
+            // Call the virtual to allow initialization of the clip
+            InitClip();
         }
 
-        public void SetLoopPlayer(bool loop)
-        {
-            this.isLoop = loop;
-        }
-
-        public void PauseAnimation()
+        /// <summary>
+        /// Will pause the playback of the current clip
+        /// </summary>
+        public void PauseClip()
         {
             paused = true;
         }
 
-        public void ResumeAnimation()
+        /// <summary>
+        /// Will resume playback of the current clip
+        /// </summary>
+        public void ResumeClip()
         {
             paused = false;
         }
 
-
-        public void Update(GameTime gameTime)
+        void InitClip()
         {
-            if(paused)
+        }
+
+        void SetKeyframe(MaterialAnimationKeyFrame keyframe)
+        {
+            CurrentFrame = keyframe.MaterialIndex;
+        }
+
+        void OnUpdate()
+        {
+        }
+
+        /// <summary>
+        /// Called during the update loop to move the animation forward
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public virtual void Update(GameTime gameTime)
+        {
+            if (currentClipValue == null)
                 return;
 
-            TimeSpan time = gameTime.ElapsedGameTime;
+            if (paused)
+                return;
+
+
+            float time = gameTime.ElapsedGameTimeSeconds;
 
             // Adjust for the rate
             if (playbackRate != 1.0f)
-                time = TimeSpan.FromMilliseconds(time.TotalMilliseconds * playbackRate);
+                time *= playbackRate;
 
-            float dt = (float)time.TotalSeconds;
+            elapsedPlaybackTime += time;
 
-            elapsedTime += dt;
-
-            if (elapsedTime >= intervalPerFrame)
+            // See if we should terminate
+            if (elapsedPlaybackTime >= duration && duration > float.Epsilon ||
+                elapsedPlaybackTime >= currentClipValue.Duration && duration < float.Epsilon)
             {
-                currentIndex += 1 * (back);
-                
-                if( currentIndex >= MaxKeyframeIndex  || currentIndex <= 0 )
-                {
-                    if (isLoop)
-                    {
-                        back *= -1;
-                    }
-                    else
-                    {
-                        if (Completed != null)
-                            Completed(this, EventArgs.Empty);
-                        return;
-                    }
-                    
-                }
-                elapsedTime = 0.0f;    //重新计时
-             }
-             
+                if (Completed != null)
+                    Completed(this, EventArgs.Empty);
 
+                currentClipValue = null;
+
+                return;
+            }
+
+            // Update the animation position.        
+            time += currentTimeValue;
+
+            // If we reached the end, loop back to the start.
+            while (time >= currentClipValue.Duration)
+                time -= currentClipValue.Duration;
+
+            CurrentTimeValue = time;
+
+            OnUpdate();
         }
-
     }
 }

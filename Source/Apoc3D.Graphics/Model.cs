@@ -80,12 +80,18 @@ namespace Apoc3D.Graphics
         static readonly string BoneHierarchyTag = "BoneHierarchy";
         static readonly string BoneHierarchyCountTag = "BoneHierarchyCount";
 
+        protected static readonly string MaterialAnimationTag2 = "MaterialAnimation2.0";
+        protected static readonly string MaterialAnimationDurationTag = "Duration";
+        protected static readonly string MaterialAnimationKeyframesTag = "Keyframes";
+        protected static readonly string MaterialAnimationKeyframeCountTag = "KeyframeCount";
 
         protected MeshType[] entities;
         protected Bone[] bones;
         protected int rootBone;
 
         protected AnimationData animData;
+        protected MaterialAnimationClip materialAnimation;
+
         //public Dictionary<string, TapeHelper> TapeHelpers
         //{
         //    get;
@@ -98,6 +104,14 @@ namespace Apoc3D.Graphics
         public AnimationData Animation 
         {
             get { return animData; }
+        }
+        public MaterialAnimationClip MaterialAnimationClip 
+        {
+            get { return materialAnimation; }
+        }
+        public void SetMaterialAnimationClip(MaterialAnimationClip clip)
+        {
+            materialAnimation = clip;
         }
         public ResourceLocation DataSource
         {
@@ -278,6 +292,27 @@ namespace Apoc3D.Graphics
 
             return data;
         }
+        BinaryDataWriter SaveMaterialAnimation()
+        {
+            BinaryDataWriter data = new BinaryDataWriter();
+
+            data.AddEntry(MaterialAnimationDurationTag, materialAnimation.Duration);
+            data.AddEntry(MaterialAnimationKeyframeCountTag, materialAnimation.Keyframes.Count);
+
+
+            List<MaterialAnimationKeyFrame> keyframes = materialAnimation.Keyframes;
+
+            ContentBinaryWriter bw = data.AddEntry(MaterialAnimationKeyframesTag);
+
+            for (int i = 0; i < keyframes.Count; i++)
+            {
+                bw.Write(keyframes[i].Time);
+                bw.Write(keyframes[i].MaterialIndex);                
+            }
+            bw.Close();
+
+            return data;
+        }
         void LoadAnimation(BinaryDataReader ad) 
         {
 
@@ -453,6 +488,25 @@ namespace Apoc3D.Graphics
 
             this.animData = new AnimationData(modelAnim, rootAnim, bindPose, invBindPose, skeleHierarchy);
         }
+        void LoadMaterialAnimation(BinaryDataReader md)
+        {
+            float duration = md.GetDataSingle(MaterialAnimationDurationTag);
+            int count = md.GetDataInt32(MaterialAnimationKeyframeCountTag);
+
+            List<MaterialAnimationKeyFrame> keyframes = new List<MaterialAnimationKeyFrame>(count);
+
+            ContentBinaryReader br = md.GetData(MaterialAnimationKeyframesTag);
+            for (int i = 0; i < count; i++)
+            {
+                float time = br.ReadSingle();
+                int mid = br.ReadInt32();
+
+                keyframes.Add(new MaterialAnimationKeyFrame(time, mid));
+            }
+            br.Close();
+
+            materialAnimation = new MaterialAnimationClip(duration, keyframes);
+        }
         protected void ReadData(BinaryDataReader data)
         {
             int entCount = data.GetDataInt32(EntityCountTag);
@@ -480,6 +534,20 @@ namespace Apoc3D.Graphics
                 ad.Close();
                 br.Close();
             }
+
+            if (data.Contains(MaterialAnimationTag2)) 
+            {
+                br = data.GetData(MaterialAnimationTag2);
+
+                BinaryDataReader md = br.ReadBinaryData();
+
+                LoadMaterialAnimation(md);
+
+                md.Close();
+
+                br.Close();
+            }
+
         }
         protected void WriteData(BinaryDataWriter data)
         {
@@ -505,6 +573,15 @@ namespace Apoc3D.Graphics
                 bw.Write(ad);
                 ad.Dispose();
                 bw.Close();
+            }
+
+            if (materialAnimation != null) 
+            {
+                bw = data.AddEntry(MaterialAnimationTag2);
+                BinaryDataWriter md = SaveMaterialAnimation();
+                bw.Write(md);
+                md.Dispose();
+                bw.Close();                
             }
 
             //ModelAnimationFlags flags = ModelAnimationFlags.EntityTransform;
@@ -599,9 +676,9 @@ namespace Apoc3D.Graphics
         }
     }
 
-    public class Model: IRenderable, IUpdatable
+    public class Model : IRenderable, IUpdatable
     {
-        enum AnimationControl 
+        enum AnimationControl
         {
             Play,
             Stop,
@@ -617,17 +694,21 @@ namespace Apoc3D.Graphics
         ///  renderOpEntId[i] 表示索引为i的renderOperation的Entity索引
         /// </summary>
         int[] renderOpEntId;
+        int[] renderOpEntPartId;
 
         //bool animationInitialized;
         bool rigidAnimCompleted;
         bool rootAnimCompleted;
         bool skinAnimCompleted;
+        bool materialAnimCompleted;
 
         protected ResourceHandle<ModelData> data;
 
         SkinnedAnimationPlayer skinPlayer;
         RootAnimationPlayer rootPlayer;
         RigidAnimationPlayer rigidPlayer;
+
+        MaterialAnimationPlayer mtrlPlayer;
 
         protected List<ModelAnimationPlayerBase> animInstance = new List<ModelAnimationPlayerBase>();
 
@@ -644,15 +725,15 @@ namespace Apoc3D.Graphics
             set;
         }
 
-        public Model(ResourceHandle<ModelData> data)            
+        public Model(ResourceHandle<ModelData> data)
         {
             //CurrentAnimation = new NoAnimation(); 
             this.data = data;
 
             //if (!animationInitialized)
             //{
-                InitializeAnimation();
-                //animationInitialized = true;
+            InitializeAnimation();
+            //animationInitialized = true;
             //}
         }
         protected Model()
@@ -660,12 +741,16 @@ namespace Apoc3D.Graphics
             //CurrentAnimation = new NoAnimation();
         }
 
-        private void ControlRootAnimation(AnimationControl ctrl) 
+        private void ControlRootAnimation(AnimationControl ctrl)
         {
             if (rootPlayer == null)
                 return;
+            
             ModelData mdlData = data.GetWeakResource();
             AnimationData animData = mdlData.Animation;
+
+            if (animData == null)
+                return;
 
             if (animData.RootAnimationClips != null)
             {
@@ -673,10 +758,10 @@ namespace Apoc3D.Graphics
                 {
                     ModelAnimationClip clip = animData.RootAnimationClips["Take 001"];
 
-                    switch (ctrl) 
+                    switch (ctrl)
                     {
                         case AnimationControl.Play:
-                            rootPlayer.StartClip(clip, 1, TimeSpan.Zero);                            
+                            rootPlayer.StartClip(clip, 1, TimeSpan.Zero);
                             break;
                         case AnimationControl.Pause:
                             rootPlayer.PauseClip();
@@ -689,16 +774,20 @@ namespace Apoc3D.Graphics
                             rootPlayer.ResumeClip();
                             break;
                     }
-                    
+
                 }
             }
         }
-        private void ControlSkinnedAnimation(AnimationControl ctrl) 
+        private void ControlSkinnedAnimation(AnimationControl ctrl)
         {
             if (skinPlayer == null)
                 return;
+
             ModelData mdlData = data.GetWeakResource();
             AnimationData animData = mdlData.Animation;
+
+            if (animData == null)
+                return;
 
 
             if (animData.ModelAnimationClips != null)
@@ -733,6 +822,9 @@ namespace Apoc3D.Graphics
             ModelData mdlData = data.GetWeakResource();
             AnimationData animData = mdlData.Animation;
 
+            if (animData == null)
+                return;
+
             if (animData.ModelAnimationClips != null)
             {
                 if (animData.ModelAnimationClips.ContainsKey("Take 001"))
@@ -751,7 +843,6 @@ namespace Apoc3D.Graphics
                             rigidPlayer.PauseClip();
                             rigidPlayer.CurrentKeyFrame = clip.Keyframes.Count > 10 ? 10 : 0;
                             break;
-                            break;
                         case AnimationControl.Resume:
                             rigidPlayer.ResumeClip();
                             break;
@@ -759,39 +850,72 @@ namespace Apoc3D.Graphics
                 }
             }
         }
-        
+        private void ControlMaterialAnimation(AnimationControl ctrl)
+        {
+            if (mtrlPlayer == null)
+                return;
+         
+            ModelData mdlData = data.GetWeakResource();
+            MaterialAnimationClip animData = mdlData.MaterialAnimationClip;
+
+            if (animData != null)
+            {
+                switch (ctrl)
+                {
+                    case AnimationControl.Play:
+                        mtrlPlayer.StartClip(animData);
+                        break;
+                    case AnimationControl.Pause:
+                        mtrlPlayer.PauseClip();
+                        break;
+                    case AnimationControl.Stop:
+                        mtrlPlayer.PauseClip();
+                        mtrlPlayer.CurrentKeyFrame = 0;
+                        break;
+                    case AnimationControl.Resume:
+                        mtrlPlayer.ResumeClip();
+                        break;
+                }
+            }
+
+        }
+
         public void PlayAnimation()
-        {            
+        {
             ControlRootAnimation(AnimationControl.Play);
             ControlSkinnedAnimation(AnimationControl.Play);
             ControlRigidAnimation(AnimationControl.Play);
+            ControlMaterialAnimation(AnimationControl.Play);
         }
         public void PauseAnimation()
         {
             ControlRootAnimation(AnimationControl.Pause);
             ControlSkinnedAnimation(AnimationControl.Pause);
             ControlRigidAnimation(AnimationControl.Pause);
+            ControlMaterialAnimation(AnimationControl.Pause);
         }
         public void ResumeAnimation()
         {
             ControlRootAnimation(AnimationControl.Resume);
             ControlSkinnedAnimation(AnimationControl.Resume);
             ControlRigidAnimation(AnimationControl.Resume);
+            ControlMaterialAnimation(AnimationControl.Resume);
         }
-        public void StopAnimation() 
+        public void StopAnimation()
         {
-            ControlRootAnimation(AnimationControl.Play);
-            ControlSkinnedAnimation(AnimationControl.Play);
-            ControlRigidAnimation(AnimationControl.Play);
+            ControlRootAnimation(AnimationControl.Stop);
+            ControlSkinnedAnimation(AnimationControl.Stop);
+            ControlRigidAnimation(AnimationControl.Stop);
+            ControlMaterialAnimation(AnimationControl.Stop);
         }
 
-        public float GetAnimationDuration() 
+        public float GetAnimationDuration()
         {
-            if (skinPlayer != null) 
+            if (skinPlayer != null)
             {
                 return (float)skinPlayer.CurrentClip.Duration.TotalSeconds;
             }
-            else if (rigidPlayer != null) 
+            else if (rigidPlayer != null)
             {
                 return (float)rigidPlayer.CurrentClip.Duration.TotalSeconds;
             }
@@ -802,7 +926,7 @@ namespace Apoc3D.Graphics
             return 0;
         }
 
-        public ModelData GetData() 
+        public ModelData GetData()
         {
             data.TouchSync();
             return data.Resource;
@@ -814,7 +938,7 @@ namespace Apoc3D.Graphics
             if (AnimationCompeleted != null)
                 AnimationCompeleted(sender, new AnimationCompletedEventArgs(AnimationCompletedEventArgs.AnimationType.Root));
         }
-        void RigidAnim_Competed(object sender, EventArgs e) 
+        void RigidAnim_Competed(object sender, EventArgs e)
         {
             rigidAnimCompleted = true;
             if (AnimationCompeleted != null)
@@ -826,9 +950,13 @@ namespace Apoc3D.Graphics
             if (AnimationCompeleted != null)
                 AnimationCompeleted(sender, new AnimationCompletedEventArgs(AnimationCompletedEventArgs.AnimationType.Skinned));
         }
+        void MtrlAnim_Completed(object sender, EventArgs e) 
+        {
+            materialAnimCompleted = true;
+        }
         #region IRenderable 成员
 
-        void InitializeAnimation() 
+        void InitializeAnimation()
         {
             data.TouchSync();
 
@@ -842,7 +970,7 @@ namespace Apoc3D.Graphics
             {
                 if (animData.RootAnimationClips.ContainsKey("Take 001"))
                 {
-                    ModelAnimationClip clip = animData.RootAnimationClips["Take 001"];
+                    //ModelAnimationClip clip = animData.RootAnimationClips["Take 001"];
 
                     rootPlayer = new RootAnimationPlayer();
                     CurrentAnimation.Add(rootPlayer);
@@ -858,7 +986,7 @@ namespace Apoc3D.Graphics
                 {
                     if (animData.ModelAnimationClips.ContainsKey("Take 001"))
                     {
-                        ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+                        //ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
 
                         skinPlayer = new SkinnedAnimationPlayer(animData.BindPose, animData.InverseBindPose, animData.SkeletonHierarchy);
                         CurrentAnimation.Add(skinPlayer);
@@ -866,13 +994,13 @@ namespace Apoc3D.Graphics
                         skinPlayer.Completed += SkinAnim_Completed;
                         //skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
                     }
-                    
+
                 }
                 else
                 {
                     if (animData.ModelAnimationClips.ContainsKey("Take 001"))
                     {
-                        ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+                        //ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
 
                         rigidPlayer = new RigidAnimationPlayer(mdlData.Bones.Length);
                         CurrentAnimation.Add(rigidPlayer);
@@ -881,6 +1009,28 @@ namespace Apoc3D.Graphics
                         //rigidPlayer.StartClip(clip, 1, TimeSpan.Zero);
                     }
                 }
+            }
+
+            MaterialAnimationClip mtrlClip = mdlData.MaterialAnimationClip;
+            if (mtrlClip != null) 
+            {
+                mtrlPlayer = new MaterialAnimationPlayer();
+                mtrlPlayer.Completed += MtrlAnim_Completed;
+            }
+        }
+        public void ReloadMaterialAnimation()
+        {
+            if (mtrlPlayer != null)
+            {
+                mtrlPlayer.Completed -= MtrlAnim_Completed;
+            }
+
+            ModelData mdlData = data.GetWeakResource();
+            MaterialAnimationClip mtrlClip = mdlData.MaterialAnimationClip;
+            if (mtrlClip != null)
+            {
+                mtrlPlayer = new MaterialAnimationPlayer();
+                mtrlPlayer.Completed += MtrlAnim_Completed;
             }
         }
         void UpdateAnimtaion()
@@ -902,6 +1052,12 @@ namespace Apoc3D.Graphics
                 if (AutoLoop)
                     ControlSkinnedAnimation(AnimationControl.Play);
                 skinAnimCompleted = false;
+            }
+            if (materialAnimCompleted) 
+            {
+                if (AutoLoop)
+                    ControlMaterialAnimation(AnimationControl.Play);
+                materialAnimCompleted = false;
             }
         }
         public RenderOperation[] GetRenderOperation()
@@ -925,10 +1081,7 @@ namespace Apoc3D.Graphics
                 for (int i = 0; i < entities.Length; i++)
                 {
                     entOps[i] = entities[i].GetRenderOperation();
-                    //for (int j = 0; j < entOps[i].Length; j++)
-                    //{
-                    //    animation.GetTransform(i, out entOps[i][j].Transformation);
-                    //}
+
                     opCount += entOps[i].Length;
                 }
 
@@ -936,6 +1089,7 @@ namespace Apoc3D.Graphics
                 //gmBuffer = new GeomentryData[opCount];
                 opBuffer = new RenderOperation[opCount];
                 renderOpEntId = new int[opCount];
+                renderOpEntPartId = new int[opCount];
 
                 for (int i = 0; i < entities.Length; i++)
                 {
@@ -945,10 +1099,9 @@ namespace Apoc3D.Graphics
                     {
                         int opid = dstIdx + j;
                         renderOpEntId[opid] = i;
+                        renderOpEntPartId[opid] = j;
 
                         opBuffer[opid].BoneTransforms = skinPlayer == null ? null : skinPlayer.GetSkinTransforms();
-                        //opBuffer[dstIdx + j].Geomentry = entOps[i][j];
-                        //animation.GetTransform(i, out  opBuffer[dstIdx + j].Transformation);
                         
                         if (animInstance.Count > 0)
                         {
@@ -956,7 +1109,7 @@ namespace Apoc3D.Graphics
 
                             for (int k = 0; k < animInstance.Count; k++)
                             {
-                                int entId = i;// renderOpEntId[i];
+                                int entId = i;
 
                                 int boneId = entities[entId].ParentBoneID;
 
@@ -966,9 +1119,8 @@ namespace Apoc3D.Graphics
                         }
                         else
                         {
-                            opBuffer[opid].Transformation = Matrix.Identity;// animInstance.GetTransform(renderOpEntId[i]);
+                            opBuffer[opid].Transformation = Matrix.Identity;
                         }
-                        //opBuffer[i].Priority = RenderPriority.Second;
                     }
 
                     dstIdx += entOps[i].Length;
@@ -978,6 +1130,18 @@ namespace Apoc3D.Graphics
             {
                 for (int i = 0; i < opBuffer.Length; i++)
                 {
+                    if (mtrlPlayer != null) 
+                    {
+                        int partId = renderOpEntPartId[i];
+                        int entId = renderOpEntId[i];
+                        int frame = mtrlPlayer.CurrentFrame;
+                        if (frame >= entities[entId].Materials[partId].Length) 
+                        {
+                            frame = entities[entId].Materials[partId].Length - 1;
+                        }
+                        opBuffer[i].Material = entities[entId].Materials[partId][frame];
+                    }
+
                     if (animInstance.Count > 0)
                     {
                         opBuffer[i].Transformation = Matrix.Identity;
@@ -994,14 +1158,13 @@ namespace Apoc3D.Graphics
                     }
                     else
                     {
-                        opBuffer[i].Transformation = Matrix.Identity;// animInstance.GetTransform(renderOpEntId[i]);
+                        opBuffer[i].Transformation = Matrix.Identity;
                     }
 
                     opBuffer[i].BoneTransforms = skinPlayer == null ? null : skinPlayer.GetSkinTransforms();
-                    //opBuffer[i].Transformation = Matrix.Identity;// animInstance.GetTransform(renderOpEntId[i]);
-                    //animation.GetTransform(renderOpEntId[i], out opBuffer[i].Transformation);
+                    
                 }
-                //animation.Animate();
+
             }
             return opBuffer;
         }
@@ -1016,10 +1179,13 @@ namespace Apoc3D.Graphics
 
         public void Update(GameTime dt)
         {
-            for (int i = 0; i < animInstance.Count; i++) 
+            for (int i = 0; i < animInstance.Count; i++)
             {
                 animInstance[i].Update(dt);
-                //if (animInstance[i]) { }
+            }
+            if (mtrlPlayer != null)
+            {
+                mtrlPlayer.Update(dt);
             }
 
             //GameMesh[] entities = data.Resource.Entities;

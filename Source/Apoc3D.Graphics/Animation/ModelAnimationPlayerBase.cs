@@ -63,7 +63,7 @@ namespace Apoc3D.Graphics.Animation
             get { return currentTimeValue; }
             set
             {
-                TimeSpan time = value + TimeSpan.FromSeconds(0.0005);
+                TimeSpan time = value + TimeSpan.FromSeconds(0.001);
 
                 // If the position moved backwards, reset the keyframe index.
                 if (time < currentTimeValue)

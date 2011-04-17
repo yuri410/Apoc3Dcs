@@ -106,7 +106,6 @@ namespace Apoc3D.Graphics
         protected static readonly string MaterialsTag = "Materials";
 
         protected static readonly string MaterialAnimationTag = "MaterialAnimation";
-        protected static readonly string MaterialAnimationTag2 = "MaterialAnimation2.0";
         protected static readonly string FaceCountTag = "FaceCount";
         protected static readonly string FacesTag = "Faces";
         //protected static readonly string VertexFormatTag = "VertexFormat";
@@ -715,7 +714,7 @@ namespace Apoc3D.Graphics
         #region Fields
         VertexDeclaration vtxDecl;
         int vertexSize;
-        int materialFrameIndex;
+        //int materialFrameIndex;
         /// <summary>
         ///  渲染操作缓冲
         /// </summary>
@@ -1249,11 +1248,11 @@ namespace Apoc3D.Graphics
         {
             get { return primCount; }
         }
-        public int MaterialFrameIndex
-        {
-            get { return materialFrameIndex; }
-            set { materialFrameIndex = value; }
-        }
+        //public int MaterialFrameIndex
+        //{
+        //    get { return materialFrameIndex; }
+        //    set { materialFrameIndex = value; }
+        //}
         /// <summary>
         ///  获取或设置网格的名称
         /// </summary>
@@ -1292,7 +1291,7 @@ namespace Apoc3D.Graphics
                     gd.VertexDeclaration = vtxDecl;
                     gd.VertexSize = vertexSize;
 
-                    bufferedOp[i].Material = materials[i][materialFrameIndex];//matAnims[i].CurrentFrame];
+                    bufferedOp[i].Material = materials[i][0];//matAnims[i].CurrentFrame];
                     bufferedOp[i].Geomentry = gd;
                     //bufferedOp[i].Priority = bufferedOp[i].Material.PriorityHint;
                     //bufferedOp[i].Transformation 
