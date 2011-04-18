@@ -725,6 +725,25 @@ namespace Apoc3D.Graphics
             set;
         }
 
+        public float SkinAnimDuration 
+        {
+            get
+            {
+                ModelData mdlData = data.GetWeakResource();
+                AnimationData animData = mdlData.Animation;
+
+                if (animData.ModelAnimationClips != null)
+                {
+                    if (animData.ModelAnimationClips.ContainsKey("Take 001"))
+                    {
+                        ModelAnimationClip clip = animData.ModelAnimationClips["Take 001"];
+                        return (float)clip.Duration.TotalSeconds;
+                    }
+                }
+                return 0;
+            }
+        }
+
         public Model(ResourceHandle<ModelData> data)
         {
             //CurrentAnimation = new NoAnimation(); 
