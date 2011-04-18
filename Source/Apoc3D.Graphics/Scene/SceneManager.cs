@@ -197,7 +197,7 @@ namespace Apoc3D.Scene
 
                             //Matrix.Multiply(ref ops[k].Transformation, ref obj.Transformation, out ops[k].Transformation);
                             //ops[k].Transformation = obj.Transformation;
-                            opList.Add(ops[k]);
+                            opList.Add(ref ops[k]);
 
 
                             //if (mate.Effect == null)

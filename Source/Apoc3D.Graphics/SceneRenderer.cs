@@ -185,7 +185,7 @@ namespace Apoc3D.Graphics
                                 matTbl.Add(mate, opList);
                             }
 
-                            opList.Add(ops[k]);
+                            opList.Add(ref ops[k]);
 
                             //string desc;
                             //bool supportsInst;
