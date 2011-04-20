@@ -1002,6 +1002,23 @@ namespace Apoc3D.MathLib
             return (dl1 <= bs.Radius);
         }
 
+        public static float Distance(ref Ray ra, ref Vector3 point)
+        {
+            float cx = point.X - ra.Position.X;
+            float cy = point.Y - ra.Position.Y;
+            float cz = point.Z - ra.Position.Z;
+
+
+            float dl1 = ra.Direction.X * cx + ra.Direction.Y * cy + ra.Direction.Z * cz;
+
+            Vector3 n = new Vector3(cx - ra.Direction.X * dl1, cy - ra.Direction.Y * dl1, cz - ra.Direction.Z * dl1);
+
+            n.Normalize();
+
+            dl1 = Math.Abs(-(n.X * cx + n.Y * cy + n.Z * cz));
+            return dl1;
+        }
+
         public static bool BoundingSphereIntersects(ref BoundingSphere bs, ref Vector3 start, ref Vector3 end)
         {
             //Vector3 v1 = (vCentre - vEnd);
