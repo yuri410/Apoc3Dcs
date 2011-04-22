@@ -818,7 +818,10 @@ namespace Apoc3D.Graphics
                     switch (ctrl)
                     {
                         case AnimationControl.Play:
+
                             skinPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                            
+                            
                             break;
                         case AnimationControl.Stop:
                             skinPlayer.PauseClip();
@@ -860,7 +863,7 @@ namespace Apoc3D.Graphics
                             break;
                         case AnimationControl.Stop:
                             rigidPlayer.PauseClip();
-                            rigidPlayer.CurrentKeyFrame = clip.Keyframes.Count > 10 ? 10 : 0;
+                            rigidPlayer.CurrentKeyFrame = 0;
                             break;
                         case AnimationControl.Resume:
                             rigidPlayer.ResumeClip();

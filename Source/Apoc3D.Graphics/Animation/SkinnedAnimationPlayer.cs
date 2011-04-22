@@ -49,7 +49,22 @@ namespace Apoc3D.Graphics.Animation
         /// </summary>
         protected override void InitClip()
         {
-            bindPose.CopyTo(boneTransforms);
+            //bindPose.CopyTo(boneTransforms);
+
+            //List<ModelKeyframe> keyframes = CurrentClip.Keyframes;
+
+            //for (int i = 0; i < keyframes.Count; i++)
+            //{
+                //ModelKeyframe keyframe = keyframes[i];
+
+                //if (keyframe.Time.TotalSeconds > 0.33)
+                //{
+                    //break;
+                //}
+
+                //// Use this keyframe
+                //SetKeyframe(keyframe);
+            //}
         }
 
         /// <summary>
