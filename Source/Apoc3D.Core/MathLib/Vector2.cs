@@ -926,7 +926,13 @@ namespace Apoc3D.MathLib
 
             return results;
         }
-
+        public static Vector2 TransformSimple(Vector2 position, ref Matrix matrix)
+        {
+            Vector2 vector;
+            vector.X = position.X * matrix.M11 + position.Y * matrix.M21 + matrix.M41;
+            vector.Y = position.X * matrix.M12 + position.Y * matrix.M22 + matrix.M42;
+            return vector;
+        }
         /// <summary>
         /// Returns a vector containing the smallest components of the specified vectors.
         /// </summary>
