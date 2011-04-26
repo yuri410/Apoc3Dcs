@@ -17,7 +17,8 @@ namespace Apoc3D.Graphics.Animation
     /// The animation player manipulates a skinned model
     /// </summary>
     public class SkinnedAnimationPlayer : ModelAnimationPlayerBase
-    {        
+    {
+        bool isFirstPlay = true;
         // Current animation transform matrices.
         Matrix[] boneTransforms;
         Matrix[] worldTransforms;
@@ -49,7 +50,11 @@ namespace Apoc3D.Graphics.Animation
         /// </summary>
         protected override void InitClip()
         {
-            //bindPose.CopyTo(boneTransforms);
+            if (isFirstPlay)
+            {
+                bindPose.CopyTo(boneTransforms);
+                isFirstPlay = false;
+            }
 
             //List<ModelKeyframe> keyframes = CurrentClip.Keyframes;
 

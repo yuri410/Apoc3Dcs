@@ -300,6 +300,10 @@ namespace Apoc3D.Collections
             this.version++;
         }
 
+        public void SetElement(int i, T value)
+        {
+            this.array[(this.head + i) % this.array.Length] = value;
+        }
         public T GetElement(int i)
         {
             return this.array[(this.head + i) % this.array.Length];
