@@ -1321,7 +1321,7 @@ namespace Apoc3D.RenderSystem.Xna
                     RenderOperation op = opList[j];
                     GeomentryData gm = op.Geomentry;
 
-                    if (gm.VertexCount == 0)
+                    if (gm.VertexCount == 0 || gm.PrimCount == 0)
                         continue;
 
                     BatchCount++;
