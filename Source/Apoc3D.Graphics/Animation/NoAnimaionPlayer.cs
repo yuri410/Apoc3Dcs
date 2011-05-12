@@ -6,7 +6,7 @@ using Apoc3D.MathLib;
 
 namespace Apoc3D.Graphics.Animation
 {
-    class NoAnimaionPlayer : ModelAnimationPlayerBase
+    public class NoAnimaionPlayer : ModelAnimationPlayerBase
     {
         Matrix transform;
 

@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -41,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitTable.cs" />
     <Compile Include="Core\AsyncProcessor.cs" />
     <Compile Include="CaseInsensitiveStringComparer.cs" />
     <Compile Include="Collections\CollectionBase.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="MathLib\Rectangle.cs" />
     <Compile Include="MathLib\Size.cs" />
     <Compile Include="MathLib\Triangle.cs" />
+    <Compile Include="MathLib\ValueSmoother.cs" />
     <Compile Include="MathLib\Vector2.cs" />
     <Compile Include="MathLib\Vector3.cs" />
     <Compile Include="MathLib\Vector4.cs" />
@@ -176,6 +180,7 @@
     <Compile Include="Vfs\IAbstractFactory.cs" />
     <Compile Include="Vfs\Location.cs" />
     <Compile Include="Vfs\LpkArchive.cs" />
+    <Compile Include="Vfs\PakArchive.cs" />
     <Compile Include="Vfs\Streams.cs" />
   </ItemGroup>
   <ItemGroup>

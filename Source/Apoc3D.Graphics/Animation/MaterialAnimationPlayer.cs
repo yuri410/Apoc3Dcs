@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Apoc3D.Graphics.Animation
 {
-    class MaterialAnimationPlayer
+    public class MaterialAnimationPlayer
     {
         // Clip currently being played
         MaterialAnimationClip currentClipValue;

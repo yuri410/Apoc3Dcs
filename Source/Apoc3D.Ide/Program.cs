@@ -77,6 +77,8 @@ namespace Apoc3D.Ide
         {
             DevStringTable.Initialize();
 
+            Apoc3D.Core.PluginManager.Initiailze(null, null);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

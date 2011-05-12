@@ -87,19 +87,21 @@ namespace Apoc3D.Core
                                     if (errcbk != null)
                                     {
                                         errcbk(obj, e);
+                                        Console.Write(e.Message);
                                     }
                                 }
 
                                 singleton.plugins.Add(obj.Name, obj);
+                                Console.Write("Plugin Loaded " + assembly.GetName());
 
                                 found = true;
                             }
                         }
                     }
                 }
-                catch (BadImageFormatException)
+                catch (BadImageFormatException e)
                 {
-
+                    Console.Write(e.Message);
                 }
                 catch (Exception e)
                 {

@@ -30,7 +30,7 @@ namespace Apoc3D.MathLib
 {
     using T = System.Single;
 
-    class ValueSmoother
+    public class ValueSmoother
     {
         FastQueue<T> valueQueue = new FastQueue<T>();
         int smoothSize;

@@ -320,10 +320,6 @@
       <Project>{726180A4-EE3E-478D-A5F9-985F56393AA7}</Project>
       <Name>Apoc3D.Graphics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Apoc3D.RenderSystem.Xna\Apoc3D.RenderSystem.Xna.PC.csproj">
-      <Project>{AE28499E-7D28-42AC-8CE6-4F93753342AD}</Project>
-      <Name>Apoc3D.RenderSystem.Xna.PC</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Build\" />
