@@ -29,7 +29,7 @@ namespace Apoc3D.Ide
 {
     public static class Paths
     {
-        static readonly string pluginPath = "Plugins\\";
+        static readonly string pluginPath = "";
         static readonly string configPath = "Config\\";
 
         public static string PluginPath
