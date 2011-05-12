@@ -80,6 +80,16 @@ namespace Apoc3D.RenderSystem.Xna
             Init(ps.GetShaderCode());
         }
 
+
+        public XnaPixelShader(XnaRenderSystem rs, byte[] byteCode)
+            : base(rs)
+        {
+            device = rs.Device;
+            psXna = new XG.PixelShader(device, byteCode);
+
+            Init(byteCode);
+        }
+
         public XnaPixelShader(XnaRenderSystem rs, ResourceLocation resLoc)
             : base(rs)
         {

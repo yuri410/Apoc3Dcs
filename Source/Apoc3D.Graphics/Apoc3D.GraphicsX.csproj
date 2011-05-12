@@ -1,7 +1,7 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectGuid>{7538293E-884D-476E-839C-EC7E3536A43C}</ProjectGuid>
-    <ProjectTypeGuids>{2DF5C3F4-5A5F-47a9-8E94-23B4456F55E2};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Xbox 360</Platform>
     <OutputType>Library</OutputType>
@@ -9,7 +9,7 @@
     <RootNamespace>Apoc3D.Graphics</RootNamespace>
     <AssemblyName>Apoc3D.Graphics</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
+    <XnaFrameworkVersion>v3.1</XnaFrameworkVersion>
     <XnaPlatform>Xbox 360</XnaPlatform>
     <XnaCrossPlatformGroupID>500e32ec-54a3-49a5-be16-4e03463ed8af</XnaCrossPlatformGroupID>
   </PropertyGroup>
@@ -58,13 +58,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animation\Animation.cs" />
+    <Compile Include="Animation\AnimationData.cs" />
     <Compile Include="Animation\Bone.cs" />
     <Compile Include="Animation\EntityNode.cs" />
-    <Compile Include="Animation\KeyFrame.cs" />
-    <Compile Include="Animation\MaterialAnimation.cs" />
-    <Compile Include="Animation\SkinAnimation.cs" />
-    <Compile Include="Animation\TransformAnimation.cs" />
+    <Compile Include="Animation\MaterialAnimationKeyFrame.cs" />
+    <Compile Include="Animation\MaterialAnimationPlayer.cs" />
+    <Compile Include="Animation\ModelAnimationClip.cs" />
+    <Compile Include="Animation\ModelAnimationPlayerBase.cs" />
+    <Compile Include="Animation\ModelKeyframe.cs" />
+    <Compile Include="Animation\NoAnimaionPlayer.cs" />
+    <Compile Include="Animation\RigidAnimationPlayer.cs" />
+    <Compile Include="Animation\RootAnimationPlayer.cs" />
+    <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Collections\BoneCollection.cs" />
     <Compile Include="Collections\ClipPlaneCollection.cs" />
@@ -72,17 +77,15 @@
     <Compile Include="Collections\SamplerStateCollection.cs" />
     <Compile Include="Collections\TextureWrapCollection.cs" />
     <Compile Include="Desgin\MeshFaceConverter.cs" />
-    <Compile Include="Effects\DefaultSMGenEffect.cs" />
     <Compile Include="Effects\Effect.cs" />
     <Compile Include="Effects\EffectManager.cs" />
     <Compile Include="Effects\EffectParams.cs" />
-    <Compile Include="Effects\Post\Bloom.cs" />
-    <Compile Include="Effects\Post\Composite.cs" />
-    <Compile Include="Effects\Post\GaussBlurX.cs" />
-    <Compile Include="Effects\Post\GaussBlurY.cs" />
-    <Compile Include="Effects\Post\PostEffect.cs" />
-    <Compile Include="Effects\StandardEffect.cs" />
+    <Compile Include="Effects\Post\GaussBlurShd.cs" />
+    <Compile Include="Effects\Post\PostEffect.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FpsCounter.cs" />
+    <Compile Include="Geometry\Sphere.cs" />
     <Compile Include="IRenderable.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MeshSimplifier.cs" />
@@ -159,9 +162,6 @@
       <Project>{610523B4-A5A6-4D3A-A10F-DAFE02D49B9D}</Project>
       <Name>JigLibX360</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Effects\Post\note.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

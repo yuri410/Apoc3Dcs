@@ -28,6 +28,7 @@ using Apoc3D.Graphics;
 using Apoc3D.MathLib;
 using XF = Microsoft.Xna.Framework;
 using XFG = Microsoft.Xna.Framework.Graphics;
+using Apoc3D.Graphics.Effects;
 
 namespace Apoc3D.RenderSystem.Xna
 {
@@ -58,7 +59,7 @@ namespace Apoc3D.RenderSystem.Xna
             begun = true;
 
         }
-        public override void DrawQuad(GeomentryData quad, Code2015.Effects.PostEffect effect)
+        public override void DrawQuad(GeomentryData quad, PostEffect effect)
         {
             //End();
 
@@ -75,7 +76,11 @@ namespace Apoc3D.RenderSystem.Xna
             XFG.Texture2D tex2D = xt.tex2D;
             if (tex2D != null)
             {
+#if !XBOX
                 XF.Rectangle xrect;
+#else
+                XF.Rectangle xrect = new XF.Rectangle();
+#endif
                 xrect.X = rect.X;
                 xrect.Y = rect.Y;
                 xrect.Width = rect.Width;
@@ -92,7 +97,11 @@ namespace Apoc3D.RenderSystem.Xna
             XFG.Texture2D tex2D = xt.tex2D;
             if (tex2D != null)
             {
+#if !XBOX
                 XF.Vector2 xpos;
+#else
+                XF.Vector2 xpos = new XF.Vector2();
+#endif
                 xpos.X = pos.X;
                 xpos.Y = pos.Y;
 
@@ -107,7 +116,11 @@ namespace Apoc3D.RenderSystem.Xna
             XFG.Texture2D tex2D = xt.tex2D;
             if (tex2D != null)
             {
+#if !XBOX
                 XF.Rectangle xrect;
+#else
+                XF.Rectangle xrect = new XF.Rectangle();
+#endif
                 xrect.X = dstRect.X;
                 xrect.Y = dstRect.Y;
                 xrect.Width = dstRect.Width;
@@ -138,7 +151,11 @@ namespace Apoc3D.RenderSystem.Xna
             XFG.Texture2D tex2D = xt.tex2D;
             if (tex2D != null)
             {
+#if !XBOX
                 XF.Vector2 xpos;
+#else
+                XF.Vector2 xpos = new XF.Vector2();
+#endif
                 xpos.X = x;
                 xpos.Y = y;
 
@@ -153,7 +170,12 @@ namespace Apoc3D.RenderSystem.Xna
             {
                 sprite.End();
 
+#if !XBOX
                 XF.Matrix mat;
+#else
+                XF.Matrix mat = new XF.Matrix();
+#endif
+
                 mat.M11 = matrix.M11; mat.M12 = matrix.M12; mat.M13 = matrix.M13; mat.M14 = matrix.M14;
                 mat.M21 = matrix.M21; mat.M22 = matrix.M22; mat.M23 = matrix.M23; mat.M24 = matrix.M24;
                 mat.M31 = matrix.M31; mat.M32 = matrix.M32; mat.M33 = matrix.M33; mat.M34 = matrix.M34;

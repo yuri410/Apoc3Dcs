@@ -100,6 +100,15 @@ namespace Apoc3D.RenderSystem.Xna
             return new XnaStateBlock(renderSys);
         }
 
+        public override VertexShader CreateVertexShader(byte[] byteCode)
+        {
+            return new XnaVertexShader(renderSys, byteCode);
+        }
+
+        public override PixelShader CreatePixelShader(byte[] byteCode)
+        {
+            return new XnaPixelShader(renderSys, byteCode);
+        }
         public override VertexShader CreateVertexShader(ResourceLocation resLoc)
         {
             return new XnaVertexShader(renderSys, resLoc);

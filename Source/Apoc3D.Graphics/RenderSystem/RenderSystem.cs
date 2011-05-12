@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Text;
 using Apoc3D.Collections;
 using Apoc3D.MathLib;
-using Code2015.Effects;
 
 namespace Apoc3D.Graphics
 {

@@ -80,6 +80,14 @@ namespace Apoc3D.RenderSystem.Xna
             Init(vs.GetShaderCode());
         }
 
+        public XnaVertexShader(XnaRenderSystem rs, byte[] byteCode)
+            : base(rs)
+        {
+            device = rs.Device;
+            vsXna = new XG.VertexShader(device, byteCode);
+
+            Init(byteCode);
+        }
         public XnaVertexShader(XnaRenderSystem rs, ResourceLocation resLoc)
             : base(rs)
         {

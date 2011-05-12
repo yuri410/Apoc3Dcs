@@ -91,5 +91,8 @@ namespace Apoc3D.Graphics
         public abstract VertexShader CreateVertexShader(ResourceLocation resLoc);
         public abstract PixelShader CreatePixelShader(ResourceLocation resLoc);
 
+        public abstract VertexShader CreateVertexShader(byte[] byteCode);
+        public abstract PixelShader CreatePixelShader(byte[] byteCode);
+
     }
 }

@@ -29,7 +29,7 @@ using Apoc3D.Collections;
 using Apoc3D.Core;
 using Apoc3D.Graphics;
 using Apoc3D.MathLib;
-using Code2015.Effects;
+using Apoc3D.Graphics.Effects;
 
 namespace Apoc3D.Graphics
 {
@@ -49,7 +49,7 @@ namespace Apoc3D.Graphics
         {
             RenderSystem = rs;
         }
-        public abstract void DrawQuad(GeomentryData quad, Code2015.Effects.PostEffect effect);
+        public abstract void DrawQuad(GeomentryData quad, PostEffect effect);
 
         public abstract void Draw(Texture texture, Rectangle rect, ColorValue color);
         public abstract void Draw(Texture texture, Vector2 pos, ColorValue color);

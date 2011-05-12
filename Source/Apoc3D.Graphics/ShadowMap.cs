@@ -30,9 +30,6 @@ using Apoc3D.Graphics.Effects;
 using Apoc3D.MathLib;
 using Apoc3D.Media;
 using Apoc3D.Vfs;
-using Code2015.EngineEx;
-using Code2015.World;
-using Code2015.Effects;
 
 namespace Apoc3D.Graphics
 {
@@ -239,35 +236,35 @@ namespace Apoc3D.Graphics
             stdRenderTarget = null;
         }
 
-        Matrix GetLightView(float longitude, float latitude, float h)
-        {
-            const float rotation = -MathEx.PIf / 6f;
-            const float yaw = -MathEx.PiOver4;
+        //Matrix GetLightView(float longitude, float latitude, float h)
+        //{
+        //    const float rotation = -MathEx.PIf / 6f;
+        //    const float yaw = -MathEx.PiOver4;
 
 
-            float p = h * 0.022f;
+        //    float p = h * 0.022f;
 
-            Vector3 target = PlanetEarth.GetPosition(longitude - p * MathEx.PIf / 90f, latitude);
+        //    Vector3 target = PlanetEarth.GetPosition(longitude - p * MathEx.PIf / 90f, latitude);
 
-            Vector3 axis = target;
-            axis.Normalize();
+        //    Vector3 axis = target;
+        //    axis.Normalize();
 
-            //float sign = latitude > 0 ? 1 : -1;
-            Vector3 up = Vector3.UnitY;
+        //    //float sign = latitude > 0 ? 1 : -1;
+        //    Vector3 up = Vector3.UnitY;
 
-            Vector3 rotAxis = axis;
+        //    Vector3 rotAxis = axis;
 
-            Vector3 yawAxis = Vector3.Cross(axis, up);
-            yawAxis.Normalize();
+        //    Vector3 yawAxis = Vector3.Cross(axis, up);
+        //    yawAxis.Normalize();
 
-            Quaternion rotTrans = Quaternion.RotationAxis(rotAxis, rotation);
-            axis = Vector3.TransformSimple(axis, Quaternion.RotationAxis(yawAxis, yaw) * rotTrans);
+        //    Quaternion rotTrans = Quaternion.RotationAxis(rotAxis, rotation);
+        //    axis = Vector3.TransformSimple(axis, Quaternion.RotationAxis(yawAxis, yaw) * rotTrans);
 
-            Vector3 position = target + axis * h * 35;
-            return Matrix.LookAtRH(position, target,
-                Vector3.TransformSimple(up, rotTrans));
+        //    Vector3 position = target + axis * h * 35;
+        //    return Matrix.LookAtRH(position, target,
+        //        Vector3.TransformSimple(up, rotTrans));
 
-        }
+        //}
       
 
         public void Begin(Vector3 lightDir, ICamera cam)

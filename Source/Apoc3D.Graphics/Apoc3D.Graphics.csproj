@@ -41,15 +41,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animation\Animation.cs" />
-    <Compile Include="Animation\Bone.cs" />
-    <Compile Include="Animation\EntityNode.cs" />
-    <Compile Include="Animation\KeyFrame.cs" />
-    <Compile Include="Animation\MaterialAnimation.cs" />
-    <Compile Include="Animation\SkinAnimation.cs" />
-    <Compile Include="Animation\TransformAnimation.cs" />
+    <Compile Include="Animation\AnimationData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\Bone.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\EntityNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\MaterialAnimationKeyFrame.cs" />
+    <Compile Include="Animation\MaterialAnimationPlayer.cs" />
+    <Compile Include="Animation\ModelAnimationClip.cs" />
+    <Compile Include="Animation\ModelAnimationPlayerBase.cs" />
+    <Compile Include="Animation\ModelKeyframe.cs" />
+    <Compile Include="Animation\NoAnimaionPlayer.cs" />
+    <Compile Include="Animation\RigidAnimationPlayer.cs" />
+    <Compile Include="Animation\RootAnimationPlayer.cs" />
+    <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
     <Compile Include="Collections\ClipPlaneCollection.cs" />
     <Compile Include="Collections\TextureWrapCollection.cs" />
+    <Compile Include="Effects\Post\GaussBlurShd.cs" />
+    <Compile Include="Effects\Post\PostEffect.cs" />
     <Compile Include="Geometry\Sphere.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -58,15 +71,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SceneRenderer.cs" />
-    <Compile Include="Scene\Atmosphere.cs" />
     <Compile Include="Collections\SamplerStateCollection.cs" />
     <Compile Include="Desgin\MeshFaceConverter.cs" />
-    <Compile Include="Effects\Post\Bloom.cs" />
-    <Compile Include="Effects\Post\GaussBlurX.cs" />
-    <Compile Include="Effects\Post\PostEffect.cs" />
-    <Compile Include="Effects\Post\GaussBlurY.cs" />
-    <Compile Include="Effects\Post\Composite.cs" />
     <Compile Include="FpsCounter.cs" />
+    <Compile Include="Scene\Atmosphere.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Scene\Lights\DirectionalLight.cs" />
     <Compile Include="Scene\Lights\LightFactory.cs" />
     <Compile Include="Scene\Lights\LightObject.cs" />
@@ -136,7 +146,10 @@
     <Compile Include="WeatherType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Effects\Post\note.txt" />
+    <ProjectReference Include="..\Apoc3D.Core\Apoc3D.Core.csproj">
+      <Project>{767AFD72-02F7-4543-B193-A2E19645A4B9}</Project>
+      <Name>Apoc3D.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

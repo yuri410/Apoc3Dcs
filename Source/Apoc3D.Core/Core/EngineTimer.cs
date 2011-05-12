@@ -228,9 +228,12 @@ namespace Apoc3D.Core
                 Disposed = true;
                 const int MaxWait = 10;
 
+                
                 for (int i = 0; i < MaxWait; i++)
-                {
+                {          
+#if !XBOX
                     if (thread.IsAlive)
+#endif
                         Thread.Sleep(10);
                 }
                 thread.Abort();
