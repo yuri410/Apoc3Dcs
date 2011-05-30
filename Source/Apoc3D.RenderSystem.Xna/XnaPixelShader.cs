@@ -436,7 +436,8 @@ namespace Apoc3D.RenderSystem.Xna
             xs.MagFilter = XnaUtils.ConvertEnum(state.MagFilter);
             xs.MinFilter = XnaUtils.ConvertEnum(state.MinFilter);
             xs.MipFilter = XnaUtils.ConvertEnum(state.MipFilter);
-            xs.MaxAnisotropy = state.MaxMipLevel;
+            xs.MaxAnisotropy = state.MaxAnisotropy;
+            xs.MaxMipLevel = state.MaxMipLevel;
             xs.MipMapLevelOfDetailBias = state.MipMapLODBias;
         }
         public override void SetTextureDirect(int si, Texture tex)
