@@ -396,7 +396,7 @@ namespace Apoc3D.MathLib
             return results;
         }
 
-#warning test
+
         /// <summary>
         /// Finds the intersection between a plane and a line.
         /// </summary>
@@ -411,27 +411,27 @@ namespace Apoc3D.MathLib
 
             float cos = Vector3.Dot(dir, plane.Normal);
 
-            if (cos < float.Epsilon)
+            if (Math.Abs(cos) < float.Epsilon)
             {
                 intersectPoint = Vector3.Zero;
                 return false;
             }
 
-            float d1 = Vector3.Dot(start, plane.Normal);
-            float d2 = Vector3.Dot(end, plane.Normal);
+            float d1 = Vector3.Dot(start, plane.Normal) + plane.D;
+            float d2 = Vector3.Dot(end, plane.Normal) + plane.D;
 
-            if (d1 * d2 < 0)
+            if (d1 * d2 > 0)
             {
                 intersectPoint = Vector3.Zero;
                 return false;
             }
 
             cos /= dir.Length();
-            float sin = (float)Math.Sqrt(1 - cos * cos);
+            //float sin = (float)Math.Sqrt(1 - cos * cos);
 
-            float dist = d1 / sin;
+            float dist = d1 / cos;
 
-            intersectPoint = start + dir * dist;
+            intersectPoint = start + dir * (dist) / dir.Length();
             return true;
         }
 
