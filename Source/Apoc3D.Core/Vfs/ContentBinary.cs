@@ -77,6 +77,32 @@ namespace Apoc3D.Vfs
             mat.M44 = ReadSingle();
         }
 
+        public string ReadApoc3DString()
+        {
+            uint len = ReadUInt32();
+
+            if ((len & 0x80000000U) == 0x80000000U)
+            {
+                len &= 0x7FFFFFFFU;
+
+                StringBuilder str = new StringBuilder((int)len);
+                for (uint i = 0; i < len; i++)
+                {
+                    str.Append((char)ReadByte());
+                }
+                return str.ToString();
+            }
+            else
+            {
+                StringBuilder str = new StringBuilder((int)len);
+                for (uint i = 0; i < len; i++)
+                {
+                    str.Append((char)ReadInt16());
+                }
+
+                return str.ToString();
+            }
+        }
         public string ReadStringUnicode()
         {
             int len = ReadInt32();
@@ -275,6 +301,44 @@ namespace Apoc3D.Vfs
             for (int i = 0; i < len; i++)
             {
                 Write((ushort)str[i]);
+            }
+        }
+
+        public void WriteApoc3DString(string value)
+        {
+            bool isMB = true;
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (value[i] > 0xff)
+                {
+                    isMB = false;
+                }
+            }
+
+            uint sizeBits = (uint)(value.Length);
+            Trace.Assert(sizeBits < 0x80000000U);
+
+            if (isMB)
+            {
+                sizeBits |= 0x80000000U;
+            }
+
+            Write(sizeBits);
+
+            if (isMB)
+            {
+                for (int i = 0; i < value.Length; i++)
+                {
+                    Write((byte)value[i]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < value.Length; i++)
+                {
+                    Write((ushort)value[i]);
+                }
             }
         }
 
